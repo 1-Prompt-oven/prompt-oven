@@ -4,6 +4,7 @@ interface ProfileInfoInputProps {
 	title: string
 	discription: string
 	name: string
+	inputData: string | undefined
 	placeholder: string
 }
 
@@ -11,6 +12,7 @@ export default function ProfileInfoInput({
 	title,
 	discription,
 	name,
+	inputData,
 	placeholder,
 }: ProfileInfoInputProps) {
 	return (
@@ -21,8 +23,9 @@ export default function ProfileInfoInput({
 				<input
 					type="text"
 					name={name}
+					defaultValue={inputData}
 					placeholder={placeholder}
-					className="w-full bg-[#1b1b1b] py-1 pl-2 text-white"
+					className="w-full bg-[#1b1b1b] py-2 pl-3 text-white"
 				/>
 			</div>
 		</div>

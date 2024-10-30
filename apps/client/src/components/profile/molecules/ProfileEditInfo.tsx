@@ -1,11 +1,16 @@
 import React from "react"
+import Link from "next/link"
+import type { MemberInfoType } from "@/types/profile/profileTypes"
 import ProfileInfoInput from "../atoms/ProfileInfoInput"
 import ProfileInfoCheckbox from "../atoms/ProfileInfoCheckbox"
 import ProfileBannerUpload from "../atoms/ProfileBannerUpload"
 import ProfileAvatarUpload from "../atoms/ProfileAvatarUpload"
-import Link from "next/link"
 
-export default function ProfileEditInfo() {
+interface ProfileEditProps {
+	memberInfo: MemberInfoType
+}
+
+export default function ProfileEditInfo({ memberInfo }: ProfileEditProps) {
 	return (
 		<div className="mb-20 mt-32">
 			<div className="mb-12">
@@ -14,7 +19,7 @@ export default function ProfileEditInfo() {
 					Upload a picture to display on your profile.
 				</p>
 
-				<ProfileAvatarUpload />
+				<ProfileAvatarUpload currentAvatar={memberInfo.avatarImageUrl || ""} />
 			</div>
 
 			<ProfileBannerUpload />
@@ -28,7 +33,9 @@ export default function ProfileEditInfo() {
 					</Link>
 				</p>
 				<p>
-					<span className="text-sm font-bold text-white">@Name</span>
+					<span className="text-sm font-bold text-white">
+						@{memberInfo.nickname}
+					</span>
 				</p>
 			</div>
 
@@ -37,6 +44,7 @@ export default function ProfileEditInfo() {
 					title="X / Twitter"
 					discription="Your X / Twitter username."
 					name="Twitter"
+					inputData={memberInfo.twitterName}
 					placeholder="My X / Twitter Name"
 				/>
 
@@ -44,6 +52,7 @@ export default function ProfileEditInfo() {
 					title="Instagram"
 					discription="Your Instagram username."
 					name="Instagram"
+					inputData={memberInfo.instagramName}
 					placeholder="My Instagram Name"
 				/>
 
@@ -51,6 +60,7 @@ export default function ProfileEditInfo() {
 					title="Youtube"
 					discription="Your YouTube account link."
 					name="Youtube"
+					inputData={memberInfo.youtubeUrl}
 					placeholder="https://www.youtube.com/user/email"
 				/>
 
@@ -58,6 +68,7 @@ export default function ProfileEditInfo() {
 					title="Website"
 					discription="Your Main Website link."
 					name="Website"
+					inputData={memberInfo.websiteUrl}
 					placeholder="https://www.website.com/user/email"
 				/>
 
@@ -65,6 +76,7 @@ export default function ProfileEditInfo() {
 					title="Allow Messages"
 					discription="Allow other users to message you."
 					name="allowMessage"
+					checkData={memberInfo.allowMessage}
 				/>
 
 				<ProfileInfoCheckbox
@@ -72,6 +84,7 @@ export default function ProfileEditInfo() {
 					discription="You must have 25 sales across your prompts to be eligible to accept
 						custom prompt requests."
 					name="acceptCustom"
+					checkData={memberInfo.acceptCustom}
 				/>
 			</div>
 		</div>

@@ -1,17 +1,24 @@
+import type { ProfileListType } from "@/types/profile/profileTypes"
 import SearchInput from "@/components/common/atom/SearchInput"
 import ProfileFavoritePromptList from "../molecules/ProfileFavoitePromptList"
-import ProfileNewestPromptList from "../molecules/ProfileNewestPromptList"
+import ProfileRegistPromptList from "../molecules/ProfileRegistPromptList"
 
-export default function ProfilePromptList() {
-	const list = Array.from({ length: 7 }, (_, i) => `item${i + 1}`)
+interface ProfileListProps {
+	favoriteList: ProfileListType[]
+	registList: ProfileListType[]
+}
 
+export default function ProfilePromptList({
+	favoriteList,
+	registList,
+}: ProfileListProps) {
 	return (
 		<>
 			{/* USER Prompt List */}
 			<div>
 				<SearchInput placeholder={`Search @name's prompts`} />
-				<ProfileFavoritePromptList list={list} />
-				<ProfileNewestPromptList list={list} />
+				<ProfileFavoritePromptList promptList={favoriteList} />
+				<ProfileRegistPromptList promptList={registList} />
 			</div>
 		</>
 	)

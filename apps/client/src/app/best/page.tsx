@@ -1,3 +1,3 @@
 export default function page() {
-	return <section></section>
+	return <section>page</section>
 }

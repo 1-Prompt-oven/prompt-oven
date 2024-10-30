@@ -1,11 +1,23 @@
 "use client"
 
-import React, { useState } from "react"
+import { useState } from "react"
+import type {
+	MemberInfoType,
+	ReviewAndFollowType,
+} from "@/types/profile/profileTypes"
+import ProfileEditInfo from "../molecules/ProfileEditInfo"
 import ProfileSetting from "../molecules/ProfileSetting"
 import ProfileSimpleInfo from "../molecules/ProfileSimpleInfo"
-import ProfileEditInfo from "../molecules/ProfileEditInfo"
 
-export default function ProfileMain() {
+interface ProfileMainProps {
+	reviewAndFollowCount: ReviewAndFollowType
+	memberInfo: MemberInfoType
+}
+
+export default function ProfileMain({
+	reviewAndFollowCount,
+	memberInfo,
+}: ProfileMainProps) {
 	const [isVisible, setIsVisible] = useState<boolean>(true)
 
 	const toggleVisibility = () => {
@@ -14,17 +26,22 @@ export default function ProfileMain() {
 
 	return (
 		<>
-			{/* Background & Avartar */}
+			{/* Background & Avatar */}
 			<ProfileSetting
+				memberInfo={memberInfo}
 				isVisible={isVisible}
 				toggleVisibility={toggleVisibility}
 			/>
 
 			{/* USER INFO */}
 			{isVisible ? (
-				<ProfileSimpleInfo isVisible={isVisible} />
+				<ProfileSimpleInfo
+					memberInfo={memberInfo}
+					isVisible={isVisible}
+					reviewAndFollowCount={reviewAndFollowCount}
+				/>
 			) : (
-				<ProfileEditInfo />
+				<ProfileEditInfo memberInfo={memberInfo} />
 			)}
 		</>
 	)
