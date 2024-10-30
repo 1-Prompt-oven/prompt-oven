@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react"
 import { Control, Controller } from "react-hook-form"
 import ValidateButton from "../atom/Button"
+import { Input } from "../atom/Input"
 
 interface TimerInputProps {
 	control: Control<any>
@@ -50,13 +51,13 @@ const TimerInput: React.FC<TimerInputProps> = ({ control }) => {
 	return (
 		<div>
 			<label>E-mail validation</label>
-			<div className="email-validation flex items-center justify-between">
+			<div className="email-validation grid grid-cols-[10fr_2fr] gap-4 pt-2">
 				<Controller
 					name="emailValidation"
 					control={control}
 					render={({ field }) => (
 						<div className="relative w-full">
-							<input
+							<Input
 								{...field}
 								type="text"
 								placeholder="Value"

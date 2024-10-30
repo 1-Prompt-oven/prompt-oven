@@ -6,9 +6,10 @@ import ValidateButton from "../atom/Button"
 import SignupButton from "../atom/SignupButton"
 import Link from "next/link"
 import { Input } from "../atom/Input"
+import TimerInput from "../molecule/TimerInput"
 
 interface FormInput {
-	emailLocal: string
+	email: string
 	emailValidation: string
 	password: string
 	passwordConfirm: string
@@ -17,7 +18,16 @@ interface FormInput {
 }
 
 const SignUpForm: React.FC = () => {
-	const { control, handleSubmit } = useForm<FormInput>()
+	const { control, handleSubmit } = useForm<FormInput>({
+		defaultValues: {
+			email: "",
+			emailValidation: "",
+			password: "",
+			passwordConfirm: "",
+			nickname: "",
+			terms: false,
+		},
+	})
 
 	const onSubmit: SubmitHandler<FormInput> = (data) => {
 		console.log(data)
@@ -28,11 +38,11 @@ const SignUpForm: React.FC = () => {
 			className="flex min-h-screen flex-col items-center">
 			<h5 className="flex justify-center py-10 align-middle">Sign-up</h5>
 			<div className="items-centern flex flex-col">
+				<label>E-mail</label>
 				<div className="form--group py-2">
-					<label>E-mail validation</label>
-					<div className="email--input grid grid-cols-[2fr_1fr] gap-4">
+					<div className="email--input grid grid-cols-[10fr_2fr] gap-4">
 						<Controller
-							name="emailLocal"
+							name="email"
 							control={control}
 							render={({ field }) => (
 								<Input
@@ -46,30 +56,12 @@ const SignUpForm: React.FC = () => {
 						<ValidateButton text="validate" />
 					</div>
 				</div>
-				<div className="form-group max-w-screen-lg">
-					<label>E-mail validation</label>
-					<div className="email-validation flex justify-between">
-						<Controller
-							name="emailValidation"
-							control={control}
-							render={({ field }) => (
-								<Input
-									{...field}
-									type="text"
-									placeholder="Value"
-									className="input"
-								/>
-							)}
-						/>
-						<span>00:00</span>
-
-						<ValidateButton text="check" />
-					</div>
+				<div>
+					<TimerInput control={control} />
 				</div>
-
 				{/* Password */}
-				<div className="form-group flex flex-col justify-between">
-					<label>Password</label>
+				<label className="pt-2">Password</label>
+				<div className="form-group flex flex-col justify-between py-2">
 					<Controller
 						name="password"
 						control={control}
@@ -83,10 +75,9 @@ const SignUpForm: React.FC = () => {
 						)}
 					/>
 				</div>
-
 				{/* Password Confirm */}
+				<label className="pt-2">Password confirm</label>
 				<div className="form-group flex flex-col py-2">
-					<label>Password confirm</label>
 					<Controller
 						name="passwordConfirm"
 						control={control}
@@ -102,9 +93,9 @@ const SignUpForm: React.FC = () => {
 				</div>
 
 				{/* Nickname */}
-				<div className="form-group flex justify-between py-2">
+				<div className="form-group py-2">
 					<label>Nickname</label>
-					<div className="nickname-input">
+					<div className="nickname-input grid grid-cols-[10fr_2fr] gap-4">
 						<Controller
 							name="nickname"
 							control={control}
@@ -121,28 +112,32 @@ const SignUpForm: React.FC = () => {
 					</div>
 				</div>
 
-				<div className="form-group terms">
+				<div className="form-group-terms flex items-center gap-2">
 					<Controller
 						name="terms"
 						control={control}
 						render={({ field }) => {
 							const { onChange, onBlur, value, name, ref } = field
 							return (
-								<Input
+								<input
 									type="checkbox"
 									checked={value}
 									onChange={(e) => onChange(e.target.checked)}
 									name={name}
 									ref={ref}
 									onBlur={onBlur}
+									className="mr-2"
 								/>
 							)
 						}}
 					/>
-					<label>I accept the terms</label>
-					<Link href="#">Read our T&Cs</Link>
+					<label className="flex items-center gap-1">
+						<span>I accept the terms</span>
+						<Link href="#" className="text-blue-500 underline">
+							Read our T&Cs
+						</Link>
+					</label>
 				</div>
-
 				{/* Submit Button */}
 				<SignupButton text="Sign UP" />
 			</div>

@@ -6,7 +6,6 @@ interface ValidateButtonProps {
 }
 
 function SignupButton({ text }: ValidateButtonProps) {
-	console.log(text)
 	return <Button>{text}</Button>
 }
 
