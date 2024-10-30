@@ -3,12 +3,11 @@ import { Button } from "../../../../../../packages/ui/src/Button"
 
 interface ValidateButtonProps {
 	text: string
+	onClick?: () => void
 }
 
-function ValidateButton({ text }: ValidateButtonProps) {
-	console.log(text)
-	return <Button>{text}</Button>
-	
+function ValidateButton({ text, onClick }: ValidateButtonProps) {
+	return <Button onClick={onClick}>{text}</Button>
 }
 
 export default ValidateButton

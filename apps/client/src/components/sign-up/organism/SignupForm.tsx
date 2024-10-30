@@ -3,11 +3,12 @@
 import React from "react"
 import { useForm, Controller, SubmitHandler } from "react-hook-form"
 import ValidateButton from "../atom/Button"
-import LabelInput from "../molecule/LabelInput"
+import SignupButton from "../atom/SignupButton"
+import Link from "next/link"
+import { Input } from "../atom/Input"
 
-interface IFormInput {
+interface FormInput {
 	emailLocal: string
-	emailDomain: string
 	emailValidation: string
 	password: string
 	passwordConfirm: string
@@ -16,148 +17,135 @@ interface IFormInput {
 }
 
 const SignUpForm: React.FC = () => {
-	const { control, handleSubmit } = useForm<IFormInput>()
+	const { control, handleSubmit } = useForm<FormInput>()
 
-	const onSubmit: SubmitHandler<IFormInput> = (data) => {
+	const onSubmit: SubmitHandler<FormInput> = (data) => {
 		console.log(data)
 	}
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="signup--form">
-			<h2 className="flex justify-center align-middle">Sign-up</h2>
-			<div className="form--group py-2">
-				<LabelInput label_name="email" />
-				<div className="email--input">
-					<Controller
-						name="emailLocal"
-						control={control}
-						render={({ field }) => (
-							<input
-								{...field}
-								type="text"
-								placeholder="example"
-								className="input"
-							/>
-						)}
-					/>
-					<span>@</span>
-					<Controller
-						name="emailDomain"
-						control={control}
-						render={({ field }) => (
-							<input
-								{...field}
-								type="text"
-								placeholder="etc.com"
-								className="input"
-							/>
-						)}
-					/>
-					<ValidateButton text="validate" />
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="flex min-h-screen flex-col items-center">
+			<h5 className="flex justify-center py-10 align-middle">Sign-up</h5>
+			<div className="items-centern flex flex-col">
+				<div className="form--group py-2">
+					<label>E-mail validation</label>
+					<div className="email--input grid grid-cols-[2fr_1fr] gap-4">
+						<Controller
+							name="emailLocal"
+							control={control}
+							render={({ field }) => (
+								<Input
+									{...field}
+									type="text"
+									placeholder="example"
+									className="input"
+								/>
+							)}
+						/>
+						<ValidateButton text="validate" />
+					</div>
 				</div>
-			</div>
+				<div className="form-group max-w-screen-lg">
+					<label>E-mail validation</label>
+					<div className="email-validation flex justify-between">
+						<Controller
+							name="emailValidation"
+							control={control}
+							render={({ field }) => (
+								<Input
+									{...field}
+									type="text"
+									placeholder="Value"
+									className="input"
+								/>
+							)}
+						/>
+						<span>00:00</span>
 
-			{/* E-mail Validation */}
-			<div className="form-group">
-				<label>E-mail validation</label>
-				<div className="email-validation">
+						<ValidateButton text="check" />
+					</div>
+				</div>
+
+				{/* Password */}
+				<div className="form-group flex flex-col justify-between">
+					<label>Password</label>
 					<Controller
-						name="emailValidation"
+						name="password"
 						control={control}
 						render={({ field }) => (
-							<input
+							<Input
 								{...field}
-								type="text"
+								type="password"
 								placeholder="Value"
 								className="input"
 							/>
 						)}
 					/>
-					<span>00:00</span>
-					<ValidateButton text="check" />
 				</div>
-			</div>
 
-			{/* Password */}
-			<div className="form-group">
-				<label>Password</label>
-				<Controller
-					name="password"
-					control={control}
-					render={({ field }) => (
-						<input
-							{...field}
-							type="password"
-							placeholder="Value"
-							className="input"
-						/>
-					)}
-				/>
-			</div>
-
-			{/* Password Confirm */}
-			<div className="form-group">
-				<label>Password confirm</label>
-				<Controller
-					name="passwordConfirm"
-					control={control}
-					render={({ field }) => (
-						<input
-							{...field}
-							type="password"
-							placeholder="Value"
-							className="input"
-						/>
-					)}
-				/>
-			</div>
-
-			{/* Nickname */}
-			<div className="form-group">
-				<label>Nickname</label>
-				<div className="nickname-input">
+				{/* Password Confirm */}
+				<div className="form-group flex flex-col py-2">
+					<label>Password confirm</label>
 					<Controller
-						name="nickname"
+						name="passwordConfirm"
 						control={control}
 						render={({ field }) => (
-							<input
+							<Input
 								{...field}
-								type="text"
+								type="password"
 								placeholder="Value"
 								className="input"
 							/>
 						)}
 					/>
-					<ValidateButton text="validate" />
 				</div>
-			</div>
 
-			{/* Terms and Conditions */}
-			<div className="form-group terms">
-				<Controller
-					name="terms"
-					control={control}
-					render={({ field }) => {
-						const { onChange, onBlur, value, name, ref } = field
-						return (
-							<input
-								type="checkbox"
-								checked={value} // boolean 값을 checked로 관리
-								onChange={(e) => onChange(e.target.checked)} // 체크박스 상태를 e.target.checked로 관리
-								name={name}
-								ref={ref}
-								onBlur={onBlur}
-							/>
-						)
-					}}
-				/>
-				<label>I accept the terms</label>
-				<a href="#">Read our T&Cs</a>
-			</div>
+				{/* Nickname */}
+				<div className="form-group flex justify-between py-2">
+					<label>Nickname</label>
+					<div className="nickname-input">
+						<Controller
+							name="nickname"
+							control={control}
+							render={({ field }) => (
+								<Input
+									{...field}
+									type="text"
+									placeholder="Value"
+									className="input"
+								/>
+							)}
+						/>
+						<ValidateButton text="validate" />
+					</div>
+				</div>
 
-			{/* Submit Button */}
-			<button type="submit" className="submit-button">
-				Sign Up
-			</button>
+				<div className="form-group terms">
+					<Controller
+						name="terms"
+						control={control}
+						render={({ field }) => {
+							const { onChange, onBlur, value, name, ref } = field
+							return (
+								<Input
+									type="checkbox"
+									checked={value}
+									onChange={(e) => onChange(e.target.checked)}
+									name={name}
+									ref={ref}
+									onBlur={onBlur}
+								/>
+							)
+						}}
+					/>
+					<label>I accept the terms</label>
+					<Link href="#">Read our T&Cs</Link>
+				</div>
+
+				{/* Submit Button */}
+				<SignupButton text="Sign UP" />
+			</div>
 		</form>
 	)
 }
