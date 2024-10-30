@@ -23,7 +23,7 @@ function NotableDrop({
 	author,
 }: NotableDropProps) {
 	return (
-		<Card className="relative box-content h-[600px] w-[460px] overflow-hidden rounded-[10px] border-[1px] border-[#424242] bg-[#111111] p-5 hover:border-[#DDA2FE] ">
+		<Card className="relative box-border h-[600px] w-[460px] select-none overflow-hidden rounded-[10px] border-[1px] border-[#424242] bg-[#111111] p-5 hover:border-[#DDA2FE]">
 			<div className="absolute inset-0 z-10 bg-gradient-to-b from-transparent via-black/5 to-black" />
 			<div className="relative h-full w-full overflow-hidden rounded-[10px]">
 				<Image

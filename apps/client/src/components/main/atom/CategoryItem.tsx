@@ -9,7 +9,7 @@ interface CategoryItemProps {
 // todo 해당 컴포넌트를 누를 시에 특정 경로로 이동할 수 있도록 수정할 예정 (href 추가)
 function CategoryItem({ title, images }: CategoryItemProps) {
 	return (
-		<Card className="relative box-content h-[340px] w-[340px] overflow-hidden rounded-[10px] bg-[#111111]">
+		<Card className="relative box-border h-[340px] w-[340px] overflow-hidden rounded-[10px] bg-[#111111]">
 			<CardContent className="flex gap-[10px] p-5">
 				{/* Tall image on the left */}
 				<div className="relative h-[250px] w-[145px] overflow-hidden rounded-[10px]">

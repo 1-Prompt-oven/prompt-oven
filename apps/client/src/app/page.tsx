@@ -8,8 +8,8 @@ import FeatureDescriptionContainer from "@/components/main/atom/FeatureDescripti
 import ImageCarousel from "@/components/main/molecule/ImageCarousel.tsx"
 import CategoryList from "@/components/main/molecule/CategoryList.tsx"
 import NotableDrop from "@/components/main/molecule/NotableDrop.tsx"
+import NotableDropsCarousel from "@/components/main/organism/NotableDropsCarousel.tsx"
 import MainFooter from "@/components/main/organism/MainFooter.tsx"
-
 
 const steps = [
 	{
@@ -70,6 +70,17 @@ const promptCategories = [
 	},
 ]
 
+const notableDrops = Array.from({ length: 12 }).map(() => ({
+	title: "Colourfull assests",
+	description:
+		"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt",
+	tag: "NEW",
+	bgImage: "/img/main/notableDrop1.png",
+	author: {
+		name: "@robix2x2x",
+		profile: "/img/main/notableDropAvatar1.png",
+	},
+}))
 
 
 export default function Page() {
@@ -111,6 +122,10 @@ export default function Page() {
 							profile: "/img/main/notableDropAvatar1.png",
 						}}
 					/>
+				</div>
+
+				<div className="w-full py-10">
+					<NotableDropsCarousel items={notableDrops} />
 				</div>
         
 			</div>
