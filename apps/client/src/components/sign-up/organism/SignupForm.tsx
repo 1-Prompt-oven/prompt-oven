@@ -32,6 +32,7 @@ const SignUpForm: React.FC = () => {
 	const onSubmit: SubmitHandler<FormInput> = (data) => {
 		console.log(data)
 	}
+	//
 
 	return (
 		<form
