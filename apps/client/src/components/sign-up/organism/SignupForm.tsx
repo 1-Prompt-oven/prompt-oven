@@ -1,13 +1,15 @@
 "use client"
 
 import React from "react"
-import { useForm, Controller, SubmitHandler } from "react-hook-form"
+import { useForm, SubmitHandler, Controller } from "react-hook-form"
+import FormController from "../molecule/FormController"
 import ValidateButton from "../atom/Button"
-import LabelInput from "../molecule/LabelInput"
+import SignupButton from "../atom/SignupButton"
+import Link from "next/link"
+import TimerInput from "../molecule/TimerInput"
 
-interface IFormInput {
-	emailLocal: string
-	emailDomain: string
+interface FormInput {
+	email: string
 	emailValidation: string
 	password: string
 	passwordConfirm: string
@@ -16,148 +18,108 @@ interface IFormInput {
 }
 
 const SignUpForm: React.FC = () => {
-	const { control, handleSubmit } = useForm<IFormInput>()
+	const { control, handleSubmit } = useForm<FormInput>({
+		defaultValues: {
+			email: "",
+			emailValidation: "",
+			password: "",
+			passwordConfirm: "",
+			nickname: "",
+			terms: false,
+		},
+	})
 
-	const onSubmit: SubmitHandler<IFormInput> = (data) => {
-		console.log(data)
+	const onSubmit: SubmitHandler<FormInput> = (data) => {
+		// console.log(data)
 	}
+	//
+
 	return (
-		<form onSubmit={handleSubmit(onSubmit)} className="signup--form">
-			<h2 className="flex justify-center align-middle">Sign-up</h2>
-			<div className="form--group py-2">
-				<LabelInput label_name="email" />
-				<div className="email--input">
-					<Controller
-						name="emailLocal"
-						control={control}
-						render={({ field }) => (
-							<input
-								{...field}
-								type="text"
-								placeholder="example"
-								className="input"
-							/>
-						)}
-					/>
-					<span>@</span>
-					<Controller
-						name="emailDomain"
-						control={control}
-						render={({ field }) => (
-							<input
-								{...field}
-								type="text"
-								placeholder="etc.com"
-								className="input"
-							/>
-						)}
-					/>
-					<ValidateButton text="validate" />
-				</div>
-			</div>
-
-			{/* E-mail Validation */}
-			<div className="form-group">
-				<label>E-mail validation</label>
-				<div className="email-validation">
-					<Controller
-						name="emailValidation"
-						control={control}
-						render={({ field }) => (
-							<input
-								{...field}
-								type="text"
-								placeholder="Value"
-								className="input"
-							/>
-						)}
-					/>
-					<span>00:00</span>
-					<ValidateButton text="check" />
-				</div>
-			</div>
-
-			{/* Password */}
-			<div className="form-group">
-				<label>Password</label>
-				<Controller
-					name="password"
-					control={control}
-					render={({ field }) => (
-						<input
-							{...field}
-							type="password"
-							placeholder="Value"
+		<form
+			onSubmit={handleSubmit(onSubmit)}
+			className="flex min-h-screen flex-col items-center">
+			<h5 className="flex justify-center py-10 align-middle">Sign-up</h5>
+			<div className="flex flex-col items-center">
+				<label>E-mail</label>
+				<div className="py-2">
+					<div className="grid grid-cols-[10fr_2fr] gap-4">
+						<FormController
+							name="email"
+							control={control}
+							type="text"
+							placeholder="example"
 							className="input"
 						/>
-					)}
-				/>
-			</div>
+						<ValidateButton text="validate" />
+					</div>
+				</div>
+				<div>
+					<TimerInput control={control} />
+				</div>
 
-			{/* Password Confirm */}
-			<div className="form-group">
-				<label>Password confirm</label>
-				<Controller
-					name="passwordConfirm"
-					control={control}
-					render={({ field }) => (
-						<input
-							{...field}
-							type="password"
-							placeholder="Value"
-							className="input"
+				{/* Password */}
+				<label className="pt-2">Password</label>
+				<div className="flex flex-col justify-between py-2">
+					<FormController
+						name="password"
+						control={control}
+						type="password"
+						placeholder="Password"
+					/>
+				</div>
+
+				{/* Password Confirm */}
+				<label className="pt-2">Password confirm</label>
+				<div className="flex flex-col py-2">
+					<FormController
+						name="passwordConfirm"
+						control={control}
+						type="password"
+						placeholder="Confirm Password"
+					/>
+				</div>
+
+				{/* Nickname */}
+				<div className="form-group py-2">
+					<label>Nickname</label>
+					<div className="grid grid-cols-[10fr_2fr] gap-4">
+						<FormController
+							name="nickname"
+							control={control}
+							type="text"
+							placeholder="Nickname"
 						/>
-					)}
-				/>
-			</div>
+						<ValidateButton text="validate" />
+					</div>
+				</div>
 
-			{/* Nickname */}
-			<div className="form-group">
-				<label>Nickname</label>
-				<div className="nickname-input">
+				{/* Terms Checkbox */}
+				<div className="flex items-center gap-2">
 					<Controller
-						name="nickname"
+						name="terms"
 						control={control}
 						render={({ field }) => (
-							<input
-								{...field}
-								type="text"
-								placeholder="Value"
-								className="input"
-							/>
-						)}
-					/>
-					<ValidateButton text="validate" />
-				</div>
-			</div>
-
-			{/* Terms and Conditions */}
-			<div className="form-group terms">
-				<Controller
-					name="terms"
-					control={control}
-					render={({ field }) => {
-						const { onChange, onBlur, value, name, ref } = field
-						return (
 							<input
 								type="checkbox"
-								checked={value} // boolean 값을 checked로 관리
-								onChange={(e) => onChange(e.target.checked)} // 체크박스 상태를 e.target.checked로 관리
-								name={name}
-								ref={ref}
-								onBlur={onBlur}
+								checked={field.value}
+								onChange={(e) => field.onChange(e.target.checked)}
+								name={field.name}
+								ref={field.ref}
+								className="mr-2"
 							/>
-						)
-					}}
-				/>
-				<label>I accept the terms</label>
-				<a href="#">Read our T&Cs</a>
-			</div>
+						)}
+					/>
+					<label className="flex items-center gap-1">
+						<span>I accept the terms</span>
+						<Link href="#" className="text-blue-500 underline">
+							Read our T&Cs
+						</Link>
+					</label>
+				</div>
 
-			{/* Submit Button */}
-			<button type="submit" className="submit-button">
-				Sign Up
-			</button>
+				{/* Submit Button */}
+				<SignupButton text="Sign UP" />
+			</div>
 		</form>
 	)
 }

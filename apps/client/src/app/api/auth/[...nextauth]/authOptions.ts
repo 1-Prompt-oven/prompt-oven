@@ -1,7 +1,7 @@
 import CredentialsProvider from "next-auth/providers/credentials"
 import type { NextAuthOptions } from "next-auth"
 import { signInAction } from "@/app/action/auth/signInAction"
-import type { authMemberType } from "@/app/types/authMemberType"
+import type { authMemberType } from "@/types/auth/authMemberType"
 
 export const authOptions: NextAuthOptions = {
 	session: {

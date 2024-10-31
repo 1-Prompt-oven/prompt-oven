@@ -1,10 +1,10 @@
 import React from "react"
 import { Button } from "@repo/ui/button"
-import NavAnchor from "@/components/common/atom/NavAnchor"
 import GradientButton from "@/components/common/atom/GradientButton.tsx"
 import Avatar from "@/components/common/atom/Avatar.tsx"
 import SearchInput from "@/components/common/atom/SearchInput"
 import MainLogo from "@/components/common/atom/icon/MainLogo.tsx"
+import NavAnchor from "@/components/common/atom/NavAnchor"
 
 export default function MainHeader() {
 	return (
@@ -25,12 +25,9 @@ export default function MainHeader() {
 					<NavAnchor href="/" color="#969696" activeColor="#A913F9">
 						HOME
 					</NavAnchor>
-					<div className="group relative">
-						<NavAnchor href="/prompts" color="#969696" activeColor="#A913F9">
-							PROMPTS
-						</NavAnchor>
-						{/* Dropdown menu can be added here */}
-					</div>
+					<NavAnchor href="/prompts" color="#969696" activeColor="#A913F9">
+						PROMPTS
+					</NavAnchor>
 					<NavAnchor
 						href="/special-exhibition"
 						color="#969696"
