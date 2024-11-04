@@ -1,6 +1,6 @@
 "use client"
 
-import React from "react"
+import React, { useEffect } from "react"
 import { useForm, SubmitHandler, Controller } from "react-hook-form"
 import FormController from "../molecule/FormController"
 import ValidateButton from "../atom/Button"
@@ -18,7 +18,7 @@ interface FormInput {
 }
 
 const SignUpForm: React.FC = () => {
-	const { control, handleSubmit } = useForm<FormInput>({
+	const { control, handleSubmit, watch } = useForm<FormInput>({
 		defaultValues: {
 			email: "",
 			emailValidation: "",
@@ -30,9 +30,15 @@ const SignUpForm: React.FC = () => {
 	})
 
 	const onSubmit: SubmitHandler<FormInput> = (data) => {
-		// console.log(data)
+		console.log("submitted data", data)
 	}
-	//
+	// Watch all form values
+	const watchedValues = watch()
+
+	// Log the current form values in the console whenever they change
+	useEffect(() => {
+		console.log("Current form values:", watchedValues)
+	}, [watchedValues])
 
 	return (
 		<form

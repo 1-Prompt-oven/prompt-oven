@@ -1,5 +1,5 @@
 import React from "react"
-import { Button } from "../../../../../../packages/ui/src/Button"
+import { Button } from "@repo/ui/button"
 
 interface ValidateButtonProps {
 	text: string
