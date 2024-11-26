@@ -1,7 +1,5 @@
-import type {
-	ProfileListCardType,
-	ProfileMemberInfoType,
-} from "@/types/profile/profileTypes"
+import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
+import type { PromptsType } from "@/types/prompts/promptsType"
 
 //프로필 멤버 정보 - undefined 정보 포함
 export const profileMemberInfoUndefineData: ProfileMemberInfoType = {
@@ -12,7 +10,6 @@ export const profileMemberInfoUndefineData: ProfileMemberInfoType = {
 	follower: 2365121,
 	viewer: 413487,
 	sales: 412,
-	isViewStatus: false,
 }
 
 //프로필 멤버 정보 - undefined 정보 미포함
@@ -31,10 +28,9 @@ export const profileMemberInfoData: ProfileMemberInfoType = {
 	follower: 2365121,
 	viewer: 413487,
 	sales: 4121,
-	isViewStatus: true,
 }
 
-export const profileListData: ProfileListCardType[] = [
+export const profileListData: PromptsType[] = [
 	{
 		productUUID: "pr-od-uc-t1",
 		thumbnailUrl:

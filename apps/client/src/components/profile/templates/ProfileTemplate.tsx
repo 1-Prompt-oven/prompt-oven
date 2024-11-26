@@ -1,15 +1,13 @@
-import type {
-	ProfileListCardType,
-	ProfileMemberInfoType,
-} from "@/types/profile/profileTypes"
+import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
+import type { PromptsType } from "@/types/prompts/promptsType"
 import ProfileMemberInfo from "../organisms/ProfileMemberInfo"
 import ProfilePrompt from "../organisms/ProfilePrompt"
 
 interface ProfileDataProps {
 	memberData: ProfileMemberInfoType // 회원 정보
-	listData: ProfileListCardType[]
+	listData: PromptsType[]
 	// listData: {
-	// 	items: ProfileListCardType[] // 프로필 카드 목록
+	// 	items: PromptsType[] // 프로필 카드 목록
 	// 	nextCursor: string | null // 다음 커서
 	// }
 }

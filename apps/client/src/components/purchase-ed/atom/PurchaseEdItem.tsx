@@ -7,15 +7,15 @@ import { ShoppingCart } from "@repo/ui/lucide"
 import StarAnimation from "@repo/ui/star-animation"
 import { PromptCardDateFormatted, PromptIsNew } from "@/lib/utils"
 import type { PromptsType } from "@/types/prompts/promptsType"
-import FavoriteName from "./FavoriteName"
-import FavoriteLLMId from "./FavoriteLLMId"
-import FavoritePrice from "./FavoritePrice"
+import FavoriteName from "./PurchaseEdName"
+import FavoriteLLMId from "./PurchaseEdLLMId"
+import FavoritePrice from "./PurchaseEdPrice"
 
-interface FavoriteItemProps {
+interface PurchaseEdItemProps {
 	productInfo: PromptsType
 }
 
-export default function FavoriteItem({ productInfo }: FavoriteItemProps) {
+export default function PurchaseEdItem({ productInfo }: PurchaseEdItemProps) {
 	const formattedDate = PromptCardDateFormatted(productInfo.productRegistDate)
 	const isNew = PromptIsNew(productInfo.productRegistDate)
 

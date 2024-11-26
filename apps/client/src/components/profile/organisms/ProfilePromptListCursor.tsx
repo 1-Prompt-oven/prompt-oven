@@ -1,14 +1,13 @@
 // "use client"
 
 // import React, { useState, useEffect } from "react"
-// import type { ProfileListCardType } from "@/types/profile/profileTypes"
 // import ProfilePromptItem from "../molecules/ProfilePromptItem"
 // import ProfileLoadMore from "../molecules/ProfileLoadMore"
 // import { getProfileList } from "@/action/profile/getProfileData"
 
 // interface ProfileListProps {
 // 	initialData: {
-// 		items: ProfileListCardType[] // 초기 데이터
+// 		items: PromptsType[] // 초기 데이터
 // 		nextCursor: string | null // 다음 커서
 // 	}
 // }
@@ -16,7 +15,7 @@
 // export default function ProfilePromptListCursor({
 // 	initialData,
 // }: ProfileListProps) {
-// 	const [allData, setAllData] = useState<ProfileListCardType[]>(
+// 	const [allData, setAllData] = useState<PromptsType[]>(
 // 		initialData.items,
 // 	)
 // 	const [loading, setLoading] = useState(false)
@@ -68,12 +67,11 @@
 // }
 
 // // import React from "react"
-// // import type { ProfileListCardType } from "@/types/profile/profileTypes"
 // // import ProfilePromptItem from "../molecules/ProfilePromptItem"
 // // import ProfileLoadMore from "../molecules/ProfileLoadMore"
 
 // // interface ProfileListProps {
-// // 	listData: ProfileListCardType[]
+// // 	listData: PromptsType[]
 // // }
 
 // // export default function ProfilePromptList({ listData }: ProfileListProps) {
