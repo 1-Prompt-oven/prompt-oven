@@ -5,11 +5,11 @@ import { Card } from "@repo/ui/card"
 import { Badge } from "@repo/ui/badge"
 import { Button } from "@repo/ui/button"
 import StarAnimation from "@repo/ui/star-animation"
-import type { ProfileListCardType } from "@/types/profile/profileTypes"
+import type { PromptsType } from "@/types/prompts/promptsType"
 import { PromptCardDateFormatted, PromptIsNew } from "@/lib/utils"
 
 interface ProfileCardProps {
-	productInfo: ProfileListCardType
+	productInfo: PromptsType
 }
 
 export default function ProfilePromptItem({ productInfo }: ProfileCardProps) {

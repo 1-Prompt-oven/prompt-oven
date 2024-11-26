@@ -1,10 +1,10 @@
 "use server"
 
-import { FavoriteListDatas } from "@/dummy/favorite/favoritesDatas"
+import { PurchaseEd } from "@/dummy/purchase/purchase-ed"
 import type { PromptsType } from "@/types/prompts/promptsType"
 
-export async function getFavoriteList(): Promise<PromptsType[]> {
-	const res: PromptsType[] = await FavoriteListDatas
+export async function getPurchaseEd(): Promise<PromptsType[]> {
+	const res: PromptsType[] = await PurchaseEd
 	// const res: ProfileMemberInfoType = await profileMemberInfoUndefineData
 
 	//     const res = await fetch(`${process.env.API_BASE_URL}/v1/profile`, {
