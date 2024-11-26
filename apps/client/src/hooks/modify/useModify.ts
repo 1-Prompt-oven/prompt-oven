@@ -2,24 +2,30 @@ import { useState } from "react"
 import { uploadImage } from "@/action/s3/s3UploadAction"
 import type { CommonModifyType } from "@/types/modify/commonModifyTypes"
 
-export const useModify = (memberData: CommonModifyType) => {
+export const useModify = (modifyData: CommonModifyType) => {
 	//// 변수 관리 START ////
 	const [banner, setBanner] = useState<string | undefined>(
-		memberData.bannerImageUrl ? memberData.bannerImageUrl : "",
+		modifyData.bannerImageUrl ? modifyData.bannerImageUrl : "",
 	)
+
 	const [avatar, setAvatar] = useState<string | undefined>(
-		memberData.avatarImageUrl ? memberData.avatarImageUrl : "",
+		modifyData.avatarImageUrl ? modifyData.avatarImageUrl : "",
 	)
 
 	const [hashTag, setHashTag] = useState<string | undefined>(
-		memberData.hashTag ? memberData.hashTag : "",
+		modifyData.hashTag ? modifyData.hashTag : "",
 	)
-	const [nickname, setNickname] = useState<string>(memberData.nickname)
+
+	const [nickname, setNickname] = useState<string | undefined>(
+		modifyData.nickname ? modifyData.nickname : "",
+	)
+
 	const [email, setEmail] = useState<string | undefined>(
-		memberData.email ? memberData.email : "",
+		modifyData.email ? modifyData.email : "",
 	)
+
 	const [bio, setBio] = useState<string | undefined>(
-		memberData.bio ? memberData.bio : "",
+		modifyData.bio ? modifyData.bio : "",
 	)
 	//// 변수 관리 END ////
 
@@ -82,22 +88,22 @@ export const useModify = (memberData: CommonModifyType) => {
 	const handleReset = (field: string) => {
 		switch (field) {
 			case "banner":
-				setBanner(memberData.bannerImageUrl ? memberData.bannerImageUrl : "")
+				setBanner(modifyData.bannerImageUrl ? modifyData.bannerImageUrl : "")
 				break
 			case "avatar":
-				setAvatar(memberData.avatarImageUrl ? memberData.avatarImageUrl : "")
+				setAvatar(modifyData.avatarImageUrl ? modifyData.avatarImageUrl : "")
 				break
 			case "hashTag":
-				setHashTag(memberData.hashTag ? memberData.hashTag : "")
+				setHashTag(modifyData.hashTag ? modifyData.hashTag : "")
 				break
 			case "nickname":
-				setNickname(memberData.nickname)
+				setNickname(modifyData.nickname ? modifyData.nickname : "")
 				break
 			case "email":
-				setEmail(memberData.email ? memberData.email : "")
+				setEmail(modifyData.email ? modifyData.email : "")
 				break
 			case "bio":
-				setBio(memberData.bio ? memberData.bio : "")
+				setBio(modifyData.bio ? modifyData.bio : "")
 				break
 			default:
 				break
