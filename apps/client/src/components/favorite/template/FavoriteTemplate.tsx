@@ -1,6 +1,6 @@
+import type { PromptsType } from "@/types/prompts/promptsType"
 import FavoriteContainer from "../organism/FavoriteContainer"
 import FavoriteTitle from "../atom/FavoriteTitle"
-import type { PromptsType } from "@/types/prompts/promptsType"
 
 interface PromptsTemplateProps {
 	favoriteList: PromptsType[]
