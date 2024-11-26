@@ -4,10 +4,8 @@ import {
 	profileListData,
 	profileMemberInfoData,
 } from "@/dummy/profile/infoAndListDatas"
-import type {
-	ProfileListCardType,
-	ProfileMemberInfoType,
-} from "@/types/profile/profileTypes"
+import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
+import type { PromptsType } from "@/types/prompts/promptsType"
 
 export async function getProfileMemberInfo(): Promise<ProfileMemberInfoType> {
 	const res: ProfileMemberInfoType = await profileMemberInfoData
@@ -27,7 +25,7 @@ export async function getProfileMemberInfo(): Promise<ProfileMemberInfoType> {
 
 // export async function getProfileList(cursor?: string) {
 export async function getProfileList() {
-	const res: ProfileListCardType[] = await profileListData // 데이터를 가져옴
+	const res: PromptsType[] = await profileListData // 데이터를 가져옴
 	return res
 
 	// const startIndex = cursor ? parseInt(cursor) : 0 // 커서가 주어지면 해당 인덱스부터 시작

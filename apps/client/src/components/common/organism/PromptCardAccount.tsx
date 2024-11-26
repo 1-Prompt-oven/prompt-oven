@@ -6,24 +6,26 @@ import { Card } from "@repo/ui/card"
 import { ShoppingCart } from "@repo/ui/lucide"
 import StarAnimation from "@repo/ui/star-animation"
 import { PromptCardDateFormatted, PromptIsNew } from "@/lib/utils"
-import type { FavoriteType } from "@/types/favorite/favoriteTypes"
-import FavoriteName from "./FavoriteName"
-import FavoriteLLMId from "./FavoriteLLMId"
-import FavoritePrice from "./FavoritePrice"
+import type { PromptsType } from "@/types/prompts/promptsType"
+import PromptName from "../molecule/PromptName"
+import PromptLLMId from "../molecule/PromptLLMId"
+import PromptPrice from "../molecule/PromptPrice"
 
-interface FavoriteItemProps {
-	productInfo: FavoriteType
+interface PromptCardAccountProps {
+	productInfo: PromptsType
 }
 
-export default function FavoriteItem({ productInfo }: FavoriteItemProps) {
+export default function PromptCardAccount({
+	productInfo,
+}: PromptCardAccountProps) {
 	const formattedDate = PromptCardDateFormatted(productInfo.productRegistDate)
 	const isNew = PromptIsNew(productInfo.productRegistDate)
 
 	return (
 		<li className="flex justify-center">
 			<Link href="/prompt-detail/1">
-				<Card className="relative flex w-[220px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
-					<div className="relative h-[260px]">
+				<Card className="relative flex w-[210px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
+					<div className="relative h-[250px]">
 						<Image
 							src={productInfo.thumbnailUrl}
 							sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -48,11 +50,11 @@ export default function FavoriteItem({ productInfo }: FavoriteItemProps) {
 						/>
 
 						<div className="ml-1 space-y-5">
-							<FavoriteName favoriteName={productInfo.productName} />
-							<FavoriteLLMId llmId={productInfo.llmId} />
+							<PromptName name={productInfo.productName} />
+							<PromptLLMId llmId={productInfo.llmId} />
 						</div>
 
-						<FavoritePrice productPrice={productInfo.productPrice} />
+						<PromptPrice price={productInfo.productPrice} />
 					</div>
 				</Card>
 			</Link>

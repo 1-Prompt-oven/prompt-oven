@@ -1,9 +1,9 @@
-import type { FavoriteType } from "@/types/favorite/favoriteTypes"
+import type { PromptsType } from "@/types/prompts/promptsType"
 import FavoriteList from "../molecule/FavoriteList"
 import FavoriteCountBar from "../molecule/FavoriteCountBar"
 
 interface FavoriteContainerProps {
-	favoriteList: FavoriteType[]
+	favoriteList: PromptsType[]
 }
 
 export default function FavoriteContainer({

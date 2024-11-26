@@ -1,6 +1,6 @@
 import type { PromptsType } from "@/types/prompts/promptsType"
 
-export const FavoriteListDatas: PromptsType[] = [
+export const PurchaseEd: PromptsType[] = [
 	{
 		productUUID: "pr-od-uc-t1",
 		thumbnailUrl:
