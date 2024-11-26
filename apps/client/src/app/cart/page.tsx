@@ -13,9 +13,16 @@ async function cart() {
 	const selectedItemsTotalPrice = await calculateTotalPrice(items)
 
 	return (
-		<main>
-			<CartItemContainer items={items} />
-			<CartCheckout totalPrice={selectedItemsTotalPrice} />
+		<main className="min-h-screen bg-black p-6">
+			<div className="mx-auto max-w-6xl">
+				<h1 className="mb-6 text-2xl font-bold text-white">My Cart</h1>
+				<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+					<div className="lg:col-span-2">
+						<CartItemContainer items={items} />
+					</div>
+					<CartCheckout totalPrice={selectedItemsTotalPrice} />
+				</div>
+			</div>
 		</main>
 	)
 }
