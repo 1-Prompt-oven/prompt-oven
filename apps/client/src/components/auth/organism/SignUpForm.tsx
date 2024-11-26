@@ -4,20 +4,22 @@ import type { FieldValues } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@repo/ui/button"
-import { CheckBox } from "@repo/ui/checkbox"
-import { Label } from "@repo/ui/label"
 import { signupSchema, signupSchemaObject } from "@/schema/auth.ts"
 import SignUpField from "@/components/auth/molecule/SignUpField.tsx"
 import SignUpTimerField from "@/components/auth/molecule/SignUpTimerField.tsx"
 import { useAuthTimer } from "@/hooks/auth/useAuthTimer.ts"
 import { registerAuthMember } from "@/action/auth/memberRegisterAction"
 import type { RegisterOAuthMemberResponse } from "@/types/auth/memberRegisterType"
+import ValidTermsCheckBox from "../molecule/TermsValidCheckBox"
 
 function SignUpForm() {
 	const {
 		handleSubmit,
 		register,
 		watch,
+		setError,
+		clearErrors,
+		setValue,
 		formState: { errors },
 	} = useForm({
 		resolver: zodResolver(signupSchema),
@@ -25,14 +27,14 @@ function SignUpForm() {
 	})
 
 	const signUpSchemaKeys = signupSchemaObject.keyof().enum
-	const email = watch(signUpSchemaKeys.email) as string
-	const emailCode = watch(signUpSchemaKeys.emailCode) as string
-	const nickName = watch(signUpSchemaKeys.nickname) as string
+	const email: string = watch(signUpSchemaKeys.email) as string
+	const emailCode: string = watch(signUpSchemaKeys.emailCode) as string
+	const nickName: string = watch(signUpSchemaKeys.nickname) as string
 
 	const handleOnSubmitSuccess = async (data: FieldValues) => {
 		const responseData = data as RegisterOAuthMemberResponse
 		await registerAuthMember(responseData)
-		window.location.href = "/auth/sign-in"
+		window.location.href = "/sign-in"
 	}
 	const handleOnSubmitFailure = (error: FieldValues) => {
 		// eslint-disable-next-line no-console -- This is a client-side only log
@@ -180,17 +182,20 @@ function SignUpForm() {
 						}}
 					/>
 
-					{/* Remember me and Forgot Password */}
 					<div className="flex items-center space-x-2">
-						<CheckBox
+						<ValidTermsCheckBox
 							id="terms"
-							className="h-[18px] w-[18px] rounded-none border-none !bg-[#333333] shadow-[0px_0px_30px_rgba(0,0,0,0.2)] data-[state=checked]:bg-[#333333] data-[state=checked]:text-white"
+							name="terms"
+							label="I accept the terms"
+							register={register}
+							setError={setError}
+							clearErrors={clearErrors}
+							errorProps={{
+								name: "terms",
+								errors,
+							}}
+							setValue={setValue}
 						/>
-						<Label
-							htmlFor="terms"
-							className="cursor-pointer text-sm text-white">
-							I accept the terms
-						</Label>
 					</div>
 				</div>
 
@@ -207,4 +212,3 @@ function SignUpForm() {
 }
 
 export default SignUpForm
-

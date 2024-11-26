@@ -1,5 +1,5 @@
 import type { HTMLProps } from "react"
-import React from "react"
+import React, { memo } from "react"
 import { Label, type LabelProps } from "@repo/ui/label"
 import { Button, type ButtonProps } from "@repo/ui/button"
 import { ErrorMessage } from "@hookform/error-message"
@@ -19,7 +19,7 @@ interface SignUpFieldProps {
 	}
 }
 
-function SignUpField({
+const SignUpField = memo(function SignUpField({
 	showButton = false,
 	inputProps,
 	buttonProps,
@@ -53,13 +53,14 @@ function SignUpField({
 				<ErrorMessage
 					name={errorProps.name || ""}
 					errors={errorProps.errors}
-					render={(msg) => {
-						return <p className="mt-1 text-red-500">{msg.message}</p>
+					render={({ message }) => {
+						return <p className="mt-1 text-red-500">{message}</p>
 					}}
 				/>
 			) : null}
 		</div>
 	)
-}
+})
 
 export default SignUpField
+
