@@ -8,10 +8,10 @@ function SearchItemSkeleton() {
 				<div className="flex items-center gap-3 p-2" key={`prompt-${i}`}>
 					<Skeleton className="h-16 w-16 rounded" />
 					<div className="flex-1 space-y-2">
-						<Skeleton className="h-4 w-[200px]" />
+						<Skeleton className="h-4 w-[60%] rounded-none" />
 						<div className="flex items-center gap-2">
-							<Skeleton className="h-3 w-[100px]" />
-							<Skeleton className="h-3 w-[50px]" />
+							<Skeleton className="h-3 w-[20%] rounded-none" />
+							<Skeleton className="h-3 w-[10%] rounded-none" />
 						</div>
 					</div>
 				</div>
