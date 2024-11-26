@@ -1,11 +1,12 @@
-import React from "react"
+import { getFavoriteList } from "@/action/favorite/getFavoritesData"
+import FavoriteTemplate from "@/components/favorite/template/FavoriteTemplate"
 
-export default function Favorite() {
+export default async function Favorite() {
+	const favoriteList = await getFavoriteList()
+
 	return (
-		<main className="container mx-auto flex h-[400px] items-center bg-[#111111] py-1">
-			<p className="mx-auto text-center text-xl text-white">
-				Please Access Link ( &apos;/favorite/nickname&#39; )
-			</p>
-		</main>
+		<section className="container mx-auto bg-[#111111] py-1">
+			<FavoriteTemplate favoriteList={favoriteList} />
+		</section>
 	)
 }
