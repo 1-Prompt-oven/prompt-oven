@@ -1,7 +1,7 @@
 "use client"
 
 import type { PromptsType } from "@/types/prompts/promptsType"
-import ProfilePromptItem from "../molecules/ProfilePromptItem"
+import PromptCard from "@/components/common/organism/PromptCard"
 import ProfileLoadMore from "../atoms/ProfileLoadMore"
 
 interface ProfileListProps {
@@ -18,7 +18,7 @@ export default function ProfilePromptList({ listData }: ProfileListProps) {
 			<ul className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{listData.length > 0
 					? listData.map((item) => (
-							<ProfilePromptItem key={item.productUUID} productInfo={item} />
+							<PromptCard key={item.productUUID} productInfo={item} />
 						))
 					: null}
 			</ul>

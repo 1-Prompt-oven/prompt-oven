@@ -10,9 +10,9 @@ export default function PurchaseEdTemplate({
 	purchaseEdList,
 }: PurchaseEdTemplateProps) {
 	return (
-		<section className="mx-auto mt-12 max-w-screen-xl">
+		<div className="mx-auto mt-4 max-w-screen-xl">
 			<PurchaseEdTitle />
 			<PurchaseEdContainer purchaseEdList={purchaseEdList} />
-		</section>
+		</div>
 	)
 }
