@@ -1,5 +1,5 @@
-import Favorite from "@/app/favorite/[id]/page"
-import PurchaseEd from "@/app/purchase/[id]/ed/page"
+import Favorite from "@/app/favorite/page"
+import PurchaseEd from "@/app/purchase/ed/page"
 import ContentWrapper from "@/components/account/template/ContentWrapper.tsx"
 import type { SearchParams } from "@/types/account/searchParams.ts"
 
