@@ -9,12 +9,14 @@ interface CartItemContainerProps {
 
 function CartItemContainer({ items }: CartItemContainerProps) {
 	return (
-		<>
+		<div className="space-y-4">
 			<CartItemAllCheck />
-			{items.map((item) => (
-				<CartItem key={item.itemId} />
-			))}
-		</>
+			<div className="space-y-3">
+				{items.map((item) => (
+					<CartItem key={item.itemId} item={item} />
+				))}
+			</div>
+		</div>
 	)
 }
 
