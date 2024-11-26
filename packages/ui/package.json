@@ -26,7 +26,8 @@
 		"./star-animation": "./src/StarAnimation.tsx",
 		"./dialog": "./src/Dialog.tsx",
 		"./skeleton": "./src/Skeleton.tsx",
-		"./sheet": "./src/Sheet.tsx"
+		"./sheet": "./src/Sheet.tsx",
+		"./custom-select": "./src/CustomSelect.tsx"
 	},
 	"license": "MIT",
 	"scripts": {
