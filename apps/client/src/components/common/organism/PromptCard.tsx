@@ -1,18 +1,21 @@
-import Link from "next/link"
 import Image from "next/image"
-import { ShoppingCart } from "@repo/ui/lucide"
-import { Card } from "@repo/ui/card"
+import Link from "next/link"
 import { Badge } from "@repo/ui/badge"
 import { Button } from "@repo/ui/button"
+import { Card } from "@repo/ui/card"
+import { ShoppingCart } from "@repo/ui/lucide"
 import StarAnimation from "@repo/ui/star-animation"
-import type { PromptsType } from "@/types/prompts/promptsType"
 import { PromptCardDateFormatted, PromptIsNew } from "@/lib/utils"
+import type { PromptsType } from "@/types/prompts/promptsType"
+import PromptName from "../molecule/PromptName"
+import PromptLLMId from "../molecule/PromptLLMId"
+import PromptPrice from "../molecule/PromptPrice"
 
-interface ProfileCardProps {
+interface PromptCardProps {
 	productInfo: PromptsType
 }
 
-export default function ProfilePromptItem({ productInfo }: ProfileCardProps) {
+export default function PromptCard({ productInfo }: PromptCardProps) {
 	const formattedDate = PromptCardDateFormatted(productInfo.productRegistDate)
 	const isNew = PromptIsNew(productInfo.productRegistDate)
 
@@ -45,17 +48,11 @@ export default function ProfilePromptItem({ productInfo }: ProfileCardProps) {
 						/>
 
 						<div className="ml-1 space-y-5">
-							<h3 className="font-lato text-base font-semibold text-white">
-								{productInfo.productName}
-							</h3>
-							<p className="font-lato text-xs text-[#827682]">
-								{productInfo.llmId}
-							</p>
+							<PromptName name={productInfo.productName} />
+							<PromptLLMId llmId={productInfo.llmId} />
 						</div>
 
-						<span className="font-lato absolute bottom-2 right-3 ml-1 mt-0 !text-base text-white">
-							{productInfo.productPrice.toLocaleString()}$
-						</span>
+						<PromptPrice price={productInfo.productPrice} />
 					</div>
 				</Card>
 			</Link>

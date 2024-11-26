@@ -1,3 +1,5 @@
+import Favorite from "@/app/favorite/[id]/page"
+import PurchaseEd from "@/app/purchase/[id]/ed/page"
 import ContentWrapper from "@/components/account/template/ContentWrapper.tsx"
 import type { SearchParams } from "@/types/account/searchParams.ts"
 
@@ -6,7 +8,11 @@ export default function page({ searchParams }: SearchParams) {
 	const view = searchParams.view ?? "overview"
 	return (
 		<ContentWrapper queryParams={{ view }}>
-			<div className="text-white">test text {searchParams.view}</div>
+			{view === "favorites" && <Favorite />}
+			{view === "purchases" && <PurchaseEd />}
+			{view !== "purchases" && view !== "favorites" && (
+				<div>test text {view}</div>
+			)}
 		</ContentWrapper>
 	)
 }

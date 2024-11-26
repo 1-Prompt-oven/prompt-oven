@@ -5,8 +5,8 @@ export default async function PurchaseEd() {
 	const purchaseEdList = await getPurchaseEd()
 
 	return (
-		<main className="container mx-auto bg-[#111111] py-1">
+		<section className="container mx-auto bg-[#111111] py-1">
 			<PurchaseEdTemplate purchaseEdList={purchaseEdList} />
-		</main>
+		</section>
 	)
 }
