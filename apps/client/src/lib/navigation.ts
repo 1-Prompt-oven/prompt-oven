@@ -70,8 +70,8 @@ export const sellerNavs: MenuNavItemType[] = [
 	{
 		icon: Package,
 		label: "Product",
-		href: "account?view=product-list",
-		query: "product",
+		href: "account",
+		query: "product-list",
 		subMenu: [
 			{ label: "Create Product", href: "/account", query: "create-product" },
 			{ label: "Product List", href: "/account", query: "product-list" },
