@@ -1,6 +1,6 @@
 "use server"
 import type { CartItemType } from "@/types/cart/cartTypes"
-import type { CommonResType } from "@/types/common/ResponseType"
+import type { CommonResType } from "@/types/common/responseType"
 import { dummyCartItems } from "@/dummy/cart/cartData"
 
 export async function getCartData(): Promise<CartItemType[]> {
