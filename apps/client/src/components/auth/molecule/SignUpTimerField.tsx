@@ -1,4 +1,4 @@
-import React, { type HTMLProps } from "react"
+import React, { memo, type HTMLProps } from "react"
 import { Button, type ButtonProps } from "@repo/ui/button"
 import type { FieldErrors } from "react-hook-form"
 import { ErrorMessage } from "@hookform/error-message"
@@ -15,7 +15,7 @@ interface SignUpTimerFieldProps {
 	timeLeft: number | null
 }
 
-function SignUpTimerField({
+const SignUpTimerField = memo(function SignUpTimerField({
 	inputProps,
 	buttonProps,
 	buttonText,
@@ -58,6 +58,7 @@ function SignUpTimerField({
 			) : null}
 		</div>
 	)
-}
+})
 
 export default SignUpTimerField
+
