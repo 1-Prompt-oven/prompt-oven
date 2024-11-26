@@ -1,13 +1,13 @@
 "use client"
 
-import type { ProfileListCardType } from "@/types/profile/profileTypes"
+import type { PromptsType } from "@/types/prompts/promptsType"
 import ProfilePromptItem from "../molecules/ProfilePromptItem"
 import ProfileLoadMore from "../atoms/ProfileLoadMore"
 
 interface ProfileListProps {
-	listData: ProfileListCardType[]
+	listData: PromptsType[]
 	// initialData: {
-	// 	items: ProfileListCardType[] // 초기 데이터
+	// 	items: PromptsType[] // 초기 데이터
 	// 	nextCursor: string | null // 다음 커서
 	// }
 }
