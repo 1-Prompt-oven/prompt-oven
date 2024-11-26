@@ -56,12 +56,12 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 		if (!isAvatarUploaded) return
 
 		const payload: CommonModifyType = {
-			memberUUID: "test",
-			bannerImageUrl: formData.get("bannerImageUrl") as string | undefined,
-			avatarImageUrl: formData.get("avatarImageUrl") as string | undefined,
+			memberUUID: "test" as string,
+			bannerImageUrl: formData.get("bannerImageUrl") as string,
+			avatarImageUrl: formData.get("avatarImageUrl") as string,
 			hashTag: formData.get("hashTag") as string,
 			bio: formData.get("bio") as string,
-			email: formData.get("email") as string | undefined,
+			email: formData.get("email") as string,
 			nickname: formData.get("nickname") as string,
 		}
 

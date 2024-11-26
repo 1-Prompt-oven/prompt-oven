@@ -5,7 +5,7 @@ import ProfileModifyName from "../atoms/ProfileModifyName"
 
 interface MemberLeftProps {
 	hashTag: string | undefined
-	nickname: string
+	nickname: string | undefined
 	email: string | undefined
 	joined: string
 }
