@@ -27,7 +27,8 @@
 		"./dialog": "./src/Dialog.tsx",
 		"./skeleton": "./src/Skeleton.tsx",
 		"./sheet": "./src/Sheet.tsx",
-		"./custom-select": "./src/CustomSelect.tsx"
+		"./custom-select": "./src/CustomSelect.tsx",
+		"./tag": "./src/Tag.tsx"
 	},
 	"license": "MIT",
 	"scripts": {
