@@ -25,6 +25,7 @@ import { X } from "@repo/ui/lucide"
 import { Input } from "@repo/ui/input"
 import { useRouter } from "next/navigation"
 import { useSearchActions } from "@/action/search/useSearchResults"
+import SearchItemSkeleton from "../atom/SearchItemSkeleton"
 
 interface SearchDialogDrawerWrapperProps {
 	setIsOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -39,10 +40,18 @@ export function SearchDialogDrawer({
 	const { creators, prompts, fetchAndSetSearchResults } = useSearchActions()
 	const router = useRouter()
 	const [query, setQuery] = useState("")
+	const [isLoading, setIsLoading] = useState(false)
 
-	const debouncedFetchAndSetSearchResults = debounce((searchQuery: string) => {
-		fetchAndSetSearchResults(searchQuery)
-	}, 300)
+	const debouncedFetchAndSetSearchResults = debounce(
+		async (searchQuery: string) => {
+			try {
+				await fetchAndSetSearchResults(searchQuery)
+			} finally {
+				setIsLoading(false)
+			}
+		},
+		300,
+	)
 
 	useEffect(() => {
 		const handleResize = () => {
@@ -55,6 +64,7 @@ export function SearchDialogDrawer({
 
 	useEffect(() => {
 		if (query) {
+			setIsLoading(true)
 			debouncedFetchAndSetSearchResults(query)
 		} else {
 			setQuery("")
@@ -74,7 +84,7 @@ export function SearchDialogDrawer({
 		<>
 			{isMobile ? (
 				<Drawer open={isOpen} onOpenChange={() => setIsOpen(false)}>
-					<DrawerContent className="border-zinc-80 h-[45rem] bg-zinc-900/95 p-5">
+					<DrawerContent className="border-zinc-80 min-h-[60%] bg-zinc-900/95 p-5">
 						<div className="flex justify-between">
 							{/* 수빈 - 탭 클릭 시 해당 api 액션 연결 작업 진행하기 */}
 							<Tabs defaultValue="creator" className="w-full">
@@ -95,14 +105,18 @@ export function SearchDialogDrawer({
 											placeholder="What are you searching for?"
 											className="placeholder:text-muted-foreground text-muted-foreground border-none bg-transparent text-lg"
 										/>
-										{creators.map((creator) => (
-											<Button
-												key={creator.id}
-												variant="ghost"
-												className="text-muted-foreground w-full justify-start hover:text-white">
-												{creator.nickname}
-											</Button>
-										))}
+										{isLoading ? (
+											<SearchItemSkeleton />
+										) : (
+											creators.map((creator) => (
+												<Button
+													key={creator.id}
+													variant="ghost"
+													className="text-muted-foreground w-full justify-start hover:text-white">
+													{creator.nickname}
+												</Button>
+											))
+										)}
 									</div>
 								</TabsContent>
 								<TabsContent value="prompt">
@@ -114,14 +128,18 @@ export function SearchDialogDrawer({
 											placeholder="What are you searching for?"
 											className="placeholder:text-muted-foreground text-muted-foreground border-none bg-transparent text-lg"
 										/>
-										{prompts.map((prompt) => (
-											<Button
-												key={prompt.id}
-												variant="ghost"
-												className="text-muted-foreground w-full justify-start hover:text-white">
-												{prompt.title}
-											</Button>
-										))}
+										{isLoading ? (
+											<SearchItemSkeleton />
+										) : (
+											prompts.map((prompt) => (
+												<Button
+													key={prompt.id}
+													variant="ghost"
+													className="text-muted-foreground w-full justify-start hover:text-white">
+													{prompt.title}
+												</Button>
+											))
+										)}
 									</div>
 								</TabsContent>
 							</Tabs>
@@ -130,10 +148,9 @@ export function SearchDialogDrawer({
 				</Drawer>
 			) : (
 				<Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
-					<DialogContent className="border-zinc-80 bg-zinc-900/95">
+					<DialogContent className="border-zinc-80 bg-zinc-900/95 md:min-w-[55%]">
 						<DialogHeader>
 							<div className="flex justify-between">
-								{/* 수빈 - 탭 클릭 시 해당 api 액션 연결 작업 진행하기 */}
 								<Tabs defaultValue="creator" className="w-full">
 									<TabsList className="w-[200px] bg-zinc-800">
 										<TabsTrigger value="creator" className="w-full">
@@ -152,14 +169,18 @@ export function SearchDialogDrawer({
 												placeholder="What are you searching for?"
 												className="placeholder:text-muted-foreground text-muted-foreground border-none bg-transparent text-lg"
 											/>
-											{creators.map((creator) => (
-												<Button
-													key={creator.id}
-													variant="ghost"
-													className="text-muted-foreground w-full justify-start hover:text-white">
-													{creator.nickname}
-												</Button>
-											))}
+											{isLoading ? (
+												<SearchItemSkeleton />
+											) : (
+												creators.map((creator) => (
+													<Button
+														key={creator.id}
+														variant="ghost"
+														className="text-muted-foreground w-full justify-start hover:text-white">
+														{creator.nickname}
+													</Button>
+												))
+											)}
 										</div>
 									</TabsContent>
 									<TabsContent value="prompt">
@@ -171,14 +192,18 @@ export function SearchDialogDrawer({
 												placeholder="What are you searching for?"
 												className="placeholder:text-muted-foreground text-muted-foreground border-none bg-transparent text-lg"
 											/>
-											{prompts.map((prompt) => (
-												<Button
-													key={prompt.id}
-													variant="ghost"
-													className="text-muted-foreground w-full justify-start hover:text-white">
-													{prompt.title}
-												</Button>
-											))}
+											{isLoading ? (
+												<SearchItemSkeleton />
+											) : (
+												prompts.map((prompt) => (
+													<Button
+														key={prompt.id}
+														variant="ghost"
+														className="text-muted-foreground w-full justify-start hover:text-white">
+														{prompt.title}
+													</Button>
+												))
+											)}
 										</div>
 									</TabsContent>
 								</Tabs>
