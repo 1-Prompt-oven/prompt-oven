@@ -87,6 +87,10 @@ export const sellerNavs: MenuNavItemType[] = [
 		label: "Purchases",
 		href: "/account",
 		query: "purchases",
+		subMenu: [
+			{ label: "Ongoing", href: "/account", query: "purchase-ongoing" },
+			{ label: "Completed", href: "/account", query: "purchase-completed" },
+		],
 	},
 	{ icon: Heart, label: "Favorites", href: "/account", query: "favorites" },
 	{ icon: Settings, label: "Settings", href: "/account", query: "settings" },
