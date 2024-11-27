@@ -23,7 +23,7 @@ export const authOptions: NextAuthOptions = {
 				if (!credentials?.email || !credentials?.password) {
 					return null
 				}
-				const res = await signIn(credentials);
+				const res = await signIn(credentials) as any;
 				return res.result
 			}
 		}),
