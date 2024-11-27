@@ -34,7 +34,7 @@ jobs:
           host: ${{ secrets.EC2_FE_HOST }}
           username: ubuntu
           key: ${{ secrets.EC2_KEY }}
-          timeout: 60s
+          timeout: 1800s
           script: |
             echo "Stopping existing container..."
             sudo docker stop prompt_oven_fe || true
