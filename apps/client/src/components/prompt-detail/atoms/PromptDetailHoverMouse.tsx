@@ -57,9 +57,7 @@ export default function PromptDetailHoverMouse({
 								</div>
 								<p className="flex items-start">
 									<span className="mr-1 text-sm">$</span>
-									<span className="text-base">
-										{productDetail.productPrice}
-									</span>
+									<span className="text-base">{productDetail.price}</span>
 								</p>
 							</div>
 

@@ -18,7 +18,7 @@ export default function ProfilePromptList({ listData }: ProfileListProps) {
 			<ul className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
 				{listData.length > 0
 					? listData.map((item) => (
-							<PromptCard key={item.productUUID} productInfo={item} />
+							<PromptCard key={item.productUuid} productInfo={item} />
 						))
 					: null}
 			</ul>

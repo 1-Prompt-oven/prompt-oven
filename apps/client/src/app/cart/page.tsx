@@ -6,11 +6,10 @@ import CartItemContainer from "@/components/cart/organism/CartItemContainer"
 import CartCheckout from "@/components/cart/organism/CartCheckout"
 
 async function cart() {
-	const items: CartItemType[] = await getCartData()
-	// 추후 uuid 가지고 상품 데이터 가져와서 만든 최종 사용자 장바구니 데이터를 items 에 재할당해서
-	// 컴포넌트에 내려줘야 함.
-
-	const selectedItemsTotalPrice = await calculateTotalPrice(items)
+	const _memberUuid = "uuid" // 더미 uuid
+	const items: CartItemType[] = await getCartData(_memberUuid)
+	const selectedItem = items.filter((item) => item.selected)
+	const selectedItemsTotalPrice = await calculateTotalPrice(selectedItem)
 
 	return (
 		<main className="min-h-screen bg-black p-6">
@@ -18,7 +17,10 @@ async function cart() {
 				<h1 className="mb-6 text-2xl font-bold text-white">My Cart</h1>
 				<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
 					<div className="lg:col-span-2">
-						<CartItemContainer items={items} />
+						<CartItemContainer
+							initialItems={items}
+							initialSelectedItems={selectedItem}
+						/>
 					</div>
 					<CartCheckout totalPrice={selectedItemsTotalPrice} />
 				</div>

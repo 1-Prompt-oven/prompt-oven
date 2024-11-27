@@ -32,7 +32,7 @@ export default function PromptTopItemStash({
 				<PromptName promptName={promptTop.productName} />
 				<div className="flex items-center justify-between">
 					<PromptLLMId llmId={promptTop.llmId} />
-					<PromptPrice productPrice={promptTop.productPrice} />
+					<PromptPrice price={promptTop.price} />
 				</div>
 			</div>
 		</Card>

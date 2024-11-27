@@ -1,11 +1,11 @@
 export interface PromptDetailInfoType {
-	productUUID: string
+	productUuid: string
 	thumbnailUrl: string
 	productName: string
 	productStar: number
 	productReviewCount: number
 	productRegistDate: string
-	productPrice: number
+	price: number
 	productDescription: string
 	hashTag: string
 	bio: string | undefined

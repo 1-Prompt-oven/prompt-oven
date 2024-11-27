@@ -66,7 +66,7 @@ export default function PrompToptItem({ promptTop, rank }: PrompToptItemProps) {
 
 				<div className="flex items-center justify-between">
 					<PromptCategory llmId={promptTop.llmId} />
-					<PromptPrice productPrice={promptTop.productPrice} />
+					<PromptPrice price={promptTop.price} />
 				</div>
 			</div> */}
 		</Card>
