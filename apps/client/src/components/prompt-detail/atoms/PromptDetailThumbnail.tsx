@@ -3,12 +3,12 @@ import Image from "next/image"
 
 interface PromptDetailThumbnailProps {
 	thumbnailUrl: string
-	productUUID: string
+	productUuid: string
 }
 
 export default function PromptDetailThumbnail({
 	thumbnailUrl,
-	productUUID,
+	productUuid,
 }: PromptDetailThumbnailProps) {
 	return (
 		<div className="relative h-[600px] min-w-[380px] overflow-hidden rounded-lg sm:h-[800px] sm:min-w-[600px]">
@@ -16,7 +16,7 @@ export default function PromptDetailThumbnail({
 			<Image
 				sizes="(max-width: 500px) 100vw, 145px"
 				src={thumbnailUrl}
-				alt={productUUID}
+				alt={productUuid}
 				fill
 				className="rounded-lg"
 				priority

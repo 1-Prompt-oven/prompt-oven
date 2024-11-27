@@ -46,7 +46,7 @@
 // 				{promptTop.length > 0
 // 					? promptTop.map((item, index) => (
 // 							<div
-// 								key={item.productUUID}
+// 								key={item.productUuid}
 // 								className="carousel-item"
 // 								style={{
 // 									transform: `rotateY(${index * rotateAngle}deg) translateZ(300px)`,

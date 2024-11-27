@@ -4,13 +4,13 @@ import PromptDetailInfo from "./PromptDetailInfo"
 
 interface PromptDetailMainProps {
 	thumbnailUrl: string
-	productUUID: string
+	productUuid: string
 	productDetail: PromptDetailInfoType
 }
 
 export default function PromptDetailMain({
 	thumbnailUrl,
-	productUUID,
+	productUuid,
 	productDetail,
 }: PromptDetailMainProps) {
 	return (
@@ -18,7 +18,7 @@ export default function PromptDetailMain({
 			<div className="flex flex-col gap-12 lg:!flex-row">
 				<PromptDetailThumbnail
 					thumbnailUrl={thumbnailUrl}
-					productUUID={productUUID}
+					productUuid={productUuid}
 				/>
 
 				<PromptDetailInfo productDetail={productDetail} />
