@@ -12,7 +12,7 @@
 // 					{promptTop.length > 0O
 // 						? [3, 1, 0, 2, 4].map((index) => (
 // 								<PrompToptItem
-// 									key={promptTop[index].productUUID}
+// 									key={promptTop[index].productUuid}
 // 									promptTop={promptTop[index]}
 // 									rank={Number(index)}
 // 								/>

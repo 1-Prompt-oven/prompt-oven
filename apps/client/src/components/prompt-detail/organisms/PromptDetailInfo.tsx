@@ -17,7 +17,7 @@ export default function PromptDetailInfo({
 			<div className="flex flex-col gap-12">
 				<PromptDetailStandardInfo
 					productRegistDate={productDetail.productRegistDate}
-					productPrice={productDetail.productPrice}
+					price={productDetail.price}
 					productName={productDetail.productName}
 					productStar={productDetail.productStar}
 					productReviewCount={productDetail.productReviewCount}

@@ -54,7 +54,7 @@
 // 					(
 // 						item, // 현재 표시할 데이터만 잘라서 사용
 // 					) => (
-// 						<ProfilePromptItem key={item.productUUID} productInfo={item} />
+// 						<ProfilePromptItem key={item.productUuID} productInfo={item} />
 // 					),
 // 				)}
 // 				{allData.length === 0 && <div>No data available</div>}
@@ -80,7 +80,7 @@
 // // 			<div className="grid grid-cols-2 gap-8 xl:grid-cols-3 2xl:grid-cols-4">
 // // 				{listData.length > 0
 // // 					? listData.map((item) => (
-// // 							<ProfilePromptItem key={item.productUUID} productInfo={item} />
+// // 							<ProfilePromptItem key={item.productUuID} productInfo={item} />
 // // 						))
 // // 					: null}
 // // 			</div>
