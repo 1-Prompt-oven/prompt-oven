@@ -1,17 +1,24 @@
+import type { PaymentItemType } from "@/types/purchase.ts/purchase-ongoing"
 import PurchaseIngTitle from "../atom/PurchaseIngTitle"
 import PaymentDetail from "../organism/PaymentDetail"
 import PaymentMethod from "../organism/PaymentMethod"
 import PaymentOrder from "../organism/PaymentOrder"
 
-export default function PurchaseIngTemplate() {
+interface PurchaseIngTemplateProps {
+	paymentList: PaymentItemType[]
+}
+
+export default function PurchaseIngTemplate({
+	paymentList,
+}: PurchaseIngTemplateProps) {
 	return (
-		<div className="mx-6 mt-4 max-w-screen-xl">
+		<div className="mx-6 mb-12 mt-4 max-w-screen-xl">
 			<PurchaseIngTitle />
 
 			<div className="flex gap-8">
 				<div className="flex w-[700px] flex-col gap-8">
 					<PaymentMethod />
-					<PaymentDetail />
+					<PaymentDetail paymentList={paymentList} />
 				</div>
 				<PaymentOrder />
 			</div>
