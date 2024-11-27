@@ -1,7 +1,7 @@
 import Link from "next/link"
 import Image from "next/image"
-import type { BestCreatorDataTypes } from "@/types/best/bestTypes"
 import { Trophy, ArrowDown, ArrowUp, Minus } from "@repo/ui/lucide"
+import type { BestCreatorDataTypes } from "@/types/best/bestTypes"
 
 interface BestCardProps extends BestCreatorDataTypes {
 	name: string
@@ -61,7 +61,7 @@ export function BestCreatorListItem({
 						{creatorTag}
 					</span>
 				</div>
-				<div className="col-end-7"></div>
+				<div className="col-end-7" />
 			</div>
 		</Link>
 	)

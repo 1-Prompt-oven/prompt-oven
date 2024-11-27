@@ -13,7 +13,7 @@ export default function ProfileModifyBanner({
 	handleReset,
 }: ProfileBannerProps) {
 	return (
-		<div className="group relative flex h-[200px] justify-center px-4 md:h-[230px] xl:h-[260px]">
+		<div className="group relative flex h-[200px] justify-center px-4 md:h-[230px] xl:h-[280px]">
 			<input type="hidden" value={memberBanner} name="bannerImageUrl" />
 			<div
 				className="h-full w-full rounded-lg bg-gradient-to-r from-[#A913F9] to-[#F913C4]"

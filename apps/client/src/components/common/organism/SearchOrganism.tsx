@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react"
 import debounce from "lodash/debounce"
-import { useSearchActions } from "@/action/search/useSearchResults"
-import SearchInput from "../atom/SearchInput"
-import SearchDropdown from "../molecule/SearchDropdown"
 import { useRouter } from "next/navigation"
+import { useSearchActions } from "@/action/search/useSearchResults"
+import SearchInput from "../atom/SearchInputWrapper"
+import SearchDropdown from "../molecule/SearchDropdown"
 
 function SearchOrganism() {
 	const [open, setOpen] = useState(false)
@@ -41,7 +41,7 @@ function SearchOrganism() {
 		setQuery("")
 	}
 	return (
-		<form className="relative w-[40rem]" onSubmit={handleSubmit}>
+		<form className="relative w-full" onSubmit={handleSubmit}>
 			<SearchInput
 				value={query}
 				onFocus={handleFocus}

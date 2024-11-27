@@ -1,10 +1,10 @@
 "use client"
 import React from "react"
 import Link from "next/link"
+import { ArrowDown, ArrowUp, Minus } from "@repo/ui/lucide"
+import { Card } from "@repo/ui/card"
 import type { BestCreatorDataTypes } from "@/types/best/bestTypes"
 import Image from "next/image"
-import { Card } from "@repo/ui/card"
-import { ArrowDown, ArrowUp, Minus } from "@repo/ui/lucide"
 
 interface BestCardProps extends BestCreatorDataTypes {
 	name: string
@@ -46,7 +46,7 @@ export default function BestTop5Card({
 							</div>
 						)}
 					</div>
-					<div className="col-end-7 mr-[-0.525rem] flex items-center justify-end"></div>
+					<div className="col-end-7 mr-[-0.525rem] flex items-center justify-end" />
 				</div>
 
 				<div className="flex h-full flex-col items-center justify-center gap-4 p-6 pt-0">

@@ -30,6 +30,8 @@
 		"./custom-select": "./src/CustomSelect.tsx",
 		"./tag": "./src/Tag.tsx",
 		"./switch": "./src/Switch.tsx"
+		"./drawer": "./src/Drawer.tsx",
+		"./tabs": "./src/Tabs.tsx"
 	},
 	"license": "MIT",
 	"scripts": {
@@ -66,11 +68,14 @@
 		"@radix-ui/react-select": "^2.1.2",
 		"@radix-ui/react-slot": "^1.1.0",
 		"@radix-ui/react-switch": "^1.1.1",
+		"@radix-ui/react-tabs": "^1.1.1",
 		"@radix-ui/react-toast": "^1.2.2",
 		"class-variance-authority": "^0.7.0",
 		"clsx": "^2.1.1",
 		"lucide-react": "^0.453.0",
 		"tailwind-merge": "^2.5.4",
-		"tailwindcss-animate": "^1.0.7"
+		"tailwindcss-animate": "^1.0.7",
+		"vaul": "^1.1.1"
 	}
 }
+

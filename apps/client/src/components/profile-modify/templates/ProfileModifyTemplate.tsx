@@ -10,7 +10,7 @@ export default function ProfileModifyTemplate({
 	memberData,
 }: ProfileModifyTemplateProps) {
 	return (
-		<section className="sm:m-18 sm:mx-18 mx-6 mt-12 w-full max-w-screen-2xl lg:mx-24 xl:mx-32">
+		<section className="mx-auto mt-12 max-w-screen-xl">
 			<ProfileModifyTitle />
 			<ProfileModifyInfo memberData={memberData} />
 		</section>

@@ -1,6 +1,6 @@
 import React from "react"
+import type { BestCreatorDataTypes } from "@/types/best/bestTypes"
 import BestTop5Card from "../molecule/BestTop5Card"
-import { BestCreatorDataTypes } from "@/types/best/bestTypes"
 
 interface BestListProps<T> {
 	data: T[]

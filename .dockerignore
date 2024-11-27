@@ -1,3 +1,27 @@
+# Dependencies
 **/node_modules
+
+# Build outputs
+.next
+dist
+build
+
+# Cache and logs
 .turbo
+.cache
+*.log
+
+# Development files
 .git
+.env*
+.editorconfig
+README.md
+*.md
+coverage
+
+# Keep package files
+!**/package.json
+!**/package-lock.json
+!pnpm-lock.yaml
+!pnpm-workspace.yaml
+!turbo.json

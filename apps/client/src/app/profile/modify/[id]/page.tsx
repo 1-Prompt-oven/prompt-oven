@@ -5,7 +5,7 @@ export default async function ProfileModify() {
 	const memberData = await getProfileMemberInfo()
 
 	return (
-		<main className="flex min-h-screen justify-center overflow-auto bg-[#111111] py-1">
+		<main className="container mx-auto bg-[#111111] py-1">
 			<ProfileModifyTemplate memberData={memberData} />
 		</main>
 	)

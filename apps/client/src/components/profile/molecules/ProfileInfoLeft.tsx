@@ -16,7 +16,7 @@ interface MemberLeftProps {
 
 export default function ProfileInfoLeft({ memberData }: MemberLeftProps) {
 	return (
-		<div className="flex flex-grow flex-col justify-between gap-1 xl:gap-3">
+		<div className="flex max-w-[160px] flex-grow flex-col justify-between gap-1 xl:gap-3">
 			<ProfileName memberData={memberData} />
 
 			<div className="mt-4 flex items-center gap-2 md:mt-0">

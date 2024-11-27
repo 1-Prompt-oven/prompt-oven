@@ -1,3 +1,6 @@
+import Favorite from "@/app/favorite/page"
+import PurchaseEd from "@/app/purchase/ed/page"
+import PurchaseIng from "@/app/purchase/ing/page"
 import ContentWrapper from "@/components/account/template/ContentWrapper.tsx"
 import type { SearchParams } from "@/types/account/searchParams.ts"
 import CreateProductPage from "@/components/product-create/page/CreateProductPage.tsx"
@@ -7,7 +10,13 @@ export default function page({ searchParams }: SearchParams) {
 	const view = searchParams.view ?? "overview"
 	return (
 		<ContentWrapper queryParams={{ view }}>
-			{view === "create-product" ? <CreateProductPage /> : null}
+			{view === "create-product" && <CreateProductPage />}
+			{view === "favorites" && <Favorite />}
+			{view === "purchase-ongoing" && <PurchaseIng />}
+			{view === "purchase-completed" && <PurchaseEd />}
+			{view !== "purchase-ongoing" &&
+				view !== "purchase-completed" &&
+				view !== "favorites" && <div>test text {view}</div>}
 		</ContentWrapper>
 	)
 }

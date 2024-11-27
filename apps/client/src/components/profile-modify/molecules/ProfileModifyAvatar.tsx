@@ -13,7 +13,7 @@ export default function ProfileModifyAvatar({
 	handleReset,
 }: ProfileModifyAvatarProps) {
 	return (
-		<div className="group relative aspect-square h-full rounded-xl border-[3px] border-white bg-white">
+		<div className="group relative aspect-square h-full w-28 rounded-xl border-[3px] border-white bg-white md:w-auto">
 			<input type="hidden" value={memberAvatar} name="avatarImageUrl" />
 			{memberAvatar ? (
 				<Image

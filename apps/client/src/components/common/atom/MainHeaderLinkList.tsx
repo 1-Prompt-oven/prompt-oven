@@ -9,7 +9,10 @@ function MainHeaderLinkList({ ...props }: MainHeaderLinkListProps) {
 	return (
 		<ul
 			{...props}
-			className={cn("mx-4 hidden items-center gap-6 xl:flex", props.className)}>
+			className={cn(
+				"mx-4 hidden items-center gap-6 xl:!flex",
+				props.className,
+			)}>
 			{mainNavs.map((nav, index) => (
 				// eslint-disable-next-line react/no-array-index-key -- index is unique
 				<li key={index}>

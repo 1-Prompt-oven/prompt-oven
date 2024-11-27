@@ -5,7 +5,7 @@ import ProfileModifyName from "../atoms/ProfileModifyName"
 
 interface MemberLeftProps {
 	hashTag: string | undefined
-	nickname: string
+	nickname: string | undefined
 	email: string | undefined
 	joined: string
 }
@@ -17,7 +17,7 @@ export default function ProfileModifyInfoLeft({
 	joined,
 }: MemberLeftProps) {
 	return (
-		<div className="flex max-w-[25%] flex-col justify-between gap-1 xl:gap-3">
+		<div className="flex max-w-[160px] flex-grow flex-col justify-between gap-1 xl:gap-3">
 			<ProfileModifyName
 				hashTag={hashTag}
 				nickname={nickname}
@@ -41,20 +41,6 @@ export default function ProfileModifyInfoLeft({
 							<MoreVertical className="h-4 w-4 text-white" />
 						</Button>
 					</DropdownMenuTrigger>
-					{/* <DropdownMenuContent
-						align="end"
-						className="bg-[#ead4ff] font-semibold text-[#3a3a3a]">
-						<DropdownMenuItem>
-							<Link href="/profile/modify/1">
-								<p>개인정보 수정</p>
-							</Link>
-						</DropdownMenuItem>
-						<DropdownMenuItem>
-							<Link href="/Report">
-								<p>신고</p>
-							</Link>
-						</DropdownMenuItem>
-					</DropdownMenuContent> */}
 				</DropdownMenu>
 			</div>
 		</div>

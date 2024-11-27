@@ -30,7 +30,7 @@ const withOutAuth = async (
 	}
 }
 
-const withAuthList: string[] = []
+const withAuthList: string[] = [] // 추후 routes.cart 추가 예정
 const withOutAuthList: string[] = [routes.signIn]
 
 export default async function middleware(request: NextRequest) {

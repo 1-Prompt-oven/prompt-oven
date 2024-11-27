@@ -2,9 +2,8 @@
 
 import Link from "next/link"
 import { Button } from "@repo/ui/button"
-import { uploadImage } from "@/action/s3/s3UploadAction"
-import { useProfileModify } from "@/hooks/profile-modify/useProfileModify"
-import type { ProfileModifyType } from "@/types/profile/profileModifyTypes"
+import { useModify } from "@/hooks/modify/useModify"
+import type { CommonModifyType } from "@/types/modify/commonModifyTypes"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import ProfileModifyAvatar from "../molecules/ProfileModifyAvatar"
 import ProfileModifyBanner from "../molecules/ProfileModifyBanner"
@@ -28,75 +27,65 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 		handleBannerChange,
 		handleAvatarChange,
 		handleInputChange,
+		handleImageUpload,
 		handleReset,
-	} = useProfileModify(memberData)
+	} = useModify(memberData)
 
 	const handleForm = async (formData: FormData) => {
 		const uploadBanner = formData.get("bannerImageUrl") as string | undefined
-		const auplaodAvatar = formData.get("avatarImageUrl") as string | undefined
+		const uploadAvatar = formData.get("avatarImageUrl") as string | undefined
 
-		if (
-			uploadBanner !== undefined &&
-			uploadBanner !== memberData.bannerImageUrl
-		) {
-			if (uploadBanner !== memberData.bannerImageUrl) {
-				const result = await uploadImage(uploadBanner, "profile")
-				if (result.isSuccess) {
-					formData.set("bannerImageUrl", result.responseImageUrl as string)
-				} else {
-					// eslint-disable-next-line no-alert -- Comments to notify you of failed image upload
-					alert("이미지 업로드에 실패하였습니다.")
-					return
-				}
-			}
-		}
+		// 배너 이미지 업로드 처리
+		const isBannerUploaded = await handleImageUpload(
+			formData,
+			uploadBanner,
+			memberData.bannerImageUrl,
+			"bannerImageUrl",
+			"profile",
+		)
+		if (!isBannerUploaded) return
 
-		if (
-			auplaodAvatar !== undefined &&
-			auplaodAvatar !== memberData.avatarImageUrl
-		) {
-			if (auplaodAvatar !== memberData.avatarImageUrl) {
-				const result = await uploadImage(auplaodAvatar, "profile")
-				if (result.isSuccess) {
-					formData.set("avatarImageUrl", result.responseImageUrl as string)
-				} else {
-					// eslint-disable-next-line no-alert -- Comments to notify you of failed image upload
-					alert("이미지 업로드에 실패하였습니다.")
-					return
-				}
-			}
-		}
+		// 아바타 이미지 업로드 처리
+		const isAvatarUploaded = await handleImageUpload(
+			formData,
+			uploadAvatar,
+			memberData.avatarImageUrl,
+			"avatarImageUrl",
+			"profile",
+		)
+		if (!isAvatarUploaded) return
 
-		const payload: ProfileModifyType = {
-			memberUUID: "test",
-			bannerImageUrl: formData.get("bannerImageUrl") as string | undefined,
-			avatarImageUrl: formData.get("avatarImageUrl") as string | undefined,
+		const payload: CommonModifyType = {
+			memberUUID: "test" as string,
+			bannerImageUrl: formData.get("bannerImageUrl") as string,
+			avatarImageUrl: formData.get("avatarImageUrl") as string,
 			hashTag: formData.get("hashTag") as string,
 			bio: formData.get("bio") as string,
 			email: formData.get("email") as string,
 			nickname: formData.get("nickname") as string,
 		}
-		// eslint-disable-next-line no-console -- This is a server-side only log
+
+		// eslint-disable-next-line no-console -- test Console
 		console.log(payload)
 	}
 
 	return (
 		<div className="mb-20">
 			<form action={handleForm}>
-				<div className="h-[350px] xl:h-[400px]">
+				<div className="mx-2">
 					<ProfileModifyBanner
 						memberBanner={banner}
 						handleFileChange={handleBannerChange}
 						handleReset={handleReset}
 					/>
-					<div className="relative -top-[6.5rem] z-[5] mx-10 mt-10 flex h-24 items-center justify-between gap-4 md:h-40 xl:-top-[7.5rem] xl:h-44">
+					<div className="relative -top-[3.5rem] z-[5] mx-10 flex flex-col gap-4 md:-top-[5.5rem] md:h-40 md:!flex-row md:items-center md:justify-between xl:h-44">
 						<ProfileModifyAvatar
 							memberAvatar={avatar}
 							handleFileChange={handleAvatarChange}
 							handleReset={handleReset}
 						/>
 
-						<div className="mt-[90px] flex h-[175px] flex-grow justify-between gap-2 rounded-xl bg-gradient-to-r from-[#B514F1] to-[#0BA9FF] p-4 md:mt-0 md:h-[90%] md:items-center md:p-8">
+						<div className="flex flex-grow justify-between gap-2 rounded-xl bg-gradient-to-r from-[#B514F1] to-[#0BA9FF] p-4 md:h-[90%] md:items-center">
 							<ProfileModifyInfoLeft
 								hashTag={hashTag}
 								nickname={nickname}

@@ -7,6 +7,7 @@ import { AvatarMenu } from "@/components/common/molecule/AvatarMenu.tsx"
 import BadgeContainer from "@/components/common/atom/BadgeContainer.tsx"
 import { SideBarMenu } from "@/components/common/organism/SideBarMenu.tsx"
 import MainHeaderLinkList from "@/components/common/atom/MainHeaderLinkList.tsx"
+import SearchInputWrapper from "../atom/SearchInputWrapper"
 
 export default function MainHeader() {
 	return (
@@ -17,8 +18,9 @@ export default function MainHeader() {
 			</Link>
 
 			{/* todo: 검색 다이얼로그 컴포넌트 추가 필요 - 모바일 또는 태블릿인 경우 검색 아이콘으로 바뀌는 반응형 작업도 필요함 */}
-			<div className="box-border hidden h-full max-w-2xl flex-1 items-center border-x border-[#424242] px-10 md:flex">
-				<div className="h-8 w-full bg-po-gray-100" />
+			<div className="box-border flex h-full max-w-2xl flex-1 items-center px-10 lg:border-x lg:border-[#424242]">
+				{/* <div className="h-8 w-full bg-po-gray-100" /> */}
+				<SearchInputWrapper className="h-8 w-full" />
 			</div>
 
 			{/* Navigation */}
