@@ -2,13 +2,13 @@
 
 import React, { useState, useEffect } from "react"
 import type { CartItemType } from "@/types/cart/cartTypes"
-import CartItem from "../molecule/CartItem"
 import {
 	cartCheckUpdate,
 	// deleteCartItem,
 	// deleteCartItemList,
 } from "@/action/cart/getCartData"
 import { calculateTotalPrice } from "@/action/cart/cartDataAction"
+import CartItem from "../molecule/CartItem"
 import CartItemAllCheck from "../molecule/CartItemAllCheck"
 
 interface CartItemContainerProps {

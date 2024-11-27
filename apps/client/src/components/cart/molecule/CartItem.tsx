@@ -1,7 +1,7 @@
 import React from "react"
 import { CheckBox } from "@repo/ui/checkbox"
-import type { CartItemType } from "@/types/cart/cartTypes"
 import Image from "next/image"
+import type { CartItemType } from "@/types/cart/cartTypes"
 
 interface CartItemProps {
 	item: CartItemType
