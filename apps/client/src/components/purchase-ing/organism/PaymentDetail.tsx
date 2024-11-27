@@ -20,18 +20,26 @@ export default function PaymentDetail({ paymentList }: PaymentDetailProps) {
 			<PaymentTitle title="Payment Details" option="p-4" />
 			<PaymentDivider />
 
-			<div className="flex flex-col gap-4 p-4 text-sm font-semibold">
-				<p className="text-sm">Item List</p>
-				<PaymentList paymentList={paymentList} />
+			{paymentList.length > 0 ? (
+				<>
+					<div className="flex flex-col gap-4 p-4 text-sm font-semibold">
+						<p className="text-sm">Item List</p>
+						<PaymentList paymentList={paymentList} />
 
-				<PaymentDetailLine name="Shipping" price="0" />
-				<PaymentDetailTotalItem count={paymentList.length} />
-			</div>
+						<PaymentDetailLine name="Shipping" price="0" />
+						<PaymentDetailTotalItem count={paymentList.length} />
+					</div>
 
-			<div className="px-4">
-				<PaymentDivider />
-				<PromptDetailTotalPrice name="Total Payment" price={totalPrice} />
-			</div>
+					<div className="px-4">
+						<PaymentDivider />
+						<PromptDetailTotalPrice name="Total Payment" price={totalPrice} />
+					</div>
+				</>
+			) : (
+				<div className="m-auto">
+					<p className="p-4">구매 진행중인 상품이 없습니다.</p>
+				</div>
+			)}
 		</div>
 	)
 }
