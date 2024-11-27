@@ -29,7 +29,7 @@
 		"./sheet": "./src/Sheet.tsx",
 		"./custom-select": "./src/CustomSelect.tsx",
 		"./tag": "./src/Tag.tsx",
-		"./switch": "./src/Switch.tsx"
+		"./switch": "./src/Switch.tsx",
 		"./drawer": "./src/Drawer.tsx",
 		"./tabs": "./src/Tabs.tsx"
 	},
