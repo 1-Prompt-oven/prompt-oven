@@ -19,6 +19,8 @@ export default async function PurchaseIng() {
 			return { error: "구매할 상품이 존재하지 않습니다." }
 		}
 
+		//Payments 연동 필요 부분
+
 		const payload: RequestPaymentType = {
 			memberUUID: "1",
 			paymentMethod: formData.get("paymentMethod") as string,
