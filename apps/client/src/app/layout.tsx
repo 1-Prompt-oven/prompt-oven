@@ -44,7 +44,7 @@ export default function RootLayout({
 				<AuthSessionProvider>
 					<SideMenuToggleStoreProvider>
 						<MainHeader />
-						{children}
+						<div className="relative pt-20">{children}</div>
 					</SideMenuToggleStoreProvider>
 				</AuthSessionProvider>
 			</body>
