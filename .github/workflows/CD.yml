@@ -44,7 +44,7 @@ jobs:
    ## deploy to EC2
       - name: SSH into EC2 and stop docker container
         run: |
-          ssh -i key.pem ubuntu}@${{ secrets.EC2_FE_HOST }} << 'EOF'
+          ssh -i key.pem ubuntu@${{ secrets.EC2_FE_HOST }} << 'EOF'
             sudo docker stop prompt_oven_fe
       - name: SSH into EC2 and rm docker container
         run: |
