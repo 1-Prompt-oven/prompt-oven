@@ -1,5 +1,5 @@
 import type { PaymentItemType } from "@/types/purchase.ts/purchase-ongoing"
-import PaymentDetailLine from "../atom/PaymentDetailLine"
+import PaymentDetailItemLine from "../atom/PaymentDetailItemLine"
 
 interface PaymentListProps {
 	paymentList: PaymentItemType[]
@@ -11,7 +11,8 @@ export default function PaymentList({ paymentList }: PaymentListProps) {
 			{paymentList.length > 0
 				? paymentList.map((item) => (
 						<li key={item.productUUID}>
-							<PaymentDetailLine
+							<PaymentDetailItemLine
+								uuid={item.productUUID}
 								name={item.productName}
 								price={item.productPrice}
 							/>

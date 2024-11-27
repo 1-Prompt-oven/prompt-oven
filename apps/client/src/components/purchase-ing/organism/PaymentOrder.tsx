@@ -6,7 +6,7 @@ export default function PaymentOrder() {
 		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
 			<PaymentTitle title="Message" />
 			<textarea
-				name="paymentMessage"
+				name="message"
 				placeholder="Leave a message"
 				className="h-[130px] resize-none rounded-lg border border-[#d8d8d8] p-3"
 			/>
