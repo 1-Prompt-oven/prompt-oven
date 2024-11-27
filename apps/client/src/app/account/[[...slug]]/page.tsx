@@ -7,7 +7,6 @@ export default function page({ searchParams }: SearchParams) {
 	const view = searchParams.view ?? "overview"
 	return (
 		<ContentWrapper queryParams={{ view }}>
-			<div className="mb-4 text-white">{searchParams.view}</div>
 			{view === "create-product" ? <CreateProductPage /> : null}
 		</ContentWrapper>
 	)

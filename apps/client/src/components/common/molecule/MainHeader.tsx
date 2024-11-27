@@ -10,7 +10,7 @@ import MainHeaderLinkList from "@/components/common/atom/MainHeaderLinkList.tsx"
 
 export default function MainHeader() {
 	return (
-		<CommonHeader className="h-20 bg-po-black-200">
+		<CommonHeader className="fixed left-0 right-0 z-[10] h-20 bg-po-black-200">
 			{/* Logo */}
 			<Link href="/" className="pr-4">
 				<MainLogo />
