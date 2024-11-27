@@ -1,10 +1,10 @@
 // eslint-disable-next-line import/no-named-as-default -- This is a server-side only import
 import CredentialsProvider from "next-auth/providers/credentials"
-import type { Awaitable, NextAuthOptions, User } from "next-auth"
+import type { NextAuthOptions } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import NaverProvider from "next-auth/providers/naver"
 import KakaoProvider from "next-auth/providers/kakao"
-import { signIn, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts"
+import { signIn } from "@/action/auth/OAuthSignInAction.ts"
 
 export const authOptions: NextAuthOptions = {
 	session: {
@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
 				email: { label: "email", type: "text" },
 				password: { label: "password", type: "password" },
 			},
-			async authorize(credentials): Promise<Awaitable<User> | null> {
+			async authorize(credentials): Promise<any> {
 				if (!credentials?.email || !credentials?.password) {
 					return null
 				}
