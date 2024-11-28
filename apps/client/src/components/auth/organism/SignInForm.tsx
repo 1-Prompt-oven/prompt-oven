@@ -2,20 +2,16 @@
 
 import { useEffect, useState } from "react"
 import type { FieldValues } from "react-hook-form"
+import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
 import Link from "next/link"
-import { useRouter } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@repo/ui/button"
 import { CheckBox } from "@repo/ui/checkbox"
 import { loginSchema } from "@/schema/auth.ts"
 import SignInField from "@/components/auth/molecule/SignInField.tsx"
-import { signIn } from "@/action/auth/OAuthSignInAction"
-import type { SignIn } from "@/types/auth/AuthMemberType"
 
 function SignInForm() {
-	const router = useRouter()
-
 	const {
 		handleSubmit,
 		register,
@@ -53,40 +49,17 @@ function SignInForm() {
 		if (errorMessage) {
 			setErrorMessage("")
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps -- Debugging form validation errors
 	}, [email, password])
 
 	const loginSchemaKeys = loginSchema.keyof().enum
 
 	const handleOnSubmitSuccess = async (data: FieldValues) => {
-		try {
-			const requestData: SignIn = {
-				email: data.email,
-				password: data.password,
-			}
-
-			const response = await signIn(requestData)
-
-			if (response.accesstoken) {
-				if (rememberMe) {
-					localStorage.setItem("rememberedEmail", data.email as string)
-					localStorage.setItem("rememberMe", "true")
-				} else {
-					localStorage.removeItem("rememberedEmail")
-					localStorage.setItem("rememberMe", "false")
-				}
-				const previousPage = document.referrer
-				const targetPage =
-					previousPage && !previousPage.includes("/sign-in")
-						? previousPage
-						: "/"
-				router.push(targetPage)
-			} else {
-				throw new Error("Invalid credentials")
-			}
-		} catch (error) {
-			handleOnSubmitFailure({ error })
-		}
+		signIn("credentials", {
+			email: data.email,
+			password: data.password,
+			redirect: true,
+			callbackUrl: "/",
+		})
 	}
 	const handleOnSubmitFailure = (submissionErrors: FieldValues) => {
 		// eslint-disable-next-line no-console -- Debugging form validation errors
@@ -228,4 +201,3 @@ function SignInForm() {
 }
 
 export default SignInForm
-

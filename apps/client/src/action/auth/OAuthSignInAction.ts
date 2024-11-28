@@ -5,7 +5,7 @@ import type {
 	SignInResponse,
 } from "@/types/auth/OAuthType.ts"
 import { actionHandler } from "@/action/actionHandler.ts"
-import type { SignIn } from '@/types/auth/AuthMemberType'
+import type { SignInType } from '@/types/auth/AuthMemberType'
 
 // todo : 구현 마무리하기 -- 2024.11.12
 export const unregisterByOAuth = async (
@@ -42,8 +42,8 @@ export const signInByOAuth = async (
 	})
 }
 
-export const signIn = async (
-	reqBody: SignIn,
+export const signInByAuth = async (
+	reqBody: SignInType,
 ): Promise<SignInResponse> => {
 	return actionHandler<SignInResponse>({
 		name: "signIn",

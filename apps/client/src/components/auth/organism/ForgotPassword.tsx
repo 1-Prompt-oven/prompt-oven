@@ -12,7 +12,7 @@ import {
 	requestPasswordResetEmail,
 	checkEmailVerificationCode,
 	resetPassword,
-} from "@/action/auth/forgotPassward"
+} from "@/action/auth/forgotPasswardAction"
 
 function ForgotPassword() {
 	const [emailVerified, setEmailVerified] = useState(false)
@@ -56,7 +56,7 @@ function ForgotPassword() {
 		}
 	}
 
-	const handleEmailValidation = async () => {
+	const emailValidationHandler = async () => {
 		try {
 			await requestPasswordResetEmail({ email })
 			startTimer()
@@ -68,7 +68,7 @@ function ForgotPassword() {
 		}
 	}
 
-	const handleEmailCodeValidation = async () => {
+	const emailCodeValidationHandler = async () => {
 		try {
 			const response = await checkEmailVerificationCode({
 				email,
@@ -115,7 +115,7 @@ function ForgotPassword() {
 							disabled:
 								Boolean(errors[forgotPasswordSchemaKeys.email]) || !email,
 							type: "button",
-							onClick: handleEmailValidation,
+							onClick: emailValidationHandler,
 						}}
 						inputProps={{
 							id: forgotPasswordSchemaKeys.email,
@@ -142,7 +142,7 @@ function ForgotPassword() {
 									timeLeft === 0 ||
 									Boolean(errors[forgotPasswordSchemaKeys.emailCode]) ||
 									!emailCode,
-								onClick: handleEmailCodeValidation,
+								onClick: emailCodeValidationHandler,
 							}}
 							buttonText="Check"
 							errorProps={{
