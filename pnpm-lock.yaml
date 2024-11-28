@@ -127,6 +127,9 @@ importers:
       '@tanstack/react-query':
         specifier: ^5.59.15
         version: 5.60.5(react@18.3.1)
+      '@tosspayments/tosspayments-sdk':
+        specifier: ^2.3.2
+        version: 2.3.2
       clsx:
         specifier: ^2.1.1
         version: 2.1.1
@@ -2356,6 +2359,9 @@ packages:
         optional: true
       '@types/react-dom':
         optional: true
+
+  '@tosspayments/tosspayments-sdk@2.3.2':
+    resolution: {integrity: sha512-8Sq1cMc4HrxF4zaL213D51epQM7P5p7Tq/iLARooX8SMSY/16MVs8NUuIcmO1dbfpcBaX10wLwYSOZcL4ZGRtw==}
 
   '@trysound/sax@0.2.0':
     resolution: {integrity: sha512-L7z9BgrNEcYyUYtF+HaEfiS5ebkh9jXqbszz7pC0hRBPaatV0XjSD3+eHrpqFemQfgwiFF0QPIarnIihIDn7OA==}
@@ -8438,6 +8444,8 @@ snapshots:
     optionalDependencies:
       '@types/react': 18.3.12
       '@types/react-dom': 18.3.1
+
+  '@tosspayments/tosspayments-sdk@2.3.2': {}
 
   '@trysound/sax@0.2.0': {}
 
