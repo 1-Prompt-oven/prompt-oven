@@ -3,8 +3,8 @@ import React from "react"
 import Link from "next/link"
 import { ArrowDown, ArrowUp, Minus } from "@repo/ui/lucide"
 import { Card } from "@repo/ui/card"
-import type { BestCreatorDataTypes } from "@/types/best/bestTypes"
 import Image from "next/image"
+import type { BestCreatorDataTypes } from "@/types/best/bestTypes"
 
 interface BestCardProps extends BestCreatorDataTypes {
 	name: string

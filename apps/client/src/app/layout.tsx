@@ -47,7 +47,7 @@ export default async function RootLayout({
 				<AuthContextProvider isAuth={isAuth}>
 					<SideMenuToggleStoreProvider>
 						<MainHeader />
-						{children}
+						<div className="relative pt-20">{children}</div>
 					</SideMenuToggleStoreProvider>
 				</AuthContextProvider>
 			</body>

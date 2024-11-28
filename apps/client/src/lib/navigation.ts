@@ -70,8 +70,8 @@ export const sellerNavs: MenuNavItemType[] = [
 	{
 		icon: Package,
 		label: "Product",
-		href: "account?view=product-list",
-		query: "product",
+		href: "account",
+		query: "product-list",
 		subMenu: [
 			{ label: "Create Product", href: "/account", query: "create-product" },
 			{ label: "Product List", href: "/account", query: "product-list" },
@@ -87,6 +87,10 @@ export const sellerNavs: MenuNavItemType[] = [
 		label: "Purchases",
 		href: "/account",
 		query: "purchases",
+		subMenu: [
+			{ label: "Ongoing", href: "/account", query: "purchase-ongoing" },
+			{ label: "Completed", href: "/account", query: "purchase-completed" },
+		],
 	},
 	{ icon: Heart, label: "Favorites", href: "/account", query: "favorites" },
 	{ icon: Settings, label: "Settings", href: "/account", query: "settings" },
