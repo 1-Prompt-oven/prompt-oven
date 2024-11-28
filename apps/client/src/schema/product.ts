@@ -16,8 +16,8 @@ export const createProductFirstSchemaKeys =
 export const createProductSecondSchema = z.object({
 	contents: z.array(
 		z.object({
-			content: z.string({ message: "내용을 입력해주세요" }),
-			contentType: z.string({ message: "콘텐츠 타입을 입력해주세요" }),
+			name: z.string(),
+			value: z.string({ message: "내용을 입력해주세요" }),
 		}),
 	),
 	seed: z.string({ message: "시드를 입력해주세요" }),

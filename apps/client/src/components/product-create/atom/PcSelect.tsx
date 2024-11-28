@@ -15,7 +15,7 @@ interface SelectOption {
 }
 interface PcSelectProps {
 	onValueChange: (value: string) => void
-	defaultValue?: Value
+	defaultValue: Value
 	placeholder: string
 	className?: string
 	options: SelectOption[]
