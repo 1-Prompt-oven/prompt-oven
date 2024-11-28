@@ -80,6 +80,7 @@ export default function CreateProductFirstPage() {
 				length={productNameWatch}>
 				<PcInput
 					placeholder="Enter Name"
+					maxLength={TITLE_MAX_LENGTH}
 					{...register(createProductFirstSchemaKeys.productName)}
 				/>
 			</FieldLengthCounter>
@@ -127,6 +128,7 @@ export default function CreateProductFirstPage() {
 			</PcDescription>
 			<FieldLengthCounter maxLength={TEXTAREA_MAX_LENGTH} length={promptWatch}>
 				<PcTextarea
+					maxLength={TEXTAREA_MAX_LENGTH}
 					placeholder="Enter your prompt text here. Include all the settings you used. Put all variables in [square brackets]."
 					{...register(createProductFirstSchemaKeys.prompt)}
 				/>
@@ -137,6 +139,7 @@ export default function CreateProductFirstPage() {
 				maxLength={TEXTAREA_MAX_LENGTH}
 				length={descriptionWatch}>
 				<PcTextarea
+					maxLength={TEXTAREA_MAX_LENGTH}
 					placeholder="Enter Description"
 					{...register(createProductFirstSchemaKeys.description)}
 				/>
