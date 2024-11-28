@@ -3,7 +3,7 @@
 import * as React from "react"
 import { cn } from "@/lib/utils"
 
-// @ts-expect-error -- for suppressing onChange type error
+// @ts-expect-error -- No types available
 interface PriceStepperProps
 	extends React.InputHTMLAttributes<HTMLInputElement> {
 	min: number

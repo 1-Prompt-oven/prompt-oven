@@ -8,14 +8,14 @@ import {
 	SelectValue,
 } from "@repo/ui/custom-select"
 
+type Value = string
 interface SelectOption {
-	value: string
+	value: Value
 	label: string
-	id: string
 }
 interface PcSelectProps {
 	onValueChange: (value: string) => void
-	defaultValue?: string
+	defaultValue?: Value
 	placeholder: string
 	className?: string
 	options: SelectOption[]
