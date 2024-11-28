@@ -16,10 +16,10 @@ export default function PromptDetailInfo({
 		<div className="flex min-h-[600px] flex-grow flex-col sm:min-h-[800px] lg:justify-between">
 			<div className="flex flex-col gap-12">
 				<PromptDetailStandardInfo
-					productRegistDate={productDetail.productRegistDate}
+					createdAt={productDetail.createdAt}
 					price={productDetail.price}
 					productName={productDetail.productName}
-					productStar={productDetail.productStar}
+					avgStar={productDetail.avgStar}
 					productReviewCount={productDetail.productReviewCount}
 				/>
 

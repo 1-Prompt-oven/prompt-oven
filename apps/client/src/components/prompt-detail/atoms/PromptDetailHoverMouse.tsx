@@ -48,7 +48,7 @@ export default function PromptDetailHoverMouse({
 								</p>
 								<div className="flex items-center gap-4">
 									<StarAnimation
-										rateData={productDetail.productStar}
+										rateData={productDetail.avgStar}
 										noAnimation={false}
 									/>
 									<span className="mt-1 text-xs font-semibold">

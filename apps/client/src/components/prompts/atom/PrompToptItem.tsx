@@ -61,7 +61,7 @@ export default function PrompToptItem({ promptTop, rank }: PrompToptItemProps) {
 
 			{/* Top Prompts Description 보류 */}
 			{/* <div className="flex h-[107px] flex-col gap-2 bg-[#3d2d50] pl-2 pt-1 md:h-[107px]">
-				<StarRate value={promptTop.productStar} />
+				<StarRate value={promptTop.avgStar} />
 				<PromptName promptName={promptTop.productName} />
 
 				<div className="flex items-center justify-between">

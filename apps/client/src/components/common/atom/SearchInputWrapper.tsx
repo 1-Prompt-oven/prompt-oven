@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef, useState, InputHTMLAttributes } from "react"
+import React, { useEffect, useRef, useState } from "react"
+import type { InputHTMLAttributes } from "react"
 import { Search } from "@repo/ui/lucide"
 import { Button } from "@repo/ui/button"
 import { Input } from "@repo/ui/input"

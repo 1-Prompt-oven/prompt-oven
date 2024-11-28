@@ -28,7 +28,7 @@ export default function PromptTopItemStash({
 				{rank}
 			</div>
 			<div className="flex h-[107px] flex-col gap-2 bg-[#3d2d50] pl-2 pt-1">
-				<StarAnimation rateData={promptTop.productStar} noAnimation={false} />
+				<StarAnimation rateData={promptTop.avgStar} noAnimation={false} />
 				<PromptName promptName={promptTop.productName} />
 				<div className="flex items-center justify-between">
 					<PromptLLMId llmId={promptTop.llmId} />

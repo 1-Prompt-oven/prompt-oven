@@ -3,9 +3,9 @@ export interface PromptTopType {
 	thumbnailUrl: string
 	productName: string
 	llmId: number
-	productStar: number
+	avgStar: number
 	price: number
-	productRegistDate: string
+	createdAt?: string
 }
 
 export interface PromptsType {
@@ -13,7 +13,7 @@ export interface PromptsType {
 	thumbnailUrl: string
 	productName: string
 	llmId: number
-	productStar: number
+	avgStar: number
 	price: number
-	productRegistDate: string
+	createdAt?: string
 }

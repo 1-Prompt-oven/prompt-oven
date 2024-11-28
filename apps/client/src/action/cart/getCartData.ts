@@ -2,7 +2,7 @@
 import type { CartItemType } from "@/types/cart/cartTypes"
 import type {
 	CommonResType,
-	// ProductApiResponseType,
+	// PromptApiResponseType,
 	// CartItemApiResponseType,
 } from "@/types/common/responseType"
 // import type { PromptsType } from "@/types/prompts/promptsType"
@@ -47,7 +47,7 @@ export async function getCartData(
 	// 			throw new Error(`상품 상세 정보 가져오기 실패: ${cartItem.productUuid}`)
 	// 		}
 
-	// 		const productData: CommonResType<ProductApiResponseType> =
+	// 		const productData: CommonResType<PromptApiResponseType> =
 	// 			await productResponse.json()
 
 	// 		return productData.result.productList[0]

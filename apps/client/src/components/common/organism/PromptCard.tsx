@@ -16,8 +16,8 @@ interface PromptCardProps {
 }
 
 export default function PromptCard({ productInfo }: PromptCardProps) {
-	const formattedDate = PromptCardDateFormatted(productInfo.productRegistDate)
-	const isNew = PromptIsNew(productInfo.productRegistDate)
+	const formattedDate = PromptCardDateFormatted(productInfo.createdAt)
+	const isNew = PromptIsNew(productInfo.createdAt)
 
 	return (
 		<li className="flex justify-center">
@@ -42,10 +42,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 					</div>
 
 					<div className="relative flex h-[110px] flex-col gap-1 bg-[#3d2d50] px-3 pt-1">
-						<StarAnimation
-							rateData={productInfo.productStar}
-							noAnimation={false}
-						/>
+						<StarAnimation rateData={productInfo.avgStar} noAnimation={false} />
 
 						<div className="ml-1 space-y-5">
 							<PromptName name={productInfo.productName} />
