@@ -15,5 +15,5 @@ export interface PromptsType {
 	llmId: number
 	avgStar: number
 	price: number
-	createdAt?: string
+	createdAt: string
 }
