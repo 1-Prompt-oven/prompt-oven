@@ -24,4 +24,14 @@ export interface OAuthSignInResponse {
 	failed: boolean
 }
 
-export type SignInResponse = Omit<OAuthSignInResponse, 'failed'>
+// export type SignInResponse = Omit<OAuthSignInResponse, 'failed'>
+
+export interface SignInResponse {
+  result: {
+    accesstoken: string,
+    refreshtoken: string,
+    nickname: string,
+    role: string,
+    memberUUID: string
+}
+}

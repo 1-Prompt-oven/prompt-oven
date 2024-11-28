@@ -1,18 +1,28 @@
 "use client"
 
+import { useState } from "react"
 import type { FieldValues } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@repo/ui/button"
 import { signupSchema, signupSchemaObject } from "@/schema/auth.ts"
+import { useAuthTimer } from "@/hooks/auth/useAuthTimer.ts"
+import {
+	registerAuthMember,
+	verifyEmail,
+	verifyNickname,
+} from "@/action/auth/memberManageAction"
+import type { RegisterOAuthMemberResponse } from "@/types/auth/memberRegisterType"
+import {
+	checkEmailVerificationCode,
+	requestPasswordResetEmail,
+} from "@/action/auth/forgotPasswardAction"
 import SignUpField from "@/components/auth/molecule/SignUpField.tsx"
 import SignUpTimerField from "@/components/auth/molecule/SignUpTimerField.tsx"
-import { useAuthTimer } from "@/hooks/auth/useAuthTimer.ts"
-import { registerAuthMember } from "@/action/auth/memberRegisterAction"
-import type { RegisterOAuthMemberResponse } from "@/types/auth/memberRegisterType"
 import ValidTermsCheckBox from "../molecule/TermsValidCheckBox"
 
 function SignUpForm() {
+	const [emailVerified, setEmailVerified] = useState(false)
 	const {
 		handleSubmit,
 		register,
@@ -30,8 +40,16 @@ function SignUpForm() {
 	const email: string = watch(signUpSchemaKeys.email) as string
 	const emailCode: string = watch(signUpSchemaKeys.emailCode) as string
 	const nickName: string = watch(signUpSchemaKeys.nickname) as string
+	const [showTimerField, setShowTimerField] = useState(true)
 
 	const handleOnSubmitSuccess = async (data: FieldValues) => {
+		if (!emailVerified) {
+			setError(signUpSchemaKeys.emailCode, {
+				type: "manual",
+				message: "Email verification is required.",
+			})
+			return
+		}
 		const responseData = data as RegisterOAuthMemberResponse
 		await registerAuthMember(responseData)
 		window.location.href = "/sign-in"
@@ -43,22 +61,76 @@ function SignUpForm() {
 	}
 
 	// email validation
-	const emailValidationHandler = () => {
-		// todo : email validation Api 구현하기
-		startTimer()
+	const emailValidationHandler = async () => {
+		try {
+			// Step 1: Verify email duplication
+			const verifyResponse = await verifyEmail({ email })
+			if (!verifyResponse.isSuccess || !verifyResponse.result) {
+				setError(signUpSchemaKeys.email, {
+					type: "manual",
+					message: "Email is already taken. Please use a different email.",
+				})
+				return
+			}
+
+			// Step 2: Send email verification request
+			await requestPasswordResetEmail({ email })
+			startTimer() // Start the timer for email validation
+			clearErrors(signUpSchemaKeys.email) // Clear any existing errors
+		} catch (error) {
+			setError(signUpSchemaKeys.email, {
+				type: "manual",
+				message: "Failed to validate email. Please try again.",
+			})
+		}
 	}
-	const emailCodeValidationHandler = () => {
-		// todo : email code validation Api 구현하기
+	const emailCodeValidationHandler = async () => {
+		try {
+			const response = await checkEmailVerificationCode({
+				email,
+				code: emailCode,
+			})
+
+			if (response) {
+				clearErrors(signUpSchemaKeys.emailCode)
+				setEmailVerified(true)
+				setShowTimerField(false)
+			} else {
+				setError(signUpSchemaKeys.emailCode, {
+					type: "manual",
+					message: "Invalid verification code.",
+				})
+			}
+		} catch (error) {
+			setError(signUpSchemaKeys.emailCode, {
+				type: "manual",
+				message: "Verification failed. Please try again.",
+			})
+		}
 	}
 
 	const emailValidationTime = 180 // 3 minutes in seconds
 	const [timeLeft, startTimer] = useAuthTimer({ emailValidationTime })
 
 	// nickname validation
-	const nickNameValidationHandler = () => {
-		// todo : nickname validation Api 구현하기
+	const nickNameValidationHandler = async () => {
+		try {
+			const response = await verifyNickname({ nickname: nickName })
+			if (response.isSuccess && response.result) {
+				clearErrors(signUpSchemaKeys.nickname)
+			} else {
+				setError(signUpSchemaKeys.nickname, {
+					type: "manual",
+					message: "Nickname is already taken. Please choose another one.",
+				})
+			}
+		} catch (error) {
+			setError(signUpSchemaKeys.nickname, {
+				type: "manual",
+				message: "Failed to validate nickname. Please try again.",
+			})
+		}
 	}
-
 	return (
 		<div className="min-w-[500px] select-none gap-0 rounded border-none bg-[#252525] px-6 pb-12 pt-16 md:min-h-[780px] md:max-w-[650px] md:px-10 md:pb-16 md:pt-24">
 			<div className="mb-5 flex h-fit flex-col justify-center gap-[5px] md:mb-14">
@@ -98,7 +170,7 @@ function SignUpForm() {
 					/>
 
 					{/* Email Validation */}
-					{timeLeft !== null ? (
+					{showTimerField && timeLeft !== null ? (
 						<SignUpTimerField
 							inputProps={{
 								id: signUpSchemaKeys.emailCode,
