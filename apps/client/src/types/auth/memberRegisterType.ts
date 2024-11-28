@@ -1,7 +1,7 @@
 export interface RegisterOAuthMemberRequest {
 	email: string
-	password: string
-	nickname: string
+	password?: string
+	nickname?: string
 	provider: string
 	providerId: string
 }
