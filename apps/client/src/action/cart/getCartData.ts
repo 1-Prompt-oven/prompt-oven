@@ -73,6 +73,7 @@ export async function getCartData(
 	// 			price: product.price,
 	// 			selected: cartItem.selected,
 	// 			thumbnailUrl: product.thumbnailUrl,
+	// 			llmId: product.llmId,
 	// 		}
 	// 	})
 

@@ -12,17 +12,19 @@ async function cart() {
 	const selectedItemsTotalPrice = await calculateTotalPrice(selectedItem)
 
 	return (
-		<main className="min-h-screen bg-black p-6">
-			<div className="mx-auto max-w-6xl">
-				<h1 className="mb-6 text-2xl font-bold text-white">My Cart</h1>
-				<div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+		<main className="min-h-screen bg-black pt-10">
+			<div className="container mx-auto max-w-7xl">
+				<h1 className="mb-8 text-2xl font-bold text-white">My Cart</h1>
+				<div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
 					<div className="lg:col-span-2">
 						<CartItemContainer
 							initialItems={items}
 							initialSelectedItems={selectedItem}
 						/>
 					</div>
-					<CartCheckout totalPrice={selectedItemsTotalPrice} />
+					<div className="h-auto">
+						<CartCheckout totalPrice={selectedItemsTotalPrice} />
+					</div>
 				</div>
 			</div>
 		</main>

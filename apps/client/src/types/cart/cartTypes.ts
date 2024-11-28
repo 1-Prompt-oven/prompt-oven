@@ -6,4 +6,5 @@ export interface CartItemType {
 	productName: string
 	thumbnailUrl: string
 	price: number
+	llmName: string
 }

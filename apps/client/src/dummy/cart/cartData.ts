@@ -9,6 +9,7 @@ export const dummyCartItems: CartItemType[] = [
 		thumbnailUrl:
 			"https://assets.promptbase.com/DALLE_IMAGES%2FrZHZRYckkfU3lYMhm1wJrrvtyLD2%2Fresized%2F1686953714424_150x150.webp?alt=media&token=4f49bbb1-bf1b-4681-b261-03fed292f9ef",
 		price: 4000,
+		llmName: "Dall-E",
 	},
 	{
 		productUuid: "item2",
@@ -17,6 +18,7 @@ export const dummyCartItems: CartItemType[] = [
 		productName: "Jeju Puppy Bandal",
 		thumbnailUrl: "/img/cart/jejuBandal.jpg",
 		price: 20000000,
+		llmName: "GPT",
 	},
 	{
 		productUuid: "item3",
@@ -26,6 +28,7 @@ export const dummyCartItems: CartItemType[] = [
 		thumbnailUrl:
 			"https://assets.promptbase.com/DALLE_IMAGES%2FVAXItKojEQXmXUs4prJNIftWE6T2%2Fresized%2F1728324786805_100x100.webp?alt=media&token=8ca1932d-3be9-4f2b-88da-54e9df2649fe",
 		price: 1500,
+		llmName: "Dall-E",
 	},
 	{
 		productUuid: "item4",
@@ -34,5 +37,6 @@ export const dummyCartItems: CartItemType[] = [
 		productName: "Smiling Bandal",
 		thumbnailUrl: "/img/cart/smileBandal.jpg",
 		price: 10000000,
+		llmName: "GPT",
 	},
 ]

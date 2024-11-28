@@ -18,6 +18,14 @@ export async function fetchSearchResults(
 	if (tab === "prompt") {
 		const promptResponse = await fetch(
 			`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/product/list?searchBar=${query}&pageSize=5`,
+			{
+				headers: {
+					"Content-Type": "application/json",
+					Accept: "application/json",
+				},
+				method: "GET",
+				cache: "no-cache",
+			},
 		)
 		const promptData: CommonResType<PromptApiResponseType> =
 			await promptResponse.json()
@@ -27,6 +35,14 @@ export async function fetchSearchResults(
 	// 크리에이터 검색 결과 fetch
 	const creatorResponse = await fetch(
 		`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/profile/search?query=${query}`,
+		{
+			headers: {
+				"Content-Type": "application/json",
+				Accept: "application/json",
+			},
+			method: "GET",
+			cache: "no-cache",
+		},
 	)
 	const creatorData: CommonResType<SearchResultCreatorType[]> =
 		await creatorResponse.json()

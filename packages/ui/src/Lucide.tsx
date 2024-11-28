@@ -40,5 +40,6 @@ export {
 	Bell,
 	Check,
 	Upload,
+	Trash2,
 	type LucideProps,
 } from "lucide-react"
