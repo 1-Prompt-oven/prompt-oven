@@ -1,6 +1,12 @@
 export const promptVariableRegex = /\[[^\]]+]/g
 
-export const extractPromptVariables = (prompt: string) => {
+export interface PromptVariableType {
+	name: string
+	value: string
+}
+export const extractPromptVariables = (
+	prompt: string,
+): PromptVariableType[] => {
 	const matches = prompt.match(promptVariableRegex)
 
 	if (matches) {
