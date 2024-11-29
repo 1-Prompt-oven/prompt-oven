@@ -1,12 +1,13 @@
 import React from "react"
+import { getServerSession } from "next-auth"
+import { authOptions } from "./api/auth/[...nextauth]/authOption"
 import "./globals.css"
 import "@repo/ui/styles.css"
 import type { Metadata } from "next"
 import { roboto, sora } from "@/app/fonts.ts"
-// import MainHeader from "@/components/main/molecule/MainHeader.tsx"
 import MainHeader from "@/components/common/molecule/MainHeader.tsx"
-import { AuthSessionProvider } from "@/provider/authSessionProvider.tsx"
 import { SideMenuToggleStoreProvider } from "@/provider/account/sideMenuStoreProvider.tsx"
+import AuthContextProvider from "@/provider/AuthContextProvider"
 
 export const metadata: Metadata = {
 	title: "Prompt Oven",
@@ -29,11 +30,13 @@ export const metadata: Metadata = {
 		title: "Prompt Oven",
 	},
 }
-export default function RootLayout({
+export default async function RootLayout({
 	children,
 }: {
 	children: React.ReactNode
 }) {
+	const session = await getServerSession(authOptions)
+	const isAuth = Boolean(session?.user)
 	return (
 		<html lang="en">
 			<head>
@@ -41,12 +44,12 @@ export default function RootLayout({
 			</head>
 			<body
 				className={`${sora.variable} ${roboto.variable} ${sora.className} bg-po-black-200`}>
-				<AuthSessionProvider>
+				<AuthContextProvider isAuth={isAuth}>
 					<SideMenuToggleStoreProvider>
 						<MainHeader />
-						{children}
+						<div className="relative pt-20">{children}</div>
 					</SideMenuToggleStoreProvider>
-				</AuthSessionProvider>
+				</AuthContextProvider>
 			</body>
 		</html>
 	)

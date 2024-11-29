@@ -3,7 +3,7 @@ import StarAnimation from "@repo/ui/star-animation"
 
 interface PromptDetailStandardInfoProps {
 	productRegistDate: string
-	productPrice: number
+	price: number
 	productName: string
 	productStar: number
 	productReviewCount: number
@@ -11,13 +11,13 @@ interface PromptDetailStandardInfoProps {
 
 export default function PromptDetailStandardInfo({
 	productRegistDate,
-	productPrice,
+	price,
 	productName,
 	productStar,
 	productReviewCount,
 }: PromptDetailStandardInfoProps) {
 	const formattedDate = new Date(productRegistDate).toISOString().split("T")[0]
-	const formattedNumber = productPrice.toFixed(2)
+	const formattedNumber = price.toFixed(2)
 
 	return (
 		<div className="flex flex-col gap-4">

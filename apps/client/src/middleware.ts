@@ -8,6 +8,7 @@ const withAuth = async (req: NextRequest, token: boolean) => {
 	const { pathname } = req.nextUrl
 	if (!token) {
 		url.pathname = routes.signIn
+		// url.basePath = routes.signUp
 		url.search = `callbackUrl=${pathname}`
 
 		return NextResponse.redirect(url)
@@ -21,24 +22,23 @@ const withOutAuth = async (
 	to: string | null,
 ) => {
 	const url = req.nextUrl.clone()
+  if (token) {
+    url.pathname = to ?? FALLBACK_URL;
+    url.search = "";
 
-	if (token) {
-		url.pathname = to ?? FALLBACK_URL
-		url.search = ""
-
-		return NextResponse.redirect(url)
-	}
+    return NextResponse.redirect(url);
+  } 
 }
 
-const withAuthList: string[] = [] // 추후 routes.cart 추가 예정
-const withOutAuthList: string[] = [routes.signIn]
+const withAuthList: string[] = [routes.cart, routes.profile, routes.favorite]
+const withOutAuthList: string[] = []
 
 export default async function middleware(request: NextRequest) {
 	const token = await getToken({
 		req: request,
 		secret: process.env.NEXTAUTH_SECRET,
 	})
-	const accessToken = token?.accessToken
+	const accessToken = token?.accesstoken
 	const { searchParams } = request.nextUrl
 	const callbackUrl = searchParams.get("callbackUrl")
 	const { pathname } = request.nextUrl

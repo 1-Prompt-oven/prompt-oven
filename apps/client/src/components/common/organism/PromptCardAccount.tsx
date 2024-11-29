@@ -54,7 +54,7 @@ export default function PromptCardAccount({
 							<PromptLLMId llmId={productInfo.llmId} />
 						</div>
 
-						<PromptPrice price={productInfo.productPrice} />
+						<PromptPrice price={productInfo.price} />
 					</div>
 				</Card>
 			</Link>

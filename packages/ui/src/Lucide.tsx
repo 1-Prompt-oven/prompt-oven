@@ -38,5 +38,7 @@ export {
 	Store,
 	MessageSquareText,
 	Bell,
+	Check,
+	Upload,
 	type LucideProps,
 } from "lucide-react"

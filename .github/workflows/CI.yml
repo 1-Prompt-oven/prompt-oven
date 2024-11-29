@@ -33,7 +33,19 @@ jobs:
           key: ${{ matrix.node-version }}-${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ matrix.node-version }}-${{ runner.os }}-pnpm-store-
-      
+            
+      - name: Cache Next.js and Turbo
+        uses: actions/cache@v4
+        with:
+          path: |
+            ${{ github.workspace }}/apps/client/.next/cache
+            ${{ github.workspace }}/apps/admin/.next/cache
+            .turbo
+          key: ${{ runner.os }}-nextjs-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
+          restore-keys: |
+            ${{ runner.os }}-nextjs-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}-
+            ${{ runner.os }}-nextjs-turbo-
+              
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       

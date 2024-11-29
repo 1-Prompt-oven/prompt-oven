@@ -1,19 +1,19 @@
 export interface PromptTopType {
-	productUUID: string
+	productUuid: string
 	thumbnailUrl: string
 	productName: string
 	llmId: number
 	productStar: number
-	productPrice: number
+	price: number
 	productRegistDate: string
 }
 
 export interface PromptsType {
-	productUUID: string
+	productUuid: string
 	thumbnailUrl: string
 	productName: string
 	llmId: number
 	productStar: number
-	productPrice: number
+	price: number
 	productRegistDate: string
 }
