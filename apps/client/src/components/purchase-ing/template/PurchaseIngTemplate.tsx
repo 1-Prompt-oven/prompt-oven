@@ -48,7 +48,7 @@ export default function PurchaseIngTemplate({
 
 					<PaymentOrder
 						method={selectedMethod}
-						totalOrder={paymentList.length}
+						paymentList={paymentList}
 						totalPrice={totalPrice}
 					/>
 				</div>

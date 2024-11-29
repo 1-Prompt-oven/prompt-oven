@@ -1,6 +1,7 @@
+import type { PaymentItemType } from "@/types/purchase.ts/purchase-ongoing"
+import type methodGroup from "../atom/icon/MethodGroup"
 import PaymentMessageArea from "../PaymentMessageArea"
 import PaymentTitle from "../atom/PaymentTitle"
-import type methodGroup from "../atom/icon/MethodGroup"
 import PaymentLastCheckValue from "../molecule/PaymentLastCheckValue"
 import PaymentOrderNone from "../molecule/PaymentOrderNone"
 import PaymentProceed from "../molecule/PaymentProceed"
@@ -12,24 +13,36 @@ interface SelectedMethod {
 
 interface PaymentOrderProps {
 	method: SelectedMethod // selectedMethod를 props로 받음
-	totalOrder: number
+	paymentList: PaymentItemType[]
 	totalPrice: number
 }
 
 export default function PaymentOrder({
 	method,
-	totalOrder,
+	paymentList,
 	totalPrice,
 }: PaymentOrderProps) {
+	const orderName =
+		paymentList.length > 1
+			? `${paymentList[0].productName} 외 ${paymentList.length - 1}건`
+			: paymentList[0].productName
+
 	return (
 		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
 			<PaymentTitle title="Message" />
 			<PaymentMessageArea comment="Leave a message" />
 
-			<PaymentLastCheckValue totalOrder={totalOrder} totalPrice={totalPrice} />
+			<PaymentLastCheckValue
+				totalOrder={paymentList.length}
+				totalPrice={totalPrice}
+			/>
 
 			{method.payment ? (
-				<PaymentProceed method={method.payment} />
+				<PaymentProceed
+					method={method.payment}
+					orderName={orderName}
+					totalPrice={totalPrice}
+				/>
 			) : (
 				<PaymentOrderNone />
 			)}

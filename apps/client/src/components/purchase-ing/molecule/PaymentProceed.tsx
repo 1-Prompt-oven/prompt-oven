@@ -5,20 +5,6 @@ import { Button } from "@repo/ui/button"
 
 const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`
 
-const amount = {
-	currency: "KRW",
-	value: 50000,
-}
-
-// 결제 방법을 정의하는 타입
-// type PaymentMethod =
-// 	| "CARD"
-// 	| "TRANSFER"
-// 	| "VIRTUAL_ACCOUNT"
-// 	| "MOBILE_PHONE"
-// 	| "CULTURE_GIFT_CERTIFICATE"
-// 	| "FOREIGN_EASY_PAY"
-
 const generateRandomString = (length = 20) => {
 	const characters =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
@@ -29,13 +15,30 @@ const generateRandomString = (length = 20) => {
 	}
 	return result
 }
-
 const customerKey = generateRandomString()
 
-export default function PaymentProceed({ method }: { method: string }) {
+interface PaymentProceedProps {
+	method: string
+	orderName: string
+	totalPrice: number
+}
+
+export default function PaymentProceed({
+	method,
+	orderName,
+	totalPrice,
+}: PaymentProceedProps) {
+	const amount = {
+		currency: "KRW",
+		value: totalPrice,
+	}
+
 	const [payment, setPayment] = useState<TossPaymentsPayment | null>(null) // 초기값을 null로 설정
 
 	const selectedPaymentMethod: string = method
+
+	const payer = "김토스"
+	const paymentMail = "customer123@gmail.com"
 
 	useEffect(() => {
 		async function fetchPayment() {
@@ -68,11 +71,11 @@ export default function PaymentProceed({ method }: { method: string }) {
 					method: "CARD", // 카드 및 간편결제
 					amount,
 					orderId: generateRandomString(), // 고유 주문번호
-					orderName: "토스 티셔츠 외 2건",
+					orderName,
 					successUrl: `${window.location.origin}/payment/success`, // 결제 요청이 성공하면 리다이렉트되는 URL
 					failUrl: `${window.location.origin}/fail`, // 결제 요청이 실패하면 리다이렉트되는 URL
-					customerEmail: "customer123@gmail.com",
-					customerName: "김토스",
+					customerEmail: paymentMail,
+					customerName: payer,
 					card: {
 						useEscrow: false,
 						flowMode: "DEFAULT",
@@ -80,17 +83,17 @@ export default function PaymentProceed({ method }: { method: string }) {
 						useAppCardOnly: false,
 					},
 				})
-				break // break 추가
+				break
 			case "TRANSFER":
 				await payment.requestPayment({
 					method: "TRANSFER", // 계좌이체 결제
 					amount,
 					orderId: generateRandomString(),
-					orderName: "토스 티셔츠 외 2건",
+					orderName,
 					successUrl: `${window.location.origin}/payment/success`,
 					failUrl: `${window.location.origin}/fail`,
-					customerEmail: "customer123@gmail.com",
-					customerName: "김토스",
+					customerEmail: paymentMail,
+					customerName: payer,
 					transfer: {
 						cashReceipt: {
 							type: "소득공제",
@@ -98,17 +101,17 @@ export default function PaymentProceed({ method }: { method: string }) {
 						useEscrow: false,
 					},
 				})
-				break // break 추가
+				break
 			case "VIRTUAL_ACCOUNT":
 				await payment.requestPayment({
 					method: "VIRTUAL_ACCOUNT", // 가상계좌 결제
 					amount,
 					orderId: generateRandomString(),
-					orderName: "토스 티셔츠 외 2건",
+					orderName,
 					successUrl: `${window.location.origin}/payment/success`,
 					failUrl: `${window.location.origin}/fail`,
-					customerEmail: "customer123@gmail.com",
-					customerName: "김토스",
+					customerEmail: paymentMail,
+					customerName: payer,
 					virtualAccount: {
 						cashReceipt: {
 							type: "소득공제",
@@ -117,31 +120,31 @@ export default function PaymentProceed({ method }: { method: string }) {
 						validHours: 24,
 					},
 				})
-				break // break 추가
+				break
 			case "MOBILE_PHONE":
 				await payment.requestPayment({
 					method: "MOBILE_PHONE", // 휴대폰 결제
 					amount,
 					orderId: generateRandomString(),
-					orderName: "토스 티셔츠 외 2건",
+					orderName,
 					successUrl: `${window.location.origin}/payment/success`,
 					failUrl: `${window.location.origin}/fail`,
-					customerEmail: "customer123@gmail.com",
-					customerName: "김토스",
+					customerEmail: paymentMail,
+					customerName: payer,
 				})
-				break // break 추가
+				break
 			case "CULTURE_GIFT_CERTIFICATE":
 				await payment.requestPayment({
 					method: "CULTURE_GIFT_CERTIFICATE", // 문화상품권 결제
 					amount,
 					orderId: generateRandomString(),
-					orderName: "토스 티셔츠 외 2건",
+					orderName,
 					successUrl: `${window.location.origin}/payment/success`,
 					failUrl: `${window.location.origin}/fail`,
-					customerEmail: "customer123@gmail.com",
-					customerName: "김토스",
+					customerEmail: paymentMail,
+					customerName: payer,
 				})
-				break // break 추가
+				break
 			case "FOREIGN_EASY_PAY":
 				await payment.requestPayment({
 					method: "FOREIGN_EASY_PAY", // 해외 간편결제
@@ -153,14 +156,14 @@ export default function PaymentProceed({ method }: { method: string }) {
 					orderName: "토스 티셔츠 외 2건",
 					successUrl: `${window.location.origin}/payment/success`,
 					failUrl: `${window.location.origin}/fail`,
-					customerEmail: "customer123@gmail.com",
-					customerName: "김토스",
+					customerEmail: paymentMail,
+					customerName: payer,
 					foreignEasyPay: {
 						provider: "PAYPAL", // PayPal 결제
 						country: "KR",
 					},
 				})
-				break // break 추가
+				break
 			default:
 				// eslint-disable-next-line no-console -- Invalid payment method selected.
 				console.error("Invalid payment method selected.")
