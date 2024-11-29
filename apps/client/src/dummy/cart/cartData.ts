@@ -2,6 +2,7 @@ import type { CartItemType } from "@/types/cart/cartTypes"
 
 export const dummyCartItems: CartItemType[] = [
 	{
+		id: 1,
 		productUuid: "item1",
 		memberUuid: "member1",
 		selected: false,
@@ -12,6 +13,7 @@ export const dummyCartItems: CartItemType[] = [
 		llmName: "Dall-E",
 	},
 	{
+		id: 2,
 		productUuid: "item2",
 		memberUuid: "member1",
 		selected: true,
@@ -21,6 +23,7 @@ export const dummyCartItems: CartItemType[] = [
 		llmName: "GPT",
 	},
 	{
+		id: 3,
 		productUuid: "item3",
 		memberUuid: "member1",
 		selected: false,
@@ -31,6 +34,7 @@ export const dummyCartItems: CartItemType[] = [
 		llmName: "Dall-E",
 	},
 	{
+		id: 4,
 		productUuid: "item4",
 		memberUuid: "member1",
 		selected: true,
