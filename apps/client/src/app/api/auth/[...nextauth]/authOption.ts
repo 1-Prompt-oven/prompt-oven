@@ -4,6 +4,7 @@ import GoogleProvider from "next-auth/providers/google";
 import NaverProvider from "next-auth/providers/naver";
 import KakaoProvider from "next-auth/providers/kakao";
 import { signInByAuth } from "@/action/auth/OAuthSignInAction.ts";
+import { Session } from "inspector/promises";
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -18,7 +19,7 @@ export const authOptions: NextAuthOptions = {
                 email: { label: "email", type: "text" },
                 password: { label: "password", type: "password" },
             },
-            async authorize(credentials): Promise<any> {
+            async authorize(credentials): Promise<User | null> {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
@@ -63,7 +64,7 @@ export const authOptions: NextAuthOptions = {
           },
       
               async session({ session, token }) {
-            session.user = token as any;
+            session.user = token;
             return session;
           },
       

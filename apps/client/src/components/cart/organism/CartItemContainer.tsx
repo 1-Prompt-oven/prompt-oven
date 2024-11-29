@@ -6,7 +6,7 @@ import {
 	cartCheckUpdate,
 	// deleteCartItem,
 	// deleteCartItemList,
-} from "@/action/cart/getCartData"
+} from "@/action/cart/cartAction"
 import { calculateTotalPrice } from "@/action/cart/cartDataAction"
 import CartItem from "../molecule/CartItem"
 import CartItemAllCheck from "../molecule/CartItemAllCheck"

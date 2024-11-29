@@ -1,13 +1,13 @@
 import React from "react"
 import type { CartItemType } from "@/types/cart/cartTypes"
-import { getCartData } from "@/action/cart/getCartData"
+import { getCartData } from "@/action/cart/cartAction"
 import { calculateTotalPrice } from "@/action/cart/cartDataAction"
 import CartItemContainer from "@/components/cart/organism/CartItemContainer"
 import CartCheckout from "@/components/cart/organism/CartCheckout"
 
 async function cart() {
 	const _memberUuid = "uuid" // 더미 uuid
-	const items: CartItemType[] = await getCartData(_memberUuid)
+	const items: CartItemType[] = await getCartData()
 	const selectedItem = items.filter((item) => item.selected)
 	const selectedItemsTotalPrice = await calculateTotalPrice(selectedItem)
 
@@ -17,10 +17,10 @@ async function cart() {
 				<h1 className="mb-8 text-2xl font-bold text-white">My Cart</h1>
 				<div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
 					<div className="lg:col-span-2">
-						<CartItemContainer
+						{/* <CartItemContainer
 							initialItems={items}
 							initialSelectedItems={selectedItem}
-						/>
+						/> */}
 					</div>
 					<div className="h-auto">
 						<CartCheckout totalPrice={selectedItemsTotalPrice} />
