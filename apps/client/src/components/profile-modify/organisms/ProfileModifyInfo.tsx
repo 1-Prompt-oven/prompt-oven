@@ -30,6 +30,7 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 		handleInputChange,
 		handleImageUpload,
 		handleReset,
+		handleImageRemove,
 	} = useModify(memberData)
 
 	const handleForm = async (formData: FormData) => {
@@ -88,12 +89,14 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 						memberBanner={banner}
 						handleFileChange={handleBannerChange}
 						handleReset={handleReset}
+						handleImageRemove={handleImageRemove}
 					/>
 					<div className="relative -top-[3.5rem] z-[5] mx-10 flex flex-col gap-4 md:-top-[5.5rem] md:h-40 md:!flex-row md:items-center md:justify-between xl:h-44">
 						<ProfileModifyAvatar
 							memberAvatar={avatar}
 							handleFileChange={handleAvatarChange}
 							handleReset={handleReset}
+							handleImageRemove={handleImageRemove}
 						/>
 
 						<div className="flex flex-grow justify-between gap-2 rounded-xl bg-gradient-to-r from-[#B514F1] to-[#0BA9FF] p-4 md:h-[90%] md:items-center">
