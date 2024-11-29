@@ -9,12 +9,13 @@ import {
 import { MoreVertical, Star } from "@repo/ui/lucide"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import ProfileName from "../atoms/info/ProfileName"
+import { matchUser } from "@/lib/api/sessionExtractor"
 
 interface MemberLeftProps {
 	memberData: ProfileMemberInfoType
 }
 
-export default function ProfileInfoLeft({ memberData }: MemberLeftProps) {
+export default async function ProfileInfoLeft({ memberData }: MemberLeftProps) {
 	return (
 		<div className="flex max-w-[160px] flex-grow flex-col justify-between gap-1 xl:gap-3">
 			<ProfileName memberData={memberData} />
@@ -37,11 +38,13 @@ export default function ProfileInfoLeft({ memberData }: MemberLeftProps) {
 					<DropdownMenuContent
 						align="end"
 						className="bg-[#ead4ff] font-semibold text-[#3a3a3a]">
-						<DropdownMenuItem>
-							<Link href={`/profile/modify/${memberData.nickname}`}>
-								<p>개인정보 수정</p>
-							</Link>
-						</DropdownMenuItem>
+						{await matchUser(memberData.memberUUID) && (
+							<DropdownMenuItem>
+								<Link href={`/profile/modify/${memberData.nickname}`}>
+									<p>개인정보 수정</p>
+								</Link>
+							</DropdownMenuItem>
+						)}
 						<DropdownMenuItem>
 							<Link href="/Report">
 								<p>신고</p>
