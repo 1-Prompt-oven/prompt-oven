@@ -36,24 +36,26 @@ function CartItemContainer({
 			...item,
 			selected: newSelectedState,
 		}))
-
+		// PR-4396652f
+		// 299b66a0-e1e7-448e-b396-ba681fcc2aea
 		setCartItems(updatedItems)
 		await calculateTotalPrice(updatedItems)
 	}
+
 	// 개별 체크 및 해제하는 액션
 
-	// const handleSelectItem = async (item: CartItemType) => {
-	// 	const updatedItem = { ...item, selected: !item.selected }
-	// 	await cartCheckUpdate(updatedItem, updatedItem.selected)
+	const handleSelectItem = async (item: CartItemType) => {
+		const newItemState = { ...item, selected: !item.selected }
+		await cartCheckUpdate(newItemState, newItemState.selected)
 
-	// 	const updatedItems = cartItems.map((cartItem) =>
-	// 		cartItem.productUuid === item.productUuid ? updatedItem : cartItem,
-	// 	)
+		const updatedItems = cartItems.map((cartItem) =>
+			cartItem.productUuid === item.productUuid ? newItemState : cartItem,
+		)
 
-	// 	setCartItems(updatedItems)
-	// 	setSelectedItems(updatedItems.filter((updatedItem) => updatedItem.selected))
-	// 	await calculateTotalPrice(updatedItems)
-	// }
+		setCartItems(updatedItems)
+		setSelectedItems(updatedItems.filter((updatedItem) => updatedItem.selected))
+		await calculateTotalPrice(updatedItems)
+	}
 
 	useEffect(() => {
 		setCartItems(cartItems)
@@ -65,7 +67,11 @@ function CartItemContainer({
 			<CartItemAllCheck handleSelectAll={handleSelectAll} />
 			<div className="space-y-3">
 				{cartItems.map((item) => (
-					<CartItem key={item.productUuid} item={item} />
+					<CartItem
+						key={item.productUuid}
+						item={item}
+						handleSelectItem={handleSelectItem}
+					/>
 				))}
 			</div>
 		</div>

@@ -6,14 +6,16 @@ import type { CartItemType } from "@/types/cart/cartTypes"
 
 interface CartItemProps {
 	item: CartItemType
+	handleSelectItem: (item: CartItemType) => void
 }
 
-function CartItem({ item }: CartItemProps) {
+function CartItem({ item, handleSelectItem }: CartItemProps) {
 	return (
 		<div className="flex items-center space-x-4 rounded-lg bg-gray-900 p-4">
 			<CheckBox
 				checked={item.selected}
 				className="h-4 w-4 border-gray-400 bg-transparent"
+				onClick={() => handleSelectItem(item)}
 			/>
 			<div className="relative h-16 w-16">
 				<Image
@@ -33,7 +35,7 @@ function CartItem({ item }: CartItemProps) {
 			<span className="font-medium text-purple-400">
 				{item.price.toLocaleString()} 원
 			</span>
-			<button className="text-gray-400 hover:text-gray-300">
+			<button type="button" className="text-gray-400 hover:text-gray-300">
 				<Trash2 className="h-5 w-5" />
 			</button>
 		</div>

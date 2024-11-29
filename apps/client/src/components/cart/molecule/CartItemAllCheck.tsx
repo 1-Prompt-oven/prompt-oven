@@ -17,7 +17,9 @@ function CartItemAllCheck({
 					Select All Items
 				</span>
 			</div>
-			<button className="text-xs font-medium text-purple-400 hover:text-purple-300">
+			<button
+				type="button"
+				className="text-xs font-medium text-purple-400 hover:text-purple-300">
 				REMOVE
 			</button>
 		</div>

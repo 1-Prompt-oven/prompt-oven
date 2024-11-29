@@ -15,6 +15,7 @@ export interface PromptApiResponseType {
 }
 
 export interface CartItemApiResponseType {
+	id: number
 	memberUuid: string
 	productUuid: string
 	selected: boolean

@@ -1,4 +1,5 @@
 export interface CartItemType {
+	id: number
 	memberUuid: string
 	productUuid: string
 	selected: boolean
