@@ -18,8 +18,7 @@
         "AWS_REGION",
         "AWS_ACCESS_KEY_ID",
         "AWS_SECRET_ACCESS_KEY",
-        "API_BASE_URL",
-        "NEXT_PUBLIC_API_BASE_URL"
+        "API_BASE_URL"
       ]
     },
     "lint": {},
