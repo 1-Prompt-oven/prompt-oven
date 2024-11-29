@@ -1,3 +1,4 @@
+import CommonMethodSvg from "./CommonMethodSvg"
 import AmazonPayNone from "./off/AmazonPayNone"
 import ApplePayNone from "./off/ApplePayNone"
 import MasterCardNone from "./off/MasterCardNone"
@@ -10,6 +11,38 @@ import Paypal from "./on/Paypal"
 import Stripe from "./on/Stripe"
 
 const MethodGroup = {
+	general: [
+		{
+			icon: <CommonMethodSvg isActive word="Card" pixel="8" />,
+			iconNone: <CommonMethodSvg isActive={false} word="Card" pixel="8" />,
+			label: "CARD",
+		},
+		// {
+		// 	icon: <CommonMethodSvg isActive word="Trans" pixel="8" />,
+		// 	iconNone: <CommonMethodSvg isActive={false} word="Trans" pixel="8" />,
+		// 	label: "TRANSFER",
+		// },
+		{
+			icon: <CommonMethodSvg isActive word="VirAcc" pixel="7" />,
+			iconNone: <CommonMethodSvg isActive={false} word="VirAcc" pixel="7" />,
+			label: "VIRTUAL_ACCOUNT",
+		},
+		{
+			icon: <CommonMethodSvg isActive word="MobPH" pixel="7" />,
+			iconNone: <CommonMethodSvg isActive={false} word="MobPH" pixel="7" />,
+			label: "MOBILE_PHONE",
+		},
+		{
+			icon: <CommonMethodSvg isActive word="CGC" pixel="9" />,
+			iconNone: <CommonMethodSvg isActive={false} word="CGC" pixel="9" />,
+			label: "CULTURE_GIFT_CERTIFICATE",
+		},
+		{
+			icon: <CommonMethodSvg isActive word="FEP" pixel="9" />,
+			iconNone: <CommonMethodSvg isActive={false} word="FEP" pixel="9" />,
+			label: "FOREIGN_EASY_PAY",
+		},
+	],
 	eWallet: [
 		{
 			icon: <MasterCard />,
@@ -17,11 +50,6 @@ const MethodGroup = {
 			label: "Master Card",
 		},
 		{ icon: <Paypal />, iconNone: <PaypalNone />, label: "Paypal" },
-		{ icon: <AmazonPay />, iconNone: <AmazonPayNone />, label: "Amazon Pay" },
-		{ icon: <ApplePay />, iconNone: <ApplePayNone />, label: "Apple Pay" },
-		{ icon: <Stripe />, iconNone: <StripeNone />, label: "Toss Payments" },
-	],
-	bankbook: [
 		{ icon: <AmazonPay />, iconNone: <AmazonPayNone />, label: "Amazon Pay" },
 		{ icon: <ApplePay />, iconNone: <ApplePayNone />, label: "Apple Pay" },
 		{ icon: <Stripe />, iconNone: <StripeNone />, label: "Toss Payments" },
