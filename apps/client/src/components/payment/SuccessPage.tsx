@@ -3,6 +3,7 @@
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import type { RequestPaymentType } from "@/types/purchase.ts/purchase-ongoing"
+import SuccessLinkPage from "./SuccessLinkPage"
 
 interface RequestData {
 	orderId: string | null
@@ -34,7 +35,7 @@ interface ResponseData {
 
 export function SuccessPage() {
 	const searchParams = useSearchParams()
-	const [responseData, setResponseData] = useState<ResponseData | null>(null)
+	const [errorCount, setErrorCount] = useState<number>(0)
 
 	useEffect(() => {
 		async function confirm() {
@@ -63,17 +64,18 @@ export function SuccessPage() {
 				const errorCode = json.code || "UNKNOWN_ERROR" // json.code가 없을 경우 기본값 설정
 				const errorMessage = json.message || "Unknown error" // json.message가 없을 경우 기본값 설정
 
-				// eslint-disable-next-line no-console -- Check Error
-				console.log(
-					"errorCode : ",
-					errorCode,
-					"\nerrorMessage : ",
-					errorMessage,
-				)
+				if (errorCount < 1) setErrorCount(errorCount + 1)
+				else {
+					//연결이 1회 실패 시, 에러 페이지로 이동
+					// eslint-disable-next-line no-console -- Check Error
+					console.log(
+						"errorCode : ",
+						errorCode,
+						"\nerrorMessage : ",
+						errorMessage,
+					)
+				}
 			} else {
-				// 성공적인 응답 처리
-				setResponseData(json)
-
 				const payload: RequestPaymentType = {
 					memberUUID: "1",
 					orderId: json.orderId,
@@ -93,20 +95,7 @@ export function SuccessPage() {
 		}
 
 		confirm()
-	}, [searchParams])
+	}, [searchParams, errorCount])
 
-	return (
-		<div className="text-white">
-			<div
-				className="box_section"
-				style={{ width: "600px", textAlign: "left" }}>
-				<b>Response Data :</b>
-				<div id="response" style={{ whiteSpace: "initial" }}>
-					{responseData ? (
-						<pre>{JSON.stringify(responseData, null, 4)}</pre>
-					) : null}
-				</div>
-			</div>
-		</div>
-	)
+	return <SuccessLinkPage />
 }
