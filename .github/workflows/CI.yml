@@ -34,30 +34,18 @@ jobs:
           restore-keys: |
             ${{ matrix.node-version }}-${{ runner.os }}-pnpm-store-
             
-      - name: Cache turbo
+      - name: Cache Next.js and Turbo
         uses: actions/cache@v4
         with:
-          path: ~/.turbo
-          key: ${{ matrix.node-version }}-${{ runner.os }}-turbo-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          path: |
+            ${{ github.workspace }}/apps/client/.next/cache
+            ${{ github.workspace }}/apps/admin/.next/cache
+            .turbo
+          key: ${{ runner.os }}-nextjs-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}-${{ hashFiles('**/*.js', '**/*.jsx', '**/*.ts', '**/*.tsx') }}
           restore-keys: |
-            ${{ matrix.node-version }}-${{ runner.os }}-turbo-store-
-
-      - name: Cache turbo-client
-        uses: actions/cache@v4
-        with:
-          path: ~/apps/client/.turbo
-          key: ${{ matrix.node-version }}-${{ runner.os }}-turbo-client-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ matrix.node-version }}-${{ runner.os }}-turbo-client-
-
-      - name: Cache turbo-admin
-        uses: actions/cache@v4
-        with:
-          path: ~/apps/admin/.turbo
-          key: ${{ matrix.node-version }}-${{ runner.os }}-turbo-admin-${{ hashFiles('**/pnpm-lock.yaml') }}
-          restore-keys: |
-            ${{ matrix.node-version }}-${{ runner.os }}-turbo-admin-
-      
+            ${{ runner.os }}-nextjs-turbo-${{ hashFiles('**/pnpm-lock.yaml') }}-
+            ${{ runner.os }}-nextjs-turbo-
+              
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
       

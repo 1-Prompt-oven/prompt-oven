@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { uploadImage } from "@/action/s3/s3UploadAction"
-import type { CommonModifyType } from "@/types/modify/commonModifyTypes"
+import type { CommonModifyType } from "@/types/profile/profileTypes"
 
 export const useModify = (modifyData: CommonModifyType) => {
 	//// 변수 관리 START ////
