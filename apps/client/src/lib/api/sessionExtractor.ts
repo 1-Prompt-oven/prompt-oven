@@ -87,3 +87,44 @@ export async function getRefreshToken(): Promise<string | null> {
     return null
 }
 
+export async function matchUser(target: string): Promise<boolean> {
+    "use server"
+    const session = await getServerSession(authOptions)
+    if (session) {
+        const userObj = session as { user?: { memberUUID?: unknown } }
+        const memberUUID = userObj.user?.memberUUID
+
+        if (typeof memberUUID === 'string') {
+            return memberUUID === target
+        }
+    }
+    return false
+}
+
+export async function isAdmin(): Promise<boolean> {
+    "use server"
+    const session = await getServerSession(authOptions)
+    if (session) {
+        const userObj = session as { user?: { role?: unknown } }
+        const role = userObj.user?.role
+
+        if (typeof role === 'string') {
+            return role === 'admin'
+        }
+    }
+    return false
+}
+
+export async function isSeller(): Promise<boolean> {
+    "use server"
+    const session = await getServerSession(authOptions)
+    if (session) {
+        const userObj = session as { user?: { role?: unknown } }
+        const role = userObj.user?.role
+
+        if (typeof role === 'string') {
+            return role === 'seller'
+        }
+    }
+    return false
+}
