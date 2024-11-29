@@ -33,6 +33,30 @@ jobs:
           key: ${{ matrix.node-version }}-${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
             ${{ matrix.node-version }}-${{ runner.os }}-pnpm-store-
+            
+      - name: Cache turbo
+        uses: actions/cache@v4
+        with:
+          path: ~/.turbo
+          key: ${{ matrix.node-version }}-${{ runner.os }}-turbo-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ matrix.node-version }}-${{ runner.os }}-turbo-store-
+
+      - name: Cache turbo-client
+        uses: actions/cache@v4
+        with:
+          path: ~/apps/client/.turbo
+          key: ${{ matrix.node-version }}-${{ runner.os }}-turbo-client-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ matrix.node-version }}-${{ runner.os }}-turbo-client-
+
+      - name: Cache turbo-admin
+        uses: actions/cache@v4
+        with:
+          path: ~/apps/admin/.turbo
+          key: ${{ matrix.node-version }}-${{ runner.os }}-turbo-admin-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ matrix.node-version }}-${{ runner.os }}-turbo-admin-
       
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
