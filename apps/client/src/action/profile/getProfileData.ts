@@ -14,7 +14,7 @@ export async function getProfileMemberInfo(id: string): Promise<ProfileMemberInf
 		headers,
 		next: { revalidate: 3600 },
 	})
-	await fetch(`${process.env.API_BASE_URL}/v1/profile/viewership/nickname/${id}`, {
+	void fetch(`${process.env.API_BASE_URL}/v1/profile/viewership/nickname/${id}`, {
 		method: "POST",
 		headers,
 	})
@@ -39,7 +39,7 @@ export async function getProfileMemberInfoByUuid(id: string): Promise<ProfileMem
 		headers,
 		next: { revalidate: 3600 },
 	})
-	await fetch(`${process.env.API_BASE_URL}/v1/profile/viewership/uuid/${id}`, {
+	void fetch(`${process.env.API_BASE_URL}/v1/profile/viewership/uuid/${id}`, {
 		method: "POST",
 		headers,
 	})
