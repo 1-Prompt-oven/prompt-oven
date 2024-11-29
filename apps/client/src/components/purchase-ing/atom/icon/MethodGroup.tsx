@@ -17,11 +17,11 @@ const MethodGroup = {
 			iconNone: <CommonMethodSvg isActive={false} word="Card" pixel="8" />,
 			label: "CARD",
 		},
-		{
-			icon: <CommonMethodSvg isActive word="Trans" pixel="8" />,
-			iconNone: <CommonMethodSvg isActive={false} word="Trans" pixel="8" />,
-			label: "TRANSFER",
-		},
+		// {
+		// 	icon: <CommonMethodSvg isActive word="Trans" pixel="8" />,
+		// 	iconNone: <CommonMethodSvg isActive={false} word="Trans" pixel="8" />,
+		// 	label: "TRANSFER",
+		// },
 		{
 			icon: <CommonMethodSvg isActive word="VirAcc" pixel="7" />,
 			iconNone: <CommonMethodSvg isActive={false} word="VirAcc" pixel="7" />,

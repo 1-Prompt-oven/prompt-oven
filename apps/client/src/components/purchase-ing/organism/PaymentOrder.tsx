@@ -1,3 +1,4 @@
+import { Button } from "@repo/ui/button"
 import PaymentTitle from "../atom/PaymentTitle"
 import type methodGroup from "../atom/icon/MethodGroup"
 import PaymentTest from "./PaymentTest"
@@ -12,9 +13,6 @@ interface PaymentOrderProps {
 }
 
 export default function PaymentOrder({ method }: PaymentOrderProps) {
-	// eslint-disable-next-line no-console -- This is test
-	console.log(method)
-
 	return (
 		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
 			<PaymentTitle title="Message" />
@@ -37,12 +35,15 @@ export default function PaymentOrder({ method }: PaymentOrderProps) {
 				</div>
 			</div>
 
-			{/* <Button
-				type="submit"
-				className="bg-[#9747ff] text-white hover:bg-[#743dbd]">
-				<span>Order Now</span>
-			</Button> */}
-			<PaymentTest method="CARD" />
+			{method.payment ? (
+				<PaymentTest method={method.payment} />
+			) : (
+				<Button
+					type="button"
+					className="bg-[#9747ff] text-white hover:bg-[#743dbd]">
+					<span>Order Now</span>
+				</Button>
+			)}
 		</div>
 	)
 }

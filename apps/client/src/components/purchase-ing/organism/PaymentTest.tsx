@@ -11,13 +11,13 @@ const amount = {
 }
 
 // 결제 방법을 정의하는 타입
-type PaymentMethod =
-	| "CARD"
-	| "TRANSFER"
-	| "VIRTUAL_ACCOUNT"
-	| "MOBILE_PHONE"
-	| "CULTURE_GIFT_CERTIFICATE"
-	| "FOREIGN_EASY_PAY"
+// type PaymentMethod =
+// 	| "CARD"
+// 	| "TRANSFER"
+// 	| "VIRTUAL_ACCOUNT"
+// 	| "MOBILE_PHONE"
+// 	| "CULTURE_GIFT_CERTIFICATE"
+// 	| "FOREIGN_EASY_PAY"
 
 const generateRandomString = (length = 20) => {
 	const characters =
@@ -32,10 +32,10 @@ const generateRandomString = (length = 20) => {
 
 const customerKey = generateRandomString()
 
-export default function PaymentTest({ method }: { method: PaymentMethod }) {
+export default function PaymentTest({ method }: { method: string }) {
 	const [payment, setPayment] = useState<TossPaymentsPayment | null>(null) // 초기값을 null로 설정
 
-	const selectedPaymentMethod: PaymentMethod = method
+	const selectedPaymentMethod: string = method
 
 	useEffect(() => {
 		async function fetchPayment() {
