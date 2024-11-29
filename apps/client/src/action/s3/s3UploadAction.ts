@@ -1,7 +1,7 @@
 "use server"
 
 import { v4 as uuidv4 } from "uuid"
-import type { S3ResponseType } from "@/types/profile/profileModifyTypes"
+import type { S3ResponseType } from "@/types/common/responseType"
 
 interface UploadResponse {
 	message: string

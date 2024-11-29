@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { Button } from "@repo/ui/button"
 import { useModify } from "@/hooks/modify/useModify"
-import type { CommonModifyType } from "@/types/modify/commonModifyTypes"
+import type { CommonModifyType } from "@/types/profile/profileTypes"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import ProfileModifyAvatar from "../molecules/ProfileModifyAvatar"
 import ProfileModifyBanner from "../molecules/ProfileModifyBanner"
@@ -56,7 +56,7 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 		if (!isAvatarUploaded) return
 
 		const payload: CommonModifyType = {
-			memberUUID: "test" as string,
+			memberUUID: memberData.memberUUID,
 			bannerImageUrl: formData.get("bannerImageUrl") as string,
 			avatarImageUrl: formData.get("avatarImageUrl") as string,
 			hashTag: formData.get("hashTag") as string,

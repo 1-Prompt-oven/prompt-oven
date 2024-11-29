@@ -20,3 +20,8 @@ export interface CartItemApiResponseType {
 	selected: boolean
 	deleted?: boolean
 }
+
+export interface S3ResponseType {
+	isSuccess: boolean
+	responseImageUrl: string | undefined
+}
