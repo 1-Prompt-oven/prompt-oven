@@ -8,13 +8,13 @@ import PaymentList from "../molecule/PaymentList"
 
 interface PaymentDetailProps {
 	paymentList: PaymentItemType[]
+	totalPrice: number
 }
 
-export default function PaymentDetail({ paymentList }: PaymentDetailProps) {
-	const totalPrice = paymentList.reduce((sum, item) => {
-		return sum + parseInt(item.productPrice)
-	}, 0)
-
+export default function PaymentDetail({
+	paymentList,
+	totalPrice,
+}: PaymentDetailProps) {
 	return (
 		<div className="rounded-md bg-white font-semibold">
 			<PaymentTitle title="Payment Details" option="p-4" />
