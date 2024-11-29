@@ -1,7 +1,7 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
-const apiSecretKey = "test_sk_GjLJoQ1aVZ9WZN6WXaDg3w6KYe2R"
+const apiSecretKey = `${process.env.TOSS_SECRET_KEY}`
 const encryptedApiSecretKey = `Basic ${Buffer.from(`${apiSecretKey}:`).toString("base64")}`
 
 export async function POST(request: NextRequest) {

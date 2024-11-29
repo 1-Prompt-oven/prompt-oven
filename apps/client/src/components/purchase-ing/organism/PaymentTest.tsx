@@ -3,7 +3,7 @@ import { loadTossPayments } from "@tosspayments/tosspayments-sdk"
 import type { TossPaymentsPayment } from "@tosspayments/tosspayments-sdk"
 import { Button } from "@repo/ui/button"
 
-const clientKey = "test_ck_AQ92ymxN341bBABy0aB0VajRKXvd"
+const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`
 
 const amount = {
 	currency: "KRW",
