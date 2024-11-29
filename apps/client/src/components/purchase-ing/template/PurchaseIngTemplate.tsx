@@ -23,7 +23,8 @@ export default function PurchaseIngTemplate({
 	handlePayment,
 }: PurchaseIngTemplateProps) {
 	const [selectedMethod, setSelectedMethod] = useState<SelectedMethod>({
-		type: "eWallet", // 기본 결제 유형
+		// type: "eWallet", // 기본 결제 유형
+		type: "general", // 기본 결제 유형
 		payment: undefined, // 선택된 결제 방법
 	})
 

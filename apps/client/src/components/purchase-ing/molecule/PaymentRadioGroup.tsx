@@ -20,7 +20,7 @@ export default function PaymentRadioGroup({
 		<RadioGroup
 			value={selectedPayment}
 			onValueChange={onChangePayment}
-			className="space-y-5"
+			className="space-y-4"
 			name="paymentMethod">
 			{currentMethodGroup.map((item) => (
 				<div key={item.label} className="flex items-center space-x-2">

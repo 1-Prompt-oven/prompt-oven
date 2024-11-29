@@ -1,14 +1,13 @@
 export default function CommonMethodSvg({
 	isActive,
-	word = "CARD",
-	pixel = "text-[8px]",
+	word,
+	pixel,
 }: {
 	isActive: boolean
 	word: string
 	pixel: string
 }) {
 	const rectColor = isActive ? "#131313" : "#7E7E7E"
-	const textColor = isActive ? "black" : "white"
 
 	return (
 		<svg width="27" height="22" viewBox="0 0 27 21.5469">
@@ -18,8 +17,8 @@ export default function CommonMethodSvg({
 				y="50%"
 				dominantBaseline="middle"
 				textAnchor="middle"
-				fill={textColor}
-				className={`text-center ${pixel}`}>
+				style={{ fill: "white", fontSize: pixel }} // 인라인 스타일로 색상과 폰트 크기 설정
+			>
 				{word}
 			</text>
 		</svg>
