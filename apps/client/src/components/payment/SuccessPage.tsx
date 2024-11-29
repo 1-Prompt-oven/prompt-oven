@@ -1,7 +1,8 @@
 "use client"
 
-import { useSearchParams, useRouter } from "next/navigation"
-import { useEffect, useState, Suspense } from "react"
+import { useSearchParams } from "next/navigation"
+import { useEffect, useState } from "react"
+import type { RequestPaymentType } from "@/types/purchase.ts/purchase-ongoing"
 
 interface RequestData {
 	orderId: string | null
@@ -11,18 +12,27 @@ interface RequestData {
 
 interface ResponseData {
 	success: boolean
-	data?: {
-		transactionId: string
-		status: string
+	transactionId: string
+	status: string
+	orderId: string
+	orderName: string
+	requestedAt: string
+	approvedAt: string
+	method: string
+	easyPay: {
+		provider: string
 		amount: number
-		orderId: string
 	}
+	metadata: {
+		message: string
+		paymentList: string // JSON 문자열로 저장
+	}
+
 	message: string
 	code?: string // code 속성을 추가
 }
 
 export function SuccessPage() {
-	const navigate = useRouter()
 	const searchParams = useSearchParams()
 	const [responseData, setResponseData] = useState<ResponseData | null>(null)
 
@@ -60,47 +70,33 @@ export function SuccessPage() {
 					"\nerrorMessage : ",
 					errorMessage,
 				)
-			}
+			} else {
+				// 성공적인 응답 처리
+				setResponseData(json)
 
-			// 성공적인 응답 처리
-			setResponseData(json)
+				const payload: RequestPaymentType = {
+					memberUUID: "1",
+					orderId: json.orderId,
+					orderName: json.orderName,
+					requestedAt: json.requestedAt,
+					approvedAt: json.approvedAt,
+					paymentWay: json.method,
+					paymentMethod: json.easyPay.provider,
+					totalAmount: json.easyPay.amount,
+					message: json.metadata.message,
+					purchaseList: JSON.parse(json.metadata.paymentList),
+				}
+
+				// eslint-disable-next-line no-console -- This is a  payload
+				console.log("payload --> ", payload)
+			}
 		}
 
 		confirm()
-	}, [searchParams, navigate])
+	}, [searchParams])
 
 	return (
 		<div className="text-white">
-			<div className="box_section" style={{ width: "600px" }}>
-				<h2>결제를 완료했어요</h2>
-				<div className="p-grid typography--p" style={{ marginTop: "50px" }}>
-					<div className="p-grid-col text--left">
-						<b>결제금액</b>
-					</div>
-					<div className="p-grid-col text--right" id="amount">
-						{`${Number(searchParams.get("amount")).toLocaleString()}원`}
-					</div>
-				</div>
-				<div className="p-grid typography--p" style={{ marginTop: "10px" }}>
-					<div className="p-grid-col text--left">
-						<b>주문번호</b>
-					</div>
-					<div className="p-grid-col text--right" id="orderId">
-						{`${searchParams.get("orderId")}`}
-					</div>
-				</div>
-				<div className="p-grid typography--p" style={{ marginTop: "10px" }}>
-					<div className="p-grid-col text--left">
-						<b>paymentKey</b>
-					</div>
-					<div
-						className="p-grid-col text--right"
-						id="paymentKey"
-						style={{ whiteSpace: "initial", width: "250px" }}>
-						{`${searchParams.get("paymentKey")}`}
-					</div>
-				</div>
-			</div>
 			<div
 				className="box_section"
 				style={{ width: "600px", textAlign: "left" }}>
@@ -112,14 +108,5 @@ export function SuccessPage() {
 				</div>
 			</div>
 		</div>
-	)
-}
-
-// Suspense 경계를 추가하여 useSearchParams()를 감싸는 부분
-export default function PageWrapper() {
-	return (
-		<Suspense fallback={<div>Loading...</div>}>
-			<SuccessPage />
-		</Suspense>
 	)
 }

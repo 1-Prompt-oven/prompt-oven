@@ -1,3 +1,4 @@
+import { useState } from "react"
 import type { PaymentItemType } from "@/types/purchase.ts/purchase-ongoing"
 import type methodGroup from "../atom/icon/MethodGroup"
 import PaymentMessageArea from "../PaymentMessageArea"
@@ -22,6 +23,8 @@ export default function PaymentOrder({
 	paymentList,
 	totalPrice,
 }: PaymentOrderProps) {
+	const [message, setMessage] = useState<string>("X")
+
 	const orderName =
 		paymentList.length > 1
 			? `${paymentList[0].productName} 외 ${paymentList.length - 1}건`
@@ -35,6 +38,8 @@ export default function PaymentOrder({
 					method={method.payment}
 					orderName={orderName}
 					totalPrice={totalPrice}
+					paymentList={paymentList}
+					message={message ? message : "X"}
 				/>
 			)
 		} else {
@@ -47,7 +52,10 @@ export default function PaymentOrder({
 	return (
 		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
 			<PaymentTitle title="Message" />
-			<PaymentMessageArea comment="Leave a message" />
+			<PaymentMessageArea
+				comment="Leave a message"
+				onMessageChange={setMessage}
+			/>
 			<PaymentLastCheckValue
 				totalOrder={paymentList.length}
 				totalPrice={totalPrice}

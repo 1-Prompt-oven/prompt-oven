@@ -10,7 +10,6 @@ import PaymentOrder from "../organism/PaymentOrder"
 
 interface PurchaseIngTemplateProps {
 	paymentList: PaymentItemType[]
-	handlePayment: (FormData: FormData) => void
 }
 
 interface SelectedMethod {
@@ -20,11 +19,9 @@ interface SelectedMethod {
 
 export default function PurchaseIngTemplate({
 	paymentList,
-	handlePayment,
 }: PurchaseIngTemplateProps) {
 	const [selectedMethod, setSelectedMethod] = useState<SelectedMethod>({
 		type: "general", // 기본 결제 유형
-		// type: "eWallet", // 기본 결제 유형
 		payment: undefined, // 선택된 결제 방법
 	})
 
@@ -33,26 +30,24 @@ export default function PurchaseIngTemplate({
 	}, 0)
 
 	return (
-		<form action={handlePayment}>
-			<div className="mx-6 mb-12 mt-4 max-w-screen-xl">
-				<PurchaseIngTitle />
+		<div className="mx-6 mb-12 mt-4 max-w-screen-xl">
+			<PurchaseIngTitle />
 
-				<div className="flex gap-8">
-					<div className="flex w-[700px] flex-col gap-8">
-						<PaymentMethod
-							method={selectedMethod}
-							setMethod={setSelectedMethod}
-						/>
-						<PaymentDetail paymentList={paymentList} totalPrice={totalPrice} />
-					</div>
-
-					<PaymentOrder
+			<div className="flex gap-8">
+				<div className="flex w-[700px] flex-col gap-8">
+					<PaymentMethod
 						method={selectedMethod}
-						paymentList={paymentList}
-						totalPrice={totalPrice}
+						setMethod={setSelectedMethod}
 					/>
+					<PaymentDetail paymentList={paymentList} totalPrice={totalPrice} />
 				</div>
+
+				<PaymentOrder
+					method={selectedMethod}
+					paymentList={paymentList}
+					totalPrice={totalPrice}
+				/>
 			</div>
-		</form>
+		</div>
 	)
 }

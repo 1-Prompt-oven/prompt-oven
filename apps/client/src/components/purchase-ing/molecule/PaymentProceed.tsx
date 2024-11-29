@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { loadTossPayments } from "@tosspayments/tosspayments-sdk"
 import type { TossPaymentsPayment } from "@tosspayments/tosspayments-sdk"
 import { Button } from "@repo/ui/button"
+import type { PaymentItemType } from "@/types/purchase.ts/purchase-ongoing"
 
 const clientKey = `${process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY}`
 
@@ -21,12 +22,16 @@ interface PaymentProceedProps {
 	method: string
 	orderName: string
 	totalPrice: number
+	paymentList: PaymentItemType[]
+	message: string
 }
 
 export default function PaymentProceed({
 	method,
 	orderName,
 	totalPrice,
+	paymentList,
+	message,
 }: PaymentProceedProps) {
 	const amount = {
 		currency: "KRW",
@@ -82,6 +87,7 @@ export default function PaymentProceed({
 						useCardPoint: false,
 						useAppCardOnly: false,
 					},
+					metadata: { paymentList: JSON.stringify(paymentList), message },
 				})
 				break
 			case "TRANSFER":

@@ -1,5 +1,10 @@
-import PageWrapper from "@/components/payment/SuccessPage"
+import { SuccessPage } from "@/components/payment/SuccessPage"
+import { Suspense } from "react"
 
 export default function page() {
-	return <PageWrapper />
+	return (
+		<Suspense fallback={<div>Loading...</div>}>
+			<SuccessPage />
+		</Suspense>
+	)
 }
