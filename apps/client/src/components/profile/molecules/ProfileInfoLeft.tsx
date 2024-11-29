@@ -8,8 +8,8 @@ import {
 } from "@repo/ui/dropdown-menu"
 import { MoreVertical, Star } from "@repo/ui/lucide"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
-import ProfileName from "../atoms/info/ProfileName"
 import { matchUser } from "@/lib/api/sessionExtractor"
+import ProfileName from "../atoms/info/ProfileName"
 
 interface MemberLeftProps {
 	memberData: ProfileMemberInfoType
