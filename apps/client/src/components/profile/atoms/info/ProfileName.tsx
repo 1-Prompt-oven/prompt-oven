@@ -17,11 +17,13 @@ export default function ProfileName({ memberData }: MemberNameProps) {
 				<span className="line-clamp-1 font-semibold">
 					@{memberData.nickname}
 				</span>
-				<span className="line-clamp-1 text-[#e5d9f2]">{memberData.joined}</span>
+				<span className="line-clamp-1 text-[#e5d9f2]">
+					{memberData.joined}
+				</span>
 			</p>
 			<p className="h-4 text-[10px]">
 				<span className="line-clamp-1">
-					{memberData.email ? memberData.email : "No Email"}
+					{memberData.email || "No Email"}
 				</span>
 			</p>
 		</div>
