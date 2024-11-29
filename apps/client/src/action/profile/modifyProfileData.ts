@@ -1,10 +1,13 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import type { ProfileModifyType } from "@/types/profile/profileTypes"
-import { getAuthHeaders } from "@/lib/api/headers"
+import { initializeHeaders } from "@/lib/api/headers"
+import { getAccessToken } from "@/lib/api/sessionExtractor"
 
 export async function modifyProfileData(data: ProfileModifyType) {
-    const headers = await getAuthHeaders()
+    const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
     const res = await fetch(`${process.env.API_BASE_URL}/v1/member/profile`, {
 		method: "PUT",
 		headers,
@@ -14,5 +17,7 @@ export async function modifyProfileData(data: ProfileModifyType) {
     if (!res.ok) {
 		throw new Error('Failed to modify profile data')
 	}
+	// this will revalidate the profile page
+	revalidatePath(`/profile/${data.nickname}`)
 
 }
