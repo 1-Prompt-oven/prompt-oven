@@ -1,102 +1,108 @@
 "use server"
 
-import {
-	profileListData,
-	profileMemberInfoData,
-} from "@/dummy/profile/infoAndListDatas"
+import { getServerSession } from "next-auth"
+import { authOptions } from "@/app/api/auth/[...nextauth]/authOption"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import type { PromptsType } from "@/types/prompts/promptsType"
+import { profileListData } from "@/dummy/profile/infoAndListDatas"
 
-export async function getProfileMemberInfo(): Promise<ProfileMemberInfoType> {
-	const res: ProfileMemberInfoType = await profileMemberInfoData
-	// const res: ProfileMemberInfoType = await profileMemberInfoUndefineData
+export async function getProfileMemberInfo(
+	id: string,
+): Promise<ProfileMemberInfoType> {
+	const session = await getServerSession(authOptions)
+	
+	const headers: HeadersInit = {
+		"Content-Type": "application/json",
+	}
 
-	//     const res = await fetch(`${process.env.API_BASE_URL}/v1/profile`, {
-	//       method: 'GET',
-	//       headers: {
-	//         'Content-Type': 'application/json',
-	//         Authorization: `Bearer ${auth.accessToken}`,
-	//       },
-	//       cache: 'no-cache',
-	//     })
+	// Add Authorization header only if session exists
+	if (session) {
+		const userObj = session as { user?: { accesstoken?: unknown } }
+		const accessToken = userObj.user?.accesstoken
 
-	return res
+		if (typeof accessToken === 'string') {
+			headers.Authorization = `Bearer ${accessToken}`
+		}
+	}
+
+	const res = await fetch(`${process.env.API_BASE_URL}/v1/profile/nickname/${id}`, {
+		method: "GET",
+		headers,
+		next: { revalidate: 3600 }, // 1 hour in seconds
+	})
+
+	if (!res.ok) {
+		throw new Error('Failed to fetch profile data')
+	}
+
+	const rawData: unknown = await res.json()
+	
+	function isValidResponse(data: unknown): data is { result: ProfileMemberInfoType } {
+		return (
+			typeof data === 'object' && 
+			data !== null && 
+			'result' in data &&
+			typeof (data as { result: unknown }).result === 'object'
+		)
+	}
+
+	if (!isValidResponse(rawData)) {
+		throw new Error('Invalid response format')
+	}
+
+	return rawData.result
 }
 
-// export async function getProfileList(cursor?: string) {
-export async function getProfileList() {
-	const res: PromptsType[] = await profileListData // 데이터를 가져옴
-	return res
+export async function getProfileMemberInfoByUuid(
+	id: string,
+): Promise<ProfileMemberInfoType> {
+	const session = await getServerSession(authOptions)
+	
+	const headers: HeadersInit = {
+		"Content-Type": "application/json",
+	}
 
-	// const startIndex = cursor ? parseInt(cursor) : 0 // 커서가 주어지면 해당 인덱스부터 시작
-	// const nextData =
-	// 	cursor === "0"
-	// 		? res.slice(startIndex, startIndex + 8)
-	// 		: res.slice(startIndex, startIndex + 4) // 첫 요청 시 8개, 이후 요청 시 4개
+	// Add Authorization header only if session exists
+	if (session) {
+		const userObj = session as { user?: { accesstoken?: unknown } }
+		const accessToken = userObj.user?.accesstoken
 
-	// const nextCursor =
-	// 	nextData.length < (cursor ? 4 : 8)
-	// 		? null
-	// 		: (startIndex + nextData.length).toString() // 다음 커서 계산
+		if (typeof accessToken === 'string') {
+			headers.Authorization = `Bearer ${accessToken}`
+		}
+	}
 
-	// return { items: nextData, nextCursor } // 반환 형식 맞추기
+	const res = await fetch(`${process.env.API_BASE_URL}/v1/profile/uuid/${id}`, {
+		method: "GET",
+		headers,
+		cache: 'force-cache',
+		next: { revalidate: 3600 }, // 1 hour in seconds
+	})
 
-	// try {
-	//   const response = await fetch(`${process.env.API_BASE_URL}/v1/profile/`, {
-	// 	method: 'GET',
-	// 	headers: {
-	// 	  'Content-Type': 'application/json',
-	// 	  // Authorization: `Bearer ${auth.accessToken}`, // 필요할 경우 주석 해제
-	// 	},
-	// 	// 커서가 있을 경우 쿼리 파라미터에 추가
-	// 	...(cursor && { params: { cursor } }),
-	//   });
+	if (!res.ok) {
+		throw new Error('Failed to fetch profile data')
+	}
 
-	//   if (!response.ok) {
-	// 	throw new Error('Network response was not ok');
-	//   }
+	const rawData: unknown = await res.json()
+	
+	function isValidResponse(data: unknown): data is { result: ProfileMemberInfoType } {
+		return (
+			typeof data === 'object' && 
+			data !== null && 
+			'result' in data &&
+			typeof (data as { result: unknown }).result === 'object'
+		)
+	}
 
-	//   const result = await response.json();
-	//   return {
-	// 	data: result.data, // API 응답에서 데이터 배열
-	// 	nextCursor: result.nextCursor || null, // 다음 커서
-	//   };
-	// } catch (error) {
-	//   console.error('Error fetching profile list:', error);
-	//   throw error; // 에러를 다시 던져서 호출한 쪽에서 처리할 수 있도록 함
-	// }
+	if (!isValidResponse(rawData)) {
+		throw new Error('Invalid response format')
+	}
+
+	return rawData.result
 }
 
-// export async function registeProfile(registerProfileData: FormData) {
-// 	"use server"
-
-// 	const payload: RegistProfileType = {
-// 		banner: registerProfileData.get("banner") as string,
-// 		profileImage: registerProfileData.get("profileImage") as string,
-// 		bio: registerProfileData.get("bio") as string,
-// 		xId: registerProfileData.get("xId") as string,
-// 		instagramId: registerProfileData.get("instagramId") as string,
-// 		youtubeHandle: registerProfileData.get("youtubeHandle") as string,
-// 		webLink: registerProfileData.get("webLink") as string,
-// 		allowMessage: registerProfileData.get("allowMessage") === "on",
-// 		acceptCustom: registerProfileData.get("acceptCustom") === "on",
-// 	}
-
-// 	// console.log("paylaod --> ", payload)
-
-// 	payload
-
-// 	// const res = await fetch(`${process.env.API_BASE_URL}/v1/profile/register`, {
-// 	// 	method: "POST",
-// 	// 	body: JSON.stringify(payload),
-// 	// 	headers: {
-// 	// 		"Content-Type": "application/json",
-// 	// 		//   Authorization: `Bearer ${isAuth?.accessToken}`,
-// 	// 	},
-// 	// })
-
-// 	// if (res.ok) {
-// 	// 	return true
-// 	// } else return false
-// 	return null
-// }
+// 프로필에서 보일 상품 목록 데이터 : product service에서 가져와야 함
+export async function getProfileList(): Promise<PromptsType[]> {
+	const res: PromptsType[] = await profileListData
+	return res
+}
