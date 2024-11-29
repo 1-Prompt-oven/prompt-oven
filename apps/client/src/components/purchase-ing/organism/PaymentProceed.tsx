@@ -32,7 +32,7 @@ const generateRandomString = (length = 20) => {
 
 const customerKey = generateRandomString()
 
-export default function PaymentTest({ method }: { method: string }) {
+export default function PaymentProceed({ method }: { method: string }) {
 	const [payment, setPayment] = useState<TossPaymentsPayment | null>(null) // 초기값을 null로 설정
 
 	const selectedPaymentMethod: string = method

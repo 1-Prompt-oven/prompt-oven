@@ -1,7 +1,7 @@
-import { Button } from "@repo/ui/button"
 import PaymentTitle from "../atom/PaymentTitle"
 import type methodGroup from "../atom/icon/MethodGroup"
-import PaymentTest from "./PaymentTest"
+import PaymentOrderNone from "../molecule/PaymentOrderNone"
+import PaymentProceed from "./PaymentProceed"
 
 interface SelectedMethod {
 	type: keyof typeof methodGroup // methodGroup 객체의 키 중 하나를 선택할 수 있는 타입
@@ -10,9 +10,15 @@ interface SelectedMethod {
 
 interface PaymentOrderProps {
 	method: SelectedMethod // selectedMethod를 props로 받음
+	totalOrder: number
+	totalPrice: number
 }
 
-export default function PaymentOrder({ method }: PaymentOrderProps) {
+export default function PaymentOrder({
+	method,
+	totalOrder,
+	totalPrice,
+}: PaymentOrderProps) {
 	return (
 		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
 			<PaymentTitle title="Message" />
@@ -25,24 +31,22 @@ export default function PaymentOrder({ method }: PaymentOrderProps) {
 			<div className="flex flex-col gap-3 border-t-2 border-black pt-4 font-semibold">
 				<div className="flex justify-between">
 					<p>Total Order</p>
-					<p className="flex gap-2">x7 Product</p>
+					<p className="flex gap-2">x{totalOrder} Product</p>
 				</div>
 				<div className="flex justify-between">
 					<p>Total Payment</p>
 					<p className="flex gap-4">
-						<span className="text-xl font-bold text-[#9747ff]">$6460</span>
+						<span className="text-xl font-bold text-[#9747ff]">
+							${totalPrice}
+						</span>
 					</p>
 				</div>
 			</div>
 
 			{method.payment ? (
-				<PaymentTest method={method.payment} />
+				<PaymentProceed method={method.payment} />
 			) : (
-				<Button
-					type="button"
-					className="bg-[#9747ff] text-white hover:bg-[#743dbd]">
-					<span>Order Now</span>
-				</Button>
+				<PaymentOrderNone />
 			)}
 		</div>
 	)

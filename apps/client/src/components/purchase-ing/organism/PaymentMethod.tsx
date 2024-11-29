@@ -17,14 +17,6 @@ export default function PaymentMethod({
 	method,
 	setMethod,
 }: PaymentMethodProps) {
-	// const [selectedMethod, setSelectedMethod] = useState<{
-	// 	type: keyof typeof methodGroup // keyof : methodGroup 객체의 키 중 하나를 선택할 수 있는 타입
-	// 	payment?: string
-	// }>({
-	// 	type: "eWallet", // 기본 결제 유형
-	// 	payment: undefined, // 선택된 결제 방법
-	// })
-
 	const handleSelectChange = (value: keyof typeof methodGroup) => {
 		setMethod({ type: value, payment: undefined }) // 결제 유형 변경 시 결제 방법 초기화
 	}

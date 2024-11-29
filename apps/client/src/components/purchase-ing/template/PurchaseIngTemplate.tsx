@@ -28,6 +28,10 @@ export default function PurchaseIngTemplate({
 		payment: undefined, // 선택된 결제 방법
 	})
 
+	const totalPrice = paymentList.reduce((sum, item) => {
+		return sum + parseInt(item.productPrice)
+	}, 0)
+
 	return (
 		<form action={handlePayment}>
 			<div className="mx-6 mb-12 mt-4 max-w-screen-xl">
@@ -39,10 +43,14 @@ export default function PurchaseIngTemplate({
 							method={selectedMethod}
 							setMethod={setSelectedMethod}
 						/>
-						<PaymentDetail paymentList={paymentList} />
+						<PaymentDetail paymentList={paymentList} totalPrice={totalPrice} />
 					</div>
 
-					<PaymentOrder method={selectedMethod} />
+					<PaymentOrder
+						method={selectedMethod}
+						totalOrder={paymentList.length}
+						totalPrice={totalPrice}
+					/>
 				</div>
 			</div>
 		</form>
