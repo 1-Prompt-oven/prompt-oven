@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Button } from "@repo/ui/button"
 import FailModal from "@/components/common/atom/FailModal"
 
-export default function PaymentOrderNone() {
+export default function PaymentOrderNone({ state }: { state: number }) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 
 	const handleButtonClick = () => {
@@ -12,6 +12,9 @@ export default function PaymentOrderNone() {
 	const handleCloseModal = () => {
 		setIsModalOpen(false)
 	}
+
+	const content =
+		state === 1 ? "주문 상품이 없습니다." : "결제 방식을 체크해주세요"
 
 	return (
 		<>
@@ -24,7 +27,7 @@ export default function PaymentOrderNone() {
 
 			<FailModal isOpen={isModalOpen} onClose={handleCloseModal}>
 				<div className="rounded-md bg-[#eeeeee]">
-					<p className="p-4 text-lg font-semibold">결제 방식을 체크해주세요</p>
+					<p className="p-4 text-lg font-semibold">{content}</p>
 				</div>
 			</FailModal>
 		</>

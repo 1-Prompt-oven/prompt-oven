@@ -27,25 +27,32 @@ export default function PaymentOrder({
 			? `${paymentList[0].productName} 외 ${paymentList.length - 1}건`
 			: paymentList[0].productName
 
-	return (
-		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
-			<PaymentTitle title="Message" />
-			<PaymentMessageArea comment="Leave a message" />
-
-			<PaymentLastCheckValue
-				totalOrder={paymentList.length}
-				totalPrice={totalPrice}
-			/>
-
-			{method.payment ? (
+	let content
+	if (method.payment) {
+		if (paymentList.length > 0) {
+			content = (
 				<PaymentProceed
 					method={method.payment}
 					orderName={orderName}
 					totalPrice={totalPrice}
 				/>
-			) : (
-				<PaymentOrderNone />
-			)}
+			)
+		} else {
+			content = <PaymentOrderNone state={1} />
+		}
+	} else {
+		content = <PaymentOrderNone state={2} />
+	}
+
+	return (
+		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
+			<PaymentTitle title="Message" />
+			<PaymentMessageArea comment="Leave a message" />
+			<PaymentLastCheckValue
+				totalOrder={paymentList.length}
+				totalPrice={totalPrice}
+			/>
+			{content}
 		</div>
 	)
 }
