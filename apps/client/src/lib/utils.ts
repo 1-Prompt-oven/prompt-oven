@@ -28,9 +28,14 @@ export const PromptIsNew = (dateString: string) => {
 }
 
 //Follower Format
-export const formatFollowers = (count: number) => {
+export const formatFollowers = (count: number | undefined) => {
+	if (count === undefined) return '0'
 	if (count >= 1000) {
-		return `${(count / 1000).toFixed(1)}K` // 소수점 한 자리까지 표시
+		return `${(count / 1000).toFixed(1)}K`
 	}
-	return count.toString() // 1,000 미만은 그대로 반환
+	return count.toString()
+}
+
+export const formatDate = (dateString: string) => {
+	return dateString.split('T')[0]
 }
