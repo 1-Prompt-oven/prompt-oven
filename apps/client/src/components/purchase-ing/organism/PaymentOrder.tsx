@@ -1,7 +1,9 @@
+import PaymentMessageArea from "../PaymentMessageArea"
 import PaymentTitle from "../atom/PaymentTitle"
 import type methodGroup from "../atom/icon/MethodGroup"
+import PaymentLastCheckValue from "../molecule/PaymentLastCheckValue"
 import PaymentOrderNone from "../molecule/PaymentOrderNone"
-import PaymentProceed from "./PaymentProceed"
+import PaymentProceed from "../molecule/PaymentProceed"
 
 interface SelectedMethod {
 	type: keyof typeof methodGroup // methodGroup 객체의 키 중 하나를 선택할 수 있는 타입
@@ -22,26 +24,9 @@ export default function PaymentOrder({
 	return (
 		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
 			<PaymentTitle title="Message" />
-			<textarea
-				name="message"
-				placeholder="Leave a message"
-				className="h-[130px] resize-none rounded-lg border border-[#d8d8d8] p-3"
-			/>
+			<PaymentMessageArea comment="Leave a message" />
 
-			<div className="flex flex-col gap-3 border-t-2 border-black pt-4 font-semibold">
-				<div className="flex justify-between">
-					<p>Total Order</p>
-					<p className="flex gap-2">x{totalOrder} Product</p>
-				</div>
-				<div className="flex justify-between">
-					<p>Total Payment</p>
-					<p className="flex gap-4">
-						<span className="text-xl font-bold text-[#9747ff]">
-							${totalPrice}
-						</span>
-					</p>
-				</div>
-			</div>
+			<PaymentLastCheckValue totalOrder={totalOrder} totalPrice={totalPrice} />
 
 			{method.payment ? (
 				<PaymentProceed method={method.payment} />
