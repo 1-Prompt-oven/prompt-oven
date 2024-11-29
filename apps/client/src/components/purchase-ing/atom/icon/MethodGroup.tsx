@@ -10,6 +10,14 @@ import Paypal from "./on/Paypal"
 import Stripe from "./on/Stripe"
 
 const MethodGroup = {
+	// general: [
+	// 	{ label: "CARD" },
+	// 	{ label: "TRANSFER" },
+	// 	{ label: "VIRTUAL_ACCOUNT" },
+	// 	{ label: "MOBILE_PHONE" },
+	// 	{ label: "CULTURE_GIFT_CERTIFICATE" },
+	// 	{ label: "FOREIGN_EASY_PAY" },
+	// ],
 	eWallet: [
 		{
 			icon: <MasterCard />,
