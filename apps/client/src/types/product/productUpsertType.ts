@@ -1,4 +1,12 @@
-// zod schema
+// -- Components type definitions
+export interface TextPromptSampleContentType {
+	id: string
+	name: string
+	value: Record<string, string>
+	result: string
+}
+
+// -- zod schema type definitions
 export interface PcLlmIdType {
 	llmId: number
 	name: string
@@ -12,7 +20,7 @@ export interface PcSubCategoryType {
 	subCategoryName: string
 }
 
-// API
+// -- API request and response type definitions
 
 // // llm
 export interface GetLlmRequestType {
@@ -37,7 +45,7 @@ export interface PromptContentType {
 	sampleValue: string
 }
 
-export interface ProductCreateType {
+export interface ProductUpsertType {
 	productUuid: string
 	sellerUuid: string
 	productName: string

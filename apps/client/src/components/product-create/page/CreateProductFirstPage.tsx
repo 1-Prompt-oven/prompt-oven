@@ -15,6 +15,7 @@ import {
 	createProductFirstSchema,
 	createProductFirstSchemaKeys,
 } from "@/schema/product.ts"
+import PcBaseWrapper from "@/components/product-create/atom/PcBaseWrapper.tsx"
 
 const TITLE_MAX_LENGTH = 50
 const TEXTAREA_MAX_LENGTH = 4096
@@ -56,7 +57,7 @@ export default function CreateProductFirstPage() {
 		<form className="flex flex-col gap-4">
 			<AccountTitleText className="w-full">Create New Product</AccountTitleText>
 
-			<div className="mt-6 space-y-4">
+			<PcBaseWrapper className="mt-6">
 				<PcTitle>AI Model</PcTitle>
 				<Controller
 					name={createProductFirstSchemaKeys.llmId}
@@ -72,21 +73,23 @@ export default function CreateProductFirstPage() {
 						/>
 					)}
 				/>
-			</div>
+			</PcBaseWrapper>
 
-			<PcTitle className="">Name</PcTitle>
-			<FieldLengthCounter
-				maxLength={TITLE_MAX_LENGTH}
-				length={productNameWatch}>
-				<PcInput
-					placeholder="Enter Name"
+			<PcBaseWrapper className="mt-6">
+				<PcTitle className="">Name</PcTitle>
+				<FieldLengthCounter
 					maxLength={TITLE_MAX_LENGTH}
-					{...register(createProductFirstSchemaKeys.productName)}
-				/>
-			</FieldLengthCounter>
+					length={productNameWatch}>
+					<PcInput
+						placeholder="Enter Name"
+						maxLength={TITLE_MAX_LENGTH}
+						{...register(createProductFirstSchemaKeys.productName)}
+					/>
+				</FieldLengthCounter>
+			</PcBaseWrapper>
 
 			<div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div className="space-y-4">
+				<PcBaseWrapper>
 					<PcTitle>Category</PcTitle>
 					<Controller
 						name={createProductFirstSchemaKeys.topCategoryUuid}
@@ -101,8 +104,8 @@ export default function CreateProductFirstPage() {
 							/>
 						)}
 					/>
-				</div>
-				<div className="space-y-4">
+				</PcBaseWrapper>
+				<PcBaseWrapper>
 					<PcTitle>Subcategory</PcTitle>
 					<Controller
 						name={createProductFirstSchemaKeys.subCategoryUuid}
@@ -117,51 +120,59 @@ export default function CreateProductFirstPage() {
 							/>
 						)}
 					/>
-				</div>
+				</PcBaseWrapper>
 			</div>
 
-			<PcTitle className="mt-4">Prompt</PcTitle>
-			<PcDescription>
-				Enter your prompt text here. Include all the settings you used.
-				<br />
-				Put all variables in [square brackets].
-			</PcDescription>
-			<FieldLengthCounter maxLength={TEXTAREA_MAX_LENGTH} length={promptWatch}>
-				<PcTextarea
+			<PcBaseWrapper className="mt-6">
+				<PcTitle>Prompt</PcTitle>
+				<PcDescription>
+					Enter your prompt text here. Include all the settings you used.
+					<br />
+					Put all variables in [square brackets].
+				</PcDescription>
+				<FieldLengthCounter
 					maxLength={TEXTAREA_MAX_LENGTH}
-					placeholder="Enter your prompt text here. Include all the settings you used. Put all variables in [square brackets]."
-					{...register(createProductFirstSchemaKeys.prompt)}
-				/>
-			</FieldLengthCounter>
-
-			<PcTitle className="mt-4">Description</PcTitle>
-			<FieldLengthCounter
-				maxLength={TEXTAREA_MAX_LENGTH}
-				length={descriptionWatch}>
-				<PcTextarea
-					maxLength={TEXTAREA_MAX_LENGTH}
-					placeholder="Enter Description"
-					{...register(createProductFirstSchemaKeys.description)}
-				/>
-			</FieldLengthCounter>
-
-			<PcTitle>Price</PcTitle>
-			<Controller
-				name={createProductFirstSchemaKeys.price}
-				control={control}
-				render={({ field }) => (
-					<PriceStepper
-						className="!mb-12 px-8"
-						min={1000}
-						max={5000}
-						step={500}
-						value={field.value}
-						onChange={(value) => {
-							field.onChange(value)
-						}}
+					length={promptWatch}>
+					<PcTextarea
+						maxLength={TEXTAREA_MAX_LENGTH}
+						placeholder="Enter your prompt text here. Include all the settings you used. Put all variables in [square brackets]."
+						{...register(createProductFirstSchemaKeys.prompt)}
 					/>
-				)}
-			/>
+				</FieldLengthCounter>
+			</PcBaseWrapper>
+
+			<PcBaseWrapper className="mt-4">
+				<PcTitle>Description</PcTitle>
+				<FieldLengthCounter
+					maxLength={TEXTAREA_MAX_LENGTH}
+					length={descriptionWatch}>
+					<PcTextarea
+						maxLength={TEXTAREA_MAX_LENGTH}
+						placeholder="Enter Description"
+						{...register(createProductFirstSchemaKeys.description)}
+					/>
+				</FieldLengthCounter>
+			</PcBaseWrapper>
+
+			<PcBaseWrapper>
+				<PcTitle>Price</PcTitle>
+				<Controller
+					name={createProductFirstSchemaKeys.price}
+					control={control}
+					render={({ field }) => (
+						<PriceStepper
+							className="!mb-12 px-8"
+							min={1000}
+							max={5000}
+							step={500}
+							value={field.value}
+							onChange={(value) => {
+								field.onChange(value)
+							}}
+						/>
+					)}
+				/>
+			</PcBaseWrapper>
 
 			<PcSaveBar lastSaved={lastSaved} />
 		</form>

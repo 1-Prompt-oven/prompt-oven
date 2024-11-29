@@ -4,6 +4,8 @@ export interface PromptVariableType {
 	name: string
 	value: string
 }
+export const extractPromptVariableFromFormat = (promptVar: string) =>
+	promptVar.slice(1, -1)
 export const extractPromptVariables = (
 	prompt: string,
 ): PromptVariableType[] => {
@@ -11,8 +13,9 @@ export const extractPromptVariables = (
 
 	if (matches) {
 		const uniqueVariables = Array.from(new Set(matches)).map((variable) =>
-			variable.slice(1, -1),
+			extractPromptVariableFromFormat(variable),
 		)
+
 		// Create a new array of fields based on the order of uniqueVariables
 		return uniqueVariables.map((variable) => {
 			return { name: variable, value: "" }
@@ -26,9 +29,10 @@ export const replaceVariables = (
 	prompt: string,
 	variableValues: Record<string, string>,
 ): string => {
-	return prompt.replace(promptVariableRegex, (match, variableName) => {
-		if (Object.prototype.hasOwnProperty.call(variableValues, variableName)) {
-			return `[${variableValues.variableName}]`
+	return prompt.replace(promptVariableRegex, (match) => {
+		const varValue = extractPromptVariableFromFormat(match)
+		if (Object.prototype.hasOwnProperty.call(variableValues, varValue)) {
+			return `[${variableValues[varValue]}]`
 		}
 		return match
 	})

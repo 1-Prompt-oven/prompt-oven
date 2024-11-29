@@ -17,6 +17,7 @@
 		"@aws-sdk/client-s3": "^3.696.0",
 		"@aws-sdk/s3-request-presigner": "^3.696.0",
 		"@ducanh2912/next-pwa": "^10.2.9",
+		"@hello-pangea/dnd": "^17.0.0",
 		"@hookform/error-message": "^2.0.1",
 		"@hookform/resolvers": "^3.9.0",
 		"@repo/ui": "workspace:*",

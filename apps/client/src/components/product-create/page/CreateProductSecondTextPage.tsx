@@ -1,12 +1,9 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useCallback, useEffect, useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { z } from "zod"
-import { Label } from "@repo/ui/label"
-import { Input } from "@repo/ui/input"
-import { Button } from "@repo/ui/button"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import {
 	createProductSecondSchema,
@@ -16,6 +13,13 @@ import PcTitle from "@/components/product-create/atom/PcTitle.tsx"
 import PcSelect from "@/components/product-create/atom/PcSelect.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
 import { extractPromptVariables, replaceVariables } from "@/lib/productUtils.ts"
+import { PcTextarea } from "@/components/product-create/atom/PcTextarea.tsx"
+import PcBaseWrapper from "@/components/product-create/atom/PcBaseWrapper.tsx"
+import PcLabel from "@/components/product-create/atom/PcLabel.tsx"
+import PcBoundary from "@/components/product-create/atom/PcBoundary.tsx"
+import PcButton from "@/components/product-create/atom/PcButton.tsx"
+import PcTextPromptSampleList from "@/components/product-create/molecule/PcTextPromptSampleList.tsx"
+import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 
 // interface CreateProductSecondTextPageProps {}
 
@@ -30,6 +34,20 @@ const fetchPrompt = () => {
 	})
 }
 
+interface DropResult {
+	draggableId: string
+	type: string
+	source: {
+		droppableId: string
+		index: number
+	}
+	destination: {
+		droppableId: string
+		index: number
+	} | null
+	reason: "DROP" | "CANCEL"
+}
+
 type FormData = z.infer<typeof createProductSecondSchema>
 
 const modelVersion = [
@@ -38,15 +56,27 @@ const modelVersion = [
 	{ value: "3", label: "Chat GPT 4o" },
 ]
 
+/*
+ * todo:
+ *   1) model version API로 가져오기
+ *   2) prompt API로 가져오기
+ *   3) prompt 가져오는 중에 loading spinner 추가하기
+ *   4) prompt 가져오는 중에 error handling 추가하기
+ *   5) 상품 등록 API 호출하기
+ */
 export default function CreateProductSecondTextPage() {
 	const [prompt, setPrompt] = useState("")
+
+	const extractPromptVars = useCallback((_prompt: string) => {
+		return extractPromptVariables(_prompt)
+	}, [])
 
 	useEffect(() => {
 		const getPrompt = async () => {
 			try {
 				const fetchedPrompt = await fetchPrompt()
 				setPrompt(fetchedPrompt)
-				const extractedVars = extractPromptVariables(fetchedPrompt)
+				const extractedVars = extractPromptVars(fetchedPrompt)
 				replace(extractedVars)
 			} catch (error) {
 				// Handle error
@@ -74,7 +104,12 @@ export default function CreateProductSecondTextPage() {
 		name: "promptVars",
 	})
 
-	const { fields: contentFields, append: appendContent } = useFieldArray({
+	const {
+		fields: contentFields,
+		append: appendContent,
+		move,
+		remove,
+	} = useFieldArray({
 		control,
 		name: "contents",
 	})
@@ -82,29 +117,37 @@ export default function CreateProductSecondTextPage() {
 	const onSubmit = (data: FormData) => {
 		const varObj: Record<string, string> = data.promptVars.reduce(
 			(acc, { name, value }) => {
-				// @ts-expect-error -- TS doesn't know that name is a string
-				acc[name] = value
-				return acc
+				return Object.assign(acc, { [name]: value })
 			},
 			{},
 		)
+
 		const newContent = {
-			name: prompt,
-			value: data.promptVars.map((v) => `${v.name}: ${v.value}`).join(", "),
-			result: data.promptResult
-				? replaceVariables(data.promptResult, varObj)
-				: "",
+			name: replaceVariables(prompt, varObj),
+			value: varObj,
+			result: data.promptResult || "",
 		}
 		appendContent(newContent)
 		setValue("promptResult", "")
+		// Reset the values of prompt variables
+		data.promptVars.forEach((variable, index) => {
+			setValue(`promptVars.${index}.value`, "")
+		})
+	}
+
+	// Drag and drop
+	const onDragEnd = (result: DropResult) => {
+		if (!result.destination) return
+
+		move(result.source.index, result.destination.index)
 	}
 
 	return (
 		<form className="flex flex-col gap-4">
 			<AccountTitleText className="w-full">Create New Product</AccountTitleText>
-
+			{/* Model version and Seed*/}
 			<div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-				<div className="space-y-4">
+				<PcBaseWrapper>
 					<PcTitle>Model Version</PcTitle>
 					<Controller
 						name={createProductSecondSchemaKeys.llmVersionId}
@@ -118,61 +161,61 @@ export default function CreateProductSecondTextPage() {
 							/>
 						)}
 					/>
-				</div>
-
-				<div className="space-y-4">
-					<PcTitle>Subcategory</PcTitle>
+				</PcBaseWrapper>
+				<PcBaseWrapper>
+					<PcTitle>Seed</PcTitle>
 					<PcInput
 						placeholder="Enter Model Seed"
 						className="h-9"
 						type="number"
 						{...register(createProductSecondSchemaKeys.seed)}
 					/>
-				</div>
+				</PcBaseWrapper>
 			</div>
+			{/* Sample variables and outputs */}
 
-			{fields.map((field, index) => (
-				<div key={field.id}>
-					<Label htmlFor={`promptVar-${index}`}>{field.name}</Label>
-					<Input
-						{...register(`promptVars.${index}.value`)}
-						className="text-white"
-						id={`promptVar-${index}`}
-						placeholder={`Enter value for ${field.name}`}
+			<PcTitle className="mt-6">Sample Prompt</PcTitle>
+			<PcBoundary>
+				<PcLabel>Sample Input</PcLabel>
+				<div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+					{fields.map((field, index) => (
+						<PcBaseWrapper className="relative space-y-2" key={field.id}>
+							<PcInput
+								{...register(`promptVars.${index}.value`)}
+								className="text-white"
+								id={`promptVar-${index}`}
+								placeholder={field.name}
+							/>
+						</PcBaseWrapper>
+					))}
+				</div>
+				<PcBaseWrapper className="space-y-2">
+					<PcLabel>Sample Output</PcLabel>
+					<PcTextarea
+						{...register("promptResult")}
+						id="promptResult"
+						placeholder="Enter prompt result"
+						className="h-32"
 					/>
-				</div>
-			))}
+				</PcBaseWrapper>
+				<PcButton
+					className="w-full"
+					type="button"
+					onClick={handleSubmit(onSubmit)}>
+					Submit
+				</PcButton>
+			</PcBoundary>
 
-			<div>
-				<Label htmlFor="promptResult">Prompt Result</Label>
-				<textarea
-					{...register("promptResult")}
-					id="promptResult"
-					placeholder="Enter prompt result"
-					className="h-32"
-				/>
-			</div>
-
-			<Button type="button" onClick={handleSubmit(onSubmit)}>
-				Submit
-			</Button>
-
+			<PcTitle className="mt-6">Examples</PcTitle>
 			{contentFields.length > 0 && (
-				<div className="mt-4 *:text-white">
-					<h2 className="text-lg font-semibold">Results:</h2>
-					<ul className="mt-2 list-disc pl-5">
-						{contentFields.map((content, index) => (
-							<li key={index}>
-								<strong>Prompt:</strong> {content.name}
-								<br />
-								<strong>Variables:</strong> {content.value}
-								<br />
-								<strong>Result:</strong> {content.result}
-							</li>
-						))}
-					</ul>
-				</div>
+				<PcTextPromptSampleList
+					contentFields={contentFields}
+					onDragEnd={onDragEnd}
+					onRemove={remove}
+				/>
 			)}
+
+			<PcSaveBar />
 		</form>
 	)
 }

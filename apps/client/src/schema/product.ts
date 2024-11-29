@@ -29,7 +29,7 @@ export const createProductSecondSchema = z.object({
 	contents: z.array(
 		z.object({
 			name: z.string(),
-			value: z.string(),
+			value: z.record(z.string()),
 			result: z.string(),
 		}),
 	),
