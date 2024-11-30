@@ -18,8 +18,8 @@ jobs:
 
       - name: make .env file
         run: |
-          echo "${{ secrets.PROPERTIES_PROD }}" > ~/apps/client/.env
-          echo "${{ secrets.PROPERTIES_PROD }}" > ~/apps/admin/.env
+          echo "${{ secrets.PROPERTIES_PROD }}" > ./apps/client/.env
+          echo "${{ secrets.PROPERTIES_PROD }}" > ./apps/admin/.env
       
       - name: Login to DockerHub
         uses: docker/login-action@v3
