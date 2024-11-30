@@ -18,8 +18,8 @@ jobs:
 
       - name: make .env file
         run: |
-          touch ~/apps/client/.env
-          touch ~/apps/admin/.env
+          mkdir ./apps/client/
+          mkdir ./apps/admin/
           echo "${{ secrets.PROPERTIES_PROD }}" > ~/apps/client/.env
           echo "${{ secrets.PROPERTIES_PROD }}" > ~/apps/admin/.env
       
