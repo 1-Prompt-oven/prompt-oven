@@ -67,6 +67,10 @@ COPY apps/client/package.json ./apps/client/package.json
 COPY apps/admin/package.json ./apps/admin/package.json
 COPY packages/ui/package.json ./packages/ui/package.json
 
+# Copy .env file for ensure apply .env to production mode running
+COPY --from=builder /app/apps/client/.env ./apps/client/.env
+COPY --from=builder /app/apps/admin/.env ./apps/admin/.env
+
 # Copy public directories if they exist
 COPY --from=builder /app/apps/client/public ./apps/client/public
 COPY --from=builder /app/apps/admin/public ./apps/admin/public
