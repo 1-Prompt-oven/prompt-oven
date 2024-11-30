@@ -20,6 +20,7 @@ import PcBoundary from "@/components/product-create/atom/PcBoundary.tsx"
 import PcButton from "@/components/product-create/atom/PcButton.tsx"
 import PcTextPromptSampleList from "@/components/product-create/molecule/PcTextPromptSampleList.tsx"
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
+import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSampleSkeleton.tsx"
 
 // interface CreateProductSecondTextPageProps {}
 
@@ -207,15 +208,16 @@ export default function CreateProductSecondTextPage() {
 			</PcBoundary>
 
 			<PcTitle className="mt-6">Examples</PcTitle>
-			{contentFields.length > 0 && (
+			{contentFields.length > 0 ? (
 				<PcTextPromptSampleList
 					contentFields={contentFields}
 					onDragEnd={onDragEnd}
 					onRemove={remove}
 				/>
+			) : (
+				<PcPromptSampleSkeleton />
 			)}
-
-			<PcSaveBar />
+			<PcSaveBar className="mt-10" />
 		</form>
 	)
 }

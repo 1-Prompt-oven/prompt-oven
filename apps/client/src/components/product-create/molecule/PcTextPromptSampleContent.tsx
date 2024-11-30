@@ -20,7 +20,7 @@ function PcTextPromptSampleContent({
 			ref={provided.innerRef}
 			{...provided.draggableProps}
 			{...provided.dragHandleProps}
-			className="relative flex cursor-move items-start gap-2 rounded-lg border-2 border-po-gray-250 bg-transparent px-4 pb-4 pt-8">
+			className="relative flex cursor-move items-stretch gap-2 rounded-lg border-2 border-po-gray-250 bg-transparent px-4 pb-4 pt-8 transition-[border] hover:border-po-black-50">
 			<button
 				type="button"
 				onClick={onRemove}
@@ -39,7 +39,7 @@ function PcTextPromptSampleContent({
 				))}
 			</div>
 
-			<div className="!h-full w-2/3 rounded-md bg-black p-[10px_14px] text-[0.875rem] font-normal leading-[160%] tracking-[-0.02em] text-[#94A3B8] placeholder-[#94A3B8]">
+			<div className="w-2/3 flex-grow rounded-md bg-black p-[10px_14px] text-[0.875rem] font-normal leading-[160%] tracking-[-0.02em] text-[#94A3B8] placeholder-[#94A3B8]">
 				{content.result}
 			</div>
 		</li>
