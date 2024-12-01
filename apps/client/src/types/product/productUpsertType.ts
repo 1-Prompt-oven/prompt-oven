@@ -5,6 +5,12 @@ export interface TextPromptSampleContentType {
 	value: Record<string, string>
 	result: string
 }
+export interface ImagePromptSampleContentType {
+	id: string
+	name: string
+	value: Record<string, string>
+	result: File
+}
 
 // -- zod schema type definitions
 export interface PcLlmIdType {

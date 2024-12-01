@@ -2,15 +2,10 @@ import React from "react"
 import type { DropResult } from "@hello-pangea/dnd"
 import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd"
 import PcImagePromptSampleContent from "@/components/product-create/molecule/PcImagePromptSampleContent.tsx"
-
-interface Content {
-	name: string
-	value: Record<string, string>
-	result: File
-}
+import type { ImagePromptSampleContentType } from "@/types/product/productUpsertType.ts"
 
 interface PcImagePromptSampleListProps {
-	contentFields: Content[]
+	contentFields: ImagePromptSampleContentType[]
 	onDragEnd: (result: DropResult) => void
 	onRemove: (index: number) => void
 }
@@ -30,8 +25,8 @@ function PcImagePromptSampleList({
 						ref={outerProvided.innerRef}>
 						{contentFields.map((content, index) => (
 							<Draggable
-								key={content.name}
-								draggableId={content.name}
+								key={content.id}
+								draggableId={content.id}
 								index={index}>
 								{(innerProvided) => (
 									<PcImagePromptSampleContent
