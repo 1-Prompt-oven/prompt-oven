@@ -42,5 +42,6 @@ export {
 	Upload,
 	FileUp,
 	Pencil,
+	GripVertical,
 	type LucideProps,
 } from "lucide-react"

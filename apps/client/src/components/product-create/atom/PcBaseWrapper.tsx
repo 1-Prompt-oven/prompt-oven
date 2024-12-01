@@ -1,8 +1,8 @@
-import React from "react"
+import type { HTMLAttributes, ReactNode } from "react"
 import { cn } from "@/lib/utils.ts"
 
-interface PcBaseWrapperProps extends React.HTMLAttributes<HTMLDivElement> {
-	children?: React.ReactNode
+interface PcBaseWrapperProps extends HTMLAttributes<HTMLDivElement> {
+	children?: ReactNode
 }
 
 function PcBaseWrapper({ children, ...props }: PcBaseWrapperProps) {

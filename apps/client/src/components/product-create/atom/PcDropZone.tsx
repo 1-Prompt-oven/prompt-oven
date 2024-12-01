@@ -1,19 +1,18 @@
-import React, { useCallback, useState } from "react"
+import React, { useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import Image from "next/image"
 import { FileUp, Pencil } from "@repo/ui/lucide"
 
 interface PcDropZoneProps {
 	onFileDrop?: (file: File) => void
+	currentImage: File | null
+	resetImage?: () => void
 }
 
-function PcDropZone({ onFileDrop }: PcDropZoneProps) {
-	const [file, setFile] = useState<File | null>(null)
-
+function PcDropZone({ onFileDrop, currentImage }: PcDropZoneProps) {
 	const onDrop = useCallback(
 		(acceptedFiles: File[]) => {
 			if (acceptedFiles.length > 0) {
-				setFile(acceptedFiles[0])
 				onFileDrop ? onFileDrop(acceptedFiles[0]) : null
 			}
 		},
@@ -31,7 +30,7 @@ function PcDropZone({ onFileDrop }: PcDropZoneProps) {
 
 	const handleEditClick = (event: React.MouseEvent | React.KeyboardEvent) => {
 		event.stopPropagation()
-		if (!file) {
+		if (!currentImage) {
 			open()
 		}
 	}
@@ -48,15 +47,15 @@ function PcDropZone({ onFileDrop }: PcDropZoneProps) {
 				}
 			}}
 			className={`"overflow-hidden relative flex h-60 w-44 !cursor-auto flex-col items-center justify-center gap-2 rounded-lg border-2 border-[#CBD5E1] bg-[#2F2F2F] p-8 py-8 ${
-				file ? "" : "!cursor-pointer"
+				currentImage ? "" : "!cursor-pointer"
 			}`}>
 			<input {...getInputProps()} />
 
-			{file ? (
+			{currentImage ? (
 				<>
 					<Image
-						src={URL.createObjectURL(file)}
-						alt={file.name}
+						src={URL.createObjectURL(currentImage)}
+						alt={currentImage.name}
 						fill
 						className="rounded-md object-cover"
 					/>

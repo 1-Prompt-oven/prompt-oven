@@ -6,6 +6,7 @@ export interface PromptVariableType {
 }
 export const extractPromptVariableFromFormat = (promptVar: string) =>
 	promptVar.slice(1, -1)
+
 export const extractPromptVariables = (
 	prompt: string,
 ): PromptVariableType[] => {

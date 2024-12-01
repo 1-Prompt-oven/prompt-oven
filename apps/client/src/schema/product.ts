@@ -38,3 +38,28 @@ export const createProductSecondSchema = z.object({
 })
 export const createProductSecondSchemaKeys =
 	createProductSecondSchema.keyof().enum
+
+export const createProductSecondImageSchema = z.object({
+	// 프롬프트 API를 호출에 필요한 값을 준비하기 위한 변수
+	// 프롬프트 변수 input list
+	promptVars: z.array(
+		z.object({
+			name: z.string(),
+			value: z.string({ message: "내용을 입력해주세요" }),
+		}),
+	),
+	promptResult: z.instanceof(File).optional(),
+
+	// 프롬프트 API를 호출하는데 쓰이는 변수
+	contents: z.array(
+		z.object({
+			name: z.string(),
+			value: z.record(z.string()),
+			result: z.instanceof(File),
+		}),
+	),
+	seed: z.string({ message: "시드를 입력해주세요" }),
+	llmVersionId: z.string({ message: "AI 모델을 선택해주세요" }),
+})
+export const createProductSecondImageSchemaKeys =
+	createProductSecondImageSchema.keyof().enum

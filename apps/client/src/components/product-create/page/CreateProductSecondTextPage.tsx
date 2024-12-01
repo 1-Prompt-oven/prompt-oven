@@ -72,23 +72,6 @@ export default function CreateProductSecondTextPage() {
 		return extractPromptVariables(_prompt)
 	}, [])
 
-	useEffect(() => {
-		const getPrompt = async () => {
-			try {
-				const fetchedPrompt = await fetchPrompt()
-				setPrompt(fetchedPrompt)
-				const extractedVars = extractPromptVars(fetchedPrompt)
-				replace(extractedVars)
-			} catch (error) {
-				// Handle error
-			}
-		}
-
-		getPrompt().then(() => {
-			// do nothing
-		})
-	}, [])
-
 	const { register, control, handleSubmit, setValue } = useForm<FormData>({
 		resolver: zodResolver(createProductSecondSchema),
 		defaultValues: {
@@ -114,6 +97,23 @@ export default function CreateProductSecondTextPage() {
 		control,
 		name: "contents",
 	})
+
+	useEffect(() => {
+		const getPrompt = async () => {
+			try {
+				const fetchedPrompt = await fetchPrompt()
+				setPrompt(fetchedPrompt)
+				const extractedVars = extractPromptVars(fetchedPrompt)
+				replace(extractedVars)
+			} catch (error) {
+				// Handle error
+			}
+		}
+
+		getPrompt().then(() => {
+			// do nothing
+		})
+	}, [extractPromptVars, replace])
 
 	const onSubmit = (data: FormData) => {
 		const varObj: Record<string, string> = data.promptVars.reduce(
