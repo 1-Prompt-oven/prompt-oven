@@ -40,5 +40,8 @@ export {
 	Bell,
 	Check,
 	Upload,
+	FileUp,
+	Pencil,
+	GripVertical,
 	type LucideProps,
 } from "lucide-react"
