@@ -3,7 +3,9 @@ import type { NextAuthOptions, User } from "next-auth";
 import GoogleProvider from "next-auth/providers/google";
 import NaverProvider from "next-auth/providers/naver";
 import KakaoProvider from "next-auth/providers/kakao";
-import { signInByAuth } from "@/action/auth/OAuthSignInAction.ts";
+import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts";
+import { refreshAccessToken } from '@/action/auth/authTokenAction';
+import type {ExtendedToken} from "@/types/auth/AuthToken"
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -18,7 +20,7 @@ export const authOptions: NextAuthOptions = {
                 email: { label: "email", type: "text" },
                 password: { label: "password", type: "password" },
             },
-            async authorize(credentials): Promise<any> {
+            async authorize(credentials): Promise<User | null> {
                 if (!credentials?.email || !credentials?.password) {
                     return null;
                 }
@@ -27,7 +29,7 @@ export const authOptions: NextAuthOptions = {
                     email: credentials.email,
                     password: credentials.password,
                 });
-
+                console.log("signInByAuth",response)
                 return {
                     accesstoken: response.result.accesstoken,
                     refreshtoken: response.result.refreshtoken,
@@ -55,24 +57,90 @@ export const authOptions: NextAuthOptions = {
     secret: process.env.NEXTAUTH_SECRET,
     callbacks: {
         async signIn({ user, account, profile }) {
-            console.log("signIn :", user, account, profile);
+          if (account?.provider === "credentials") {
+            if (user) {
+              return true;
+            } else {
+              return false;
+            }
+          }
+            //소셜 로그인 공통 처리
+            if (account?.provider) {
+              console.log(`${account.provider} Sign-In detected:`, account, profile);
+          
+              let providerID: string;
+              let email: string | undefined;
+          
+              switch (account.provider) {
+                case "google":
+                  providerID = account.id as string;
+                  email = profile?.email || "";
+                  break;
+          
+                case "naver":
+                  providerID = account.id as string;
+                  email = user.email || "";
+                  break;
+          
+                case "kakao":
+                  providerID = account.id as string;
+                  email = user.email || "";
+                  break;
+          
+                default:
+                  console.error("Unsupported provider:", account.provider)
+                  return false;
+              }
+          
+              // OAuth API 호출
+              const response = await signInByOAuth({
+                provider: account.provider,
+                providerID,
+                email,
+              });
+          
+              if (response) {
+                console.log(`${account.provider} OAuth API response:`, response)
+                return true; // 로그인 성공
+              } else {
+                console.error(`${account.provider} OAuth API failed:`, response)
+                return '/sign-up';
+              }
+            }
+          
             return true;
-        },
-        async jwt({ token, user }) {
+          },
+          async jwt({ token, user }): Promise<ExtendedToken> {      
+            if (user) {
+                token.accesstoken = user.accesstoken
+                token.refreshtoken = user.refreshtoken
+                token.tokenExpiration = Date.now() + 30 * 60 * 1000;
+            }        
+            if (Date.now() >= (token.tokenExpiration as number || 0)) {
+                const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "");
+                if (refreshedToken.result) {
+                    token.accesstoken = refreshedToken.result.accessToken
+                    token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000;
+                } else {
+                    // Refresh Token이 유효하지 않을 때 로그아웃 처리
+                    console.error("Refresh Token is invalid. Logging out.");
+                    token.error = "RefreshTokenError";
+                }
+            }
+        
             return { ...token, ...user };
-          },
-      
-              async session({ session, token }) {
-            session.user = token as any;
-            return session;
-          },
-      
-              async redirect({ url, baseUrl }) {
+        },
+        
+        async session({ session, token }) {
+          session.user = token;
+          return session;
+        },
+        async redirect({ url, baseUrl }) {
             return url.startsWith(baseUrl) ? url : baseUrl;
           },
     },
     pages: {
         signIn: "/sign-in",
-        error: "/error",
+        // error: "/error",
     },
 };
