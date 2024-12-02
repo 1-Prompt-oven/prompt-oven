@@ -25,7 +25,9 @@ function SignInForm() {
 	const [isClient, setIsClient] = useState(false)
 	const [rememberMe, setRememberMe] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
-
+	const [loginType, setLoginType] = useState<
+		"credentials" | "google" | "kakao" | "naver" | null
+	>(null)
 	const email = watch("email")
 	const password = watch("password")
 
@@ -51,22 +53,59 @@ function SignInForm() {
 		}
 	}, [email, password])
 
+	useEffect(() =>
+		// eslint-disable-next-line @typescript-eslint/no-empty-function -- This is no problem
+		{}, [loginType])
+
 	const loginSchemaKeys = loginSchema.keyof().enum
 
 	const handleOnSubmitSuccess = async (data: FieldValues) => {
-		signIn("credentials", {
-			email: data.email,
-			password: data.password,
-			redirect: true,
-			callbackUrl: "/",
-		})
+		if (!loginType) {
+			setErrorMessage("Login type is not selected. Please try again.")
+			return
+		}
+
+		try {
+			const response = await signIn(loginType, {
+				email: data.email,
+				password: data.password,
+				redirect: true,
+				callbackUrl: "/",
+			})
+
+			if (!response?.ok) {
+				setErrorMessage("Login failed. Please try again.")
+			}
+		} catch (error) {
+			setErrorMessage("An error occurred during login. Please try again.")
+		}
 	}
 	const handleOnSubmitFailure = (submissionErrors: FieldValues) => {
-		// eslint-disable-next-line no-console -- Debugging form validation errors
-		console.log("Form validation failed. Errors:", submissionErrors)
+		// eslint-disable-next-line no-console -- This is a client-side only log
+		console.log(submissionErrors)
 		setErrorMessage("Invalid email or password. Please try again.")
 
 		return true
+	}
+	const handleLoginClick = (type: "credentials") => {
+		setLoginType(type)
+	}
+
+	const handleSocialLogin = async (provider: "google" | "kakao" | "naver") => {
+		try {
+			const response = await signIn(provider, {
+				redirect: true,
+				callbackUrl: "/",
+			})
+
+			if (!response?.ok) {
+				setErrorMessage("Social login failed. Please try again.")
+			}
+		} catch (error) {
+			setErrorMessage(
+				"An error occurred during social login. Please try again.",
+			)
+		}
 	}
 
 	return (
@@ -150,6 +189,7 @@ function SignInForm() {
 				<div className="mb-8 flex h-fit w-full flex-col items-center gap-4">
 					<Button
 						type="submit"
+						onClick={() => handleLoginClick("credentials")}
 						className="h-[50px] w-full rounded-[25px] !bg-[#A913F9] text-white hover:!bg-[#A913F9]/90">
 						Log In
 					</Button>
@@ -160,15 +200,17 @@ function SignInForm() {
 					<div className="flex justify-center space-x-4">
 						<Button
 							type="button"
+							onClick={() => handleSocialLogin("naver")}
 							variant="outline"
 							className="h-[48px] w-[147px] rounded-full !bg-white hover:!bg-white/90">
 							<svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
 								<path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm-2 16h-2v-6h2v6zm-1-6.891c-.607 0-1.1-.496-1.1-1.109 0-.612.492-1.109 1.1-1.109s1.1.497 1.1 1.109c0 .613-.493 1.109-1.1 1.109zm8 6.891h-1.998v-2.861c0-1.881-2.002-1.722-2.002 0v2.861h-2v-6h2v1.093c.872-1.616 4-1.736 4 1.548v3.359z" />
 							</svg>
-							Apple
+							Naver
 						</Button>
 						<Button
 							type="button"
+							onClick={() => handleSocialLogin("google")}
 							variant="outline"
 							className="h-[48px] w-[147px] rounded-full !bg-white hover:!bg-white/90">
 							<svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
@@ -178,12 +220,13 @@ function SignInForm() {
 						</Button>
 						<Button
 							type="button"
+							onClick={() => handleSocialLogin("kakao")}
 							variant="outline"
 							className="h-[48px] w-[147px] rounded-full !bg-white hover:!bg-white/90">
 							<svg className="mr-2 h-5 w-5" viewBox="0 0 24 24">
 								<path d="M12 0c-6.627 0-12 5.373-12 12s5.373 12 12 12 12-5.373 12-12-5.373-12-12-12zm3 8h-1.35c-.538 0-.65.221-.65.778v1.222h2l-.209 2h-1.791v7h-3v-7h-2v-2h2v-2.308c0-1.769.931-2.692 3.029-2.692h1.971v3z" />
 							</svg>
-							Facebook
+							KaKao
 						</Button>
 					</div>
 				</div>
