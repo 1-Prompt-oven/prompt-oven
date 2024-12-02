@@ -1,34 +1,66 @@
-import { Button } from "@repo/ui/button"
+import { useState } from "react"
+import type { PaymentItemType } from "@/types/purchase.ts/purchase-ongoing"
+import type methodGroup from "../atom/icon/MethodGroup"
+import PaymentMessageArea from "../PaymentMessageArea"
 import PaymentTitle from "../atom/PaymentTitle"
+import PaymentLastCheckValue from "../molecule/PaymentLastCheckValue"
+import PaymentOrderNone from "../molecule/PaymentOrderNone"
+import PaymentProceed from "../molecule/PaymentProceed"
 
-export default function PaymentOrder() {
+interface SelectedMethod {
+	type: keyof typeof methodGroup // methodGroup 객체의 키 중 하나를 선택할 수 있는 타입
+	payment?: string // 선택된 결제 방법
+}
+
+interface PaymentOrderProps {
+	method: SelectedMethod // selectedMethod를 props로 받음
+	paymentList: PaymentItemType[]
+	totalPrice: number
+}
+
+export default function PaymentOrder({
+	method,
+	paymentList,
+	totalPrice,
+}: PaymentOrderProps) {
+	const [message, setMessage] = useState<string>("X")
+
+	const orderName =
+		paymentList.length > 1
+			? `${paymentList[0].productName} 외 ${paymentList.length - 1}건`
+			: paymentList[0].productName
+
+	let content
+	if (method.payment) {
+		if (paymentList.length > 0) {
+			content = (
+				<PaymentProceed
+					method={method.payment}
+					orderName={orderName}
+					totalPrice={totalPrice}
+					paymentList={paymentList}
+					message={message ? message : "X"}
+				/>
+			)
+		} else {
+			content = <PaymentOrderNone state={1} />
+		}
+	} else {
+		content = <PaymentOrderNone state={2} />
+	}
+
 	return (
 		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
 			<PaymentTitle title="Message" />
-			<textarea
-				name="message"
-				placeholder="Leave a message"
-				className="h-[130px] resize-none rounded-lg border border-[#d8d8d8] p-3"
+			<PaymentMessageArea
+				comment="Leave a message"
+				onMessageChange={setMessage}
 			/>
-
-			<div className="flex flex-col gap-3 border-t-2 border-black pt-4 font-semibold">
-				<div className="flex justify-between">
-					<p>Total Order</p>
-					<p className="flex gap-2">x7 Product</p>
-				</div>
-				<div className="flex justify-between">
-					<p>Total Payment</p>
-					<p className="flex gap-4">
-						<span className="text-xl font-bold text-[#9747ff]">$6460</span>
-					</p>
-				</div>
-			</div>
-
-			<Button
-				type="submit"
-				className="bg-[#9747ff] text-white hover:bg-[#743dbd]">
-				<span>Order Now</span>
-			</Button>
+			<PaymentLastCheckValue
+				totalOrder={paymentList.length}
+				totalPrice={totalPrice}
+			/>
+			{content}
 		</div>
 	)
 }

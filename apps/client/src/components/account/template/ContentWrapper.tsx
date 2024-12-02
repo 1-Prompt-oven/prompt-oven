@@ -21,7 +21,7 @@ export default function ContentWrapper({
 			<SideMenu menuItems={sellerNavs} activeRoute={view} />
 
 			{/* Main content */}
-			<div className="relative flex-1 overflow-y-scroll bg-[#1B1818] p-4 lg:mt-0 lg:p-8">
+			<div className="relative flex-1 overflow-y-scroll bg-[#1B1818] p-6 lg:mt-0 lg:p-10">
 				{children}
 			</div>
 		</div>

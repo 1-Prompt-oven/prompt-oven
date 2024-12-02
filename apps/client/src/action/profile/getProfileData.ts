@@ -14,7 +14,10 @@ export async function getProfileMemberInfo(id: string): Promise<ProfileMemberInf
 		headers,
 		next: { revalidate: 3600 },
 	})
-
+	void fetch(`${process.env.API_BASE_URL}/v1/profile/viewership/nickname/${id}`, {
+		method: "POST",
+		headers,
+	})
 	if (!res.ok) {
 		throw new Error('Failed to fetch profile data')
 	}
@@ -33,8 +36,12 @@ export async function getProfileMemberInfoByUuid(id: string): Promise<ProfileMem
 	
 	const res = await fetch(`${process.env.API_BASE_URL}/v1/profile/uuid/${id}`, {
 		method: "GET",
-		 headers,
+		headers,
 		next: { revalidate: 3600 },
+	})
+	void fetch(`${process.env.API_BASE_URL}/v1/profile/viewership/uuid/${id}`, {
+		method: "POST",
+		headers,
 	})
 
 	if (!res.ok) {

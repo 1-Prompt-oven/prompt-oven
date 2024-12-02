@@ -5,12 +5,14 @@ interface ProfileBannerProps {
 	memberBanner?: string | undefined
 	handleFileChange: (event: React.ChangeEvent<HTMLInputElement>) => void
 	handleReset: (field: string) => void
+	handleImageRemove: (field: string) => void
 }
 
 export default function ProfileModifyBanner({
 	memberBanner,
 	handleFileChange,
 	handleReset,
+	handleImageRemove,
 }: ProfileBannerProps) {
 	return (
 		<div className="group relative flex h-[200px] justify-center px-4 md:h-[230px] xl:h-[280px]">
@@ -47,6 +49,10 @@ export default function ProfileModifyBanner({
 						<span className="pointer-events-none">|</span>
 						<button type="button" onClick={() => handleReset("banner")}>
 							<span className="hover:text-[#0da7ff]">초기화</span>
+						</button>
+						<span className="pointer-events-none">|</span>
+						<button type="button" onClick={() => handleImageRemove("banner")}>
+							<span className="hover:text-[#0da7ff]">제거</span>
 						</button>
 					</div>
 				</div>

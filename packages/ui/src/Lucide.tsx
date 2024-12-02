@@ -41,5 +41,8 @@ export {
 	Check,
 	Upload,
 	Trash2,
+	FileUp,
+	Pencil,
+	GripVertical,
 	type LucideProps,
 } from "lucide-react"

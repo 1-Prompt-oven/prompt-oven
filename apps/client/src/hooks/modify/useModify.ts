@@ -138,6 +138,21 @@ export const useModify = (modifyData: CommonModifyType) => {
 	}
 	//// 이미지 - S3 핸들링 END ////
 
+	//// 이미지 제거 핸들링 START ////
+	const handleImageRemove = (field: string) => {
+		switch (field) {
+			case "banner":
+				setBanner("")
+				break
+			case "avatar":
+				setAvatar("")
+				break
+			default:
+				break
+		}
+	}
+	//// 이미지 제거 핸들링 END ////
+
 	return {
 		banner,
 		avatar,
@@ -148,7 +163,9 @@ export const useModify = (modifyData: CommonModifyType) => {
 		handleBannerChange,
 		handleAvatarChange,
 		handleInputChange,
+		
 		handleImageUpload,
 		handleReset,
+		handleImageRemove,
 	}
 }
