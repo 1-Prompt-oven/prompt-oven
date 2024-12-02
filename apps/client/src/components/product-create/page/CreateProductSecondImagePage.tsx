@@ -20,9 +20,8 @@ import PcLabel from "@/components/product-create/atom/PcLabel.tsx"
 import PcButton from "@/components/product-create/atom/PcButton.tsx"
 import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSampleSkeleton.tsx"
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
-import PcImagePromptSampleList from "@/components/product-create/molecule/PcImagePromptSampleList.tsx"
-
-// interface CreateProductSecondTextPageProps {}
+import PcImagePromptSampleList from "@/components/product-create/organism/PcImagePromptSampleList.tsx"
+import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
 
 interface DropResult {
 	draggableId: string
@@ -65,7 +64,14 @@ const modelVersion = [
  *   4) prompt 가져오는 중에 error handling 추가하기
  *   5) 상품 등록 API 호출하기
  */
-export default function CreateProductSecondImagePage() {
+
+interface CreateProductSecondImagePageProps {
+	searchParams: CreateProductQueryParams
+}
+export default function CreateProductSecondImagePage({
+	// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars -- This prop is used in the original code
+	searchParams,
+}: CreateProductSecondImagePageProps) {
 	const [prompt, setPrompt] = useState("")
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)

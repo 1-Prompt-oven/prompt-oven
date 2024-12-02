@@ -27,11 +27,10 @@ export const getLlmList = async (
 ): Promise<CommonResType<GetLlmListResponseType[]>> => {
 	return actionHandler<CommonResType<GetLlmListResponseType[]>>({
 		name: "getLlmList",
-		url: `/v1/product/llm/list?llmType={req.llmType}`,
+		url: `/v1/product/llm/list?${req.llmType ? `llmType=${req.llmType}` : ""}`,
 		options: {
 			method: "GET",
 			cache: "no-cache",
-			body: JSON.stringify(req),
 		},
 	})
 }
@@ -41,7 +40,7 @@ export const getLlmVersionList = async (
 ): Promise<CommonResType<GetLlmVersionListResponseType[]>> => {
 	return actionHandler<CommonResType<GetLlmVersionListResponseType[]>>({
 		name: "getLlmVersionList",
-		url: `/v1/admin/product/llm/version/{req.llmId}`,
+		url: `/v1/admin/product/llm/version/${req.llmId}`,
 		options: {
 			method: "GET",
 			cache: "no-cache",

@@ -18,9 +18,10 @@ import PcBaseWrapper from "@/components/product-create/atom/PcBaseWrapper.tsx"
 import PcLabel from "@/components/product-create/atom/PcLabel.tsx"
 import PcBoundary from "@/components/product-create/atom/PcBoundary.tsx"
 import PcButton from "@/components/product-create/atom/PcButton.tsx"
-import PcTextPromptSampleList from "@/components/product-create/molecule/PcTextPromptSampleList.tsx"
+import PcTextPromptSampleList from "@/components/product-create/organism/PcTextPromptSampleList.tsx"
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSampleSkeleton.tsx"
+import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
 
 // interface CreateProductSecondTextPageProps {}
 
@@ -65,7 +66,14 @@ const modelVersion = [
  *   4) prompt 가져오는 중에 error handling 추가하기
  *   5) 상품 등록 API 호출하기
  */
-export default function CreateProductSecondTextPage() {
+
+interface CreateProductSecondTextPageProps {
+	searchParams: CreateProductQueryParams
+}
+export default function CreateProductSecondTextPage({
+	// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars -- This prop is used in the original code
+	searchParams,
+}: CreateProductSecondTextPageProps) {
 	const [prompt, setPrompt] = useState("")
 
 	const extractPromptVars = useCallback((_prompt: string) => {

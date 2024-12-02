@@ -44,8 +44,34 @@ export interface PromptContentType {
 	sampleValue: string
 }
 
-// 상품 등록
-//
+// 상품 조회
+export interface GetProductDetailRequestType {
+	// path
+	productUuid: string
+}
+
+export interface GetProductDetailResponseType {
+	productUuid: string
+	sellerUuid: string
+	productName: string
+	price: number
+	prompt: string
+	description: string
+	llmId: number
+	topCategoryUuid: string
+	subCategoryUuid: string
+	contents: PromptContentType[]
+	discountRate: number
+	enabled: boolean
+	approved: boolean
+	seed: string
+	llmVersionId: number
+	avgStar: number
+	sells: number
+	reviewCount: number
+	createdAt: string // ISO date string
+	updatedAt: string // ISO date string
+}
 
 // 상품 수정 - reqbody
 export interface ModifyProductRequestType {
@@ -65,6 +91,7 @@ export interface ModifyProductRequestType {
 	llmVersionId: number
 }
 
+// 상품 등록
 // llmId: (Dall-E, 1), (GPT, 2)
 // contents는 리스트 형태로 여러 개 등록 가능.
 // reqbody

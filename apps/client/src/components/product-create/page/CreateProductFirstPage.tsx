@@ -2,6 +2,7 @@
 
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useEffect } from "react"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
@@ -16,6 +17,8 @@ import {
 	createProductFirstSchemaKeys,
 } from "@/schema/product.ts"
 import PcBaseWrapper from "@/components/product-create/atom/PcBaseWrapper.tsx"
+import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
+import { getLlmList } from "@/action/product/llmAction.ts"
 
 const TITLE_MAX_LENGTH = 50
 const TEXTAREA_MAX_LENGTH = 4096
@@ -25,7 +28,13 @@ const aiModelOptions = [
 	{ value: "2", label: "DALLE" },
 ]
 
-export default function CreateProductFirstPage() {
+interface CreateProductFirstPageProps {
+	searchParams: CreateProductQueryParams
+}
+export default function CreateProductFirstPage({
+	// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars -- This prop is used in the original code
+	searchParams,
+}: CreateProductFirstPageProps) {
 	const { control, register, watch } = useForm({
 		resolver: zodResolver(createProductFirstSchema),
 		mode: "onChange",
@@ -50,8 +59,17 @@ export default function CreateProductFirstPage() {
 		createProductFirstSchemaKeys.description,
 	).length
 
+	// hooks
 	// todo: API를 통해서 필요한 값들을 가져와야 합니다.
-	const lastSaved = "Jul 3, 2022 at 3:54 PM"
+	const lastSaved = ""
+
+	useEffect(() => {
+		getLlmList({ llmType: "" }).then((res) => {
+			const llmList = res.result
+			// eslint-disable-next-line no-console -- Debugging form validation errors
+			console.log("getLlmList", llmList)
+		})
+	}, [])
 
 	return (
 		<form className="flex max-w-5xl flex-col gap-4">

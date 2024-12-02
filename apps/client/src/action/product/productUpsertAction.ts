@@ -1,6 +1,8 @@
 import type {
 	CreateProductRequestType,
 	CreateProductTempRequestType,
+	GetProductDetailRequestType,
+	GetProductDetailResponseType,
 	GetProductSellerRequestType,
 	GetProductSellerResponseType,
 	ModifyProductRequestType,
@@ -14,6 +16,19 @@ export const getProductSeller = async (
 	return actionHandler<CommonResType<GetProductSellerResponseType>>({
 		name: "getProductSeller",
 		url: `/v1/product/${req.productUuid}/seller`,
+		options: {
+			method: "GET",
+			cache: "no-cache",
+		},
+	})
+}
+
+export const getProductDetail = async (
+	req: GetProductDetailRequestType,
+): Promise<CommonResType<GetProductDetailResponseType>> => {
+	return actionHandler<CommonResType<GetProductDetailResponseType>>({
+		name: "getProductDetail",
+		url: `/v1/product/${req.productUuid}`,
 		options: {
 			method: "GET",
 			cache: "no-cache",
