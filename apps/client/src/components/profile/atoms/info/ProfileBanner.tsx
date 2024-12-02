@@ -23,6 +23,7 @@ export default function ProfileBanner({ memberBanner }: ProfileBannerProps) {
 						fill
 						className="rounded-lg"
 						priority
+						unoptimized
 						alt="Banner"
 					/>
 				) : null}
