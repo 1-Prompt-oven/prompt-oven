@@ -9,9 +9,10 @@ import {
 } from "@repo/ui/custom-select"
 
 type Value = string
-interface SelectOption {
+export interface SelectOption {
 	value: Value
 	label: string
+	extraProps?: Record<string, unknown>
 }
 interface PcSelectProps {
 	onValueChange: (value: string) => void

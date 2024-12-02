@@ -12,11 +12,10 @@ export const getProductCategoryList = async (
 ): Promise<CommonResType<GetCategoryListResponseType[]>> => {
 	return actionHandler<CommonResType<GetCategoryListResponseType[]>>({
 		name: "getProductCategoryList",
-		url: "/v1/product/category/sub-categories",
+		url: `/v1/product/category/sub-categories?${req.parentCategoryUuid ? `parentCategoryUuid=${req.parentCategoryUuid}` : ""}`,
 		options: {
 			method: "GET",
 			cache: "no-cache",
-			body: JSON.stringify(req),
 		},
 	})
 }

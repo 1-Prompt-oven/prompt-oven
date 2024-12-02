@@ -75,20 +75,20 @@ export interface GetProductDetailResponseType {
 
 // 상품 수정 - reqbody
 export interface ModifyProductRequestType {
-	productUuid: string
-	productName: string
-	price: number
-	prompt: string
-	description: string
-	llmId: number
-	topCategoryUuid: string
-	subCategoryUuid: string
-	contents: PromptContentType[]
-	discountRate: number
-	enabled: boolean
-	approved: boolean
-	seed: string
-	llmVersionId: number
+	productUuid?: string
+	productName?: string
+	price?: number
+	prompt?: string
+	description?: string
+	llmId?: number
+	topCategoryUuid?: string
+	subCategoryUuid?: string
+	contents?: PromptContentType[]
+	discountRate?: number
+	enabled?: boolean
+	approved?: boolean
+	seed?: string
+	llmVersionId?: number
 }
 
 // 상품 등록
@@ -119,16 +119,16 @@ export interface RemoveProductRequestType {
 // llmId: (Dall-E, 1), (GPT, 2)
 // contents는 리스트 형태로 여러 개 등록 가능.
 export interface CreateProductTempRequestType {
-	sellerUuid: string
-	productName: string
-	price: number
-	prompt: string
-	description: string
-	llmId: number
-	topCategoryUuid: string
-	subCategoryUuid: string
-	contents: PromptContentType[]
-	discountRate: number
-	seed: string
-	llmVersionId: number
+	sellerUuid?: string
+	productName?: string
+	price?: number
+	prompt?: string
+	description?: string
+	llmId?: number
+	topCategoryUuid?: string
+	subCategoryUuid?: string
+	contents?: PromptContentType[]
+	discountRate?: number
+	seed?: string
+	llmVersionId?: number
 }

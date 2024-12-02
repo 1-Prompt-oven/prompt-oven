@@ -14,7 +14,7 @@ function CreateProductPage({ searchParams }: AccountSearchParams) {
 			{step === "2" && llmType === "text" && (
 				<CreateProductSecondTextPage searchParams={searchParams} />
 			)}
-			{step === "1" && llmType === "image" && (
+			{step === "2" && llmType === "image" && (
 				<CreateProductSecondImagePage searchParams={searchParams} />
 			)}
 		</>
