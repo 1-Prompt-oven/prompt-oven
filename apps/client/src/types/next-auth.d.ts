@@ -32,15 +32,5 @@ declare module 'next-auth' {
     memberUUID: string
     failed: boolean
   }
-
-  interface Session {
-    user: {
-      id?: string;
-      nickname?: string;
-      role?: string;
-    };
-    accessToken?: string; // 커스텀 속성 추가
-    refreshToken?: string
-  }
 }
 

@@ -133,8 +133,7 @@ export const authOptions: NextAuthOptions = {
                   token.tokenExpiration = null;
                   token.error = "LoggedOut";
               }
-            }
-        
+            }        
             return { ...token, ...user }
         },
         
