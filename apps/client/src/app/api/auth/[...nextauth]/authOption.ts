@@ -6,12 +6,13 @@ import KakaoProvider from "next-auth/providers/kakao";
 import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts";
 import { refreshAccessToken } from '@/action/auth/authTokenAction';
 import type {ExtendedToken} from "@/types/auth/AuthToken"
+import { logoutAuthMember } from '@/action/auth/memberManageAction';
 
 export const authOptions: NextAuthOptions = {
     session: {
         strategy: "jwt",
-        maxAge: 24 * 60 * 60, // 1 day
-        updateAge: 24 * 60 * 60, // 24 hours
+        maxAge: 24 * 60 * 60, // 24 hours
+        updateAge: 6 * 24 * 60 * 60, // 6 * 24 hours
     },
     providers: [
         CredentialsProvider({
@@ -66,24 +67,24 @@ export const authOptions: NextAuthOptions = {
           }
             //소셜 로그인 공통 처리
             if (account?.provider) {
-              console.log(`${account.provider} Sign-In detected:`, account, profile);
+              console.log(`${account.provider} Sign-In detected:`, account, profile)
           
               let providerID: string;
-              let email: string | undefined;
+              let email: string | undefined
           
               switch (account.provider) {
                 case "google":
-                  providerID = account.id as string;
+                  providerID = account.id as string
                   email = profile?.email || "";
                   break;
           
                 case "naver":
-                  providerID = account.id as string;
+                  providerID = account.id as string
                   email = user.email || "";
                   break;
           
                 case "kakao":
-                  providerID = account.id as string;
+                  providerID = account.id as string
                   email = user.email || "";
                   break;
           
@@ -100,35 +101,40 @@ export const authOptions: NextAuthOptions = {
               });
           
               if (response) {
+                // eslint-disable-next-line no-console -- This is a client-side only log
                 console.log(`${account.provider} OAuth API response:`, response)
-                return true; // 로그인 성공
+                return true
               } else {
+                // eslint-disable-next-line no-console -- This is a client-side only log
                 console.error(`${account.provider} OAuth API failed:`, response)
                 return '/sign-up';
               }
-            }
-          
+            }          
             return true;
           },
           async jwt({ token, user }): Promise<ExtendedToken> {      
             if (user) {
                 token.accesstoken = user.accesstoken
                 token.refreshtoken = user.refreshtoken
-                token.tokenExpiration = Date.now() + 30 * 60 * 1000;
-            }        
+                token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
+            }      
             if (Date.now() >= (token.tokenExpiration as number || 0)) {
-                const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "");
+                const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "")
                 if (refreshedToken.result) {
-                    token.accesstoken = refreshedToken.result.accessToken
-                    token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000;
-                } else {
-                    // Refresh Token이 유효하지 않을 때 로그아웃 처리
-                    console.error("Refresh Token is invalid. Logging out.");
-                    token.error = "RefreshTokenError";
-                }
-            }
-        
-            return { ...token, ...user };
+                  token.accesstoken = refreshedToken.result.accessToken;
+                  token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000;
+              } else {
+                  await logoutAuthMember({
+                      Authorization: `Bearer ${token.accesstoken}`,
+                      Refreshtoken: token.refreshtoken as string,
+                  })           
+                  token.accesstoken = null;
+                  token.refreshtoken = null;
+                  token.tokenExpiration = null;
+                  token.error = "LoggedOut";
+              }
+            }        
+            return { ...token, ...user }
         },
         
         async session({ session, token }) {
@@ -136,7 +142,7 @@ export const authOptions: NextAuthOptions = {
           return session;
         },
         async redirect({ url, baseUrl }) {
-            return url.startsWith(baseUrl) ? url : baseUrl;
+            return url.startsWith(baseUrl) ? url : baseUrl
           },
     },
     pages: {
