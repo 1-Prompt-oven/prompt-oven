@@ -56,26 +56,13 @@ const nextConfig = {
 		},
 	},
 	images: {
-		domains: [
-			"promptoven.s3.ap-northeast-2.amazonaws.com",
-			"promptoven.shop",
-			"www.promptoven.shop",
-			"firebasestorage.googleapis.com",
-			"assets.promptbase.com",
-			"hebbkx1anhila5yf.public.blob.vercel-storage.com",
-		],
+
 		remotePatterns: [
 			{
 				protocol: "https",
 				hostname: "promptoven.s3.ap-northeast-2.amazonaws.com",
 				port: "",
-				pathname: "/dummy/**",
-			},
-			{
-				protocol: "https",
-				hostname: "promptoven.s3.ap-northeast-2.amazonaws.com",
-				port: "",
-				pathname: "/client/**",
+				pathname: "/**",
 			},
 			{
 				protocol: "https",
