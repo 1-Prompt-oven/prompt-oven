@@ -9,6 +9,17 @@ export interface GetLlmResponseType {
 	llmName: string
 }
 
+// llmType = text, image, 미작성 시 전체 리스트 조회
+// query
+export interface GetLlmListRequestType {
+	llmType: string
+}
+export interface GetLlmListResponseType {
+	llmId: number
+	llmName: string
+	llmType: string
+}
+
 // LLM 버전 관리
 // LLM 버전 관리 API endpoints
 export interface GetLlmVersionListRequestType {
