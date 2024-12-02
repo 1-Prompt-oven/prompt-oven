@@ -7,9 +7,14 @@ import type { CartItemType } from "@/types/cart/cartTypes"
 interface CartItemProps {
 	item: CartItemType
 	handleSelectItem: (item: CartItemType) => void
+	handleDeleteItems: () => void
 }
 
-function CartItem({ item, handleSelectItem }: CartItemProps) {
+function CartItem({
+	item,
+	handleSelectItem,
+	handleDeleteItems,
+}: CartItemProps) {
 	return (
 		<div className="flex items-center space-x-4 rounded-lg bg-gray-900 p-4">
 			<CheckBox
@@ -19,7 +24,8 @@ function CartItem({ item, handleSelectItem }: CartItemProps) {
 			/>
 			<div className="relative h-16 w-16">
 				<Image
-					src={item.thumbnailUrl}
+					// src={item.thumbnailUrl}
+					src="/img/cart/smileBandal.jpg"
 					alt={item.productName}
 					className="rounded-md object-cover"
 					fill
@@ -36,7 +42,7 @@ function CartItem({ item, handleSelectItem }: CartItemProps) {
 				{item.price.toLocaleString()} 원
 			</span>
 			<button type="button" className="text-gray-400 hover:text-gray-300">
-				<Trash2 className="h-5 w-5" />
+				<Trash2 className="h-5 w-5" onClick={() => handleDeleteItems()} />
 			</button>
 		</div>
 	)

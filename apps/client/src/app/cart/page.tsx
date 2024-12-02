@@ -1,13 +1,12 @@
 import React from "react"
 import type { CartItemType } from "@/types/cart/cartTypes"
-import { getCartData } from "@/action/cart/getCartData"
+import { getCartData } from "@/action/cart/cartAction"
 import { calculateTotalPrice } from "@/action/cart/cartDataAction"
 import CartItemContainer from "@/components/cart/organism/CartItemContainer"
 import CartCheckout from "@/components/cart/organism/CartCheckout"
 
 async function cart() {
-	const _memberUuid = "uuid" // 더미 uuid
-	const items: CartItemType[] = await getCartData(_memberUuid)
+	const items: CartItemType[] = await getCartData()
 	const selectedItem = items.filter((item) => item.selected)
 	const selectedItemsTotalPrice = await calculateTotalPrice(selectedItem)
 

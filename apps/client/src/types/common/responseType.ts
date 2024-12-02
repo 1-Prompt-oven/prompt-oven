@@ -1,10 +1,10 @@
 import type { PromptsType } from "../prompts/promptsType"
 
-export interface CommonResType<T = []> {
+export interface CommonResType<T> {
 	httpStatus: string
 	isSuccess: boolean
 	message: string
-	code: number
+	code?: number
 	result: T
 }
 
