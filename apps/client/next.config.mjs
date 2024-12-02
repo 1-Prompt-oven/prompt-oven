@@ -69,6 +69,28 @@ const nextConfig = {
 			},
 		],
 	},
+	serverActions: {
+		allowedOrigins: [
+			"api.promptoven.shop",
+			"admin.promptoven.shop",
+			"localhost",
+			"www.promptoven.shop",
+			"promptoven.shop",
+			"nextjs_client",
+			"nextjs_admin",
+			"api_backend",
+		],
+		allowedForwardedHosts: [
+			"api.promptoven.shop",
+			"admin.promptoven.shop",
+			"localhost",
+			"www.promptoven.shop",
+			"promptoven.shop",
+			"nextjs_client",
+			"nextjs_admin",
+			"api_backend",
+		],
+	},
 }
 
 const withPWA = withPWAInit({
