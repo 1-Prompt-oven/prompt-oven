@@ -144,7 +144,7 @@ export default function CreateProductSecondTextPage() {
 	}
 
 	return (
-		<form className="flex flex-col gap-4">
+		<form className="flex max-w-5xl flex-col gap-4">
 			<AccountTitleText className="w-full">Create New Product</AccountTitleText>
 			{/* Model version and Seed*/}
 			<div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">

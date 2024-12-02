@@ -54,7 +54,7 @@ export default function CreateProductFirstPage() {
 	const lastSaved = "Jul 3, 2022 at 3:54 PM"
 
 	return (
-		<form className="flex flex-col gap-4">
+		<form className="flex max-w-5xl flex-col gap-4">
 			<AccountTitleText className="w-full">Create New Product</AccountTitleText>
 
 			<PcBaseWrapper className="mt-6">
