@@ -5,8 +5,16 @@ import type { DefaultSession, DefaultUser } from 'next-auth/next';
 declare module 'next-auth' {
   interface Session {
     user: {
+      id?: number
+      email: string
       accesstoken: string
       refreshtoken: string
+      kakaoAccessToken: string
+      kakaoRefreshToken: string
+      NaverAccessToken: string
+      NaverRefreshToken: string
+      GoogleAccessToken: string
+      GooglefreshToken: string
       nickname: string
       role: string
       memberUUID: string
@@ -15,6 +23,8 @@ declare module 'next-auth' {
   }
 
   interface User extends DefaultUser {
+    id?: numaber
+    email: string
     accesstoken: string
     refreshtoken: string
     nickname: string
@@ -22,4 +32,15 @@ declare module 'next-auth' {
     memberUUID: string
     failed: boolean
   }
+
+  interface Session {
+    user: {
+      id?: string;
+      nickname?: string;
+      role?: string;
+    };
+    accessToken?: string; // 커스텀 속성 추가
+    refreshToken?: string
+  }
 }
+

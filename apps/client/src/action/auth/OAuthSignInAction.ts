@@ -30,7 +30,7 @@ export const signInByOAuth = async (
 ): Promise<OAuthSignInResponse> => {
 	return actionHandler<OAuthSignInResponse>({
 		name: "signInByOAuth",
-		url: "/v1/auth/oauth/login",
+		url: "/v1/auth/social/login",
 		options: {
 			headers: {
 				"Content-Type": "application/json",

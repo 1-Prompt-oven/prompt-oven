@@ -28,7 +28,7 @@ function SignInField({
 	return (
 		<div>
 			<Label
-				htmlFor="email"
+				htmlFor="id"
 				{...labelProps}
 				className={`text-[14px] font-normal leading-[22px] text-[#C1C1C1] ${labelProps?.className ?? ""}`}>
 				{labelText}
@@ -51,3 +51,4 @@ function SignInField({
 }
 
 export default SignInField
+

@@ -74,7 +74,7 @@ export const verifyEmail = async (
 ): Promise<VerifyEmailResponse> => {
   return actionHandler<VerifyEmailResponse> ({
     name: "verifyEmail",
-		url: "/v1/auth/verify/nickname",
+		url: "/v1/auth/verify/email",
     options:{
 			method: "POST",
 			headers: {
