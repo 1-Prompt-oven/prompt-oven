@@ -18,11 +18,12 @@ export default function ProfileBanner({ memberBanner }: ProfileBannerProps) {
 			<div className="absolute inset-0 z-[2] overflow-hidden rounded-lg bg-[#1b1b1b]">
 				{memberBanner ? (
 					<Image
-						src={memberBanner}
+						src={decodeURIComponent(memberBanner)}
 						sizes="(max-width: 768px) 100vw, 1400px"
 						fill
 						className="rounded-lg"
 						priority
+						unoptimized
 						alt="Banner"
 					/>
 				) : null}
