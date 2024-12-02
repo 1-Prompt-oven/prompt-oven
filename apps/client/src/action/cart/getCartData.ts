@@ -19,7 +19,7 @@ export async function getCartData(
 				method: "GET",
 				headers: {
 					"Content-Type": "application/json",
-					Authorization: `Bearer eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAtNTEyIn0.rIDp9pRwV8IWnlIZLdRQtoRTLyQ47RFoqYm-8U2cAaRAUJJw3c-oR5auhWow3-5YJVirLQAhMUygSWDihWCgaBrFVV7ZXn5usTuluYOz5LydUUvT9NfXIzeCY2xWTieZolE_5Cj8K0_vdwsNkxMdoO60V3qROF432TypZT42Vnbdghn1aebT629RrFcpzSzdt6nFcv4CoJLmZCOxs5cc24VsnOzVUsb66gL_m7Y3dGXh4CpPKBIaNegkvUjtKsWaeBqsLa6grM-GJfqk7P8mF5Wy2eYJQbUZR8Eg2I9x_-nxYZuBq6QINRVPgxWO59GQ5T52YiakTR1gONhb3BC6sQ.WFy4UPMPbmudXLve.DPu86u_k7bAmux6mDJsZKC9KKsR2jKxVTijmGMwIwiBROA3vinXqIE5zJlZRoaH9-z2ysh6Z_ZfuvOOS0vIPPNgravpbsuiuPE7L3BpfsqU61Z78nuJom1UrQtL10ksxA8JiCjmdtEYEVWACcIH17A1E7VEOUpHqdPRx5i2A-3Dyyj5z3iZ7g1B4in2nX0Ag9T-_2Bu5UNp4UTwA8GuQFrGLSM-xAgZJw1Dz7jfHH_Ye00a-Ya2FBK0w9GKBVuo6sX2LhyFzmaqWdickiFoRx1Mz1zGWUBc8FStw-y3nufTJZx5XGT1uag.J5qYLix7M9OouEna_ic88Q`,
+					Authorization: `Bearer `,
 				},
 			},
 		)
@@ -37,7 +37,7 @@ export async function getCartData(
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAtNTEyIn0.rIDp9pRwV8IWnlIZLdRQtoRTLyQ47RFoqYm-8U2cAaRAUJJw3c-oR5auhWow3-5YJVirLQAhMUygSWDihWCgaBrFVV7ZXn5usTuluYOz5LydUUvT9NfXIzeCY2xWTieZolE_5Cj8K0_vdwsNkxMdoO60V3qROF432TypZT42Vnbdghn1aebT629RrFcpzSzdt6nFcv4CoJLmZCOxs5cc24VsnOzVUsb66gL_m7Y3dGXh4CpPKBIaNegkvUjtKsWaeBqsLa6grM-GJfqk7P8mF5Wy2eYJQbUZR8Eg2I9x_-nxYZuBq6QINRVPgxWO59GQ5T52YiakTR1gONhb3BC6sQ.WFy4UPMPbmudXLve.DPu86u_k7bAmux6mDJsZKC9KKsR2jKxVTijmGMwIwiBROA3vinXqIE5zJlZRoaH9-z2ysh6Z_ZfuvOOS0vIPPNgravpbsuiuPE7L3BpfsqU61Z78nuJom1UrQtL10ksxA8JiCjmdtEYEVWACcIH17A1E7VEOUpHqdPRx5i2A-3Dyyj5z3iZ7g1B4in2nX0Ag9T-_2Bu5UNp4UTwA8GuQFrGLSM-xAgZJw1Dz7jfHH_Ye00a-Ya2FBK0w9GKBVuo6sX2LhyFzmaqWdickiFoRx1Mz1zGWUBc8FStw-y3nufTJZx5XGT1uag.J5qYLix7M9OouEna_ic88Q`,
+						Authorization: `Bearer `,
 					},
 					next: { revalidate: 1800 },
 				},
@@ -64,7 +64,7 @@ export async function getCartData(
 					method: "GET",
 					headers: {
 						"Content-Type": "application/json",
-						Authorization: `Bearer eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAtNTEyIn0.rIDp9pRwV8IWnlIZLdRQtoRTLyQ47RFoqYm-8U2cAaRAUJJw3c-oR5auhWow3-5YJVirLQAhMUygSWDihWCgaBrFVV7ZXn5usTuluYOz5LydUUvT9NfXIzeCY2xWTieZolE_5Cj8K0_vdwsNkxMdoO60V3qROF432TypZT42Vnbdghn1aebT629RrFcpzSzdt6nFcv4CoJLmZCOxs5cc24VsnOzVUsb66gL_m7Y3dGXh4CpPKBIaNegkvUjtKsWaeBqsLa6grM-GJfqk7P8mF5Wy2eYJQbUZR8Eg2I9x_-nxYZuBq6QINRVPgxWO59GQ5T52YiakTR1gONhb3BC6sQ.WFy4UPMPbmudXLve.DPu86u_k7bAmux6mDJsZKC9KKsR2jKxVTijmGMwIwiBROA3vinXqIE5zJlZRoaH9-z2ysh6Z_ZfuvOOS0vIPPNgravpbsuiuPE7L3BpfsqU61Z78nuJom1UrQtL10ksxA8JiCjmdtEYEVWACcIH17A1E7VEOUpHqdPRx5i2A-3Dyyj5z3iZ7g1B4in2nX0Ag9T-_2Bu5UNp4UTwA8GuQFrGLSM-xAgZJw1Dz7jfHH_Ye00a-Ya2FBK0w9GKBVuo6sX2LhyFzmaqWdickiFoRx1Mz1zGWUBc8FStw-y3nufTJZx5XGT1uag.J5qYLix7M9OouEna_ic88Q`,
+						Authorization: `Bearer `,
 					},
 					next: { revalidate: 86400 },
 				},
@@ -156,7 +156,7 @@ export const cartCheckUpdate = async (
 		method: "PUT",
 		headers: {
 			"Content-Type": "application/json",
-			Authorization: `Bearer eyJjdHkiOiJKV1QiLCJlbmMiOiJBMjU2R0NNIiwiYWxnIjoiUlNBLU9BRVAtNTEyIn0.rIDp9pRwV8IWnlIZLdRQtoRTLyQ47RFoqYm-8U2cAaRAUJJw3c-oR5auhWow3-5YJVirLQAhMUygSWDihWCgaBrFVV7ZXn5usTuluYOz5LydUUvT9NfXIzeCY2xWTieZolE_5Cj8K0_vdwsNkxMdoO60V3qROF432TypZT42Vnbdghn1aebT629RrFcpzSzdt6nFcv4CoJLmZCOxs5cc24VsnOzVUsb66gL_m7Y3dGXh4CpPKBIaNegkvUjtKsWaeBqsLa6grM-GJfqk7P8mF5Wy2eYJQbUZR8Eg2I9x_-nxYZuBq6QINRVPgxWO59GQ5T52YiakTR1gONhb3BC6sQ.WFy4UPMPbmudXLve.DPu86u_k7bAmux6mDJsZKC9KKsR2jKxVTijmGMwIwiBROA3vinXqIE5zJlZRoaH9-z2ysh6Z_ZfuvOOS0vIPPNgravpbsuiuPE7L3BpfsqU61Z78nuJom1UrQtL10ksxA8JiCjmdtEYEVWACcIH17A1E7VEOUpHqdPRx5i2A-3Dyyj5z3iZ7g1B4in2nX0Ag9T-_2Bu5UNp4UTwA8GuQFrGLSM-xAgZJw1Dz7jfHH_Ye00a-Ya2FBK0w9GKBVuo6sX2LhyFzmaqWdickiFoRx1Mz1zGWUBc8FStw-y3nufTJZx5XGT1uag.J5qYLix7M9OouEna_ic88Q`,
+			Authorization: `Bearer `,
 		},
 		body: JSON.stringify({
 			cartId: item.id,
