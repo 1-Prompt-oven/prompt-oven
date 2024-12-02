@@ -5,27 +5,42 @@ module.exports = {
 }
 
 const nextConfig = {
-	
-	serverActions: {
-		allowedOrigins: [
-			"api.promptoven.shop",
-			"admin.promptoven.shop",
-			"localhost",
-			"www.promptoven.shop",
+	experimental: {
+		serverActions: {
+			bodySizeLimit: "6mb",
+			allowedOrigins: [
+				"api.promptoven.shop",
+				"admin.promptoven.shop",
+				"localhost",
+				"www.promptoven.shop",
+				"promptoven.shop",
+				"nextjs_client",
+				"nextjs_admin",
+				"api_backend",
+			],
+			allowedForwardedHosts: [
+				"api.promptoven.shop",
+				"admin.promptoven.shop",
+				"localhost",
+				"www.promptoven.shop",
+				"promptoven.shop",
+				"nextjs_client",
+				"nextjs_admin",
+				"api_backend",
+			],
+		},
+	},
+	images: {
+		domains: [
+			"promptoven.s3.ap-northeast-2.amazonaws.com",
 			"promptoven.shop",
-			"nextjs_client",
-			"nextjs_admin",
-			"api_backend",
+			"www.promptoven.shop",
 		],
-		allowedForwardedHosts: [
-			"api.promptoven.shop",
-			"admin.promptoven.shop",
-			"localhost",
-			"www.promptoven.shop",
-			"promptoven.shop",
-			"nextjs_client",
-			"nextjs_admin",
-			"api_backend",
+		remotePatterns: [
+			{
+				hostname: "promptoven.s3.ap-northeast-2.amazonaws.com",
+
+			},
 		],
 	},
 }
