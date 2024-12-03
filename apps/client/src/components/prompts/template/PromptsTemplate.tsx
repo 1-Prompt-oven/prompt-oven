@@ -1,11 +1,16 @@
 import type { PromptsType } from "@/types/prompts/promptsType"
+import type { CategoryType } from "@/types/prompts/categoryType"
 import PromptsContainer from "../organism/PromptsContainer"
 
 interface PromptsTemplateProps {
 	promptList: PromptsType[]
+	categoryList: CategoryType[]
 }
 
-export default function PromptsTemplate({ promptList }: PromptsTemplateProps) {
+export default function PromptsTemplate({
+	promptList,
+	categoryList,
+}: PromptsTemplateProps) {
 	const handleFilter = async (filterFormData: FormData) => {
 		"use server"
 
@@ -32,8 +37,11 @@ export default function PromptsTemplate({ promptList }: PromptsTemplateProps) {
 
 	return (
 		<section className="mx-auto mt-24 max-w-screen-xl">
-			{/* <PromptTop promptTop={promptTop}/> */}
-			<PromptsContainer promptList={promptList} handleFilter={handleFilter} />
+			<PromptsContainer
+				promptList={promptList}
+				categoryList={categoryList}
+				handleFilter={handleFilter}
+			/>
 		</section>
 	)
 }

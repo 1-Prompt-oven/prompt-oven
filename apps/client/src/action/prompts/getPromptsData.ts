@@ -1,36 +1,27 @@
 "use server"
 
-import { PromptsListDatas, PromptsTopDatas } from "@/dummy/prompts/promptsDatas"
-import type { PromptsType, PromptTopType } from "@/types/prompts/promptsType"
-
-export async function getPromptTop(): Promise<PromptTopType[]> {
-	const res: PromptTopType[] = await PromptsTopDatas
-	// const res: ProfileMemberInfoType = await profileMemberInfoUndefineData
-
-	//     const res = await fetch(`${process.env.API_BASE_URL}/v1/profile`, {
-	//       method: 'GET',
-	//       headers: {
-	//         'Content-Type': 'application/json',
-	//         Authorization: `Bearer ${auth.accessToken}`,
-	//       },
-	//       cache: 'no-cache',
-	//     })
-
-	return res
-}
+import { isValidResponse } from "@/lib/api/validation"
+import type { PromptsType } from "@/types/prompts/promptsType"
 
 export async function getPromptList(): Promise<PromptsType[]> {
-	const res: PromptsType[] = await PromptsListDatas
-	// const res: ProfileMemberInfoType = await profileMemberInfoUndefineData
+	//const res: PromptsType[] = await PromptsListDatas
+	//const headers = await getAuthHeaders()
 
-	//     const res = await fetch(`${process.env.API_BASE_URL}/v1/profile`, {
-	//       method: 'GET',
-	//       headers: {
-	//         'Content-Type': 'application/json',
-	//         Authorization: `Bearer ${auth.accessToken}`,
-	//       },
-	//       cache: 'no-cache',
-	//     })
+	const res = await fetch(`${process.env.API_BASE_URL}/v1/product/list`, {
+		method: "GET",
+		// headers,
+		// next: { revalidate: 3600 },
+	})
 
-	return res
+	if (!res.ok) {
+		throw new Error("Failed to fetch product list data")
+	}
+
+	const rawData: unknown = await res.json()
+
+	if (!isValidResponse<PromptsType[]>(rawData)) {
+		throw new Error("Invalid response format")
+	}
+
+	return rawData.result
 }

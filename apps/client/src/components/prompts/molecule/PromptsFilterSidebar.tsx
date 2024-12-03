@@ -1,14 +1,25 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import type { CategoryType } from "@/types/prompts/categoryType"
 import { PromptsFilterCategory } from "../atom/PromptsFilterCategory"
 import { PromptsFilterPrice } from "../atom/PromptsFilterPrice"
 import { PromptsFilterSearchInput } from "../atom/PromptsFilterSearchInput"
 import PromptSidebarButtonGroup from "../atom/PromptSidebarButtonGroup"
 import { PromptsFilterSection } from "./PromptsFilterSection"
 
-export default function PromptsFilterSidebar() {
+interface PromptFilterSidebarProps {
+	categoryList: CategoryType[]
+}
+
+export default function PromptsFilterSidebar({
+	categoryList,
+}: PromptFilterSidebarProps) {
 	const [sidebarPosition, setSidebarPosition] = useState(0)
+
+	const [topCategoryUUID, setTopCategoryUUID] = useState<string>("")
+	const [selectedValue, setSelectedValue] = useState<string>("")
+
 	const [filters, setFilters] = useState({
 		search: "",
 		topCategoryUuid: "",
@@ -27,6 +38,8 @@ export default function PromptsFilterSidebar() {
 			minPrice: "",
 			maxPrice: "",
 		})
+		setTopCategoryUUID("")
+		setSelectedValue("")
 	}
 
 	useEffect(() => {
@@ -59,11 +72,11 @@ export default function PromptsFilterSidebar() {
 
 			<PromptsFilterSection title="Category">
 				<PromptsFilterCategory
-					value={filters.topCategoryUuid}
-					name="topCategoryUuid"
-					onChange={(value) =>
-						setFilters({ ...filters, topCategoryUuid: value })
-					}
+					categoryList={categoryList}
+					topCategoryUUID={topCategoryUUID}
+					selectedValue={selectedValue}
+					setTopCategoryUUID={setTopCategoryUUID}
+					setSelectedValue={setSelectedValue}
 				/>
 			</PromptsFilterSection>
 
