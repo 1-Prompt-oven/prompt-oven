@@ -8,5 +8,6 @@ export const routes = {
 	promptDetail: "/prompt-detail",
 	prompts: "/prompts",
 	purchase: "/purchase",
-	specialExhibition: "/special-exhibition"
+	specialExhibition: "/special-exhibition",
+	settings: "/settings"
 }

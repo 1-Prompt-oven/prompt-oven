@@ -1,6 +1,6 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
+import { revalidatePath, revalidateTag } from "next/cache"
 import type { ProfileModifyType } from "@/types/profile/profileTypes"
 import { initializeHeaders } from "@/lib/api/headers"
 import { getAccessToken } from "@/lib/api/sessionExtractor"
@@ -18,6 +18,8 @@ export async function modifyProfileData(data: ProfileModifyType) {
 		throw new Error('Failed to modify profile data')
 	}
 	// this will revalidate the profile page
+	revalidateTag('profile')
 	revalidatePath(`/profile/${data.nickname}`)
+	revalidatePath(`/profile/modify/${data.memberUUID}`)
 
 }

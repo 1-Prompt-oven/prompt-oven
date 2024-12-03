@@ -1,38 +1,35 @@
 /* eslint-disable no-console -- 개발 중 디버깅을 위해 console 사용을 허용 */
 "use server"
-import { getServerSession } from "next-auth"
-import { authOptions } from "@/app/api/auth/[...nextauth]/authOption"
+import { getAuthHeaders } from "@/lib/api/headers"
 import type { CartItemType } from "@/types/cart/cartTypes"
 import type {
 	CommonResType,
 	CartItemApiResponseType,
 } from "@/types/common/responseType"
 import type { PromptsType } from "@/types/prompts/promptsType"
+import { getMemberUUID } from "@/lib/api/sessionExtractor"
 
 export async function getCartData(): Promise<CartItemType[]> {
 	"use server"
-	const session = await getServerSession(authOptions)
-	if (!session) {
+	const headers = await getAuthHeaders()
+	const memberUUID = await getMemberUUID()
+	if (!memberUUID) {
 		throw new Error("로그인이 필요합니다")
 	}
-	const token = session.user?.accesstoken
-	const memberUUID = session.user?.memberUUID
 	try {
 		// 장바구니 데이터 가져오기
 		const response = await fetch(
 			`${process.env.API_BASE_URL}/v1/member/cart/list/${memberUUID}`,
 			{
 				method: "GET",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
+				headers,
 			},
 		)
+
 		const data: CommonResType<CartItemApiResponseType[]> = await response.json()
 		const cartItems = data.result
-		// 상품 상세 데이터 요청
-		if (!cartItems || cartItems.length === 0) {
+		// 상품 상세 데이터 요청1
+		if (cartItems.length === 0) {
 			return []
 		}
 		const productDetails = await fetchProductDetails(cartItems)
@@ -129,20 +126,13 @@ function mapCartData(
 
 export async function deleteCartItem(cartId: number): Promise<void> {
 	"use server"
-	const session = await getServerSession(authOptions)
-	if (!session) {
-		throw new Error("로그인이 필요합니다")
-	}
-	const token = session.user?.accesstoken
+	const headers = await getAuthHeaders()
 	try {
 		const response = await fetch(
 			`${process.env.API_BASE_URL}/v1/member/cart/${cartId}`,
 			{
 				method: "DELETE",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${token}`,
-				},
+				headers,
 			},
 		)
 
@@ -174,17 +164,10 @@ export const cartCheckUpdate = async (
 	selected: boolean,
 ): Promise<boolean> => {
 	"use server"
-	const session = await getServerSession(authOptions)
-	if (!session) {
-		throw new Error("로그인이 필요합니다")
-	}
-	const token = session.user?.accesstoken
+	const headers = await getAuthHeaders()
 	const res = await fetch(`${process.env.API_BASE_URL}/v1/member/cart`, {
 		method: "PUT",
-		headers: {
-			"Content-Type": "application/json",
-			Authorization: `Bearer ${token}`,
-		},
+		headers,
 		body: JSON.stringify({
 			cartId: item.id,
 			selected,
