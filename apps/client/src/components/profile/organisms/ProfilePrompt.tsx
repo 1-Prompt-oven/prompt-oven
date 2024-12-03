@@ -1,10 +1,10 @@
-import type { PromptsType } from "@/types/prompts/promptsType"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 import ProfileFilterSidebar from "./ProfileFilterSidebar"
 import ProfileItemFilter from "./ProfileItemFilter"
 import ProfilePromptList from "./ProfilePromptList"
 
 interface ProfilePromptProps {
-	listData: PromptsType[]
+	listData: PromptItemType[]
 	handleFilter: (formData: FormData) => void // Ensure this is correctly typed
 }
 
