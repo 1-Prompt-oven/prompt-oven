@@ -21,3 +21,4 @@ function SearchForm({ className }: React.ComponentProps<"form">) {
 }
 
 export default SearchForm
+

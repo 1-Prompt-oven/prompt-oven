@@ -1,10 +1,10 @@
 import type { PromptsType } from "../prompts/promptsType"
 
-export interface CommonResType<T = Record<string, never>> {
-	httpStatus: CommonResHttpStatusType
+export interface CommonResType<T> {
+	httpStatus: string
 	isSuccess: boolean
 	message: string
-	code: number
+	code?: number
 	result: T
 }
 export interface CommonResHttpStatusType {
@@ -16,13 +16,14 @@ export interface CommonResHttpStatusType {
 	is3xxRedirection: boolean
 }
 
-export interface ProductApiResponseType {
+export interface PromptApiResponseType {
 	productList: PromptsType[]
 	nextCursorId: string
 	hasNext: boolean
 }
 
 export interface CartItemApiResponseType {
+	id: number
 	memberUuid: string
 	productUuid: string
 	selected: boolean

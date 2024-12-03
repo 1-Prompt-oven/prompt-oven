@@ -1,10 +1,10 @@
 "use server"
 
-import { profileListData } from "@/dummy/profile/infoAndListDatas"
-import { getAuthHeaders } from "@/lib/api/headers"
-import { isValidResponse } from "@/lib/api/validation"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
-import type { PromptItemType } from "@/types/prompts/promptsType"
+import type { PromptsType } from "@/types/prompts/promptsType"
+import { isValidResponse } from "@/lib/api/validation"
+import { getAuthHeaders } from "@/lib/api/headers"
+import { profileListData } from "@/dummy/profile/infoAndListDatas"
 
 export async function getProfileMemberInfo(
 	id: string,
@@ -74,7 +74,7 @@ export async function getProfileMemberInfoByUuid(
 }
 
 // 프로필에서 보일 상품 목록 데이터 : product service에서 가져와야 함
-export async function getProfileList(): Promise<PromptItemType[]> {
-	const res: PromptItemType[] = await profileListData
+export async function getProfileList(): Promise<PromptsType[]> {
+	const res: PromptsType[] = await profileListData
 	return res
 }

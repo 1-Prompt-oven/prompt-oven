@@ -1,9 +1,9 @@
-import type { PromptItemType } from "@/types/prompts/promptsType"
-import FavoriteCountBar from "../molecule/FavoriteCountBar"
+import type { PromptsType } from "@/types/prompts/promptsType"
 import FavoriteList from "../molecule/FavoriteList"
+import FavoriteCountBar from "../molecule/FavoriteCountBar"
 
 interface FavoriteContainerProps {
-	favoriteList: PromptItemType[]
+	favoriteList: PromptsType[]
 }
 
 export default function FavoriteContainer({
@@ -18,3 +18,4 @@ export default function FavoriteContainer({
 		</div>
 	)
 }
+

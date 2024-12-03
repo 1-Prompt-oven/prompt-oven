@@ -1,8 +1,8 @@
+import type { PromptsType } from "@/types/prompts/promptsType"
 import PromptCardAccount from "@/components/common/organism/PromptCardAccount"
-import type { PromptItemType } from "@/types/prompts/promptsType"
 
 interface FavoriteListProps {
-	favoriteList: PromptItemType[]
+	favoriteList: PromptsType[]
 }
 
 export default function FavoriteList({ favoriteList }: FavoriteListProps) {
@@ -18,3 +18,4 @@ export default function FavoriteList({ favoriteList }: FavoriteListProps) {
 		</div>
 	)
 }
+

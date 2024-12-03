@@ -18,8 +18,8 @@ export async function modifyProfileData(data: ProfileModifyType) {
 		throw new Error("Failed to modify profile data")
 	}
 	// this will revalidate the profile page
-	revalidateTag('profile')
+	revalidateTag("profile")
 	revalidatePath(`/profile/${data.nickname}`)
 	revalidatePath(`/profile/modify/${data.memberUUID}`)
-
 }
+
