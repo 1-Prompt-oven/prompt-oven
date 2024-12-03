@@ -2,15 +2,17 @@
 
 import { isValidResponse } from "@/lib/api/validation"
 import { createQueryParamString } from "@/lib/query"
-import type { PromptsType } from "@/types/prompts/promptsType"
+import type { PromptItemType, PromptsType } from "@/types/prompts/promptsType"
 
 interface RawData {
 	result: {
-		productList: PromptsType[]
+		productList: PromptItemType[]
+		nextCursorId: string
+		hasNext: boolean
 	}
 }
 
-export async function getPromptList(): Promise<PromptsType[]> {
+export async function getPromptList(): Promise<PromptsType> {
 	"use server"
 	const res = await fetch(`${process.env.API_BASE_URL}/v1/product/list`, {
 		method: "GET",
@@ -26,10 +28,12 @@ export async function getPromptList(): Promise<PromptsType[]> {
 		throw new Error("Invalid response format")
 	}
 
-	return rawData.result.productList
+	return rawData.result
 }
 
-export async function getPromptListByCategory(categoryFormData: FormData) {
+export async function getPromptListByCategory(
+	categoryFormData: FormData,
+): Promise<PromptsType> {
 	"use server"
 	categoryFormData.set("enable", "on") //프롬프트 패이지는 활성화된 상품만 보여주도록 한다.
 
@@ -67,5 +71,5 @@ export async function getPromptListByCategory(categoryFormData: FormData) {
 		throw new Error("Invalid response format")
 	}
 
-	return rawData.result.productList
+	return rawData.result
 }

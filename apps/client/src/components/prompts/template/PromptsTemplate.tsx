@@ -1,9 +1,9 @@
-import type { PromptsType } from "@/types/prompts/promptsType"
 import type { CategoryType } from "@/types/prompts/categoryType"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 import PromptsContainer from "../organism/PromptsContainer"
 
 interface PromptsTemplateProps {
-	promptList: PromptsType[]
+	promptList: PromptItemType[]
 	categoryList: CategoryType[]
 }
 

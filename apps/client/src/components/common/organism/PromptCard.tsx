@@ -1,18 +1,18 @@
-import Image from "next/image"
 import Link from "next/link"
+import Image from "next/image"
 import { Badge } from "@repo/ui/badge"
 import { Button } from "@repo/ui/button"
 import { Card } from "@repo/ui/card"
 import { ShoppingCart } from "@repo/ui/lucide"
 import StarAnimation from "@repo/ui/star-animation"
 import { PromptCardDateFormatted, PromptIsNew } from "@/lib/utils"
-import type { PromptsType } from "@/types/prompts/promptsType"
-import PromptName from "../molecule/PromptName"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 import PromptLLMId from "../molecule/PromptLLMId"
+import PromptName from "../molecule/PromptName"
 import PromptPrice from "../molecule/PromptPrice"
 
 interface PromptCardProps {
-	productInfo: PromptsType
+	productInfo: PromptItemType
 }
 
 export default function PromptCard({ productInfo }: PromptCardProps) {
@@ -24,7 +24,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 		<li className="flex justify-center">
 			<Link href="/prompt-detail/1">
 				<Card className="relative flex w-[220px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
-					<div className="relative h-[260px]">
+					<div className="relative h-[260px] bg-white">
 						{/* 잘못된 이미지에 대한 처리 추가 */}
 						{hasHttp ? (
 							<Image

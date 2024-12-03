@@ -1,8 +1,8 @@
-import type { PromptsType } from "@/types/prompts/promptsType"
 import PromptCard from "@/components/common/organism/PromptCard"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 
 interface PromptsListProps {
-	promptList: PromptsType[]
+	promptList: PromptItemType[]
 }
 
 export default function PromptList({ promptList }: PromptsListProps) {

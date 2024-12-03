@@ -1,6 +1,6 @@
-import type { PromptsType } from "@/types/prompts/promptsType"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 
-export const PromptsListDatas: PromptsType[] = [
+export const PromptsListDatas: PromptItemType[] = [
 	{
 		productUuid: "PR-4396652f",
 		productName: "Dreamworks Style 3D Animations5_24800",

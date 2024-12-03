@@ -1,5 +1,5 @@
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
-import type { PromptsType } from "@/types/prompts/promptsType"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 
 //프로필 멤버 정보 - undefined 정보 포함
 export const profileMemberInfoUndefineData: ProfileMemberInfoType = {
@@ -30,7 +30,7 @@ export const profileMemberInfoData: ProfileMemberInfoType = {
 	sales: 4121,
 }
 
-export const profileListData: PromptsType[] = [
+export const profileListData: PromptItemType[] = [
 	{
 		productUuid: "PR-4396652f",
 		productName: "Dreamworks Style 3D Animations5_24800",
