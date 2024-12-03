@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import debounce from "lodash/debounce"
 import { useRouter } from "next/navigation"
 import { useSearchActions } from "@/action/search/useSearchResults"
@@ -16,7 +16,7 @@ function SearchOrganism() {
 
 	const debouncedFetchAndSetSearchResults = debounce((searchQuery: string) => {
 		setIsLoading(true)
-		fetchAndSetSearchResults(searchQuery)
+		fetchAndSetSearchResults(searchQuery).then()
 		setIsLoading(false)
 	}, 300)
 
@@ -27,7 +27,7 @@ function SearchOrganism() {
 		} else {
 			setOpen(false)
 		}
-	}, [query])
+	}, [debouncedFetchAndSetSearchResults, query])
 
 	const handleFocus = () => setOpen(true)
 	const handleBlur = () => setTimeout(() => setOpen(false), 100)
@@ -48,7 +48,7 @@ function SearchOrganism() {
 				onBlur={handleBlur}
 				onChange={(e) => setQuery(e.target.value)}
 			/>
-			{open && query.length > 0 && (
+			{open && query.length > 0 ? (
 				<div className="absolute left-0 top-full z-10 w-full">
 					<SearchDropdown
 						creators={creators}
@@ -57,7 +57,7 @@ function SearchOrganism() {
 						isLoading={isLoading}
 					/>
 				</div>
-			)}
+			) : null}
 		</form>
 	)
 }

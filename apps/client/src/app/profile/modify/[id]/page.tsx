@@ -1,6 +1,6 @@
+import { redirect } from "next/navigation"
 import { getProfileMemberInfo } from "@/action/profile/getProfileData"
 import ProfileModifyTemplate from "@/components/profile-modify/templates/ProfileModifyTemplate"
-import { redirect } from "next/navigation"
 import { matchUser } from "@/lib/api/sessionExtractor"
 
 export default async function ProfileModify({

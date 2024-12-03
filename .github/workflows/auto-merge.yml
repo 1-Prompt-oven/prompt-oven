@@ -1,0 +1,80 @@
+name: Auto PR and Merge Dev to Main
+
+on:
+  schedule:
+    # Runs at 03:00 UTC (12:00 UTC+9)
+    - cron: '0 3 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  create-and-merge-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git fetch origin dev main
+          git diff --quiet origin/dev origin/main || echo "has_changes=true" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: repo-sync/pull-request@v2
+        id: create-pr
+        with:
+          source_branch: "dev"
+          destination_branch: "main"
+          pr_title: "chore: Auto-merge dev into main"
+          pr_body: "Automated PR to merge dev into main\nCreated by GitHub Actions at scheduled time (12:00 UTC+9)"
+          pr_label: "automated-pr,auto-merge"
+          github_token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Enable Auto-merge
+        if: steps.create-pr.outputs.pr_number
+        run: |
+          PR_NUMBER="${{ steps.create-pr.outputs.pr_number }}"
+          gh pr merge $PR_NUMBER --auto --merge
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+      - name: Wait for checks and merge
+        if: steps.create-pr.outputs.pr_number
+        run: |
+          PR_NUMBER="${{ steps.create-pr.outputs.pr_number }}"
+          
+          # Wait for CI to complete (max 15 minutes)
+          for i in {1..30}; do
+            sleep 30
+            
+            # Check PR status
+            PR_STATE=$(gh pr view $PR_NUMBER --json state --jq '.state')
+            if [ "$PR_STATE" = "MERGED" ]; then
+              echo "PR was merged successfully"
+              break
+            elif [ "$PR_STATE" = "CLOSED" ]; then
+              echo "PR was closed without merging"
+              exit 1
+            fi
+            
+            # Check CI status
+            CI_STATUS=$(gh pr view $PR_NUMBER --json statusCheckRollup --jq '.statusCheckRollup[].conclusion' | grep -v "^$")
+            if [ "$CI_STATUS" = "failure" ]; then
+              echo "CI failed, not merging PR"
+              exit 1
+            fi
+          done
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
