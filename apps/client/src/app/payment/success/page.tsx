@@ -1,6 +1,6 @@
+import { Suspense } from "react"
 import ContentWrapper from "@/components/account/template/ContentWrapper"
 import { SuccessPage } from "@/components/payment/SuccessPage"
-import { Suspense } from "react"
 
 export default function page() {
 	return (

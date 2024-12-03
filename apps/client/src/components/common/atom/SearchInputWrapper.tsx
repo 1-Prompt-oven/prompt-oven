@@ -49,7 +49,7 @@ export default function SearchInputWrapper({
 				<Search className="!h-6 !w-6 text-[#969696]" />
 			</Button>
 			{/* md 이상: 검색창 */}
-			<div className="flex hidden h-8 w-full items-center md:!block md:!flex">
+			<div className="hidden h-8 w-full items-center md:!flex">
 				<Input
 					ref={inputRef}
 					value={query}
