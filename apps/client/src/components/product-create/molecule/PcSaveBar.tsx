@@ -8,7 +8,7 @@ interface PcSaveBarProps
 	extends DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement> {
 	lastSaved?: string
 	isLastPage?: boolean
-	onSaveDraft?: () => void
+	onDraft?: () => void
 	onNext?: () => void
 	onBack?: () => void
 }
@@ -16,7 +16,7 @@ interface PcSaveBarProps
 function PcSaveBar({
 	lastSaved,
 	isLastPage,
-	onSaveDraft,
+	onDraft,
 	onNext,
 	onBack,
 	...props
@@ -46,7 +46,7 @@ function PcSaveBar({
 			{/* Action Buttons */}
 			<div className="flex items-center gap-2">
 				<PcButton
-					onClick={onSaveDraft}
+					onClick={onDraft}
 					className="bg-po-purple-50 px-4 py-2 hover:bg-po-purple-50">
 					<span className="w-20text-sm font-medium tracking-[-0.02em] text-white">
 						Save Draft

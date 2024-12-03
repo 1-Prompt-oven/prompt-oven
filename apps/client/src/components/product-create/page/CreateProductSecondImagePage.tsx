@@ -4,6 +4,8 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { z } from "zod"
+import { ThreeDots } from "react-loader-spinner"
+import type { Session } from "next-auth"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcTitle from "@/components/product-create/atom/PcTitle.tsx"
 import {
@@ -67,6 +69,7 @@ const modelVersion = [
 
 interface CreateProductSecondImagePageProps {
 	searchParams: CreateProductQueryParams
+	session: Session | null
 }
 export default function CreateProductSecondImagePage({
 	// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars -- This prop is used in the original code
@@ -168,7 +171,29 @@ export default function CreateProductSecondImagePage({
 		setCurrentImage(null)
 	}
 
-	if (loading) return <div>Loading prompt...</div>
+	if (loading)
+		return (
+			<div className="flex max-w-5xl flex-col gap-4">
+				<AccountTitleText className="w-full">
+					Create New Product
+				</AccountTitleText>
+				<div className="mt-6 flex flex-col">
+					<ThreeDots
+						visible
+						height="80"
+						width="80"
+						color="#A913F9"
+						radius="9"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+					<span className="text-xl font-medium leading-[150%] text-white">
+						Loading prompt...
+					</span>
+				</div>
+			</div>
+		)
 	if (error)
 		return (
 			<div>

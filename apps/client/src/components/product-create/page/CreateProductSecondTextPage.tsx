@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { z } from "zod"
+import type { Session } from "next-auth"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import {
 	createProductSecondSchema,
@@ -69,6 +70,7 @@ const modelVersion = [
 
 interface CreateProductSecondTextPageProps {
 	searchParams: CreateProductQueryParams
+	session: Session | null
 }
 export default function CreateProductSecondTextPage({
 	// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars -- This prop is used in the original code
