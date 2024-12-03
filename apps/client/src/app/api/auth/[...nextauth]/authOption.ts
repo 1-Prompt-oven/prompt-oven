@@ -132,7 +132,7 @@ export const authOptions: NextAuthOptions = {
 					token.error = "LoggedOut"
 				}
 			}
-			return { ...token, ...user, id: user.id?.toString() }
+			return { ...token, ...user }
 		},
 
 		async session({ session, token }) {
