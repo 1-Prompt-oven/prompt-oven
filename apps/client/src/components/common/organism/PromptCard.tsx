@@ -36,7 +36,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 						</Badge>
 						<Button
 							size="icon"
-							className="absolute bottom-[-16px] right-3 z-10 h-8 w-8 rounded-full bg-[#AD20F2] shadow-lg shadow-[#514FD7]/40 hover:bg-[#AD20F2]/90 xs:!bottom-[-18px] xs:!h-10 xs:!w-10">
+							className="absolute bottom-[-16px] right-3 z-[5] h-8 w-8 rounded-full bg-[#AD20F2] shadow-lg shadow-[#514FD7]/40 hover:bg-[#AD20F2]/90 xs:!bottom-[-18px] xs:!h-10 xs:!w-10">
 							<ShoppingCart className="h-6 w-6" />
 						</Button>
 					</div>
