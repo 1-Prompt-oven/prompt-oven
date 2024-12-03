@@ -2,10 +2,10 @@
 
 import React, { useState, useEffect } from "react"
 import type { CartItemType } from "@/types/cart/cartTypes"
-import CartItemContainer from "../organism/CartItemContainer"
-import CartCheckout from "../organism/CartCheckout"
 import { cartCheckUpdate, deleteCartItemList } from "@/action/cart/cartAction"
 import { calculateTotalPrice } from "@/action/cart/cartDataAction"
+import CartItemContainer from "../organism/CartItemContainer"
+import CartCheckout from "../organism/CartCheckout"
 
 interface CartTemplateProps {
 	initialItems: CartItemType[]
