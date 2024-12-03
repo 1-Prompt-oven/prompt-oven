@@ -12,7 +12,9 @@ function CartItemAllCheck({
 				<CheckBox onClick={() => handleSelectAll(true)} />
 				<span className="text-sm text-gray-200">Select All Items</span>
 			</div>
-			<button className="text-sm text-purple-400 hover:text-purple-300">
+			<button
+				type="button"
+				className="text-sm text-purple-400 hover:text-purple-300">
 				REMOVE
 			</button>
 		</div>
