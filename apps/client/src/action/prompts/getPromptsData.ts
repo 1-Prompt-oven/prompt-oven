@@ -3,25 +3,26 @@
 import { isValidResponse } from "@/lib/api/validation"
 import type { PromptsType } from "@/types/prompts/promptsType"
 
-export async function getPromptList(): Promise<PromptsType[]> {
-	//const res: PromptsType[] = await PromptsListDatas
-	//const headers = await getAuthHeaders()
+interface RawData {
+	result: {
+		productList: PromptsType[]
+	}
+}
 
+export async function getPromptList(): Promise<PromptsType[]> {
 	const res = await fetch(`${process.env.API_BASE_URL}/v1/product/list`, {
 		method: "GET",
-		// headers,
-		// next: { revalidate: 3600 },
 	})
 
 	if (!res.ok) {
 		throw new Error("Failed to fetch product list data")
 	}
 
-	const rawData: unknown = await res.json()
+	const rawData: RawData = await res.json() // RawData 타입으로 지정
 
-	if (!isValidResponse<PromptsType[]>(rawData)) {
+	if (!isValidResponse<RawData>(rawData)) {
 		throw new Error("Invalid response format")
 	}
 
-	return rawData.result
+	return rawData.result.productList
 }
