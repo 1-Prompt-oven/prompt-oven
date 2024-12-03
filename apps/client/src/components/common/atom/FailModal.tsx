@@ -7,7 +7,7 @@ interface FailModalProps {
 	children?: React.ReactNode // children 프로퍼티 추가
 }
 
-const FailModal: React.FC<FailModalProps> = ({ isOpen, onClose, children }) => {
+function FailModal({ isOpen, onClose, children }: FailModalProps) {
 	if (!isOpen) return null
 
 	return (

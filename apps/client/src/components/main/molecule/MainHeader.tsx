@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState, useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import Link from "next/link"
 import { Button } from "@repo/ui/button"
 import {
@@ -39,9 +39,9 @@ export default function MainHeader() {
 		}
 	}, [])
 
-	const _handleSearchClick = () => {
-		setOpen(true)
-	}
+	// const _handleSearchClick = () => {
+	// 	setOpen(true)
+	// }
 	return (
 		<header className="flex w-full justify-center bg-[#111111]">
 			<div className="relative mx-auto flex h-20 w-full max-w-[1716px] items-center justify-between px-4">
@@ -54,6 +54,7 @@ export default function MainHeader() {
 
 				{/* Search Bar */}
 				<button
+					type="button"
 					onClick={() => setOpen(!open)}
 					className="box-border hidden h-full flex-1 items-center border-x border-[#424242] px-10 md:flex">
 					<SearchInput />
