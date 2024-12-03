@@ -24,8 +24,7 @@ function CartItem({
 			/>
 			<div className="relative h-16 w-16">
 				<Image
-					// src={item.thumbnailUrl}
-					src="/img/cart/smileBandal.jpg"
+					src={item.thumbnailUrl}
 					alt={item.productName}
 					className="rounded-md object-cover"
 					fill
