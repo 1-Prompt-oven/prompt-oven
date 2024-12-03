@@ -1,10 +1,6 @@
 "use server"
 import type { CartItemType } from "@/types/cart/cartTypes"
-import type {
-	CommonResType,
-	// ProductApiResponseType,
-	// CartItemApiResponseType,
-} from "@/types/common/responseType"
+import type { CommonResType } from "@/types/common/responseType"
 // import type { PromptsType } from "@/types/prompts/promptsType"
 import { dummyCartItems } from "@/dummy/cart/cartData"
 
@@ -98,8 +94,6 @@ export async function deleteCartItem(itemId: string): Promise<void> {
 	if (!responseData.isSuccess) {
 		throw new Error("Failed to delete cart item")
 	}
-
-	return
 }
 
 export async function deleteCartItemList(itemIds: string[]): Promise<boolean> {
@@ -127,10 +121,9 @@ export const cartCheckUpdate = async (
 		},
 		body: JSON.stringify({
 			cartId: item.productUuid,
-			selected: selected,
+			selected,
 		}),
 	})
 	const responseData: CommonResType = await res.json()
-	const isSuccess = responseData.isSuccess
-	return isSuccess
+	return responseData.isSuccess
 }

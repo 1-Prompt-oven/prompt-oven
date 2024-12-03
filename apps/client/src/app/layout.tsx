@@ -1,6 +1,5 @@
 import React from "react"
 import { getServerSession } from "next-auth"
-import { authOptions } from "./api/auth/[...nextauth]/authOption"
 import "./globals.css"
 import "@repo/ui/styles.css"
 import type { Metadata } from "next"
@@ -8,6 +7,7 @@ import { roboto, sora } from "@/app/fonts.ts"
 import MainHeader from "@/components/common/molecule/MainHeader.tsx"
 import { SideMenuToggleStoreProvider } from "@/provider/account/sideMenuStoreProvider.tsx"
 import AuthContextProvider from "@/provider/AuthContextProvider"
+import { authOptions } from "./api/auth/[...nextauth]/authOption"
 
 export const metadata: Metadata = {
 	title: "Prompt Oven",

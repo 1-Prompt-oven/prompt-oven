@@ -29,7 +29,7 @@ export const PromptIsNew = (dateString: string) => {
 
 //Follower Format
 export const formatFollowers = (count: number | undefined) => {
-	if (count === undefined) return '0'
+	if (count === undefined) return "0"
 	if (count >= 1000) {
 		return `${(count / 1000).toFixed(1)}K`
 	}
@@ -37,5 +37,5 @@ export const formatFollowers = (count: number | undefined) => {
 }
 
 export const formatDate = (dateString: string) => {
-	return dateString.split('T')[0]
+	return dateString.split("T")[0]
 }

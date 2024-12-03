@@ -6,20 +6,20 @@ import { Card } from "@repo/ui/card"
 import { ShoppingCart } from "@repo/ui/lucide"
 import StarAnimation from "@repo/ui/star-animation"
 import { PromptCardDateFormatted, PromptIsNew } from "@/lib/utils"
-import type { PromptsType } from "@/types/prompts/promptsType"
-import PromptName from "../molecule/PromptName"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 import PromptLLMId from "../molecule/PromptLLMId"
+import PromptName from "../molecule/PromptName"
 import PromptPrice from "../molecule/PromptPrice"
 
 interface PromptCardAccountProps {
-	productInfo: PromptsType
+	productInfo: PromptItemType
 }
 
 export default function PromptCardAccount({
 	productInfo,
 }: PromptCardAccountProps) {
-	const formattedDate = PromptCardDateFormatted(productInfo.productRegistDate)
-	const isNew = PromptIsNew(productInfo.productRegistDate)
+	const formattedDate = PromptCardDateFormatted(productInfo.createdAt)
+	const isNew = PromptIsNew(productInfo.createdAt)
 
 	return (
 		<li className="flex justify-center">
@@ -45,7 +45,7 @@ export default function PromptCardAccount({
 
 					<div className="relative flex h-[110px] flex-col gap-1 bg-[#3d2d50] px-3 pt-1">
 						<StarAnimation
-							rateData={productInfo.productStar}
+							rateData={productInfo.reviewCount}
 							noAnimation={false}
 						/>
 

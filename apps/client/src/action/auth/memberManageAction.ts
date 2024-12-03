@@ -34,9 +34,7 @@ export const registerAuthMember = async (
 	});
 };
 
-export const logoutAuthMember = async (
-  data: LogoutRequest
-): Promise<LogoutResponse> => {
+export const logoutAuthMember = async (data: LogoutRequest): Promise<LogoutResponse> => {
   return actionHandler<LogoutResponse>({
     name: "logoutAuthMember",
     url: "/v1/auth/logout",
@@ -49,8 +47,13 @@ export const logoutAuthMember = async (
       },
       cache: "no-cache",
     },
+  }).then((response) => {
+    return response;
+  }).catch((error) => {
+    throw error;
   });
 };
+
 
 export const verifyNickname = async (
   data: VerifyNicknameRequest
@@ -74,7 +77,7 @@ export const verifyEmail = async (
 ): Promise<VerifyEmailResponse> => {
   return actionHandler<VerifyEmailResponse> ({
     name: "verifyEmail",
-		url: "/v1/auth/verify/nickname",
+		url: "/v1/auth/verify/email",
     options:{
 			method: "POST",
 			headers: {
