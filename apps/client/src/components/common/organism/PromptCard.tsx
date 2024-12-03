@@ -18,19 +18,23 @@ interface PromptCardProps {
 export default function PromptCard({ productInfo }: PromptCardProps) {
 	const formattedDate = PromptCardDateFormatted(productInfo.createdAt)
 	const isNew = PromptIsNew(productInfo.createdAt)
+	const hasHttp = productInfo.thumbnailUrl.includes("http") //잘못된 이미지에 대한 처리 추가
 
 	return (
 		<li className="flex justify-center">
 			<Link href="/prompt-detail/1">
 				<Card className="relative flex w-[220px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
 					<div className="relative h-[260px]">
-						<Image
-							src={productInfo.thumbnailUrl}
-							sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
-							fill
-							priority
-							alt="Cyberpunk character"
-						/>
+						{/* 잘못된 이미지에 대한 처리 추가 */}
+						{hasHttp ? (
+							<Image
+								src={productInfo.thumbnailUrl}
+								sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
+								fill
+								priority
+								alt="Cyberpunk character"
+							/>
+						) : null}
 						<Badge className="absolute left-4 top-4 border-0 bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] font-bold hover:from-[#A913F9] hover:to-[#3F5EFB]">
 							{isNew ? "NEW" : formattedDate}
 						</Badge>
