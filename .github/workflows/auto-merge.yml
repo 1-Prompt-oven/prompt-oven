@@ -16,49 +16,65 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Required for comparing branches
+          fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
+      
+      - name: Configure Git
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           
       - name: Check for changes
         id: check_changes
         run: |
+          git fetch origin dev main
           git diff --quiet origin/dev origin/main || echo "has_changes=true" >> $GITHUB_OUTPUT
 
       - name: Create Pull Request
         if: steps.check_changes.outputs.has_changes == 'true'
+        uses: repo-sync/pull-request@v2
         id: create-pr
-        uses: peter-evans/create-pull-request@v6
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          branch: dev
-          base: main
-          title: 'chore: Auto-merge dev into main'
-          body: |
-            Automated PR to merge dev into main
-            Created by GitHub Actions at scheduled time (12:00 UTC+9)
-          labels: |
-            automated-pr
-            auto-merge
+          source_branch: "dev"
+          destination_branch: "main"
+          pr_title: "chore: Auto-merge dev into main"
+          pr_body: "Automated PR to merge dev into main\nCreated by GitHub Actions at scheduled time (12:00 UTC+9)"
+          pr_label: "automated-pr,auto-merge"
+          github_token: ${{ secrets.PAT_TOKEN }}
 
-      - name: Auto-merge if CI passes
-        if: steps.create-pr.outputs.pull-request-number
+      - name: Enable Auto-merge
+        if: steps.create-pr.outputs.pr_number
         run: |
-          PR_NUMBER="${{ steps.create-pr.outputs.pull-request-number }}"
+          PR_NUMBER="${{ steps.create-pr.outputs.pr_number }}"
+          gh pr merge $PR_NUMBER --auto --merge
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
+
+      - name: Wait for checks and merge
+        if: steps.create-pr.outputs.pr_number
+        run: |
+          PR_NUMBER="${{ steps.create-pr.outputs.pr_number }}"
           
           # Wait for CI to complete (max 15 minutes)
           for i in {1..30}; do
             sleep 30
             
+            # Check PR status
+            PR_STATE=$(gh pr view $PR_NUMBER --json state --jq '.state')
+            if [ "$PR_STATE" = "MERGED" ]; then
+              echo "PR was merged successfully"
+              break
+            elif [ "$PR_STATE" = "CLOSED" ]; then
+              echo "PR was closed without merging"
+              exit 1
+            fi
+            
             # Check CI status
             CI_STATUS=$(gh pr view $PR_NUMBER --json statusCheckRollup --jq '.statusCheckRollup[].conclusion' | grep -v "^$")
-            
-            if [ "$CI_STATUS" == "success" ]; then
-              gh pr merge $PR_NUMBER --merge --delete-branch
-              break
-            elif [ "$CI_STATUS" == "failure" ]; then
+            if [ "$CI_STATUS" = "failure" ]; then
               echo "CI failed, not merging PR"
               exit 1
             fi
           done
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
