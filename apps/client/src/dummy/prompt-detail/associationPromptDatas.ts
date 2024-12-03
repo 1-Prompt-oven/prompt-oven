@@ -145,3 +145,4 @@ export const DetailCategoryDatas: DetailCategoryListType[] = [
 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
 	},
 ]
+

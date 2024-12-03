@@ -45,3 +45,4 @@ export const uploadImage = async (
 		return { isSuccess: false, responseImageUrl: undefined }
 	}
 }
+

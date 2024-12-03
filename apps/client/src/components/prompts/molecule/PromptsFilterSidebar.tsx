@@ -1,25 +1,14 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import type { CategoryType } from "@/types/prompts/categoryType"
 import { PromptsFilterCategory } from "../atom/PromptsFilterCategory"
 import { PromptsFilterPrice } from "../atom/PromptsFilterPrice"
 import { PromptsFilterSearchInput } from "../atom/PromptsFilterSearchInput"
 import PromptSidebarButtonGroup from "../atom/PromptSidebarButtonGroup"
 import { PromptsFilterSection } from "./PromptsFilterSection"
 
-interface PromptFilterSidebarProps {
-	categoryList: CategoryType[]
-}
-
-export default function PromptsFilterSidebar({
-	categoryList,
-}: PromptFilterSidebarProps) {
+export default function PromptsFilterSidebar() {
 	const [sidebarPosition, setSidebarPosition] = useState(0)
-
-	const [topCategoryUUID, setTopCategoryUUID] = useState<string>("")
-	const [selectedValue, setSelectedValue] = useState<string>("")
-
 	const [filters, setFilters] = useState({
 		search: "",
 		topCategoryUuid: "",
@@ -38,8 +27,6 @@ export default function PromptsFilterSidebar({
 			minPrice: "",
 			maxPrice: "",
 		})
-		setTopCategoryUUID("")
-		setSelectedValue("")
 	}
 
 	useEffect(() => {
@@ -58,7 +45,7 @@ export default function PromptsFilterSidebar({
 		<div
 			className="hidden h-full rounded-lg bg-opacity-20 bg-gradient-to-r from-[#3F1C24] to-[#262038] p-4 xs:!flex xs:flex-col lg:sticky lg:!block lg:max-w-[200px]"
 			style={{
-				top: Math.max(sidebarPosition, 100),
+				top: Math.max(sidebarPosition, 20),
 			}}>
 			<div className="flex justify-between md:!block">
 				<h2 className="mb-4 font-medium text-white">FILTER BY</h2>
@@ -72,11 +59,11 @@ export default function PromptsFilterSidebar({
 
 			<PromptsFilterSection title="Category">
 				<PromptsFilterCategory
-					categoryList={categoryList}
-					topCategoryUUID={topCategoryUUID}
-					selectedValue={selectedValue}
-					setTopCategoryUUID={setTopCategoryUUID}
-					setSelectedValue={setSelectedValue}
+					value={filters.topCategoryUuid}
+					name="topCategoryUuid"
+					onChange={(value) =>
+						setFilters({ ...filters, topCategoryUuid: value })
+					}
 				/>
 			</PromptsFilterSection>
 
@@ -95,3 +82,4 @@ export default function PromptsFilterSidebar({
 		</div>
 	)
 }
+
