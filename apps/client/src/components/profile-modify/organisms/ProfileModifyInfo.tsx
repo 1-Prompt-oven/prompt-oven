@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import { redirect } from "next/navigation"
+import { useRouter } from "next/navigation"
 import { Button } from "@repo/ui/button"
 import { useModify } from "@/hooks/modify/useModify"
 import type { ProfileModifyType, ProfileMemberInfoType } from "@/types/profile/profileTypes"
@@ -18,6 +18,7 @@ interface MemberDataProps {
 }
 
 export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
+	const router = useRouter()
 	const {
 		banner,
 		avatar,
@@ -37,48 +38,51 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 		const uploadBanner = formData.get("bannerImageUrl") as string | null
 		const uploadAvatar = formData.get("avatarImageUrl") as string | null
 
-		// Only upload banner if it's changed and not null
-		if (uploadBanner && uploadBanner !== memberData.bannerImageUrl) {
-			const isBannerUploaded = await handleImageUpload(
-				formData,
-				uploadBanner,
-				memberData.bannerImageUrl ?? "",
-				"bannerImageUrl",
-				"profile",
-			)
-			if (!isBannerUploaded) return
-		}
+			// Handle image uploads
+			if (uploadBanner && uploadBanner !== memberData.bannerImageUrl) {
+				const isBannerUploaded = await handleImageUpload(
+					formData,
+					uploadBanner,
+					memberData.bannerImageUrl ?? "",
+					"bannerImageUrl",
+					"profile",
+				)
+				if (!isBannerUploaded) return
+			}
 
-		// Only upload avatar if it's changed and not null
-		if (uploadAvatar && uploadAvatar !== memberData.avatarImageUrl) {
-			const isAvatarUploaded = await handleImageUpload(
-				formData,
-				uploadAvatar,
-				memberData.avatarImageUrl ?? "",
-				"avatarImageUrl",
-				"profile",
-			)
-			if (!isAvatarUploaded) return
-		}
+			if (uploadAvatar && uploadAvatar !== memberData.avatarImageUrl) {
+				const isAvatarUploaded = await handleImageUpload(
+					formData,
+					uploadAvatar,
+					memberData.avatarImageUrl ?? "",
+					"avatarImageUrl",
+					"profile",
+				)
+				if (!isAvatarUploaded) return
+			}
 
-		const payload: ProfileModifyType = {
-			memberUUID: memberData.memberUUID,
-			bannerImageUrl: formData.get("bannerImageUrl") as string,
-			avatarImageUrl: formData.get("avatarImageUrl") as string,
-			hashTag: formData.get("hashTag") as string,
-			bio: formData.get("bio") as string,
-			email: formData.get("email") as string,
-			nickname: formData.get("nickname") as string,
-		}
+			const payload: ProfileModifyType = {
+				memberUUID: memberData.memberUUID,
+				bannerImageUrl: formData.get("bannerImageUrl") as string,
+				avatarImageUrl: formData.get("avatarImageUrl") as string,
+				hashTag: formData.get("hashTag") as string,
+				bio: formData.get("bio") as string,
+				email: formData.get("email") as string,
+				nickname: formData.get("nickname") as string,
+			}
 
-		await modifyProfileData(payload)
-		if (payload.nickname  !== memberData.nickname) {
-			await new Promise(resolve => {
-				setTimeout(resolve, 1000)
-			})
-			// wait 1 second to wait for new nickname to be updated
-		}
-		redirect(`/profile/${payload.nickname}`)
+			await modifyProfileData(payload)
+			
+			// If nickname changed, wait briefly for revalidation
+			if (payload.nickname !== memberData.nickname) {
+				await new Promise(resolve => {
+					setTimeout(resolve, 1000)
+				})
+			}
+
+			router.refresh() // Force client-side cache refresh
+			router.push(`/profile/${payload.nickname}`)
+
 	}
 
 	return (

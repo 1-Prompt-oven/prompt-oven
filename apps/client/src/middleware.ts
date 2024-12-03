@@ -10,7 +10,6 @@ const withAuth = async (req: NextRequest, token: boolean) => {
 		url.pathname = routes.signIn
 		// url.basePath = routes.signUp
 		url.search = `callbackUrl=${pathname}`
-
 		return NextResponse.redirect(url)
 	}
 }
@@ -30,8 +29,8 @@ const withOutAuth = async (
   } 
 }
 
-const withAuthList: string[] = [routes.cart, routes.profile, routes.favorite]
-const withOutAuthList: string[] = []
+const withAuthList: string[] = [routes.cart, routes.profile, routes.favorite, routes.settings]
+const withOutAuthList: string[] = [routes.signIn, routes.signUp]
 
 export default async function middleware(request: NextRequest) {
 	const token = await getToken({
@@ -42,13 +41,25 @@ export default async function middleware(request: NextRequest) {
 	const { searchParams } = request.nextUrl
 	const callbackUrl = searchParams.get("callbackUrl")
 	const { pathname } = request.nextUrl
-	const isWithAuth = withAuthList.includes(pathname)
-	const isWithOutAuth = withOutAuthList.includes(pathname)
+
+	// Normalize the pathname
+	const normalizedPathname = pathname.replace(/\/$/, "").toLowerCase()
+
+	// Check if the normalized pathname is in the withAuthList
+	const isWithAuth = withAuthList
+		.map((route) => route.toLowerCase())
+		.includes(normalizedPathname)
+
+	// Check if the normalized pathname is in the withOutAuthList
+	const isWithOutAuth = withOutAuthList
+		.map((route) => route.toLowerCase())
+		.includes(normalizedPathname)
 
 	if (isWithAuth) return withAuth(request, Boolean(accessToken))
 	else if (isWithOutAuth)
 		return withOutAuth(request, Boolean(accessToken), callbackUrl)
 }
+
 
 export const config = {
 	matcher: ["/((?!api|_next/static|_next/image|favicon.ico|fonts|images).*)"],
