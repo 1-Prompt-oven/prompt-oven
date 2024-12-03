@@ -1,4 +1,5 @@
 export interface CartItemType {
+	id: number
 	memberUuid: string
 	productUuid: string
 	selected: boolean
@@ -6,4 +7,6 @@ export interface CartItemType {
 	productName: string
 	thumbnailUrl: string
 	price: number
+	llmName: string
 }
+

@@ -1,23 +1,20 @@
-export interface PromptsType {
-	productList: PromptItemType[]
-	nextCursorId: string
-	hasNext: boolean
+export interface PromptTopType {
+	productUuid: string
+	thumbnailUrl: string
+	productName: string
+	llmId: number
+	avgStar: number
+	price: number
+	createdAt?: string
 }
 
-export interface PromptItemType {
+export interface PromptsType {
 	productUuid: string
-	productName: string
-	price: number
-	topCategoryUuid: string
-	subCategoryUuid: string
-	enabled: boolean // boolean으로 변경
-	avgStar: number
-	sells: number
-	likeCount: number
-	llmId: number
-	description: string
-	discountRate: number
-	reviewCount: number
-	createdAt: string
 	thumbnailUrl: string
+	productName: string
+	llmId: number
+	avgStar: number
+	price: number
+	createdAt: string
 }
+

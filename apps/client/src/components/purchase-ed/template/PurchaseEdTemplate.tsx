@@ -1,9 +1,9 @@
-import type { PromptItemType } from "@/types/prompts/promptsType"
-import PurchaseEdTitle from "../atom/PurchaseEdTitle"
+import type { PromptsType } from "@/types/prompts/promptsType"
 import PurchaseEdContainer from "../organism/PurchaseEdContainer"
+import PurchaseEdTitle from "../atom/PurchaseEdTitle"
 
 interface PurchaseEdTemplateProps {
-	purchaseEdList: PromptItemType[]
+	purchaseEdList: PromptsType[]
 }
 
 export default function PurchaseEdTemplate({
@@ -16,3 +16,4 @@ export default function PurchaseEdTemplate({
 		</div>
 	)
 }
+

@@ -1,8 +1,8 @@
+import type { PromptsType } from "@/types/prompts/promptsType"
 import PromptCardAccount from "@/components/common/organism/PromptCardAccount"
-import type { PromptItemType } from "@/types/prompts/promptsType"
 
 interface PurchaseEdListProps {
-	purchaseEdList: PromptItemType[]
+	purchaseEdList: PromptsType[]
 }
 
 export default function PurchaseEdList({
@@ -20,3 +20,4 @@ export default function PurchaseEdList({
 		</div>
 	)
 }
+
