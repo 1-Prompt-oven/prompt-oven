@@ -15,3 +15,22 @@ export interface PromptDetailInfoType {
 	isCart: boolean
 	isFavorite: boolean
 }
+
+export interface PromptDetailType {
+	productUuid: string
+	sellerUuid: string
+	productName: string
+	price: number
+	prompt: string
+	llmId: number
+	description: string
+	topCategoryUuid: string
+	subCategoryUuid: string
+	contents: {
+		contentUrl: string
+		contentOrder: number
+		sampleValue: string
+	}[]
+	avgStar: number
+	createdAt: string
+}

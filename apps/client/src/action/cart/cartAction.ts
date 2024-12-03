@@ -6,7 +6,7 @@ import type {
 	CommonResType,
 	CartItemApiResponseType,
 } from "@/types/common/responseType"
-import type { PromptsType } from "@/types/prompts/promptsType"
+import type { PromptDetailType } from "@/types/prompt-detail/promptDetailType"
 import { getMemberUUID } from "@/lib/api/sessionExtractor"
 
 export async function getCartData(): Promise<CartItemType[]> {
@@ -59,14 +59,15 @@ async function fetchProductDetails(cartItems: CartItemApiResponseType[]) {
 			throw new Error(`상품 상세 정보 가져오기 실패: ${cartItem.productUuid}`)
 		}
 
-		const productData: CommonResType<PromptsType> = await productResponse.json()
+		const productData: CommonResType<PromptDetailType> =
+			await productResponse.json()
 
 		return productData.result
 	})
 	return Promise.all(productDetailsPromises)
 }
 
-async function fetchLlmModelName(productDetails: PromptsType[]) {
+async function fetchLlmModelName(productDetails: PromptDetailType[]) {
 	const llmModelNamePromises = productDetails.map(async (product) => {
 		const llmResponse = await fetch(
 			`${process.env.API_BASE_URL}/v1/product/llm/${product.llmId}`,
@@ -93,7 +94,7 @@ async function fetchLlmModelName(productDetails: PromptsType[]) {
 
 function mapCartData(
 	cartItems: CartItemApiResponseType[],
-	productDetails: PromptsType[],
+	productDetails: PromptDetailType[],
 	llmModelNames: { llmId: number; modelName: string }[],
 ): CartItemType[] {
 	return cartItems.map((cartItem) => {
@@ -136,12 +137,7 @@ export async function deleteCartItem(cartId: number): Promise<void> {
 			},
 		)
 
-		const responseData: CommonResType<CartItemApiResponseType[]> =
-			await response.json()
-
-		if (responseData.isSuccess) {
-			return
-		}
+		await response.json()
 	} catch (error) {
 		console.error("카트 데이터 fetching 실패", error)
 	}

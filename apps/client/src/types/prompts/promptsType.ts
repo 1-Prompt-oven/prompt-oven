@@ -10,19 +10,10 @@ export interface PromptTopType {
 
 export interface PromptsType {
 	productUuid: string
-	sellerUuid: string
+	thumbnailUrl: string
 	productName: string
-	price: number
-	prompt: string
 	llmId: number
-	description: string
-	topCategoryUuid: string
-	subCategoryUuid: string
-	contents: {
-		contentUrl: string
-		contentOrder: number
-		sampleValue: string
-	}[]
 	avgStar: number
+	price: number
 	createdAt: string
 }
