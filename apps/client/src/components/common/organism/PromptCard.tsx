@@ -41,18 +41,20 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 						</Button>
 					</div>
 
-					<div className="relative flex h-[110px] flex-col gap-1 bg-[#3d2d50] px-3 pt-1">
-						<StarAnimation
-							rateData={productInfo.reviewCount}
-							noAnimation={false}
-						/>
+					<div className="relative flex h-[130px] flex-col justify-between bg-[#3d2d50] px-3 pt-1">
+						<div className="flex flex-col gap-2">
+							<StarAnimation
+								rateData={productInfo.reviewCount}
+								noAnimation={false}
+							/>
 
-						<div className="ml-1 space-y-5">
 							<PromptName name={productInfo.productName} />
-							<PromptLLMId llmId={productInfo.llmId} />
 						</div>
 
-						<PromptPrice price={productInfo.price} />
+						<div className="mb-2 flex items-center justify-between">
+							<PromptLLMId llmId={productInfo.llmId} />
+							<PromptPrice price={productInfo.price} />
+						</div>
 					</div>
 				</Card>
 			</Link>
