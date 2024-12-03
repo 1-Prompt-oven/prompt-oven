@@ -51,7 +51,7 @@ function SignInForm() {
 		if (errorMessage) {
 			setErrorMessage("")
 		}
-	}, [email, password])
+	}, [email, errorMessage, password])
 
 	useEffect(() =>
 		// eslint-disable-next-line @typescript-eslint/no-empty-function -- This is no problem

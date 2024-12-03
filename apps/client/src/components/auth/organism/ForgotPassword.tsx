@@ -9,8 +9,8 @@ import SignUpField from "@/components/auth/molecule/SignUpField.tsx"
 import SignUpTimerField from "@/components/auth/molecule/SignUpTimerField.tsx"
 import { useAuthTimer } from "@/hooks/auth/useAuthTimer.ts"
 import {
-	requestPasswordResetEmail,
 	checkEmailVerificationCode,
+	requestPasswordResetEmail,
 	resetPassword,
 } from "@/action/auth/forgotPasswardAction"
 
@@ -129,7 +129,7 @@ function ForgotPassword() {
 					/>
 
 					{/* Email Code */}
-					{showTimerField && timeLeft !== null && (
+					{showTimerField && timeLeft !== null ? (
 						<SignUpTimerField
 							inputProps={{
 								id: forgotPasswordSchemaKeys.emailCode,
@@ -151,7 +151,7 @@ function ForgotPassword() {
 							}}
 							timeLeft={timeLeft}
 						/>
-					)}
+					) : null}
 
 					{/* Password */}
 					<SignUpField
