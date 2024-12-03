@@ -58,7 +58,7 @@ export default function PromptsFilterSidebar({
 		<div
 			className="hidden h-full rounded-lg bg-opacity-20 bg-gradient-to-r from-[#3F1C24] to-[#262038] p-4 xs:!flex xs:flex-col lg:sticky lg:!block lg:max-w-[200px]"
 			style={{
-				top: Math.max(sidebarPosition, 20),
+				top: Math.max(sidebarPosition, 100),
 			}}>
 			<div className="flex justify-between md:!block">
 				<h2 className="mb-4 font-medium text-white">FILTER BY</h2>

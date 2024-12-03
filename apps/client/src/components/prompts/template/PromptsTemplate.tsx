@@ -36,7 +36,7 @@ export default function PromptsTemplate({
 	}
 
 	return (
-		<section className="mx-auto mt-24 max-w-screen-xl">
+		<section className="mx-auto mt-24 max-w-screen-2xl">
 			<PromptsContainer
 				promptList={promptList}
 				categoryList={categoryList}
