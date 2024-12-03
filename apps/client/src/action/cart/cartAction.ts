@@ -9,7 +9,7 @@ import type {
 import type { PromptDetailType } from "@/types/prompt-detail/promptDetailType"
 import { getMemberUUID } from "@/lib/api/sessionExtractor"
 
-export async function getCartData(): Promise<CartItemType[]> {
+export async function cartData(): Promise<CartItemType[]> {
 	"use server"
 	const headers = await getAuthHeaders()
 	const memberUUID = await getMemberUUID()
