@@ -38,13 +38,13 @@ export default async function ProfileInfoLeft({ memberData }: MemberLeftProps) {
 					<DropdownMenuContent
 						align="end"
 						className="bg-[#ead4ff] font-semibold text-[#3a3a3a]">
-						{await matchUser(memberData.memberUUID) && (
+						{(await matchUser(memberData.memberUUID)) ? (
 							<DropdownMenuItem>
 								<Link href={`/profile/modify/${memberData.nickname}`}>
 									<p>개인정보 수정</p>
 								</Link>
 							</DropdownMenuItem>
-						)}
+						) : null}
 						<DropdownMenuItem>
 							<Link href="/Report">
 								<p>신고</p>

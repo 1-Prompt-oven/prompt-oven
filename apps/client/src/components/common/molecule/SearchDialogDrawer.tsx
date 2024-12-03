@@ -1,24 +1,8 @@
 import React, { useEffect, useState } from "react"
 import debounce from "lodash/debounce"
 import { Button } from "@repo/ui/button"
-import {
-	Dialog,
-	DialogContent,
-	// DialogDescription,
-	DialogHeader,
-	// DialogTitle,
-	// DialogTrigger,
-} from "@repo/ui/dialog"
-import {
-	Drawer,
-	// DrawerClose,
-	DrawerContent,
-	// DrawerDescription,
-	// DrawerFooter,
-	// DrawerHeader,
-	// DrawerTitle,
-	// DrawerTrigger,
-} from "@repo/ui/drawer"
+import { Dialog, DialogContent, DialogHeader } from "@repo/ui/dialog"
+import { Drawer, DrawerContent } from "@repo/ui/drawer"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@repo/ui/tabs"
 // import SearchForm from "./SearchForm"
 import { X } from "@repo/ui/lucide"
@@ -39,7 +23,7 @@ export function SearchDialogDrawer({
 	const [isMobile, setIsMobile] = useState(false)
 	const { creators, prompts, fetchAndSetSearchResults } = useSearchActions()
 	const router = useRouter()
-	const [query, setQuery] = useState("")
+	const [query, setQuery] = useState<string>("")
 	const [isLoading, setIsLoading] = useState(false)
 
 	const debouncedFetchAndSetSearchResults = debounce(
@@ -65,11 +49,12 @@ export function SearchDialogDrawer({
 	useEffect(() => {
 		if (query) {
 			setIsLoading(true)
-			debouncedFetchAndSetSearchResults(query)
+			// @ts-expect-error -- TSCONVERSION
+			debouncedFetchAndSetSearchResults(query).then()
 		} else {
 			setQuery("")
 		}
-	}, [query])
+	}, [debouncedFetchAndSetSearchResults, query])
 
 	const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
 		if (e.key === "Enter" && query.trim() !== "") {

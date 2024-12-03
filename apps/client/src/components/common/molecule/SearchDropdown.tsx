@@ -59,11 +59,11 @@ function SearchDropdown({
 			</div>
 			<hr className="mt-3" />
 			<div className="w-full py-3 hover:bg-white">
-				<button className="text-muted-foreground flex w-full items-center px-4 py-3 text-sm transition-colors">
-					<Search
-						className="h-8 w-8 shrink-0"
-						onClick={() => router.push(`/prompts/${query}`)}
-					/>
+				<button
+					type="button"
+					className="text-muted-foreground flex w-full items-center px-4 py-3 text-sm transition-colors"
+					onClick={() => router.push(`/prompts/${query}`)}>
+					<Search className="h-8 w-8 shrink-0" />
 					<span className="ml-2">Explore all {query} prompts</span>
 				</button>
 			</div>

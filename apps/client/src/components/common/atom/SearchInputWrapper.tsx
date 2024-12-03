@@ -1,6 +1,7 @@
 "use client"
 
-import React, { useEffect, useRef, useState, InputHTMLAttributes } from "react"
+import type { InputHTMLAttributes } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import { Search } from "@repo/ui/lucide"
 import { Button } from "@repo/ui/button"
 import { Input } from "@repo/ui/input"
@@ -48,7 +49,7 @@ export default function SearchInputWrapper({
 				<Search className="!h-6 !w-6 text-[#969696]" />
 			</Button>
 			{/* md 이상: 검색창 */}
-			<div className="flex hidden h-8 w-full items-center md:!block md:!flex">
+			<div className="hidden h-8 w-full items-center md:!flex">
 				<Input
 					ref={inputRef}
 					value={query}
