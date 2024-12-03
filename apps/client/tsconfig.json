@@ -14,7 +14,7 @@
 			"@/store/*": ["./src/store/*"],
 			"@/types/*": ["./src/types/*"],
 			"@/config/*": ["./src/config/*"],
-			"@/action/*": ["./src/action/*"]
+			"@/action/*": ["./src/action/*"],
 		}
 	},
 	"include": [
