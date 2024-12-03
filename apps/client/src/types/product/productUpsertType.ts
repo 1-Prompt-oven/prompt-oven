@@ -132,3 +132,6 @@ export interface CreateProductTempRequestType {
 	seed?: string
 	llmVersionId?: number
 }
+export interface CreateProductTempResponseType {
+	productUuid: string
+}

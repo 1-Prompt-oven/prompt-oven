@@ -1,3 +1,5 @@
+"use server"
+
 import { actionHandler } from "@/action/actionHandler.ts"
 import type {
 	GetLlmListRequestType,
