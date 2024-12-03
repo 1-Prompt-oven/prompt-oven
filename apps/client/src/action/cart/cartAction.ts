@@ -28,7 +28,7 @@ export async function getCartData(): Promise<CartItemType[]> {
 
 		const data: CommonResType<CartItemApiResponseType[]> = await response.json()
 		const cartItems = data.result
-		// 상품 상세 데이터 요청1
+		// 상품 상세 데이터 요청
 		if (cartItems.length === 0) {
 			return []
 		}

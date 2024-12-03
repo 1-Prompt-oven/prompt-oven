@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react"
 import type { FieldValues } from "react-hook-form"
-import { signIn } from "next-auth/react"
 import { useForm } from "react-hook-form"
+import { signIn } from "next-auth/react"
 import Link from "next/link"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@repo/ui/button"
@@ -51,7 +51,7 @@ function SignInForm() {
 		if (errorMessage) {
 			setErrorMessage("")
 		}
-	}, [email, password])
+	}, [email, errorMessage, password])
 
 	useEffect(() =>
 		// eslint-disable-next-line @typescript-eslint/no-empty-function -- This is no problem
@@ -118,11 +118,11 @@ function SignInForm() {
 					Enter your details to access your account
 				</p>
 			</div>
-			{errorMessage && (
+			{errorMessage ? (
 				<div className="mb-4 text-center text-sm text-red-500">
 					{errorMessage}
 				</div>
-			)}
+			) : null}
 			<form
 				onSubmit={handleSubmit(handleOnSubmitSuccess, handleOnSubmitFailure)}>
 				<div className="mb-11 flex h-fit w-full flex-col gap-5">
@@ -168,7 +168,7 @@ function SignInForm() {
 						<div className="flex items-center space-x-2">
 							<CheckBox
 								id="remember"
-								checked={isClient && rememberMe}
+								checked={!(!isClient || !rememberMe)}
 								onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
 								className="h-[18px] w-[18px] rounded-none border-none !bg-[#333333] shadow-[0px_0px_30px_rgba(0,0,0,0.2)] data-[state=checked]:bg-[#333333] data-[state=checked]:text-white"
 							/>
