@@ -1,0 +1,64 @@
+name: Auto PR and Merge Dev to Main
+
+on:
+  schedule:
+    # Runs at 03:00 UTC (12:00 UTC+9)
+    - cron: '0 3 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  create-and-merge-pr:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Required for comparing branches
+          
+      - name: Check for changes
+        id: check_changes
+        run: |
+          git diff --quiet origin/dev origin/main || echo "has_changes=true" >> $GITHUB_OUTPUT
+
+      - name: Create Pull Request
+        if: steps.check_changes.outputs.has_changes == 'true'
+        id: create-pr
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          branch: dev
+          base: main
+          title: 'chore: Auto-merge dev into main'
+          body: |
+            Automated PR to merge dev into main
+            Created by GitHub Actions at scheduled time (12:00 UTC+9)
+          labels: |
+            automated-pr
+            auto-merge
+
+      - name: Auto-merge if CI passes
+        if: steps.create-pr.outputs.pull-request-number
+        run: |
+          PR_NUMBER="${{ steps.create-pr.outputs.pull-request-number }}"
+          
+          # Wait for CI to complete (max 15 minutes)
+          for i in {1..30}; do
+            sleep 30
+            
+            # Check CI status
+            CI_STATUS=$(gh pr view $PR_NUMBER --json statusCheckRollup --jq '.statusCheckRollup[].conclusion' | grep -v "^$")
+            
+            if [ "$CI_STATUS" == "success" ]; then
+              gh pr merge $PR_NUMBER --merge --delete-branch
+              break
+            elif [ "$CI_STATUS" == "failure" ]; then
+              echo "CI failed, not merging PR"
+              exit 1
+            fi
+          done
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
