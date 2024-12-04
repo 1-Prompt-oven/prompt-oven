@@ -1,3 +1,11 @@
+import React from "react"
+
+function CreateProductSecondTextPage() {
+	return <div />
+}
+
+export default CreateProductSecondTextPage
+
 // "use client"
 //
 // import React, { useCallback, useEffect, useState } from "react"
