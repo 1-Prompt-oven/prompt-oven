@@ -4,11 +4,13 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { z } from "zod"
+import { ThreeDots } from "react-loader-spinner"
+import type { Session } from "next-auth"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcTitle from "@/components/product-create/atom/PcTitle.tsx"
 import {
 	createProductSecondImageSchema,
-	createProductSecondSchemaKeys,
+	createProductSecondImageSchemaKeys,
 } from "@/schema/product.ts"
 import PcSelect from "@/components/product-create/atom/PcSelect.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
@@ -20,9 +22,8 @@ import PcLabel from "@/components/product-create/atom/PcLabel.tsx"
 import PcButton from "@/components/product-create/atom/PcButton.tsx"
 import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSampleSkeleton.tsx"
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
-import PcImagePromptSampleList from "@/components/product-create/molecule/PcImagePromptSampleList.tsx"
-
-// interface CreateProductSecondTextPageProps {}
+import PcImagePromptSampleList from "@/components/product-create/organism/PcImagePromptSampleList.tsx"
+import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
 
 interface DropResult {
 	draggableId: string
@@ -65,7 +66,15 @@ const modelVersion = [
  *   4) prompt 가져오는 중에 error handling 추가하기
  *   5) 상품 등록 API 호출하기
  */
-export default function CreateProductSecondImagePage() {
+
+interface CreateProductSecondImagePageProps {
+	searchParams: CreateProductQueryParams
+	session: Session | null
+}
+export default function CreateProductSecondImagePage({
+	// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars -- This prop is used in the original code
+	searchParams,
+}: CreateProductSecondImagePageProps) {
 	const [prompt, setPrompt] = useState("")
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
@@ -162,7 +171,29 @@ export default function CreateProductSecondImagePage() {
 		setCurrentImage(null)
 	}
 
-	if (loading) return <div>Loading prompt...</div>
+	if (loading)
+		return (
+			<div className="flex max-w-5xl flex-col gap-4">
+				<AccountTitleText className="w-full">
+					Create New Product
+				</AccountTitleText>
+				<div className="mt-6 flex flex-col">
+					<ThreeDots
+						visible
+						height="80"
+						width="80"
+						color="#A913F9"
+						radius="9"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+					<span className="text-xl font-medium leading-[150%] text-white">
+						Loading prompt...
+					</span>
+				</div>
+			</div>
+		)
 	if (error)
 		return (
 			<div>
@@ -171,14 +202,14 @@ export default function CreateProductSecondImagePage() {
 		)
 
 	return (
-		<form className="flex flex-col gap-4">
+		<form className="flex max-w-5xl flex-col gap-4">
 			<AccountTitleText className="w-full">Create New Product</AccountTitleText>
 			{/* Model version and Seed*/}
 			<div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
 				<PcBaseWrapper>
 					<PcTitle>Model Version</PcTitle>
 					<Controller
-						name={createProductSecondSchemaKeys.llmVersionId}
+						name={createProductSecondImageSchemaKeys.llmVersionId}
 						control={control}
 						render={({ field }) => (
 							<PcSelect
@@ -196,7 +227,7 @@ export default function CreateProductSecondImagePage() {
 						placeholder="Enter Model Seed"
 						className="h-9"
 						type="number"
-						{...register(createProductSecondSchemaKeys.seed)}
+						{...register(createProductSecondImageSchemaKeys.seed)}
 					/>
 				</PcBaseWrapper>
 			</div>
