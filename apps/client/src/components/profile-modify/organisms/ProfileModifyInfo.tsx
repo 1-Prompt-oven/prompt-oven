@@ -167,7 +167,7 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 
 				<div className="mx-auto flex w-[90%] justify-end py-12">
 					<Link
-						href="/profile/1"
+						href={`/profile/${nickname}`}
 						className="px-10py-6 inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-gradient-to-r from-[#FFCCDF] to-[#FFB6C1] px-10 py-6 text-sm font-medium text-white shadow transition-colors hover:from-[#FFB6C1] hover:to-[#FF69B4] focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
 						<span className="font-semibold text-gray-500">취소</span>
 					</Link>
