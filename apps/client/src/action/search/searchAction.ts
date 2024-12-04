@@ -1,3 +1,5 @@
+"use server"
+
 import type { SearchResultCreatorType } from "@/types/search/searchResultType"
 import type {
 	CommonResType,
@@ -14,10 +16,11 @@ export async function fetchSearchResults(
 	query: string,
 	tab: string,
 ): Promise<FetchResults> {
+	"use server"
 	// 상품 검색 결과 fetch
 	if (tab === "prompt") {
 		const promptResponse = await fetch(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/product/list?searchBar=${query}&pageSize=5`,
+			`${process.env.API_BASE_URL}/v1/product/list?searchBar=${query}&pageSize=5`,
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -34,7 +37,7 @@ export async function fetchSearchResults(
 	}
 	// 크리에이터 검색 결과 fetch
 	const creatorResponse = await fetch(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/profile/search?query=${query}`,
+		`${process.env.API_BASE_URL}/v1/profile/search?query=${query}`,
 		{
 			headers: {
 				"Content-Type": "application/json",
