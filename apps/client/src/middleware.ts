@@ -2,6 +2,7 @@ import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 import { routes } from "@/config/auth/route.ts"
+import { handleWithAuthRequest } from "@/middleware/commonMiddlewrae.ts"
 
 const withAuth = async (req: NextRequest, token: boolean) => {
 	const url = req.nextUrl.clone()
@@ -12,6 +13,8 @@ const withAuth = async (req: NextRequest, token: boolean) => {
 		url.search = `callbackUrl=${pathname}`
 		return NextResponse.redirect(url)
 	}
+
+	return handleWithAuthRequest(req)
 }
 
 const FALLBACK_URL = "/"
@@ -34,6 +37,7 @@ const withAuthList: string[] = [
 	routes.profile,
 	routes.favorite,
 	routes.settings,
+	routes.account,
 ]
 const withOutAuthList: string[] = [routes.signIn, routes.signUp]
 

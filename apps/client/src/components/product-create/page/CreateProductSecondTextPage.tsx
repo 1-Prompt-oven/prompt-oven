@@ -27,7 +27,7 @@ import PcTextPromptSampleList from "@/components/product-create/organism/PcTextP
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSampleSkeleton.tsx"
 import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
-import { setProductUuid } from "@/lib/localStorage.ts"
+import { getStorageItem, setProductUuid } from "@/lib/localStorage.ts"
 import {
 	getProductDetail,
 	updateProduct,
@@ -37,6 +37,7 @@ import type {
 	GetProductDetailResponseType,
 	ModifyProductRequestType,
 } from "@/types/product/productUpsertType.ts"
+import { localStorageKeys } from "@/config/product/localStorage.ts"
 
 interface DropResult {
 	draggableId: string
@@ -157,8 +158,13 @@ export default function CreateProductSecondTextPage({
 			}
 		}
 
+		const _productUuid = getStorageItem(localStorageKeys.curTempProductUuid)
+		if (!_productUuid && !searchParams.productUuid) {
+			router.back()
+		}
+
 		initExistingData().then()
-	}, [extractPromptVars, replace])
+	}, [extractPromptVars, replace]) // eslint-disable-line react-hooks/exhaustive-deps -- 빈 배열로 둬도 됨.
 
 	const onSubmit = (data: FormData) => {
 		const varObj: Record<string, string> = data.promptVars.reduce(

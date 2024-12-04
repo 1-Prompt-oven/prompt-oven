@@ -27,7 +27,7 @@ export const getLlmName = async (req: GetLlmRequestType) => {
 export const getLlmList = async (req: GetLlmListRequestType) => {
 	return actionHandler<CommonResType2<GetLlmListResponseType[]>>({
 		name: "getLlmList",
-		url: `/v1/product/llm/list?${req.llmType ? `llmType=${req.llmType}` : ""}`,
+		url: `/v1/product/llm/list${req.llmType ? `?llmType=${req.llmType}` : ""}`,
 		options: {
 			method: "GET",
 			cache: "no-cache",

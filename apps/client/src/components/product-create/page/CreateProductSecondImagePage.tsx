@@ -161,7 +161,7 @@ export default function CreateProductSecondImagePage({
 		initExistingData().then(() => {
 			// do nothing
 		})
-	}, [extractPromptVars, replace])
+	}, [extractPromptVars, replace]) // eslint-disable-line react-hooks/exhaustive-deps -- 빈 배열로 둬도 됨.
 
 	const onSubmit = (data: FormData) => {
 		if (data.promptResult) {

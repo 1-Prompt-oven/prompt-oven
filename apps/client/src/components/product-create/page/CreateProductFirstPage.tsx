@@ -30,6 +30,7 @@ import type { GetLlmListResponseType } from "@/types/product/llmType.ts"
 import type { GetCategoryListResponseType } from "@/types/product/productCategory.ts"
 import type {
 	CreateProductTempRequestType,
+	GetProductDetailResponseType,
 	ModifyProductRequestType,
 } from "@/types/product/productUpsertType.ts"
 import { getSellerProfile } from "@/action/settlement/settlementAction.ts"
@@ -58,6 +59,10 @@ export default function CreateProductFirstPage({
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
 	const [lastSaved, setLastSaved] = useState<string>("")
+
+	const [product, setProduct] = useState<GetProductDetailResponseType | null>(
+		null,
+	)
 
 	const { control, register, watch, getValues, setValue } = useForm({
 		resolver: zodResolver(createProductFirstSchema),
@@ -120,6 +125,7 @@ export default function CreateProductFirstPage({
 					const productUuid = setProductUuid(searchParams.productUuid ?? "")
 					if (productUuid) {
 						const productData = (await getProductDetail({ productUuid })).result
+						setProduct(productData)
 						setValue(
 							createProductFirstSchemaKeys.llmId,
 							String(productData.llmId),
@@ -234,19 +240,22 @@ export default function CreateProductFirstPage({
 		}
 	}
 
-	const onSave = (type: "draft" | "next") => {
-		if (getStorageItem(localStorageKeys.curTempProductUuid)) {
-			updatePromptProduct()
+	const onSave = async (type: "draft" | "next") => {
+		const productUuid = getStorageItem(localStorageKeys.curTempProductUuid)
+		if (productUuid) {
+			await updatePromptProduct()
 		} else {
-			savePromptDraft()
+			await savePromptDraft()
 		}
 		if (type === "next") {
 			const llmId = getValues(createProductFirstSchemaKeys.llmId)
 			const llmType = aiModelOptions.find((llm) => llm.value === llmId)
 				?.extraProps?.llmType as string
-			_.delay(() => {
-				router.push(`account?view=create-product&step=2&llmType=${llmType}`)
-			}, 2000)
+			router.push(
+				`account?view=create-product&step=2&llmType=${llmType}&productUuid=${productUuid}`,
+			)
+		} else {
+			setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
 		}
 	}
 
@@ -254,7 +263,7 @@ export default function CreateProductFirstPage({
 		router.back()
 	}
 
-	const savePromptDraft = () => {
+	const savePromptDraft = async () => {
 		const values = getValues()
 		const reqBody: CreateProductTempRequestType = {
 			sellerUuid,
@@ -269,16 +278,16 @@ export default function CreateProductFirstPage({
 		}
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("onSaveDraft reqbody", reqBody)
-		createTempProduct(reqBody).then((res) => {
-			// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
-			console.log("onSaveDraft", res.result)
-			setProductUuid(res.result.productUuid)
-		})
+		const res = await createTempProduct(reqBody)
+		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
+		console.log("onSaveDraft", res.result)
+		setProductUuid(res.result.productUuid)
 	}
 
 	const updatePromptProduct = () => {
 		const values = getValues()
 		const reqBody: ModifyProductRequestType = {
+			...product,
 			productUuid: getStorageItem(localStorageKeys.curTempProductUuid),
 			productName: values.productName,
 			price: values.price,
@@ -291,7 +300,7 @@ export default function CreateProductFirstPage({
 		}
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("updateProduct reqbody", reqBody)
-		updateProduct(reqBody).then()
+		return updateProduct(reqBody)
 	}
 
 	if (loading)
