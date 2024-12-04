@@ -6,13 +6,13 @@ import { Card } from "@repo/ui/card"
 import { ShoppingCart } from "@repo/ui/lucide"
 import StarAnimation from "@repo/ui/star-animation"
 import { PromptCardDateFormatted, PromptIsNew } from "@/lib/utils"
-import type { PromptsType } from "@/types/prompts/promptsType"
-import PromptName from "../molecule/PromptName"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 import PromptLLMId from "../molecule/PromptLLMId"
+import PromptName from "../molecule/PromptName"
 import PromptPrice from "../molecule/PromptPrice"
 
 interface PromptCardAccountProps {
-	productInfo: PromptsType
+	productInfo: PromptItemType
 }
 
 export default function PromptCardAccount({
@@ -44,7 +44,10 @@ export default function PromptCardAccount({
 					</div>
 
 					<div className="relative flex h-[110px] flex-col gap-1 bg-[#3d2d50] px-3 pt-1">
-						<StarAnimation rateData={productInfo.avgStar} noAnimation={false} />
+						<StarAnimation
+							rateData={productInfo.reviewCount}
+							noAnimation={false}
+						/>
 
 						<div className="ml-1 space-y-5">
 							<PromptName name={productInfo.productName} />
@@ -58,4 +61,3 @@ export default function PromptCardAccount({
 		</li>
 	)
 }
-
