@@ -13,7 +13,7 @@ export const createProductFirstSchema = z.object({
 export const createProductFirstSchemaKeys =
 	createProductFirstSchema.keyof().enum
 
-export const createProductSecondSchema = z.object({
+export const createProductSecondTextSchema = z.object({
 	// 프롬프트 API를 호출에 필요한 값을 준비하기 위한 변수
 	// 프롬프트 변수 input list
 	promptVars: z.array(
@@ -36,8 +36,8 @@ export const createProductSecondSchema = z.object({
 	seed: z.string({ message: "시드를 입력해주세요" }),
 	llmVersionId: z.string({ message: "AI 모델을 선택해주세요" }),
 })
-export const createProductSecondSchemaKeys =
-	createProductSecondSchema.keyof().enum
+export const createProductSecondTextSchemaKeys =
+	createProductSecondTextSchema.keyof().enum
 
 export const createProductSecondImageSchema = z.object({
 	// 프롬프트 API를 호출에 필요한 값을 준비하기 위한 변수

@@ -26,127 +26,125 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
 
-                const response = await signInByAuth({
-                    email: credentials.email,
-                    password: credentials.password,
-                });
-                console.log("signInByAuth",response)
-                return {
-                    accesstoken: response.result.accesstoken,
-                    refreshtoken: response.result.refreshtoken,
-                    email: credentials.email,
-                    nickname: response.result.nickname,
-                    memberUUID: response.result.memberUUID,
-                    role: response.result.role,
-                    failed: false,
-                };
-            },
-        }),
-        NaverProvider({
-            clientId: process.env.NAVER_CLIENT_ID || "",
-            clientSecret: process.env.NAVER_CLIENT_SECRET || "",
-        }),
-        KakaoProvider({
-            clientId: process.env.KAKAO_CLIENT_ID || "",
-            clientSecret: process.env.KAKAO_CLIENT_SECRET || "",
-        }),
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID || "",
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-        }),
-    ],
-    secret: process.env.NEXTAUTH_SECRET,
-    callbacks: {
-        async signIn({ user, account, profile }) {
-          if (account?.provider === "credentials") {
-            if (user) {
-              return true;
-            } else {
-              return false;
-            }
-          }
-            //소셜 로그인 공통 처리
-            if (account?.provider) {
-              console.log(`${account.provider} Sign-In detected:`, account, profile)
-          
-              let providerID: string;
-              let email: string | undefined
-          
-              switch (account.provider) {
-                case "google":
-                  providerID = account.id as string
-                  email = profile?.email || "";
-                  break;
-          
-                case "naver":
-                  providerID = account.id as string
-                  email = user.email || "";
-                  break;
-          
-                case "kakao":
-                  providerID = account.id as string
-                  email = user.email || "";
-                  break;
-          
-                default:
-                  console.error("Unsupported provider:", account.provider)
-                  return false;
-              }
-          
-              // OAuth API 호출
-              const response = await signInByOAuth({
-                provider: account.provider,
-                providerID,
-                email,
-              });
-          
-              if (response) {
-                // eslint-disable-next-line no-console -- This is a client-side only log
-                console.log(`${account.provider} OAuth API response:`, response)
-                return true
-              } else {
-                // eslint-disable-next-line no-console -- This is a client-side only log
-                console.error(`${account.provider} OAuth API failed:`, response)
-                return '/sign-up';
-              }
-            }          
-            return true;
-          },
-          async jwt({ token, user }): Promise<ExtendedToken> {      
-            if (user) {
-                token.accesstoken = user.accesstoken
-                token.refreshtoken = user.refreshtoken
-                token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
-            }      
-            if (Date.now() >= (token.tokenExpiration as number || 0)) {
-                const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "")
-                if (refreshedToken.result) {
-                  token.accesstoken = refreshedToken.result.accessToken;
-                  token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000;
-              } else {
-                  await logoutAuthMember({
-                      Authorization: `Bearer ${token.accesstoken}`,
-                      Refreshtoken: token.refreshtoken as string,
-                  })           
-                  token.accesstoken = null;
-                  token.refreshtoken = null;
-                  token.tokenExpiration = null;
-                  token.error = "LoggedOut";
-              }
-            }        
-            return { ...token, ...user }
-        },
-        
-        async session({ session, token }) {
-          session.user = token;
-          return session;
-        },
-        async redirect({ url, baseUrl }) {
-            return url.startsWith(baseUrl) ? url : baseUrl
-          },
-    },
-    pages: {
-        signIn: "/sign-in",
-        // error: "/error",
-    },
-};
+				const response = await signInByAuth({
+					email: credentials.email,
+					password: credentials.password,
+				})
+				console.log("signInByAuth", response)
+				return {
+					accesstoken: response.result.accesstoken,
+					refreshtoken: response.result.refreshtoken,
+					email: credentials.email,
+					nickname: response.result.nickname,
+					memberUUID: response.result.memberUUID,
+					role: response.result.role,
+					failed: false,
+				}
+			},
+		}),
+		NaverProvider({
+			clientId: process.env.NAVER_CLIENT_ID || "",
+			clientSecret: process.env.NAVER_CLIENT_SECRET || "",
+		}),
+		KakaoProvider({
+			clientId: process.env.KAKAO_CLIENT_ID || "",
+			clientSecret: process.env.KAKAO_CLIENT_SECRET || "",
+		}),
+		GoogleProvider({
+			clientId: process.env.GOOGLE_CLIENT_ID || "",
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+		}),
+	],
+	secret: process.env.NEXTAUTH_SECRET,
+	callbacks: {
+		async signIn({ user, account, profile }) {
+			if (account?.provider === "credentials") {
+				return Boolean(user)
+			}
+			//소셜 로그인 공통 처리
+			if (account?.provider) {
+				console.log(`${account.provider} Sign-In detected:`, account, profile)
+
+				let providerID: string
+				let email: string | undefined
+
+				switch (account.provider) {
+					case "google":
+						providerID = account.id as string
+						email = profile?.email || ""
+						break
+
+					case "naver":
+						providerID = account.id as string
+						email = user.email || ""
+						break
+
+					case "kakao":
+						providerID = account.id as string
+						email = user.email || ""
+						break
+
+					default:
+						console.error("Unsupported provider:", account.provider)
+						return false
+				}
+
+				// OAuth API 호출
+				const response = await signInByOAuth({
+					provider: account.provider,
+					providerID,
+					email,
+				})
+
+				if (response) {
+					// eslint-disable-next-line no-console -- This is a client-side only log
+					console.log(`${account.provider} OAuth API response:`, response)
+					return true
+				} else {
+					// eslint-disable-next-line no-console -- This is a client-side only log
+					console.error(`${account.provider} OAuth API failed:`, response)
+					return "/sign-up"
+				}
+			}
+			return true
+		},
+		async jwt({ token, user }): Promise<ExtendedToken> {
+			if (user) {
+				token.accesstoken = user.accesstoken
+				token.refreshtoken = user.refreshtoken
+				token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
+			}
+			if (Date.now() >= ((token.tokenExpiration as number) || 0)) {
+				const refreshedToken = await refreshAccessToken(
+					(token.refreshtoken as string) || "",
+				)
+				if (refreshedToken.result) {
+					token.accesstoken = refreshedToken.result.accessToken
+					token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000
+				} else {
+					await logoutAuthMember({
+						Authorization: `Bearer ${token.accesstoken}`,
+						Refreshtoken: token.refreshtoken as string,
+					})
+					token.accesstoken = null
+					token.refreshtoken = null
+					token.tokenExpiration = null
+					token.error = "LoggedOut"
+				}
+			}
+			return { ...token, ...user }
+		},
+
+		async session({ session, token }) {
+			session.user = token
+			return session
+		},
+		async redirect({ url, baseUrl }) {
+			return url.startsWith(baseUrl) ? url : baseUrl
+		},
+	},
+	pages: {
+		signIn: "/sign-in",
+		// error: "/error",
+	},
+}
