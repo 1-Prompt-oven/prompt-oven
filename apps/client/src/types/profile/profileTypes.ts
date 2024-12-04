@@ -9,7 +9,7 @@ export const PROFILE_FIELDS = {
 
 export interface ProfileImageType {
 	memberUUID: string
-	picture: string
+	picture: string | undefined
 }
 
 // Base type with all shared fields
