@@ -43,5 +43,7 @@ export {
 	FileUp,
 	Pencil,
 	GripVertical,
+	Trash2,
 	type LucideProps,
 } from "lucide-react"
+
