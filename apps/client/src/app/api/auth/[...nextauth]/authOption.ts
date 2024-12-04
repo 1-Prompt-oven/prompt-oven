@@ -40,7 +40,7 @@ export const authOptions: NextAuthOptions = {
                     nickname: response.result.nickname,
                     memberUUID: response.result.memberUUID,
                     role: response.result.role,
-                    profileImage: profileImage.picture,
+                    profileImage: profileImage.picture || "",
                     failed: false,
                 };
             },
@@ -125,8 +125,8 @@ export const authOptions: NextAuthOptions = {
                 const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "")
                 if (refreshedToken.result) {
                   const profileImage = await getProfileImage(user.memberUUID)
-                  token.profileImage = profileImage.picture
-                  user.profileImage = profileImage.picture
+                  token.profileImage = profileImage.picture || ""
+                  user.profileImage = profileImage.picture || ""
 
                   token.accesstoken = refreshedToken.result.accessToken;
                   user.accesstoken = refreshedToken.result.accessToken
