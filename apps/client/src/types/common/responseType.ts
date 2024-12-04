@@ -7,14 +7,6 @@ export interface CommonResType<T> {
 	code?: number
 	result: T
 }
-export interface CommonResHttpStatusType {
-	error: boolean
-	is4xxClientError: boolean
-	is5xxServerError: boolean
-	is1xxInformational: boolean
-	is2xxSuccessful: boolean
-	is3xxRedirection: boolean
-}
 
 export interface PromptApiResponseType {
 	productList: PromptsType[]
@@ -34,3 +26,4 @@ export interface S3ResponseType {
 	isSuccess: boolean
 	responseImageUrl: string | undefined
 }
+
