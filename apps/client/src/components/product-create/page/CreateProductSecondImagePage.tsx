@@ -10,7 +10,7 @@ import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcTitle from "@/components/product-create/atom/PcTitle.tsx"
 import {
 	createProductSecondImageSchema,
-	createProductSecondSchemaKeys,
+	createProductSecondImageSchemaKeys,
 } from "@/schema/product.ts"
 import PcSelect from "@/components/product-create/atom/PcSelect.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
@@ -209,7 +209,7 @@ export default function CreateProductSecondImagePage({
 				<PcBaseWrapper>
 					<PcTitle>Model Version</PcTitle>
 					<Controller
-						name={createProductSecondSchemaKeys.llmVersionId}
+						name={createProductSecondImageSchemaKeys.llmVersionId}
 						control={control}
 						render={({ field }) => (
 							<PcSelect
@@ -227,7 +227,7 @@ export default function CreateProductSecondImagePage({
 						placeholder="Enter Model Seed"
 						className="h-9"
 						type="number"
-						{...register(createProductSecondSchemaKeys.seed)}
+						{...register(createProductSecondImageSchemaKeys.seed)}
 					/>
 				</PcBaseWrapper>
 			</div>

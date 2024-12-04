@@ -158,8 +158,7 @@ export default function CreateProductFirstPage({
 				try {
 					setLoading(true)
 					// llm list api 호출
-					const llmResponse = await getLlmList({ llmType: "" })
-					const llmList = llmResponse.result
+					const llmList = (await getLlmList({ llmType: "" })).result
 					setAiModelOptions(
 						llmList.map((llm: GetLlmListResponseType) => ({
 							value: llm.llmId.toString(),
@@ -203,8 +202,6 @@ export default function CreateProductFirstPage({
 					// note: 판매자 등록은 한 번 한다는 가정으로 작성한 코드
 					const _sellerUuid = sellerUuidRes.result[0].settlementProfileID
 					setSellerUuid(_sellerUuid)
-
-					setLoading(false)
 				} catch (e) {
 					// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 					console.error("Error fetching data:", e)
@@ -291,10 +288,6 @@ export default function CreateProductFirstPage({
 		console.log("updateProduct reqbody", reqBody)
 		updateProduct(reqBody).then()
 	}
-
-	// const onNext = () => {
-	//
-	// }
 
 	if (loading)
 		return (
