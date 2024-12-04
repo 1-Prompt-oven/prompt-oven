@@ -1,30 +1,30 @@
-import CredentialsProvider from "next-auth/providers/credentials"
-import type { NextAuthOptions, User } from "next-auth"
-import GoogleProvider from "next-auth/providers/google"
-import NaverProvider from "next-auth/providers/naver"
-import KakaoProvider from "next-auth/providers/kakao"
-import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts"
-import { refreshAccessToken } from "@/action/auth/authTokenAction"
-import type { ExtendedToken } from "@/types/auth/AuthToken"
-import { logoutAuthMember } from "@/action/auth/memberManageAction"
+import CredentialsProvider from "next-auth/providers/credentials";
+import type { NextAuthOptions, User } from "next-auth";
+import GoogleProvider from "next-auth/providers/google";
+import NaverProvider from "next-auth/providers/naver";
+import KakaoProvider from "next-auth/providers/kakao";
+import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts";
+import { refreshAccessToken } from '@/action/auth/authTokenAction';
+import type {ExtendedToken} from "@/types/auth/AuthToken"
+import { logoutAuthMember } from '@/action/auth/memberManageAction';
 
 export const authOptions: NextAuthOptions = {
-	session: {
-		strategy: "jwt",
-		maxAge: 24 * 60 * 60, // 24 hours
-		updateAge: 6 * 24 * 60 * 60, // 6 * 24 hours
-	},
-	providers: [
-		CredentialsProvider({
-			name: "credentials",
-			credentials: {
-				email: { label: "email", type: "text" },
-				password: { label: "password", type: "password" },
-			},
-			async authorize(credentials): Promise<User | null> {
-				if (!credentials?.email || !credentials?.password) {
-					return null
-				}
+    session: {
+        strategy: "jwt",
+        maxAge: 24 * 60 * 60, // 24 hours
+        updateAge: 6 * 24 * 60 * 60, // 6 * 24 hours
+    },
+    providers: [
+        CredentialsProvider({
+            name: "credentials",
+            credentials: {
+                email: { label: "email", type: "text" },
+                password: { label: "password", type: "password" },
+            },
+            async authorize(credentials): Promise<User | null> {
+                if (!credentials?.email || !credentials?.password) {
+                    return null;
+                }
 
 				const response = await signInByAuth({
 					email: credentials.email,

@@ -2,12 +2,12 @@
 
 import * as React from "react"
 import SideMenu from "@/components/account/organism/SideMenu.tsx"
-import type { AccountQueryParams } from "@/types/account/searchParams.ts"
+import type { QueryParams } from "@/types/account/searchParams.ts"
 import { sellerNavs } from "@/lib/navigation.ts"
 
 interface AccountContentWrapperProps {
 	children?: React.ReactNode
-	queryParams: AccountQueryParams
+	queryParams: QueryParams
 }
 
 export default function ContentWrapper({

@@ -9,10 +9,9 @@ export interface GetLlmResponseType {
 	llmName: string
 }
 
-// llmType = text, image, 미작성 시 전체 리스트 조회
-// query
+// LLM List 조회
 export interface GetLlmListRequestType {
-	llmType?: string
+	llmType: string
 }
 export interface GetLlmListResponseType {
 	llmId: number

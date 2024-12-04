@@ -55,4 +55,3 @@ export const ProductReviewDatas: PromptReviewType = {
 	pageSize: 5,
 	page: 1,
 }
-

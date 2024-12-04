@@ -24,7 +24,7 @@ export default function PromptsItemFilter({
 	}
 
 	return (
-		<div className="gradient-filter flex h-[3.75rem] max-w-[70.625rem] items-center justify-between rounded-lg border border-white/20 px-4">
+		<div className="gradient-filter flex h-[3.75rem] max-w-[80rem] items-center justify-between rounded-lg border border-white/20 px-4">
 			{/* Left Section */}
 			<div className="flex items-center gap-4">
 				<span className="font-mulish text-sm text-white">
@@ -64,4 +64,3 @@ export default function PromptsItemFilter({
 		</div>
 	)
 }
-

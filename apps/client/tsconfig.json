@@ -14,16 +14,9 @@
 			"@/store/*": ["./src/store/*"],
 			"@/types/*": ["./src/types/*"],
 			"@/config/*": ["./src/config/*"],
-			"@/action/*": ["./src/action/*"]
+			"@/action/*": ["./src/action/*"],
 		}
 	},
-	"include": [
-		"svgr.d.ts",
-		"next-env.d.ts",
-		"**/*.ts",
-		"**/*.tsx",
-		".next/types/**/*.ts"
-	],
+	"include": ["svgr.d.ts", "next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
 	"exclude": ["node_modules"]
 }
-

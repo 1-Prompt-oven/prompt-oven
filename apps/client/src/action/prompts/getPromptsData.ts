@@ -1,37 +1,75 @@
 "use server"
 
-import { PromptsListDatas, PromptsTopDatas } from "@/dummy/prompts/promptsDatas"
-import type { PromptsType, PromptTopType } from "@/types/prompts/promptsType"
+import { isValidResponse } from "@/lib/api/validation"
+import { createQueryParamString } from "@/lib/query"
+import type { PromptItemType, PromptsType } from "@/types/prompts/promptsType"
 
-export async function getPromptTop(): Promise<PromptTopType[]> {
-	const res: PromptTopType[] = await PromptsTopDatas
-	// const res: ProfileMemberInfoType = await profileMemberInfoUndefineData
-
-	//     const res = await fetch(`${process.env.API_BASE_URL}/v1/profile`, {
-	//       method: 'GET',
-	//       headers: {
-	//         'Content-Type': 'application/json',
-	//         Authorization: `Bearer ${auth.accessToken}`,
-	//       },
-	//       cache: 'no-cache',
-	//     })
-
-	return res
+interface RawData {
+	result: {
+		productList: PromptItemType[]
+		nextCursorId: string
+		hasNext: boolean
+	}
 }
 
-export async function getPromptList(): Promise<PromptsType[]> {
-	const res: PromptsType[] = await PromptsListDatas
-	// const res: ProfileMemberInfoType = await profileMemberInfoUndefineData
+export async function getPromptList(): Promise<PromptsType> {
+	"use server"
+	const res = await fetch(`${process.env.API_BASE_URL}/v1/product/list`, {
+		method: "GET",
+	})
 
-	//     const res = await fetch(`${process.env.API_BASE_URL}/v1/profile`, {
-	//       method: 'GET',
-	//       headers: {
-	//         'Content-Type': 'application/json',
-	//         Authorization: `Bearer ${auth.accessToken}`,
-	//       },
-	//       cache: 'no-cache',
-	//     })
+	if (!res.ok) {
+		throw new Error("Failed to fetch product list data")
+	}
 
-	return res
+	const rawData: RawData = await res.json() // RawData 타입으로 지정
+
+	if (!isValidResponse<RawData>(rawData)) {
+		throw new Error("Invalid response format")
+	}
+
+	return rawData.result
 }
 
+export async function getPromptListByCategory(
+	categoryFormData: FormData,
+): Promise<PromptsType> {
+	"use server"
+	categoryFormData.set("enable", "on") //프롬프트 패이지는 활성화된 상품만 보여주도록 한다.
+
+	const payload = {
+		searchBar: categoryFormData.get("searchBar") as string | undefined,
+		topCategoryUuid: categoryFormData.get("topCategoryUuid") as
+			| string
+			| undefined,
+		subCategoryUuid: categoryFormData.get("subCategoryUuid") as
+			| string
+			| undefined,
+		enable: categoryFormData.get("enable") === "on",
+		minPrice: categoryFormData.get("minPrice") as string | undefined,
+		maxPrice: categoryFormData.get("maxPrice") as string | undefined,
+		sortDate: categoryFormData.get("sortDate") as string | undefined,
+		sortOption: categoryFormData.get("sortOption") as string | undefined,
+	}
+
+	const query = createQueryParamString(payload)
+
+	const res = await fetch(
+		`${process.env.API_BASE_URL}/v1/product/list?${query}`,
+		{
+			method: "GET",
+		},
+	)
+
+	if (!res.ok) {
+		throw new Error("Failed to fetch product Category list data")
+	}
+
+	const rawData: RawData = await res.json() // RawData 타입으로 지정
+
+	if (!isValidResponse<RawData>(rawData)) {
+		throw new Error("Invalid response format")
+	}
+
+	return rawData.result
+}

@@ -1,9 +1,9 @@
-import type { PromptsType } from "@/types/prompts/promptsType"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 import PurchaseEdCountBar from "../molecule/PurchaseEdCountBar"
 import PurchaseEdList from "../molecule/PurchaseEdList"
 
 interface PurchaseEdContainerProps {
-	purchaseEdList: PromptsType[]
+	purchaseEdList: PromptItemType[]
 }
 
 export default function PurchaseEdContainer({
@@ -18,4 +18,3 @@ export default function PurchaseEdContainer({
 		</div>
 	)
 }
-

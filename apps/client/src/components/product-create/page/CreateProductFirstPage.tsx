@@ -48,7 +48,6 @@ interface CreateProductFirstPageProps {
 }
 export default function CreateProductFirstPage({
 	session,
-
 	searchParams,
 }: CreateProductFirstPageProps) {
 	const router = useRouter()

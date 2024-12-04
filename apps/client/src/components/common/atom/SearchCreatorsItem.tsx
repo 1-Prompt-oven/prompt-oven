@@ -1,5 +1,6 @@
 import React from "react"
 import Image from "next/image"
+import { Star } from "@repo/ui/lucide"
 import type { SearchResultCreatorType } from "@/types/search/searchResultType"
 
 function SearchCreatorsItem({
@@ -25,10 +26,21 @@ function SearchCreatorsItem({
 				<div className="text-muted-foreground truncate text-left font-medium">
 					{creator.nickname}
 				</div>
+				<div className="text-muted-foreground text-sm font-semibold">
+					# {creator.rank}
+				</div>
+				<div className="text-muted-foreground pointer-events-none flex items-center gap-2 text-sm">
+					<span className="pointer-events-none flex items-center">
+						<Star className="text-muted-foreground mr-1 h-3 w-3 fill-current" />
+						{creator.rating}
+					</span>
+					<span className="text-muted-foreground ml-auto font-medium">
+						{creator.follower} followers
+					</span>
+				</div>
 			</div>
 		</button>
 	)
 }
 
 export default SearchCreatorsItem
-

@@ -1,52 +1,37 @@
-import type { SearchResultCreatorType } from "@/types/search/searchResultType"
 import type {
-	CommonResType,
-	PromptApiResponseType,
-} from "@/types/common/responseType"
-import type { PromptsType } from "@/types/prompts/promptsType"
+	SearchResultCreatorType,
+	SearchResultPromptType,
+} from "@/types/search/searchResultType"
+import {
+	searchResultCreatorData,
+	searchResultPromptData,
+} from "@/dummy/search/searchResultData"
 
-export interface FetchResults {
-	prompts: PromptsType[]
+interface FetchSearchResults {
 	creators: SearchResultCreatorType[]
+	prompts: SearchResultPromptType[]
 }
 
 export async function fetchSearchResults(
 	query: string,
-	tab: string,
-): Promise<FetchResults> {
-	// 상품 검색 결과 fetch
-	if (tab === "prompt") {
-		const promptResponse = await fetch(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/product/list?searchBar=${query}&pageSize=5`,
-			{
-				headers: {
-					"Content-Type": "application/json",
-					Accept: "application/json",
-				},
-				method: "GET",
-				cache: "no-cache",
-			},
-		)
-		const promptData: CommonResType<PromptApiResponseType> =
-			await promptResponse.json()
-		const prompts = promptData.result.productList
-		return { prompts, creators: [] }
-	}
-	// 크리에이터 검색 결과 fetch
-	const creatorResponse = await fetch(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/profile/search?query=${query}`,
-		{
-			headers: {
-				"Content-Type": "application/json",
-				Accept: "application/json",
-			},
-			method: "GET",
-			cache: "no-cache",
-		},
-	)
-	const creatorData: CommonResType<SearchResultCreatorType[]> =
-		await creatorResponse.json()
-	const creators = creatorData.result.slice(0, 5)
-	return { creators, prompts: [] }
-}
+): Promise<FetchSearchResults> {
+	// query: string,
+	// // 상품 검색 결과 fetch
+	// const productResponse = await fetch(`/v1/search/product?q=${query}`);
+	// const productData = await productResponse.json();
 
+	// // 크리에이터 검색 결과 fetch
+	// const creatorResponse = await fetch(`/v1/search/creator?q=${query}`);
+	// const creatorData = await creatorResponse.json();
+
+	// return {
+	//   creators: creatorData,
+	//   products: productData,
+	// };
+
+	const _query = query
+	return {
+		creators: searchResultCreatorData,
+		prompts: searchResultPromptData,
+	}
+}

@@ -22,4 +22,3 @@ export async function modifyProfileData(data: ProfileModifyType) {
 	revalidatePath(`/profile/${data.nickname}`)
 	revalidatePath(`/profile/modify/${data.memberUUID}`)
 }
-

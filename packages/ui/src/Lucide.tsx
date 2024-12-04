@@ -40,7 +40,6 @@ export {
 	Bell,
 	Check,
 	Upload,
-	Trash2,
 	FileUp,
 	Pencil,
 	GripVertical,

@@ -1,4 +1,11 @@
-// ---------------------------- -Product search params ---------------------------
+export interface QueryParams {
+	view: string | undefined
+}
+
+export interface SearchParams {
+	searchParams: QueryParams
+}
+
 export interface AccountQueryParams extends CreateProductQueryParams {
 	view: string | undefined
 }

@@ -14,13 +14,13 @@ interface PcSaveBarProps
 }
 
 function PcSaveBar({
-	lastSaved,
-	isLastPage,
-	onDraft,
-	onNext,
-	onBack,
-	...props
-}: PcSaveBarProps) {
+	                   lastSaved,
+	                   isLastPage,
+	                   onDraft,
+	                   onNext,
+	                   onBack,
+	                   ...props
+                   }: PcSaveBarProps) {
 	return (
 		<footer
 			{...props}
