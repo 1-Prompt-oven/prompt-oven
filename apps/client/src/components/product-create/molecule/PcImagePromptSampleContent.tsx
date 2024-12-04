@@ -1,6 +1,6 @@
-import React, { useMemo, useCallback, memo } from "react"
+import React, { memo, useCallback, useMemo } from "react"
 import Image from "next/image"
-import { X, GripVertical } from "@repo/ui/lucide"
+import { X } from "@repo/ui/lucide"
 import type { DraggableProvided } from "@hello-pangea/dnd"
 
 interface Content {
@@ -34,21 +34,16 @@ const PcImagePromptSampleContent: React.FC<PcImagePromptSampleContentProps> =
 			<li
 				ref={provided.innerRef}
 				{...provided.draggableProps}
-				className="bg-card hover:bg-accent group relative rounded-lg p-4 shadow-sm transition-colors duration-200">
-				<div
-					{...provided.dragHandleProps}
-					className="text-muted-foreground absolute left-2 top-1/2 -translate-y-1/2 transform cursor-move opacity-50 transition-opacity duration-200 group-hover:opacity-100"
-					aria-label="Drag handle">
-					<GripVertical className="h-6 w-6" />
-				</div>
+				{...provided.dragHandleProps}
+				className="relative flex cursor-move items-stretch gap-2 rounded-lg border-2 border-po-gray-250 bg-transparent px-4 pb-4 pt-8 transition-[border] hover:border-po-black-50">
 				<button
 					type="button"
 					onClick={handleRemove}
-					className="text-muted-foreground hover:text-destructive absolute right-2 top-2 transition-colors duration-200"
+					className="text-muted-foreground hover:text-foreground absolute right-2 top-2"
 					aria-label="Remove item">
 					<X className="h-5 w-5" />
 				</button>
-				<div className="flex flex-col items-start gap-4 pl-10 pr-8 sm:flex-row sm:items-center">
+				<div className="flex flex-col items-start gap-4 pr-8 sm:flex-row sm:items-center">
 					<div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-md">
 						<Image
 							src={imageUrl}
@@ -58,11 +53,11 @@ const PcImagePromptSampleContent: React.FC<PcImagePromptSampleContentProps> =
 						/>
 					</div>
 					<div className="flex-grow space-y-2">
-						<p className="text-muted-foreground text-sm">
-							<span className="text-foreground font-medium">Variables:</span>
+						<p className="text-[0.875rem] leading-[160%] tracking-[-0.02em] text-slate-400">
+							<span>Variables:</span>
 							{Object.entries(content.value).map(([key, value]) => (
-								<span key={key} className="ml-2">
-									{key}: {value}
+								<span key={key} className="ml-2 text-white">
+									{key}: [{value}]
 								</span>
 							))}
 						</p>
