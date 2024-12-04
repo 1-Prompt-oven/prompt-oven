@@ -6,16 +6,20 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import type { z } from "zod"
 import { ThreeDots } from "react-loader-spinner"
 import type { Session } from "next-auth"
+import dayjs from "dayjs"
+import { router } from "next/client"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcTitle from "@/components/product-create/atom/PcTitle.tsx"
 import {
 	createProductSecondImageSchema,
 	createProductSecondImageSchemaKeys,
 } from "@/schema/product.ts"
-import PcSelect from "@/components/product-create/atom/PcSelect.tsx"
+import PcSelect, {
+	type SelectOption,
+} from "@/components/product-create/atom/PcSelect.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
 import PcDropZone from "@/components/product-create/atom/PcDropZone.tsx"
-import { extractPromptVariables } from "@/lib/productUtils.ts"
+import { extractPromptVariables, replaceVariables } from "@/lib/productUtils.ts"
 import PcBaseWrapper from "@/components/product-create/atom/PcBaseWrapper.tsx"
 import PcBoundary from "@/components/product-create/atom/PcBoundary.tsx"
 import PcLabel from "@/components/product-create/atom/PcLabel.tsx"
@@ -24,6 +28,14 @@ import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSam
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import PcImagePromptSampleList from "@/components/product-create/organism/PcImagePromptSampleList.tsx"
 import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
+import { removeStorageItem, setProductUuid } from "@/lib/localStorage.ts"
+import {
+	getProductDetail,
+	updateProduct,
+} from "@/action/product/productUpsertAction.ts"
+import { getLlmVersionList } from "@/action/product/llmAction.ts"
+import { localStorageKeys } from "@/config/product/localStorage.ts"
+import type { ModifyProductRequestType } from "@/types/product/productUpsertType.ts"
 
 interface DropResult {
 	draggableId: string
@@ -39,24 +51,7 @@ interface DropResult {
 	reason: "DROP" | "CANCEL"
 }
 
-// Mock API call
-const fetchPrompt = () => {
-	return new Promise<string>((resolve) => {
-		setTimeout(() => {
-			resolve(
-				"Please provide a prompt for [the AI model] to generate [the text].",
-			)
-		}, 1000) // Simulate network delay
-	})
-}
-
 type FormData = z.infer<typeof createProductSecondImageSchema>
-
-const modelVersion = [
-	{ value: "1", label: "Chat GPT 3.5" },
-	{ value: "2", label: "Chat GPT 4" },
-	{ value: "3", label: "Chat GPT 4o" },
-]
 
 /*
  * todo:
@@ -72,25 +67,31 @@ interface CreateProductSecondImagePageProps {
 	session: Session | null
 }
 export default function CreateProductSecondImagePage({
-	// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars -- This prop is used in the original code
 	searchParams,
 }: CreateProductSecondImagePageProps) {
 	const [prompt, setPrompt] = useState("")
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
+	const [lastSaved, setLastSaved] = useState<string>("")
+	const [llmVersionList, setLlmVersionList] = useState<SelectOption[]>([])
 	const [currentImage, setCurrentImage] = useState<File | null>(null)
-	const minResults = 4
+	// const minResults = 4
 
-	const { register, control, handleSubmit, setValue } = useForm<FormData>({
-		resolver: zodResolver(createProductSecondImageSchema),
-		defaultValues: {
-			promptVars: [],
-			promptResult: undefined,
-			contents: [],
-			seed: "",
-			llmVersionId: "",
-		},
-	})
+	const extractPromptVars = useCallback((_prompt: string) => {
+		return extractPromptVariables(_prompt)
+	}, [])
+
+	const { register, control, handleSubmit, setValue, getValues } =
+		useForm<FormData>({
+			resolver: zodResolver(createProductSecondImageSchema),
+			defaultValues: {
+				promptVars: [],
+				promptResult: undefined,
+				contents: [],
+				seed: "",
+				llmVersionId: "",
+			},
+		})
 
 	const { fields, replace } = useFieldArray({
 		control,
@@ -107,18 +108,49 @@ export default function CreateProductSecondImagePage({
 		name: "contents",
 	})
 
-	const extractPromptVars = useCallback((_prompt: string) => {
-		return extractPromptVariables(_prompt)
-	}, [])
-
 	useEffect(() => {
-		const getPrompt = async () => {
+		const initExistingData = async () => {
 			try {
 				setLoading(true)
-				const fetchedPrompt = await fetchPrompt()
-				setPrompt(fetchedPrompt)
-				const extractedVars = extractPromptVars(fetchedPrompt)
+				const productUuid = setProductUuid(searchParams.productUuid ?? "")
+
+				const productData = (await getProductDetail({ productUuid })).result
+
+				// llm version list 조회
+				const _llmVersionList = (
+					await getLlmVersionList({ llmId: productData.llmId })
+				).result
+				setLlmVersionList(
+					_llmVersionList.map((item) => ({
+						label: item.llmVersionName,
+						value: String(item.llmVersionId),
+						extraProps: {
+							...item,
+						},
+					})),
+				)
+
+				// 상품의 프롬프트 세팅
+				setPrompt(productData.prompt)
+				const extractedVars = extractPromptVars(productData.prompt)
 				replace(extractedVars)
+
+				// 마지막 저장 시간 세팅
+				setLastSaved(dayjs(productData.updatedAt).format("YYYY-MM-DD HH:mm"))
+
+				// setValue(createProductSecondImageSchemaKeys.promptResult, "")
+
+				// 이 단계에 오면 결국에는 productUuid가 있을 거 같은데 조건문이 필요할까?
+				// 저장된 상품이 있을 경우, 상품 정보를 세팅
+				if (productUuid) {
+					setValue(createProductSecondImageSchemaKeys.seed, productData.seed)
+
+					String(productData.llmVersionId) &&
+						setValue(
+							createProductSecondImageSchemaKeys.llmVersionId,
+							String(productData.llmVersionId),
+						)
+				}
 			} catch (err) {
 				setError("Failed to fetch prompt. Please try again later.")
 			} finally {
@@ -126,7 +158,7 @@ export default function CreateProductSecondImagePage({
 			}
 		}
 
-		getPrompt().then(() => {
+		initExistingData().then(() => {
 			// do nothing
 		})
 	}, [extractPromptVars, replace])
@@ -171,6 +203,38 @@ export default function CreateProductSecondImagePage({
 		setCurrentImage(null)
 	}
 
+	// save handler
+	const onSave = (type: "draft" | "next") => {
+		updatePromptProduct()
+		if (type === "next") {
+			removeStorageItem(localStorageKeys.curTempProductUuid)
+			router.push(`account?view=create-product&step=3`)
+		}
+	}
+
+	const onBack = () => {
+		router.back()
+	}
+
+	const updatePromptProduct = () => {
+		const values = getValues()
+
+		const reqBody: ModifyProductRequestType = {
+			seed: values.seed,
+			llmVersionId: Number(values.llmVersionId),
+			contents: contentFields.map((content, index) => ({
+				contentOrder: index + 1,
+				sampleValue: replaceVariables(prompt, content.value),
+				contentUrl: "",
+			})),
+		}
+		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
+		console.log("updateProduct reqbody", reqBody)
+		updateProduct(reqBody).then(() => {
+			setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
+		})
+	}
+
 	if (loading)
 		return (
 			<div className="flex max-w-5xl flex-col gap-4">
@@ -194,12 +258,7 @@ export default function CreateProductSecondImagePage({
 				</div>
 			</div>
 		)
-	if (error)
-		return (
-			<div>
-				{error} {minResults}
-			</div>
-		)
+	if (error) return <div>{error}</div>
 
 	return (
 		<form className="flex max-w-5xl flex-col gap-4">
@@ -213,7 +272,7 @@ export default function CreateProductSecondImagePage({
 						control={control}
 						render={({ field }) => (
 							<PcSelect
-								options={modelVersion}
+								options={llmVersionList}
 								placeholder="Select AI Model"
 								onValueChange={field.onChange}
 								defaultValue={field.value}
@@ -276,7 +335,13 @@ export default function CreateProductSecondImagePage({
 			) : (
 				<PcPromptSampleSkeleton />
 			)}
-			<PcSaveBar className="mt-10" />
+			<PcSaveBar
+				className="mt-10"
+				lastSaved={lastSaved}
+				onDraft={() => onSave("draft")}
+				onNext={() => onSave("next")}
+				onBack={onBack}
+			/>
 		</form>
 	)
 }

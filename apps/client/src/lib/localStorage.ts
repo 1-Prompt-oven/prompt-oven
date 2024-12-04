@@ -19,6 +19,10 @@ export const setStorageItem = (obj: LocalStorageObject) => {
 	return { key, value }
 }
 
+export const removeStorageItem = (key: LocalStorageKey) => {
+	localStorage.removeItem(key)
+}
+
 /**
  * @param obj - object containing the key and value to store in local storage
  * @param pr - predicate function to validate the key and value before storing

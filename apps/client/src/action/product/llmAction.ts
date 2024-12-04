@@ -9,12 +9,12 @@ import type {
 	GetLlmVersionListRequestType,
 	GetLlmVersionListResponseType,
 } from "@/types/product/llmType.ts"
-import type { CommonResType } from "@/types/common/responseType.ts"
+import type { CommonResType2 } from "@/types/common/responseType.ts"
+import { getAccessToken } from "@/lib/api/sessionExtractor.ts"
+import { initializeHeaders } from "@/lib/api/headers.ts"
 
-export const getLlmName = async (
-	req: GetLlmRequestType,
-): Promise<CommonResType<GetLlmResponseType>> => {
-	return actionHandler<CommonResType<GetLlmResponseType>>({
+export const getLlmName = async (req: GetLlmRequestType) => {
+	return actionHandler<CommonResType2<GetLlmResponseType>>({
 		name: "getLlmName",
 		url: `/v1/product/llm/${req.llmId}`,
 		options: {
@@ -24,10 +24,8 @@ export const getLlmName = async (
 	})
 }
 
-export const getLlmList = async (
-	req: GetLlmListRequestType,
-): Promise<CommonResType<GetLlmListResponseType[]>> => {
-	return actionHandler<CommonResType<GetLlmListResponseType[]>>({
+export const getLlmList = async (req: GetLlmListRequestType) => {
+	return actionHandler<CommonResType2<GetLlmListResponseType[]>>({
 		name: "getLlmList",
 		url: `/v1/product/llm/list?${req.llmType ? `llmType=${req.llmType}` : ""}`,
 		options: {
@@ -37,16 +35,16 @@ export const getLlmList = async (
 	})
 }
 
-export const getLlmVersionList = async (
-	req: GetLlmVersionListRequestType,
-): Promise<CommonResType<GetLlmVersionListResponseType[]>> => {
-	return actionHandler<CommonResType<GetLlmVersionListResponseType[]>>({
+export const getLlmVersionList = async (req: GetLlmVersionListRequestType) => {
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+	return actionHandler<CommonResType2<GetLlmVersionListResponseType[]>>({
 		name: "getLlmVersionList",
-		url: `/v1/admin/product/llm/version/${req.llmId}`,
+		url: `/v1/product/llm/version/${req.llmId}`,
 		options: {
+			headers,
 			method: "GET",
 			cache: "no-cache",
-			body: JSON.stringify(req),
 		},
 	})
 }

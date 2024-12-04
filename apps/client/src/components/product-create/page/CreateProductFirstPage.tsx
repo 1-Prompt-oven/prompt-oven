@@ -6,6 +6,8 @@ import React, { useEffect, useState } from "react"
 import { ThreeDots } from "react-loader-spinner"
 import type { Session } from "next-auth"
 import { useRouter } from "next/navigation"
+import dayjs from "dayjs"
+import _ from "lodash"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
@@ -55,6 +57,7 @@ export default function CreateProductFirstPage({
 	const [sellerUuid, setSellerUuid] = useState<string>("")
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
+	const [lastSaved, setLastSaved] = useState<string>("")
 
 	const { control, register, watch, getValues, setValue } = useForm({
 		resolver: zodResolver(createProductFirstSchema),
@@ -82,9 +85,6 @@ export default function CreateProductFirstPage({
 	const selectedTopCategory = watch(
 		createProductFirstSchemaKeys.topCategoryUuid,
 	)
-
-	// todo: API를 통해서 필요한 값들을 가져와야 합니다.
-	const lastSaved = ""
 
 	const [aiModelOptions, setAiModelOptions] = useState<SelectOption[]>([])
 	const [topCategories, setTopCategories] = useState<SelectOption[]>([])
@@ -145,6 +145,10 @@ export default function CreateProductFirstPage({
 						setValue(
 							createProductFirstSchemaKeys.discountRate,
 							productData.discountRate,
+						)
+
+						setLastSaved(
+							dayjs(productData.updatedAt).format("YYYY-MM-DD HH:mm"),
 						)
 					}
 				} catch (e) {
@@ -240,7 +244,9 @@ export default function CreateProductFirstPage({
 			const llmId = getValues(createProductFirstSchemaKeys.llmId)
 			const llmType = aiModelOptions.find((llm) => llm.value === llmId)
 				?.extraProps?.llmType as string
-			router.push(`account?view=create-product&step=2&llmType=${llmType}`)
+			_.delay(() => {
+				router.push(`account?view=create-product&step=2&llmType=${llmType}`)
+			}, 2000)
 		}
 	}
 

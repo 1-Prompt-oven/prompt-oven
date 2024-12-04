@@ -21,15 +21,20 @@ const withOutAuth = async (
 	to: string | null,
 ) => {
 	const url = req.nextUrl.clone()
-  if (token) {
-    url.pathname = to ?? FALLBACK_URL;
-    url.search = "";
+	if (token) {
+		url.pathname = to ?? FALLBACK_URL
+		url.search = ""
 
-    return NextResponse.redirect(url);
-  } 
+		return NextResponse.redirect(url)
+	}
 }
 
-const withAuthList: string[] = [routes.cart, routes.profile, routes.favorite, routes.settings]
+const withAuthList: string[] = [
+	routes.cart,
+	routes.profile,
+	routes.favorite,
+	routes.settings,
+]
 const withOutAuthList: string[] = [routes.signIn, routes.signUp]
 
 export default async function middleware(request: NextRequest) {
@@ -59,7 +64,6 @@ export default async function middleware(request: NextRequest) {
 	else if (isWithOutAuth)
 		return withOutAuth(request, Boolean(accessToken), callbackUrl)
 }
-
 
 export const config = {
 	matcher: ["/((?!api|_next/static|_next/image|favicon.ico|fonts|images).*)"],
