@@ -9,7 +9,7 @@ export interface RefreshResponse {
 }
 
 export interface ExtendedToken extends JWT {
-	id?: string
+	id?: string | number
 	accesstoken?: string
 	refreshtoken?: string
 	nickname?: string

@@ -1,8 +1,7 @@
 /* eslint-disable -- Disable ESLint for this file to allow flexible type definitions for next-auth */
-import NextAuth from 'next-auth/next';
-import type { DefaultSession, DefaultUser } from 'next-auth/next';
+import type { DefaultSession, DefaultUser } from "next-auth/next"
 
-declare module 'next-auth' {
+declare module "next-auth" {
   interface Session {
     user: {
       id?: number
@@ -20,7 +19,7 @@ declare module 'next-auth' {
       memberUUID: string
       profileImage: string
       failed: boolean
-    } & DefaultSession['user'];
+    } & DefaultSession["user"]
   }
 
   interface User extends DefaultUser {
