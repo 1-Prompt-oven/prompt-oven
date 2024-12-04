@@ -22,4 +22,3 @@ export const PaymentList: PaymentItemType[] = [
 		productPrice: "900",
 	},
 ]
-

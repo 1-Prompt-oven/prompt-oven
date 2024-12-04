@@ -1,11 +1,11 @@
 "use client"
 
-import type { PromptsType } from "@/types/prompts/promptsType"
 import PromptCard from "@/components/common/organism/PromptCard"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 import ProfileLoadMore from "../atoms/ProfileLoadMore"
 
 interface ProfileListProps {
-	listData: PromptsType[]
+	listData: PromptItemType[]
 	// initialData: {
 	// 	items: PromptsType[] // 초기 데이터
 	// 	nextCursor: string | null // 다음 커서
@@ -27,4 +27,3 @@ export default function ProfilePromptList({ listData }: ProfileListProps) {
 		</div>
 	)
 }
-

@@ -16,4 +16,3 @@ export async function getPaymentList(): Promise<PaymentItemType[]> {
 
 	return res
 }
-

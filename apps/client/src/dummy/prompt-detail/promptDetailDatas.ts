@@ -20,4 +20,3 @@ export const ProductDetailData: PromptDetailInfoType = {
 	isCart: false,
 	isFavorite: false,
 }
-

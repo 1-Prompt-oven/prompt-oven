@@ -1,11 +1,11 @@
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
-import type { PromptsType } from "@/types/prompts/promptsType"
+import type { PromptItemType } from "@/types/prompts/promptsType"
 import ProfileMemberInfo from "../organisms/ProfileMemberInfo"
 import ProfilePrompt from "../organisms/ProfilePrompt"
 
 interface ProfileDataProps {
 	memberData: ProfileMemberInfoType // 회원 정보
-	listData: PromptsType[]
+	listData: PromptItemType[]
 	// listData: {
 	// 	items: PromptsType[] // 프로필 카드 목록
 	// 	nextCursor: string | null // 다음 커서
@@ -45,4 +45,3 @@ export default async function ProfileTemplate({
 		</section>
 	)
 }
-
