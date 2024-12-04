@@ -1,6 +1,14 @@
 import { useState } from "react"
-import { uploadImage } from "@/action/s3/s3UploadAction"
 import type { CommonModifyType } from "@/types/profile/profileTypes"
+
+interface UploadResponse {
+	url: string;
+	signedUrl?: string;
+}
+
+interface UploadError {
+	message: string;
+}
 
 export const useModify = (modifyData: CommonModifyType) => {
 	//// 변수 관리 START ////
@@ -119,23 +127,54 @@ export const useModify = (modifyData: CommonModifyType) => {
 		key: string,
 		bucket: string,
 	) => {
-		if (imageUrl !== undefined && imageUrl !== currentImageUrl) {
-			const result = await uploadImage(imageUrl, bucket)
-			if (result.isSuccess) {
-				//쿼리문자열 포함 URL -> 기본 URL 변경
-				const splitImageUrl =
-					typeof result.responseImageUrl === "string"
-						? result.responseImageUrl.split("?")[0]
-						: ""
-				formData.set(key, splitImageUrl)
-			} else {
-				// eslint-disable-next-line no-alert -- Comments to notify you of failed image upload
-				alert("이미지 업로드에 실패하였습니다.")
-				return false // 업로드 실패 시 false 반환
+		if (imageUrl && imageUrl !== currentImageUrl) {
+			try {
+				// Only proceed if the imageUrl is a base64 string (new upload)
+				if (imageUrl.startsWith('data:image')) {
+					// Create a new FormData for the upload
+					const uploadFormData = new FormData();
+					
+					// Convert base64 to blob
+					const response = await fetch(imageUrl);
+					const blob = await response.blob();
+					
+					// Create a File from the Blob with a proper name
+					const fileName = `${Date.now()}-${key}.${blob.type.split('/')[1] || 'png'}`;
+					const file = new File([blob], fileName, { type: blob.type });
+					
+					uploadFormData.append('img', file);
+					uploadFormData.append('keyword', `${bucket}/${key}`);
+
+					const uploadResponse = await fetch('/api/upload', {
+						method: 'POST',
+						body: uploadFormData
+					});
+
+					if (!uploadResponse.ok) {
+						const errorData = await uploadResponse.json() as UploadError;
+						throw new Error(errorData.message || 'Failed to upload image');
+					}
+
+					const data = await uploadResponse.json() as UploadResponse;
+					
+					// Update the form with the S3 URL
+					formData.set(key, data.url);
+					return true;
+				}
+				
+				// If it's already an S3 URL, just use it as is
+				formData.set(key, imageUrl);
+				return true;
+			} catch (error) {
+				return false;
 			}
 		}
-		return true // 업로드 성공 시 true 반환
-	}
+		// If no new image, keep the current one
+		if (currentImageUrl) {
+			formData.set(key, currentImageUrl);
+		}
+		return true;
+	};
 	//// 이미지 - S3 핸들링 END ////
 
 	//// 이미지 제거 핸들링 START ////
@@ -153,6 +192,25 @@ export const useModify = (modifyData: CommonModifyType) => {
 	}
 	//// 이미지 제거 핸들링 END ////
 
+	const handleUpload = async (file: File, keyword: string): Promise<string> => {
+		const formData = new FormData();
+		formData.append("img", file);
+		formData.append("keyword", keyword);
+
+		const response = await fetch('/api/upload', {
+			method: 'POST',
+			body: formData
+		});
+
+		if (!response.ok) {
+			const errorData = await response.json() as UploadError;
+			throw new Error(errorData.message || 'Upload failed');
+		}
+
+		const data = await response.json() as UploadResponse;
+		return data.url;
+	};
+
 	return {
 		banner,
 		avatar,
@@ -167,5 +225,6 @@ export const useModify = (modifyData: CommonModifyType) => {
 		handleImageUpload,
 		handleReset,
 		handleImageRemove,
+		handleUpload,
 	}
 }
