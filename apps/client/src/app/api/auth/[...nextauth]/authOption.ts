@@ -7,6 +7,7 @@ import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts"
 import { refreshAccessToken } from '@/action/auth/authTokenAction';
 import type {ExtendedToken} from "@/types/auth/AuthToken"
 import { logoutAuthMember } from '@/action/auth/memberManageAction';
+import { getProfileImage } from "@/action/profile/getProfilePic";
 
 export const authOptions: NextAuthOptions = {
     session: {
@@ -30,6 +31,7 @@ export const authOptions: NextAuthOptions = {
                     email: credentials.email,
                     password: credentials.password,
                 });
+                const profileImage = await getProfileImage(response.result.memberUUID)
                 console.log("signInByAuth",response)
                 return {
                     accesstoken: response.result.accesstoken,
@@ -38,6 +40,7 @@ export const authOptions: NextAuthOptions = {
                     nickname: response.result.nickname,
                     memberUUID: response.result.memberUUID,
                     role: response.result.role,
+                    profileImage: profileImage.picture,
                     failed: false,
                 };
             },
@@ -121,7 +124,19 @@ export const authOptions: NextAuthOptions = {
             if (Date.now() >= (token.tokenExpiration as number || 0)) {
                 const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "")
                 if (refreshedToken.result) {
+                  const profileImage = await getProfileImage(user.memberUUID)
+                  token.profileImage = profileImage.picture
+                  user.profileImage = profileImage.picture
+
                   token.accesstoken = refreshedToken.result.accessToken;
+                  user.accesstoken = refreshedToken.result.accessToken
+
+                  token.role = refreshedToken.result.role
+                  user.role = refreshedToken.result.role
+
+                  token.nickname = refreshedToken.result.nickname
+                  user.nickname = refreshedToken.result.nickname
+
                   token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000;
               } else {
                   await logoutAuthMember({

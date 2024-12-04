@@ -18,18 +18,20 @@ declare module 'next-auth' {
       nickname: string
       role: string
       memberUUID: string
+      profileImage: string
       failed: boolean
     } & DefaultSession['user'];
   }
 
   interface User extends DefaultUser {
-    id?: numaber
+    id?: string
     email: string
     accesstoken: string
     refreshtoken: string
     nickname: string
     role: string
     memberUUID: string
+    profileImage: string
     failed: boolean
   }
 }

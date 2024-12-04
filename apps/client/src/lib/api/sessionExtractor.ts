@@ -87,6 +87,20 @@ export async function getRefreshToken(): Promise<string | null> {
     return null
 }
 
+export async function getProfileImage(): Promise<string | null> {
+    "use server"
+    const session = await getServerSession(authOptions)
+    if (session) {
+        const userObj = session as { user?: { profileImage?: unknown } }
+        const profileImage = userObj.user?.profileImage
+
+        if (typeof profileImage === 'string') {
+            return profileImage
+        }
+    }
+    return null
+}
+
 export async function matchUser(target: string): Promise<boolean> {
     "use server"
     const session = await getServerSession(authOptions)
