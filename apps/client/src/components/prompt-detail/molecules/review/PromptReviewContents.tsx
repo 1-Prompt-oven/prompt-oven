@@ -2,7 +2,6 @@ import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailTyp
 import type { PromptReviewType } from "@/types/review/reviewType"
 import PromptDetailNoReview from "../../atoms/review/PromptDetailNoReview"
 import PromptDetailReviewContent from "./PromptDetailReviewContent"
-import PromptDetailReviewMore from "./PromptDetailReviewMore"
 
 interface PromptReviewContentsProps {
 	productDetail: PromptDetailInfoType
@@ -13,6 +12,8 @@ export default function PromptReviewContents({
 	productDetail,
 	productReview,
 }: PromptReviewContentsProps) {
+	// eslint-disable-next-line no-console -- This is a client-side only log
+	console.log(productDetail)
 	return (
 		<div>
 			{productReview.content.length > 0 ? (
@@ -28,10 +29,10 @@ export default function PromptReviewContents({
 							/>
 						))}
 					</ul>
-					<PromptDetailReviewMore
+					{/* <PromptDetailReviewMore
 						productDetail={productDetail}
 						productReview={productReview}
-					/>
+					/> */}
 				</div>
 			) : (
 				<PromptDetailNoReview />

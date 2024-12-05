@@ -6,8 +6,16 @@ import { getProductDetail } from "@/action/prompt-detail/getProductDetailData"
 import { getProductReview } from "@/action/review/getReviewData"
 import PromptDetailTemplate from "@/components/prompt-detail/templates/PromptDetailTemplate"
 
-export default async function PromptDetail() {
-	const productDetail = await getProductDetail()
+interface PromptIdProps {
+	params: {
+		id: string
+	}
+}
+
+export default async function PromptDetail({ params }: PromptIdProps) {
+	const productId = params.id
+
+	const productDetail = await getProductDetail(productId)
 	const productReview = await getProductReview()
 	const notableDrops = await getDetailDrops()
 	const categories = await getDetailCategory()

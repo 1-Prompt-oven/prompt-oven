@@ -1,8 +1,7 @@
 import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
-import PromptDetailHash from "../molecules/PromptDetailHash"
-import PromptDetailProductDescription from "../molecules/PromptDetailProductDescription"
-import PromptDetailSellor from "../molecules/PromptDetailSellor"
-import PromptDetailStandardInfo from "../molecules/PromptDetailStandardInfo"
+import PromptDetailDescription from "../atoms/PromptDetailHash"
+import PromptDetailStandardInfo from "../atoms/PromptDetailStandardInfo"
+import PromptDetailContents from "../molecules/PromptDetailContents"
 import PromptDetailChoice from "../molecules/PromptDetailChoice"
 
 interface PromptDetailInfoProps {
@@ -16,32 +15,24 @@ export default function PromptDetailInfo({
 		<div className="flex min-h-[600px] flex-grow flex-col sm:min-h-[800px] lg:justify-between">
 			<div className="flex flex-col gap-12">
 				<PromptDetailStandardInfo
-					productRegistDate={productDetail.productRegistDate}
+					productRegistDate={productDetail.updatedAt}
 					price={productDetail.price}
 					productName={productDetail.productName}
-					productStar={productDetail.productStar}
-					productReviewCount={productDetail.productReviewCount}
+					productStar={productDetail.avgStar}
+					reviewCount={productDetail.reviewCount}
 				/>
 
-				<PromptDetailHash
-					hashTag={productDetail.hashTag}
-					bio={productDetail.bio}
+				<PromptDetailDescription
+					llmid={productDetail.llmId}
+					description={productDetail.description}
 				/>
 
-				<PromptDetailSellor
-					memberNickname={productDetail.memberNickname}
-					memberProfileImage={productDetail.memberProfileImage}
-				/>
+				{/* <PromptDetailSellor memberUuid={contents.sellerUuid} /> */}
 
-				<PromptDetailProductDescription
-					productDescription={productDetail.productDescription}
-				/>
+				<PromptDetailContents productContents={productDetail.contents} />
 			</div>
 
-			<PromptDetailChoice
-				isFavorite={productDetail.isFavorite}
-				isCart={productDetail.isCart}
-			/>
+			<PromptDetailChoice productUuid={productDetail.productUuid} />
 		</div>
 	)
 }

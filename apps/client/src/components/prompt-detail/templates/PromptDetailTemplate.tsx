@@ -25,7 +25,7 @@ export default function PromptDetailTemplate({
 	return (
 		<section className="mx-auto mt-12 flex max-w-screen-xl flex-col lg:gap-16">
 			<PromptDetailMain
-				thumbnailUrl={productDetail.thumbnailUrl}
+				contents={productDetail.contents}
 				productUuid={productDetail.productUuid}
 				productDetail={productDetail}
 			/>

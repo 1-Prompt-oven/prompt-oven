@@ -1,17 +1,42 @@
 export interface PromptDetailInfoType {
 	productUuid: string
-	thumbnailUrl: string
+	sellerUuid: string
 	productName: string
-	productStar: number
-	productReviewCount: number
-	productRegistDate: string
 	price: number
-	productDescription: string
-	hashTag: string
-	bio: string | undefined
-	memberProfileImage: string | undefined
-	memberNickname: string | undefined
-	isBuy: boolean
-	isCart: boolean
-	isFavorite: boolean
+	prompt: string
+	description: string
+	llmId: number
+	topCategoryUuid: string
+	subCategoryUuid: string
+	contents: PromptDetailContentsType[]
+	discountRate: number
+	enabled: boolean
+	approved: boolean
+	seed: string
+	llmVersionId: number
+	avgStar: number
+	sells: number
+	reviewCount: number
+	createdAt: string
+	updatedAt: string
+}
+
+export interface PromptDetailContentsType {
+	contentUrl: string
+	contentOrder: number
+	sampleValue: string
+}
+
+export interface ProfileDetailSellorShortType {
+	memberUuid: string
+	memberProfileImage: string
+	memberNickname: string
+}
+
+export interface PromptDetailFavoriteStateType {
+	liked: boolean
+}
+
+export interface PromptDetailCartStateType {
+	result: boolean
 }

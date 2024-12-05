@@ -1,4 +1,3 @@
-import React from "react"
 import StarAnimation from "@repo/ui/star-animation"
 
 interface PromptDetailStandardInfoProps {
@@ -6,7 +5,7 @@ interface PromptDetailStandardInfoProps {
 	price: number
 	productName: string
 	productStar: number
-	productReviewCount: number
+	reviewCount: number
 }
 
 export default function PromptDetailStandardInfo({
@@ -14,7 +13,7 @@ export default function PromptDetailStandardInfo({
 	price,
 	productName,
 	productStar,
-	productReviewCount,
+	reviewCount,
 }: PromptDetailStandardInfoProps) {
 	const formattedDate = new Date(productRegistDate).toISOString().split("T")[0]
 	const formattedNumber = price.toFixed(2)
@@ -25,7 +24,7 @@ export default function PromptDetailStandardInfo({
 			<div className="flex items-center justify-between text-sm text-white">
 				<div className="flex items-center gap-4">
 					<StarAnimation rateData={productStar} noAnimation={false} />
-					<span className="font-semibold">( {productReviewCount} )</span>
+					<span className="font-semibold">( {reviewCount} )</span>
 				</div>
 				<p className="mr-4 flex gap-2">
 					<span className="font-bold">등록일</span>
