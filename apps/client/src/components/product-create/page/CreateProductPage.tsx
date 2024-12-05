@@ -4,6 +4,7 @@ import type { AccountQueryParams } from "@/types/account/searchParams.ts"
 import CreateProductFirstPage from "@/components/product-create/page/CreateProductFirstPage.tsx"
 import CreateProductSecondImagePage from "@/components/product-create/page/CreateProductSecondImagePage.tsx"
 import CreateProductSecondTextPage from "@/components/product-create/page/CreateProductSecondTextPage.tsx"
+import CreateSuccessPage from "@/components/product-create/page/CreateSuccessPage.tsx"
 
 export interface CreateProductPageProps {
 	searchParams: AccountQueryParams
@@ -29,6 +30,7 @@ function CreateProductPage({ searchParams, session }: CreateProductPageProps) {
 					searchParams={searchParams}
 				/>
 			)}
+			{step === "3" && <CreateSuccessPage searchParams={searchParams} />}
 		</>
 	)
 }
