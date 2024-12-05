@@ -82,7 +82,7 @@ export default function CreateProductSecondTextPage({
 				promptResult: "",
 				contents: [],
 				seed: "",
-				llmVersionId: "",
+				llmVersionId: undefined,
 			},
 		})
 
@@ -141,8 +141,7 @@ export default function CreateProductSecondTextPage({
 
 					setValue(
 						createProductSecondTextSchemaKeys.llmVersionId,
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-binary-expression -- null 체크,
-						String(productData.llmVersionId) ?? "",
+						String(productData.llmVersionId),
 					)
 				}
 			} catch (e) {

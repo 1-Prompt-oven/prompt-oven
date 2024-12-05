@@ -89,7 +89,7 @@ export default function CreateProductSecondImagePage({
 				promptResult: undefined,
 				contents: [],
 				seed: "",
-				llmVersionId: "",
+				llmVersionId: undefined,
 			},
 		})
 
@@ -130,7 +130,6 @@ export default function CreateProductSecondImagePage({
 						},
 					})),
 				)
-
 				// 상품의 프롬프트 세팅
 				setPrompt(productData.prompt)
 				const extractedVars = extractPromptVars(productData.prompt)
