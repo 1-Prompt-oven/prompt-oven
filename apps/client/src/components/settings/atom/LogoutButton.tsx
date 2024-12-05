@@ -1,10 +1,10 @@
 "use client"
 
-import { signOut } from "next-auth/react"
 import React, { useState } from "react"
+import { signOut } from "next-auth/react"
 import GradientButton from "@/components/common/atom/GradientButton"
 
-function SettingsButton() {
+function LogoutButton() {
 	const [loading, setLoading] = useState(false)
 	const [error, setError] = useState<string | null>(null)
 
@@ -27,7 +27,10 @@ function SettingsButton() {
 
 	return (
 		<div>
-			<GradientButton onClick={handleLogout} disabled={loading}>
+			<GradientButton
+				onClick={handleLogout}
+				disabled={loading}
+				className="w-[378px]">
 				{loading ? "Logging out..." : "Logout"}
 			</GradientButton>
 			{error ? <p className="mt-2 text-sm text-red-500">{error}</p> : null}
@@ -35,4 +38,4 @@ function SettingsButton() {
 	)
 }
 
-export default SettingsButton
+export default LogoutButton
