@@ -6,6 +6,8 @@ import type { PromptDetailType } from "@/types/search/searchResultType"
 
 interface UseSearchActions extends FetchResults {
 	fetchAndSetSearchResults: (query: string, tab: string) => Promise<void>
+	setCreators: React.Dispatch<React.SetStateAction<SearchResultCreatorType[]>>
+	setPrompts: React.Dispatch<React.SetStateAction<PromptDetailType[]>>
 }
 
 export function useSearchActions(): UseSearchActions {
@@ -31,6 +33,8 @@ export function useSearchActions(): UseSearchActions {
 	return {
 		creators,
 		prompts,
+		setCreators,
+		setPrompts,
 		fetchAndSetSearchResults,
 	}
 }

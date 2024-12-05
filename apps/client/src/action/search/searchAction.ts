@@ -20,7 +20,7 @@ export async function fetchSearchResults(
 	// 상품 검색 결과 fetch
 	if (tab === "prompt") {
 		const promptResponse = await fetch(
-			`${process.env.API_BASE_URL}/v1/product/list?searchBar=${query}&pageSize=5`,
+			`${process.env.API_BASE_URL}/v1/product/list?searchBar=${query}&pageSize=15`,
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -49,7 +49,7 @@ export async function fetchSearchResults(
 	)
 	const creatorData: CommonResType<SearchResultCreatorType[]> =
 		await creatorResponse.json()
-	const creators = creatorData.result.slice(0, 5)
+	const creators = creatorData.result.slice(0, 15)
 	return { creators, prompts: [] }
 }
 

@@ -37,16 +37,23 @@ export function SearchDialogDrawer({
 	isOpen,
 }: SearchDialogDrawerWrapperProps) {
 	const [isMobile, setIsMobile] = useState(false)
-	const { creators, prompts, fetchAndSetSearchResults } = useSearchActions()
+	const {
+		creators,
+		prompts,
+		setCreators,
+		setPrompts,
+		fetchAndSetSearchResults,
+	} = useSearchActions()
 	const router = useRouter()
+	const [query, setQuery] = useState("")
 	const [isLoading, setIsLoading] = useState(false)
 	const [currentTab, setCurrentTab] = useState("prompt")
 
 	const debouncedFetchAndSetSearchResults = debounce(
 		async (searchQuery: string, tab: string) => {
 			try {
-				await fetchAndSetSearchResults(searchQuery, tab)
 				setIsLoading(true)
+				await fetchAndSetSearchResults(searchQuery, tab)
 			} finally {
 				setIsLoading(false)
 			}
@@ -64,34 +71,81 @@ export function SearchDialogDrawer({
 	}, [])
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-		const query = e.target.value
-		debouncedFetchAndSetSearchResults(query, currentTab)
+		const newQuery = e.target.value
+		setQuery(newQuery)
+		if (newQuery === "") {
+			setPrompts([])
+			setCreators([])
+			return
+		}
+		debouncedFetchAndSetSearchResults(newQuery, currentTab)
 	}
 
 	const handleTabChange = (value: string) => {
 		setCurrentTab(value)
+		setQuery("")
+		setPrompts([])
+		setCreators([])
+	}
+
+	const renderTabContent = () => {
+		if (isLoading) {
+			return <SearchItemSkeleton />
+		}
+
+		if (query && currentTab === "prompt" && prompts.length === 0) {
+			return <p className="text-muted-foreground">No prompts found.</p>
+		}
+
+		if (query && currentTab === "creator" && creators.length === 0) {
+			return <p className="text-muted-foreground">No creators found.</p>
+		}
+
+		return currentTab === "prompt"
+			? prompts.map((prompt) => (
+					<Button
+						key={prompt.productUuid}
+						variant="ghost"
+						className="text-muted-foreground w-full justify-start hover:text-white">
+						{prompt.productName}
+					</Button>
+				))
+			: creators.map((creator) => (
+					<Button
+						key={creator.id}
+						variant="ghost"
+						className="text-muted-foreground w-full justify-start hover:text-white">
+						{creator.nickname}
+					</Button>
+				))
 	}
 
 	const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		const query = (e.target as HTMLInputElement).value.trim()
-		if (e.key === "Enter" && query !== "") {
+		if (e.key === "Enter" && query.trim() !== "") {
 			e.preventDefault()
 			router.push(`/prompts?query=${query}`)
-			setIsOpen(false)
+			closeDialog()
 		}
+	}
+
+	const closeDialog = () => {
+		setPrompts([])
+		setCreators([])
+		setQuery("")
+		setIsLoading(false)
+		setIsOpen(false)
 	}
 
 	return (
 		<>
 			{isMobile ? (
-				<Drawer open={isOpen} onOpenChange={() => setIsOpen(false)}>
+				<Drawer open={isOpen} onOpenChange={closeDialog}>
 					<DrawerContent className="border-zinc-80 min-h-[60%] bg-zinc-900/95 p-5">
 						<DrawerTitle className="hidden">Search</DrawerTitle>
 						<DrawerDescription className="hidden">
 							Search for prompts or creators
 						</DrawerDescription>
 						<div className="flex justify-between">
-							{/* 수빈 - 탭 클릭 시 해당 api 액션 연결 작업 진행하기 */}
 							<Tabs
 								defaultValue="prompt"
 								className="w-full"
@@ -110,21 +164,13 @@ export function SearchDialogDrawer({
 										<Input
 											onKeyDown={handleEnter}
 											onChange={handleInputChange}
+											value={query}
 											placeholder="What are you searching for?"
 											className="placeholder:text-muted-foreground text-muted-foreground border-none bg-transparent text-lg"
 										/>
-										{isLoading ? (
-											<SearchItemSkeleton />
-										) : (
-											creators.map((creator) => (
-												<Button
-													key={creator.id}
-													variant="ghost"
-													className="text-muted-foreground w-full justify-start hover:text-white">
-													{creator.nickname}
-												</Button>
-											))
-										)}
+										<div className="max-h-[40vh] overflow-y-auto">
+											{renderTabContent()}
+										</div>
 									</div>
 								</TabsContent>
 								<TabsContent value="prompt">
@@ -132,21 +178,15 @@ export function SearchDialogDrawer({
 										<Input
 											onKeyDown={handleEnter}
 											onChange={handleInputChange}
+											value={query}
 											placeholder="What are you searching for?"
 											className="placeholder:text-muted-foreground text-muted-foreground border-none bg-transparent text-lg"
 										/>
-										{isLoading ? (
-											<SearchItemSkeleton />
-										) : (
-											prompts.map((prompt) => (
-												<Button
-													key={prompt.productUuid}
-													variant="ghost"
-													className="text-muted-foreground w-full justify-start hover:text-white">
-													{prompt.productName}
-												</Button>
-											))
-										)}
+										<div className="max-h-[40vh] overflow-y-auto">
+											<div className="max-h-[40vh] overflow-y-auto">
+												{renderTabContent()}
+											</div>
+										</div>
 									</div>
 								</TabsContent>
 							</Tabs>
@@ -154,8 +194,8 @@ export function SearchDialogDrawer({
 					</DrawerContent>
 				</Drawer>
 			) : (
-				<Dialog open={isOpen} onOpenChange={() => setIsOpen(false)}>
-					<DialogContent className="border-zinc-80 bg-zinc-900/95 md:min-w-[55%]">
+				<Dialog open={isOpen} onOpenChange={closeDialog}>
+					<DialogContent className="border-zinc-80 fixed left-1/2 top-[50%] max-h-[70vh] overflow-scroll bg-zinc-900/95 md:min-w-[55%]">
 						<DialogHeader>
 							<DialogTitle className="hidden">Search</DialogTitle>
 							<DialogDescription className="hidden">
@@ -179,21 +219,15 @@ export function SearchDialogDrawer({
 											<Input
 												onKeyDown={handleEnter}
 												onChange={handleInputChange}
+												value={query}
 												placeholder="What are you searching for?"
 												className="placeholder:text-muted-foreground text-muted-foreground border-none bg-transparent text-lg"
 											/>
-											{isLoading ? (
-												<SearchItemSkeleton />
-											) : (
-												creators.map((creator) => (
-													<Button
-														key={creator.id}
-														variant="ghost"
-														className="text-muted-foreground w-full justify-start hover:text-white">
-														{creator.nickname}
-													</Button>
-												))
-											)}
+											<div className="max-h-[40vh] overflow-y-auto">
+												<div className="max-h-[40vh] overflow-y-auto">
+													{renderTabContent()}
+												</div>
+											</div>
 										</div>
 									</TabsContent>
 									<TabsContent value="prompt">
@@ -201,28 +235,20 @@ export function SearchDialogDrawer({
 											<Input
 												onKeyDown={handleEnter}
 												onChange={handleInputChange}
+												value={query}
 												placeholder="What are you searching for?"
 												className="placeholder:text-muted-foreground text-muted-foreground border-none bg-transparent text-lg"
 											/>
-											{isLoading ? (
-												<SearchItemSkeleton />
-											) : (
-												prompts.map((prompt) => (
-													<Button
-														key={prompt.productUuid}
-														variant="ghost"
-														className="text-muted-foreground w-full justify-start hover:text-white">
-														{prompt.productName}
-													</Button>
-												))
-											)}
+											<div className="max-h-[40vh] overflow-y-auto">
+												{renderTabContent()}
+											</div>
 										</div>
 									</TabsContent>
 								</Tabs>
 								<Button
 									variant="ghost"
 									className="text-muted-foreground mt-1.5 h-6 w-6 p-0"
-									onClick={() => setIsOpen(false)}>
+									onClick={closeDialog}>
 									<X className="!h-6 !w-6" />
 									<span className="sr-only">Close</span>
 								</Button>
