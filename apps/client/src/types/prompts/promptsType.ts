@@ -19,5 +19,5 @@ export interface PromptItemType {
 	discountRate: number
 	reviewCount: number
 	createdAt: string
-	thumbnailUrl: string
+	thumbnailUrl?: string
 }

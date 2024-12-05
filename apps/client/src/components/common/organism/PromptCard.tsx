@@ -18,7 +18,11 @@ interface PromptCardProps {
 export default function PromptCard({ productInfo }: PromptCardProps) {
 	const formattedDate = PromptCardDateFormatted(productInfo.createdAt)
 	const isNew = PromptIsNew(productInfo.createdAt)
-	const hasHttp = productInfo.thumbnailUrl.includes("http") //잘못된 이미지에 대한 처리 추가
+	const defaultImg =
+		"https://promptoven.s3.ap-northeast-2.amazonaws.com/client/product/7f39f6bc72cbe91aa91b92ebe775b981d75c52d6c21be653a8a7dadd01bee416.png"
+	const imgUrl = productInfo.thumbnailUrl
+		? productInfo.thumbnailUrl
+		: defaultImg
 
 	return (
 		<li className="flex justify-center">
@@ -26,15 +30,15 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 				<Card className="relative flex w-[220px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
 					<div className="relative h-[260px] bg-white">
 						{/* 잘못된 이미지에 대한 처리 추가 */}
-						{hasHttp ? (
-							<Image
-								src={productInfo.thumbnailUrl}
-								sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
-								fill
-								priority
-								alt="Cyberpunk character"
-							/>
-						) : null}
+
+						<Image
+							src={imgUrl}
+							sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
+							fill
+							priority
+							alt={productInfo.productUuid}
+						/>
+
 						<Badge className="absolute left-4 top-4 border-0 bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] font-bold hover:from-[#A913F9] hover:to-[#3F5EFB]">
 							{isNew ? "NEW" : formattedDate}
 						</Badge>

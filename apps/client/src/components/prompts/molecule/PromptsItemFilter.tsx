@@ -11,16 +11,17 @@ import {
 interface PromptFilterProps {
 	promptCount: number
 	handleFilter: (formData: FormData) => void
+	allForm: FormData
 }
 
 export default function PromptsItemFilter({
 	promptCount,
 	handleFilter,
+	allForm,
 }: PromptFilterProps) {
 	const handleSelectChange = (name: string, value: string) => {
-		const formData = new FormData()
-		formData.append(name, value)
-		handleFilter(formData) // 선택이 변경될 때마다 handleFilter 호출
+		allForm.append(name, value)
+		handleFilter(allForm) // 선택이 변경될 때마다 handleFilter 호출
 	}
 
 	return (
