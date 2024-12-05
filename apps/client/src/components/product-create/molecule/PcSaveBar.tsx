@@ -68,21 +68,24 @@ function PcSaveBar({
 			{/* Action Buttons */}
 			<div className="flex items-center gap-2">
 				<PcButton
+					isAsync
 					isLoading={btDraftLoading}
 					onClick={handleDraftWrapper}
-					className="w-[6.75rem] bg-po-purple-50 px-4 py-2 hover:bg-po-purple-50">
+					className="w-[6.75rem] bg-po-purple-50 px-4 py-2 hover:bg-po-purple-50 disabled:cursor-not-allowed disabled:bg-po-purple-50 disabled:opacity-90 hover:disabled:bg-po-purple-50">
 					<span className="text-sm font-medium tracking-[-0.02em] text-white">
 						Save Draft
 					</span>
 				</PcButton>
 				<PcButton
 					className="box-border w-[6.75rem] border-2 border-po-purple-100 bg-[#2F2F2F]"
-					onClick={onBack}>
+					onClick={onBack}
+					isAsync={false}>
 					<span className="text-sm font-medium tracking-[-0.02em] text-white">
 						Back
 					</span>
 				</PcButton>
 				<PcButton
+					isAsync
 					className="w-[6.75rem]"
 					isLoading={btNextLoading}
 					onClick={handleNextWrapper}>

@@ -18,7 +18,12 @@ import PcSelect, {
 } from "@/components/product-create/atom/PcSelect.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
 import PcDropZone from "@/components/product-create/atom/PcDropZone.tsx"
-import { extractPromptVariables, replaceVariables } from "@/lib/productUtils.ts"
+import {
+	convertToBase64,
+	extractPromptVariables,
+	handleProductImageUpload,
+	replaceVariables,
+} from "@/lib/productUtils.ts"
 import PcBaseWrapper from "@/components/product-create/atom/PcBaseWrapper.tsx"
 import PcBoundary from "@/components/product-create/atom/PcBoundary.tsx"
 import PcLabel from "@/components/product-create/atom/PcLabel.tsx"
@@ -52,6 +57,9 @@ interface CreateProductSecondImagePageProps {
 	searchParams: CreateProductQueryParams
 	session: Session | null
 }
+
+// todo : 최소 등록 개수 제한하기 (2개 이상)
+// todo : llm version 리스트 초기 렌더링 시, placeholder가 나오지 않는 문제 해결하기
 export default function CreateProductSecondImagePage({
 	searchParams,
 }: CreateProductSecondImagePageProps) {
@@ -135,11 +143,10 @@ export default function CreateProductSecondImagePage({
 				if (productUuid) {
 					setValue(createProductSecondImageSchemaKeys.seed, productData.seed)
 
-					String(productData.llmVersionId) &&
-						setValue(
-							createProductSecondImageSchemaKeys.llmVersionId,
-							String(productData.llmVersionId),
-						)
+					setValue(
+						createProductSecondImageSchemaKeys.llmVersionId,
+						String(productData.llmVersionId),
+					)
 				}
 			} catch (err) {
 				setError("Failed to fetch prompt. Please try again later.")
@@ -186,6 +193,13 @@ export default function CreateProductSecondImagePage({
 		move(result.source.index, result.destination.index)
 	}
 
+	/*
+			const reader = new FileReader()
+			reader.onloadend = () => {
+				setImage(reader.result as string)
+			}
+	*/
+
 	const handleFileDrop = (file: File) => {
 		setValue("promptResult", file)
 		setCurrentImage(file)
@@ -214,6 +228,28 @@ export default function CreateProductSecondImagePage({
 	const updatePromptProduct = async () => {
 		const values = getValues()
 
+		const formData = new FormData()
+
+		// Upload images to S3 and get URLs
+		const uploadPromises = contentFields.map(async (content) => {
+			const imageFile = content.result
+			const key = `product-images/${product?.productUuid}`
+			const bucket = "product"
+
+			const imageUrl = await convertToBase64(imageFile)
+
+			const success = await handleProductImageUpload(
+				formData,
+				imageUrl,
+				undefined,
+				key,
+				bucket,
+			)
+			return success ? (formData.get(key) as string) : ""
+		})
+
+		const _contentUrls = await Promise.all(uploadPromises)
+
 		const reqBody: ModifyProductRequestType = {
 			...product,
 			seed: values.seed,
@@ -221,11 +257,9 @@ export default function CreateProductSecondImagePage({
 			contents: contentFields.map((content, index) => ({
 				contentOrder: index + 1,
 				sampleValue: replaceVariables(prompt, content.value),
-				contentUrl: "",
+				contentUrl: _contentUrls[index],
 			})),
 		}
-		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
-		console.log("updateProduct reqbody", reqBody)
 		await updateProduct(reqBody)
 		setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
 	}

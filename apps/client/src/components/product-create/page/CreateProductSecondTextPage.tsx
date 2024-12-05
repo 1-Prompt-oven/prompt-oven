@@ -51,6 +51,10 @@ interface CreateProductSecondTextPageProps {
 	searchParams: CreateProductQueryParams
 	session: Session | null
 }
+
+// todo : 최소 등록 개수 제한하기 (2개 이상)
+// todo : llm version 리스트 초기 렌더링 시, placeholder가 나오지 않는 문제 해결하기
+// todo : CreateProductSecond--Page에 중복되는 로직이 많음 --> 이후에 리펙토링 필요
 export default function CreateProductSecondTextPage({
 	searchParams,
 }: CreateProductSecondTextPageProps) {
@@ -135,11 +139,11 @@ export default function CreateProductSecondTextPage({
 				if (productUuid) {
 					setValue(createProductSecondTextSchemaKeys.seed, productData.seed)
 
-					String(productData.llmVersionId) &&
-						setValue(
-							createProductSecondTextSchemaKeys.llmVersionId,
-							String(productData.llmVersionId),
-						)
+					setValue(
+						createProductSecondTextSchemaKeys.llmVersionId,
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, no-constant-binary-expression -- null 체크,
+						String(productData.llmVersionId) ?? "",
+					)
 				}
 			} catch (e) {
 				// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
@@ -238,7 +242,7 @@ export default function CreateProductSecondTextPage({
 						render={({ field }) => (
 							<PcSelect
 								options={llmVersionList}
-								placeholder="Select AI Model"
+								placeholder="Select Model Version"
 								onValueChange={field.onChange}
 								defaultValue={field.value}
 							/>

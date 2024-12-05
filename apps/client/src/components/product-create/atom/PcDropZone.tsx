@@ -1,4 +1,4 @@
-import React, { useCallback } from "react"
+import React, { useCallback, useState } from "react"
 import { useDropzone } from "react-dropzone"
 import Image from "next/image"
 import { FileUp, Pencil } from "@repo/ui/lucide"
@@ -10,8 +10,11 @@ interface PcDropZoneProps {
 }
 
 function PcDropZone({ onFileDrop, currentImage }: PcDropZoneProps) {
+	const [error, setError] = useState<string>("")
+
 	const onDrop = useCallback(
 		(acceptedFiles: File[]) => {
+			setError("")
 			if (acceptedFiles.length > 0) {
 				onFileDrop ? onFileDrop(acceptedFiles[0]) : null
 			}
@@ -19,13 +22,24 @@ function PcDropZone({ onFileDrop, currentImage }: PcDropZoneProps) {
 		[onFileDrop],
 	)
 
+	const onDropRejected = useCallback(() => {
+		setError("File size is larger than 5MB")
+	}, [])
+
+	const onFileDialogOpen = useCallback(() => {
+		setError("")
+	}, [])
+
 	const { getRootProps, getInputProps, open } = useDropzone({
 		onDrop,
+		onDropRejected,
+		onFileDialogOpen,
 		accept: {
 			"image/*": [".jpeg", ".png", ".jpg", ".gif"],
 		},
 		noClick: true,
 		noKeyboard: true,
+		maxSize: 5 * 1024 * 1024,
 	})
 
 	const handleEditClick = (event: React.MouseEvent | React.KeyboardEvent) => {
@@ -68,7 +82,14 @@ function PcDropZone({ onFileDrop, currentImage }: PcDropZoneProps) {
 					</button>
 				</>
 			) : (
-				<FileUp className="h-8 w-8 text-slate-400" />
+				<>
+					<FileUp className="h-8 w-8 text-slate-400" />
+					{error ? (
+						<span className="mt-2 text-center text-xs text-red-500">
+							{error}
+						</span>
+					) : null}
+				</>
 			)}
 		</div>
 	)

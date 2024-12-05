@@ -6,19 +6,19 @@ import { ArrowLeft, CheckCircle2, ExternalLink } from "@repo/ui/lucide"
 import Link from "next/link"
 import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
 
-interface CreateSuccessPageProps {
+interface CreateProductSuccessPageProps {
 	searchParams: CreateProductQueryParams
 }
-export default function CreateSuccessPage({
+export default function CreateProductSuccessPage({
 	searchParams,
-}: CreateSuccessPageProps) {
+}: CreateProductSuccessPageProps) {
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-[#111111] p-4">
-			<Card className="w-full max-w-2xl border-[#A913F9]/20 bg-[#1B1818]">
+		<div className="flex min-h-screen items-center justify-center p-4">
+			<Card className="w-full max-w-2xl border-po-purple-100/50 bg-po-black-200">
 				<CardContent className="p-6">
 					<div className="mb-8 flex flex-col items-center justify-center space-y-4">
-						<div className="flex h-16 w-16 items-center justify-center rounded-full bg-[#A913F9]/10">
-							<CheckCircle2 className="h-8 w-8 text-[#A913F9]" />
+						<div className="flex h-16 w-16 items-center justify-center rounded-full bg-po-purple-100/10">
+							<CheckCircle2 className="h-8 w-8 text-po-purple-100" />
 						</div>
 						<h1 className="text-center text-2xl font-semibold text-white">
 							Product Registration Complete!
@@ -31,7 +31,7 @@ export default function CreateSuccessPage({
 
 					<div className="mb-8 space-y-6">
 						<div className="rounded-lg bg-black/50 p-4">
-							<h2 className="mb-4 font-medium text-[#E2ADFF]">
+							<h2 className="mb-4 font-medium text-po-purple-50">
 								Product Details
 							</h2>
 							<dl className="space-y-2">
@@ -56,18 +56,19 @@ export default function CreateSuccessPage({
 					<div className="flex flex-col gap-4 sm:flex-row">
 						<Button
 							variant="outline"
-							className="flex-1 border-[#A913F9] text-[#E2ADFF] hover:bg-[#A913F9] hover:text-white"
+							className="flex-1 border-po-purple-100 text-po-purple-50 hover:bg-po-purple-100 hover:text-white"
 							asChild>
-							<Link href="/products">
+							<Link href="/account?view=product-list">
 								<ArrowLeft className="mr-2 h-4 w-4" />
 								Back to Products
 							</Link>
 						</Button>
 						<Button
-							className="flex-1 bg-[#A913F9] text-white hover:bg-[#A913F9]/90"
+							className="flex-1 bg-po-purple-100 text-white hover:bg-po-purple-100/90"
 							asChild>
+							{/* todo: 판매자 상품 상세 페이지로 이동시키기 */}
 							<Link href="/account?view=product-list">
-								Go to Product List
+								View Product
 								<ExternalLink className="ml-2 h-4 w-4" />
 							</Link>
 						</Button>
