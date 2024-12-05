@@ -75,6 +75,18 @@
 	transition: width 1.5s ease-in-out;
 }
 /* 스타 END */
+
+/* seller 등록 관련 style START */
+.bg-purple-500 {
+	--tw-bg-opacity: 1;
+	background-color: rgb(168 85 247 / var(--tw-bg-opacity));
+}
+
+.dark .bg-purple-500 {
+	--tw-bg-opacity: 0.5;
+}
+/* seller 등록 관련 style END */
+
 @layer components {
 	.gradient-button-1 {
 		background: linear-gradient(98.49deg, #a913f9 -11.31%, #9d3d81 76.26%);

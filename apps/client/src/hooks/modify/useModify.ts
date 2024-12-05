@@ -2,12 +2,12 @@ import { useState } from "react"
 import type { CommonModifyType } from "@/types/profile/profileTypes"
 
 interface UploadResponse {
-	url: string;
-	signedUrl?: string;
+	url: string
+	signedUrl?: string
 }
 
 interface UploadError {
-	message: string;
+	message: string
 }
 
 export const useModify = (modifyData: CommonModifyType) => {
@@ -71,7 +71,7 @@ export const useModify = (modifyData: CommonModifyType) => {
 	}
 	//// 이미지 업로드 옵션 END ////
 
-	//// Input START ////
+	//// RsInput START ////
 	const handleInputChange = (field: string, value: string) => {
 		switch (field) {
 			case "hashTag":
@@ -90,7 +90,7 @@ export const useModify = (modifyData: CommonModifyType) => {
 				break
 		}
 	}
-	//// Input END ////
+	//// RsInput END ////
 
 	//// 리셋 START ////
 	const handleReset = (field: string) => {
@@ -130,51 +130,51 @@ export const useModify = (modifyData: CommonModifyType) => {
 		if (imageUrl && imageUrl !== currentImageUrl) {
 			try {
 				// Only proceed if the imageUrl is a base64 string (new upload)
-				if (imageUrl.startsWith('data:image')) {
+				if (imageUrl.startsWith("data:image")) {
 					// Create a new FormData for the upload
-					const uploadFormData = new FormData();
-					
-					// Convert base64 to blob
-					const response = await fetch(imageUrl);
-					const blob = await response.blob();
-					
-					// Create a File from the Blob with a proper name
-					const fileName = `${Date.now()}-${key}.${blob.type.split('/')[1] || 'png'}`;
-					const file = new File([blob], fileName, { type: blob.type });
-					
-					uploadFormData.append('img', file);
-					uploadFormData.append('keyword', `${bucket}/${key}`);
+					const uploadFormData = new FormData()
 
-					const uploadResponse = await fetch('/api/upload', {
-						method: 'POST',
-						body: uploadFormData
-					});
+					// Convert base64 to blob
+					const response = await fetch(imageUrl)
+					const blob = await response.blob()
+
+					// Create a File from the Blob with a proper name
+					const fileName = `${Date.now()}-${key}.${blob.type.split("/")[1] || "png"}`
+					const file = new File([blob], fileName, { type: blob.type })
+
+					uploadFormData.append("img", file)
+					uploadFormData.append("keyword", `${bucket}/${key}`)
+
+					const uploadResponse = await fetch("/api/upload", {
+						method: "POST",
+						body: uploadFormData,
+					})
 
 					if (!uploadResponse.ok) {
-						const errorData = await uploadResponse.json() as UploadError;
-						throw new Error(errorData.message || 'Failed to upload image');
+						const errorData = (await uploadResponse.json()) as UploadError
+						throw new Error(errorData.message || "Failed to upload image")
 					}
 
-					const data = await uploadResponse.json() as UploadResponse;
-					
+					const data = (await uploadResponse.json()) as UploadResponse
+
 					// Update the form with the S3 URL
-					formData.set(key, data.url);
-					return true;
+					formData.set(key, data.url)
+					return true
 				}
-				
+
 				// If it's already an S3 URL, just use it as is
-				formData.set(key, imageUrl);
-				return true;
+				formData.set(key, imageUrl)
+				return true
 			} catch (error) {
-				return false;
+				return false
 			}
 		}
 		// If no new image, keep the current one
 		if (currentImageUrl) {
-			formData.set(key, currentImageUrl);
+			formData.set(key, currentImageUrl)
 		}
-		return true;
-	};
+		return true
+	}
 	//// 이미지 - S3 핸들링 END ////
 
 	//// 이미지 제거 핸들링 START ////
@@ -193,23 +193,23 @@ export const useModify = (modifyData: CommonModifyType) => {
 	//// 이미지 제거 핸들링 END ////
 
 	const handleUpload = async (file: File, keyword: string): Promise<string> => {
-		const formData = new FormData();
-		formData.append("img", file);
-		formData.append("keyword", keyword);
+		const formData = new FormData()
+		formData.append("img", file)
+		formData.append("keyword", keyword)
 
-		const response = await fetch('/api/upload', {
-			method: 'POST',
-			body: formData
-		});
+		const response = await fetch("/api/upload", {
+			method: "POST",
+			body: formData,
+		})
 
 		if (!response.ok) {
-			const errorData = await response.json() as UploadError;
-			throw new Error(errorData.message || 'Upload failed');
+			const errorData = (await response.json()) as UploadError
+			throw new Error(errorData.message || "Upload failed")
 		}
 
-		const data = await response.json() as UploadResponse;
-		return data.url;
-	};
+		const data = (await response.json()) as UploadResponse
+		return data.url
+	}
 
 	return {
 		banner,
@@ -221,7 +221,7 @@ export const useModify = (modifyData: CommonModifyType) => {
 		handleBannerChange,
 		handleAvatarChange,
 		handleInputChange,
-		
+
 		handleImageUpload,
 		handleReset,
 		handleImageRemove,
