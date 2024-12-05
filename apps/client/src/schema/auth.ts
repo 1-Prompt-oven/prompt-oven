@@ -54,3 +54,9 @@ export const forgotSchemaObject = z
       message: "비밀번호 형식이 일치하지 않습니다.",
     }),
   });
+
+  export const nicknameSchemaObject = z.object(
+    {nickname: z.string().regex(nicknameRegex, {
+      message: "닉네임은 1글자 이상, 영문이어야합니다"
+    })}
+  )
