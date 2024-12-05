@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 import { routes } from "@/config/auth/route.ts"
-import { handleWithAuthRequest } from "@/middleware/commonMiddlewrae.ts"
+import { handleWithAuthRequest } from "@/middleware/commonMiddleware.ts"
 
 const withAuth = async (req: NextRequest, token: boolean) => {
 	const url = req.nextUrl.clone()
