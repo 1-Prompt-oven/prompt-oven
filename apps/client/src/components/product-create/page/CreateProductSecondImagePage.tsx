@@ -4,18 +4,26 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { z } from "zod"
-import { ThreeDots } from "react-loader-spinner"
 import type { Session } from "next-auth"
+import dayjs from "dayjs"
+import { useRouter } from "next/navigation"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcTitle from "@/components/product-create/atom/PcTitle.tsx"
 import {
 	createProductSecondImageSchema,
 	createProductSecondImageSchemaKeys,
 } from "@/schema/product.ts"
-import PcSelect from "@/components/product-create/atom/PcSelect.tsx"
+import PcSelect, {
+	type SelectOption,
+} from "@/components/product-create/atom/PcSelect.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
 import PcDropZone from "@/components/product-create/atom/PcDropZone.tsx"
-import { extractPromptVariables } from "@/lib/productUtils.ts"
+import {
+	convertToBase64,
+	extractPromptVariables,
+	handleProductImageUpload,
+	replaceVariables,
+} from "@/lib/productUtils.ts"
 import PcBaseWrapper from "@/components/product-create/atom/PcBaseWrapper.tsx"
 import PcBoundary from "@/components/product-create/atom/PcBoundary.tsx"
 import PcLabel from "@/components/product-create/atom/PcLabel.tsx"
@@ -24,73 +32,66 @@ import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSam
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import PcImagePromptSampleList from "@/components/product-create/organism/PcImagePromptSampleList.tsx"
 import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
-
-interface DropResult {
-	draggableId: string
-	type: string
-	source: {
-		droppableId: string
-		index: number
-	}
-	destination: {
-		droppableId: string
-		index: number
-	} | null
-	reason: "DROP" | "CANCEL"
-}
-
-// Mock API call
-const fetchPrompt = () => {
-	return new Promise<string>((resolve) => {
-		setTimeout(() => {
-			resolve(
-				"Please provide a prompt for [the AI model] to generate [the text].",
-			)
-		}, 1000) // Simulate network delay
-	})
-}
+import {
+	getStorageItem,
+	removeStorageItem,
+	setProductUuid,
+} from "@/lib/localStorage.ts"
+import {
+	getProductDetail,
+	updateProduct,
+} from "@/action/product/productUpsertAction.ts"
+import { getLlmVersionList } from "@/action/product/llmAction.ts"
+import { localStorageKeys } from "@/config/product/localStorage.ts"
+import type {
+	GetProductDetailResponseType,
+	ModifyProductRequestType,
+} from "@/types/product/productUpsertType.ts"
+import type { DropResult } from "@/types/product/componentType.ts"
+import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
+import PcError from "@/components/product-create/atom/PcError.tsx"
 
 type FormData = z.infer<typeof createProductSecondImageSchema>
-
-const modelVersion = [
-	{ value: "1", label: "Chat GPT 3.5" },
-	{ value: "2", label: "Chat GPT 4" },
-	{ value: "3", label: "Chat GPT 4o" },
-]
-
-/*
- * todo:
- *   1) model version API로 가져오기
- *   2) prompt API로 가져오기
- *   3) prompt 가져오는 중에 loading spinner 추가하기
- *   4) prompt 가져오는 중에 error handling 추가하기
- *   5) 상품 등록 API 호출하기
- */
 
 interface CreateProductSecondImagePageProps {
 	searchParams: CreateProductQueryParams
 	session: Session | null
 }
+
+// todo : 최소 등록 개수 제한하기 (2개 이상)
+// todo : llm version 리스트 초기 렌더링 시, placeholder가 나오지 않는 문제 해결하기
 export default function CreateProductSecondImagePage({
-	// eslint-disable-next-line no-unused-vars,@typescript-eslint/no-unused-vars -- This prop is used in the original code
 	searchParams,
 }: CreateProductSecondImagePageProps) {
+	const router = useRouter()
+
 	const [prompt, setPrompt] = useState("")
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
+	const [lastSaved, setLastSaved] = useState<string>("")
+	const [llmVersionList, setLlmVersionList] = useState<SelectOption[]>([])
 	const [currentImage, setCurrentImage] = useState<File | null>(null)
-	const minResults = 4
 
-	const { register, control, handleSubmit, setValue } = useForm<FormData>({
-		resolver: zodResolver(createProductSecondImageSchema),
-		defaultValues: {
-			promptVars: [],
-			promptResult: undefined,
-			contents: [],
-			seed: "",
-			llmVersionId: "",
-		},
-	})
+	const [product, setProduct] = useState<GetProductDetailResponseType | null>(
+		null,
+	)
+	// const minResults = 4
+
+	const extractPromptVars = useCallback((_prompt: string) => {
+		return extractPromptVariables(_prompt)
+	}, [])
+
+	const { register, control, handleSubmit, setValue, getValues } =
+		useForm<FormData>({
+			resolver: zodResolver(createProductSecondImageSchema),
+			defaultValues: {
+				promptVars: [],
+				promptResult: undefined,
+				contents: [],
+				seed: "",
+				llmVersionId: undefined,
+			},
+		})
 
 	const { fields, replace } = useFieldArray({
 		control,
@@ -107,18 +108,45 @@ export default function CreateProductSecondImagePage({
 		name: "contents",
 	})
 
-	const extractPromptVars = useCallback((_prompt: string) => {
-		return extractPromptVariables(_prompt)
-	}, [])
-
 	useEffect(() => {
-		const getPrompt = async () => {
+		const initExistingData = async () => {
 			try {
 				setLoading(true)
-				const fetchedPrompt = await fetchPrompt()
-				setPrompt(fetchedPrompt)
-				const extractedVars = extractPromptVars(fetchedPrompt)
+				const productUuid = setProductUuid(searchParams.productUuid ?? "")
+
+				const productData = (await getProductDetail({ productUuid })).result
+				setProduct(productData)
+
+				// llm version list 조회
+				const _llmVersionList = (
+					await getLlmVersionList({ llmId: productData.llmId })
+				).result
+				setLlmVersionList(
+					_llmVersionList.map((item) => ({
+						label: item.llmVersionName,
+						value: String(item.llmVersionId),
+						extraProps: {
+							...item,
+						},
+					})),
+				)
+				// 상품의 프롬프트 세팅
+				setPrompt(productData.prompt)
+				const extractedVars = extractPromptVars(productData.prompt)
 				replace(extractedVars)
+
+				// 마지막 저장 시간 세팅
+				setLastSaved(dayjs(productData.updatedAt).format("YYYY-MM-DD HH:mm"))
+				// 이 단계에 오면 결국에는 productUuid가 있을 거 같은데 조건문이 필요할까?
+				// 저장된 상품이 있을 경우, 상품 정보를 세팅
+				if (productUuid) {
+					setValue(createProductSecondImageSchemaKeys.seed, productData.seed)
+
+					setValue(
+						createProductSecondImageSchemaKeys.llmVersionId,
+						String(productData.llmVersionId),
+					)
+				}
 			} catch (err) {
 				setError("Failed to fetch prompt. Please try again later.")
 			} finally {
@@ -126,10 +154,13 @@ export default function CreateProductSecondImagePage({
 			}
 		}
 
-		getPrompt().then(() => {
-			// do nothing
-		})
-	}, [extractPromptVars, replace])
+		const _productUuid = getStorageItem(localStorageKeys.curTempProductUuid)
+		if (!_productUuid && !searchParams.productUuid) {
+			router.back()
+		}
+
+		initExistingData().then()
+	}, [extractPromptVars, replace]) // eslint-disable-line react-hooks/exhaustive-deps -- 빈 배열로 둬도 됨.
 
 	const onSubmit = (data: FormData) => {
 		if (data.promptResult) {
@@ -161,6 +192,13 @@ export default function CreateProductSecondImagePage({
 		move(result.source.index, result.destination.index)
 	}
 
+	/*
+			const reader = new FileReader()
+			reader.onloadend = () => {
+				setImage(reader.result as string)
+			}
+	*/
+
 	const handleFileDrop = (file: File) => {
 		setValue("promptResult", file)
 		setCurrentImage(file)
@@ -171,35 +209,62 @@ export default function CreateProductSecondImagePage({
 		setCurrentImage(null)
 	}
 
-	if (loading)
-		return (
-			<div className="flex max-w-5xl flex-col gap-4">
-				<AccountTitleText className="w-full">
-					Create New Product
-				</AccountTitleText>
-				<div className="mt-6 flex flex-col">
-					<ThreeDots
-						visible
-						height="80"
-						width="80"
-						color="#A913F9"
-						radius="9"
-						ariaLabel="three-dots-loading"
-						wrapperStyle={{}}
-						wrapperClass=""
-					/>
-					<span className="text-xl font-medium leading-[150%] text-white">
-						Loading prompt...
-					</span>
-				</div>
-			</div>
-		)
-	if (error)
-		return (
-			<div>
-				{error} {minResults}
-			</div>
-		)
+	// save handler
+	const onSave = async (type: "draft" | "next") => {
+		await updatePromptProduct()
+		if (type === "next") {
+			removeStorageItem(localStorageKeys.curTempProductUuid)
+			router.push(
+				`account?view=create-product&step=3&productName=${product?.productName}&productUuid=${product?.productUuid}`,
+			)
+		}
+	}
+
+	const onBack = () => {
+		router.back()
+	}
+
+	const updatePromptProduct = async () => {
+		const values = getValues()
+
+		const formData = new FormData()
+
+		// Upload images to S3 and get URLs
+		const uploadPromises = contentFields.map(async (content) => {
+			const imageFile = content.result
+			const key = `product-images/${product?.productUuid}`
+			const bucket = "product"
+
+			const imageUrl = await convertToBase64(imageFile)
+
+			const success = await handleProductImageUpload(
+				formData,
+				imageUrl,
+				undefined,
+				key,
+				bucket,
+			)
+			return success ? (formData.get(key) as string) : ""
+		})
+
+		const _contentUrls = await Promise.all(uploadPromises)
+
+		const reqBody: ModifyProductRequestType = {
+			...product,
+			seed: values.seed,
+			llmVersionId: Number(values.llmVersionId),
+			contents: contentFields.map((content, index) => ({
+				contentOrder: index + 1,
+				sampleValue: replaceVariables(prompt, content.value),
+				contentUrl: _contentUrls[index],
+			})),
+		}
+		await updateProduct(reqBody)
+		setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
+	}
+
+	if (loading) return <PcLoading />
+	if (error) return <PcError error={error} />
 
 	return (
 		<form className="flex max-w-5xl flex-col gap-4">
@@ -210,10 +275,11 @@ export default function CreateProductSecondImagePage({
 					<PcTitle>Model Version</PcTitle>
 					<Controller
 						name={createProductSecondImageSchemaKeys.llmVersionId}
+						rules={{ required: "Model Version is required" }}
 						control={control}
 						render={({ field }) => (
 							<PcSelect
-								options={modelVersion}
+								options={llmVersionList}
 								placeholder="Select AI Model"
 								onValueChange={field.onChange}
 								defaultValue={field.value}
@@ -276,7 +342,13 @@ export default function CreateProductSecondImagePage({
 			) : (
 				<PcPromptSampleSkeleton />
 			)}
-			<PcSaveBar className="mt-10" />
+			<PcSaveBar
+				className="mt-10"
+				lastSaved={lastSaved}
+				onDraft={() => onSave("draft")}
+				onNext={() => onSave("next")}
+				onBack={onBack}
+			/>
 		</form>
 	)
 }

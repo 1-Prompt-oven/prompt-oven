@@ -19,6 +19,10 @@ export const setStorageItem = (obj: LocalStorageObject) => {
 	return { key, value }
 }
 
+export const removeStorageItem = (key: LocalStorageKey) => {
+	localStorage.removeItem(key)
+}
+
 /**
  * @param obj - object containing the key and value to store in local storage
  * @param pr - predicate function to validate the key and value before storing
@@ -52,10 +56,11 @@ export const setProductUuid = (productUuid: string): string => {
 	let _productUuid = ""
 	const prevProductUuid = getStorageItem(localStorageKeys.curTempProductUuid)
 	if (productUuid) {
-		_productUuid = setStorageItem({
+		setStorageItem({
 			key: localStorageKeys.curTempProductUuid,
 			value: productUuid,
-		}).value
+		})
+		_productUuid = productUuid
 	} else if (prevProductUuid) {
 		_productUuid = prevProductUuid
 	}
