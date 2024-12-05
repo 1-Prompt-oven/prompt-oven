@@ -12,6 +12,7 @@ import type { CommonResType } from "@/types/common/responseType.ts"
 export const getProductCategoryList = async (
 	req: GetCategoryListRequestType,
 ): Promise<CommonResType<GetCategoryListResponseType[]>> => {
+	"use server"
 	return actionHandler<CommonResType<GetCategoryListResponseType[]>>({
 		name: "getProductCategoryList",
 		url: `/v1/product/category/sub-categories?${req.parentCategoryUuid ? `parentCategoryUuid=${req.parentCategoryUuid}` : ""}`,

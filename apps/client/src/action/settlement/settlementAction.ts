@@ -13,6 +13,7 @@ import { initializeHeaders } from "@/lib/api/headers.ts"
 export const registerSeller = async (
 	req: Omit<RegisterSellerRequestType, "memberID">,
 ) => {
+	"use server"
 	const accessToken = await getAccessToken()
 	const memberID = await getMemberUUID()
 	const headers = initializeHeaders(accessToken ?? undefined)
@@ -29,6 +30,7 @@ export const registerSeller = async (
 }
 
 export const getSellerProfile = async (req: GetSellerRequestType) => {
+	"use server"
 	const accessToken = await getAccessToken()
 	const headers = initializeHeaders(accessToken ?? undefined)
 	return actionHandler<CommonResType<GetSellerResponseType[]>>({
