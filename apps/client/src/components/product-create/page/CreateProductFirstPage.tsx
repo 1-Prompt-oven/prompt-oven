@@ -41,6 +41,7 @@ import { getStorageItem, setProductUuid } from "@/lib/localStorage.ts"
 import { localStorageKeys } from "@/config/product/localStorage.ts"
 import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
 import PcError from "@/components/product-create/atom/PcError.tsx"
+import { extractPromptVariables } from "@/lib/productUtils.ts"
 
 const TITLE_MAX_LENGTH = 50
 const TEXTAREA_MAX_LENGTH = 4096
@@ -63,6 +64,7 @@ export default function CreateProductFirstPage({
 	const [product, setProduct] = useState<GetProductDetailResponseType | null>(
 		null,
 	)
+	const [promptTextError, setPromptTextError] = useState<string>("")
 
 	const { control, register, watch, getValues, setValue } = useForm({
 		resolver: zodResolver(createProductFirstSchema),
@@ -240,12 +242,28 @@ export default function CreateProductFirstPage({
 		}
 	}
 
+	const checkPromptText = () => {
+		const values = getValues()
+		const extractedPromptVars = extractPromptVariables(values.prompt)
+		if (extractedPromptVars.length === 0) {
+			setPromptTextError(
+				`Please make variables with [square brackets] in the prompt text.`,
+			)
+			return false
+		}
+		return true
+	}
+
 	const onSave = async (type: "draft" | "next") => {
-		const productUuid = getStorageItem(localStorageKeys.curTempProductUuid)
+		// next 버튼 클릭 시 prompt text 체크
+		setPromptTextError("")
+		if (type === "next" && !checkPromptText()) return
+
+		let productUuid = getStorageItem(localStorageKeys.curTempProductUuid)
 		if (productUuid) {
 			await updatePromptProduct()
 		} else {
-			await savePromptDraft()
+			productUuid = await savePromptDraft()
 		}
 		if (type === "next") {
 			const llmId = getValues(createProductFirstSchemaKeys.llmId)
@@ -282,6 +300,7 @@ export default function CreateProductFirstPage({
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("onSaveDraft", res.result)
 		setProductUuid(res.result.productUuid)
+		return res.result.productUuid
 	}
 
 	const updatePromptProduct = () => {
@@ -393,7 +412,8 @@ export default function CreateProductFirstPage({
 						</PcDescription>
 						<FieldLengthCounter
 							maxLength={TEXTAREA_MAX_LENGTH}
-							length={promptWatch}>
+							length={promptWatch}
+							errMsg={promptTextError}>
 							<PcTextarea
 								maxLength={TEXTAREA_MAX_LENGTH}
 								placeholder="Enter your prompt text here. Include all the settings you used. Put all variables in [square brackets]."

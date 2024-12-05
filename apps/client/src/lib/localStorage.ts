@@ -56,10 +56,11 @@ export const setProductUuid = (productUuid: string): string => {
 	let _productUuid = ""
 	const prevProductUuid = getStorageItem(localStorageKeys.curTempProductUuid)
 	if (productUuid) {
-		_productUuid = setStorageItem({
+		setStorageItem({
 			key: localStorageKeys.curTempProductUuid,
 			value: productUuid,
-		}).value
+		})
+		_productUuid = productUuid
 	} else if (prevProductUuid) {
 		_productUuid = prevProductUuid
 	}
