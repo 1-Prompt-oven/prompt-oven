@@ -1,4 +1,4 @@
-import type { PromptDetailType } from "@/types/search/searchResultType"
+import type { SearchResultPromptType } from "@/types/search/searchResultType"
 
 export interface CommonResType<T> {
 	httpStatus: string
@@ -25,7 +25,7 @@ export interface CommonResHttpStatusType {
 }
 
 export interface PromptApiResponseType {
-	productList: PromptDetailType[]
+	productList: SearchResultPromptType[]
 	nextCursorId: string
 	hasNext: boolean
 }
@@ -42,3 +42,4 @@ export interface S3ResponseType {
 	isSuccess: boolean
 	responseImageUrl: string | undefined
 }
+
