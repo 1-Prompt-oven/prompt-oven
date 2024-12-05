@@ -1,4 +1,5 @@
-import Settings from "@/components/settings/molecule/Settings"
+import React from "react"
+import Settings from "@/components/settings/templete/Settings"
 
 export default function LogoutButton() {
 	return (

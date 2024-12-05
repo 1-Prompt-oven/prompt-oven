@@ -11,6 +11,7 @@ const InputVariant = cva(
 				default: "",
 				login: "h-[50px] bg-[#333333] border-none text-white/70 px-4",
 				signup: "h-[50px] bg-[#333333] border-none text-white/70 px-4",
+				nickname: "h-[50px] bg-[#333333] border-none text-white/70 px-4",
 			},
 		},
 	},
@@ -35,3 +36,4 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = "Input"
 
 export { Input }
+

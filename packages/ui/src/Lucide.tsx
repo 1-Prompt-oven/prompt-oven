@@ -44,6 +44,8 @@ export {
 	Pencil,
 	GripVertical,
 	Trash2,
+	CheckCircle2,
+	ArrowLeft,
+	ExternalLink,
 	type LucideProps,
 } from "lucide-react"
-

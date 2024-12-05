@@ -7,6 +7,14 @@ export interface CommonResType<T> {
 	code?: number
 	result: T
 }
+
+export interface CommonResType2<T> {
+	httpStatus: CommonResHttpStatusType
+	isSuccess: boolean
+	message: string
+	code?: number
+	result: T
+}
 export interface CommonResHttpStatusType {
 	error: boolean
 	is4xxClientError: boolean
