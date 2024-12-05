@@ -13,6 +13,12 @@ export function useSearchActions(): UseSearchActions {
 	const [prompts, setPrompts] = useState<PromptDetailType[]>([])
 
 	async function fetchAndSetSearchResults(query: string, tab: string) {
+		if (query === "") {
+			setPrompts([])
+			setCreators([])
+			return
+		}
+
 		const data = await fetchSearchResults(query, tab)
 
 		if (tab === "prompt") {

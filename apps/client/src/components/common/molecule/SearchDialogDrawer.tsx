@@ -46,6 +46,7 @@ export function SearchDialogDrawer({
 		async (searchQuery: string, tab: string) => {
 			try {
 				await fetchAndSetSearchResults(searchQuery, tab)
+				setIsLoading(true)
 			} finally {
 				setIsLoading(false)
 			}
@@ -64,9 +65,6 @@ export function SearchDialogDrawer({
 
 	const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		const query = e.target.value
-		if (query === "") {
-			return
-		}
 		debouncedFetchAndSetSearchResults(query, currentTab)
 	}
 
