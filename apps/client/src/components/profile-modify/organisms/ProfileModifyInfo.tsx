@@ -6,6 +6,7 @@ import { Button } from "@repo/ui/button"
 import { useModify } from "@/hooks/modify/useModify"
 import type { ProfileModifyType, ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import { modifyProfileData } from "@/action/profile/modifyProfileData"
+import { formatDate } from "@/lib/utils"
 import ProfileModifyAvatar from "../molecules/ProfileModifyAvatar"
 import ProfileModifyBanner from "../molecules/ProfileModifyBanner"
 import ProfileModifyInfoLeft from "../molecules/ProfileModifyInfoLeft"
@@ -35,55 +36,66 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 	} = useModify(memberData)
 
 	const handleForm = async (formData: FormData) => {
-		const uploadBanner = formData.get("bannerImageUrl") as string | null
-		const uploadAvatar = formData.get("avatarImageUrl") as string | null
+		const uploadBanner = formData.get("bannerImageUrl") as string | null;
+		const uploadAvatar = formData.get("avatarImageUrl") as string | null;
+		let bannerUrl = uploadBanner;
+		let avatarUrl = uploadAvatar;
 
-			// Handle image uploads
-			if (uploadBanner && uploadBanner !== memberData.bannerImageUrl) {
-				const isBannerUploaded = await handleImageUpload(
-					formData,
-					uploadBanner,
-					memberData.bannerImageUrl ?? "",
-					"bannerImageUrl",
-					"profile",
-				)
-				if (!isBannerUploaded) return
+		// Handle banner image upload
+		if (uploadBanner && uploadBanner !== memberData.bannerImageUrl) {
+			const isBannerUploaded = await handleImageUpload(
+				formData,
+				uploadBanner,
+				memberData.bannerImageUrl ?? "",
+				"bannerImageUrl",
+				"profile",
+			)
+			if (!isBannerUploaded) {
+				return;
 			}
+			// Get the updated S3 URL from formData after upload
+			bannerUrl = formData.get("bannerImageUrl") as string;
+		}
 
-			if (uploadAvatar && uploadAvatar !== memberData.avatarImageUrl) {
-				const isAvatarUploaded = await handleImageUpload(
-					formData,
-					uploadAvatar,
-					memberData.avatarImageUrl ?? "",
-					"avatarImageUrl",
-					"profile",
-				)
-				if (!isAvatarUploaded) return
+		// Handle avatar image upload
+		if (uploadAvatar && uploadAvatar !== memberData.avatarImageUrl) {
+			const isAvatarUploaded = await handleImageUpload(
+				formData,
+				uploadAvatar,
+				memberData.avatarImageUrl ?? "",
+				"avatarImageUrl",
+				"profile",
+			)
+			if (!isAvatarUploaded) {
+				return;
 			}
+			// Get the updated S3 URL from formData after upload
+			avatarUrl = formData.get("avatarImageUrl") as string;
+		}
 
-			const payload: ProfileModifyType = {
-				memberUUID: memberData.memberUUID,
-				bannerImageUrl: formData.get("bannerImageUrl") as string,
-				avatarImageUrl: formData.get("avatarImageUrl") as string,
-				hashTag: formData.get("hashTag") as string,
-				bio: formData.get("bio") as string,
-				email: formData.get("email") as string,
-				nickname: formData.get("nickname") as string,
-			}
+		// Prepare payload with updated URLs
+		const payload: ProfileModifyType = {
+			memberUUID: memberData.memberUUID,
+			bannerImageUrl: bannerUrl ?? memberData.bannerImageUrl,
+			avatarImageUrl: avatarUrl ?? memberData.avatarImageUrl,
+			hashTag: formData.get("hashTag") as string,
+			bio: formData.get("bio") as string,
+			email: formData.get("email") as string,
+			nickname: formData.get("nickname") as string,
+		};
 
-			await modifyProfileData(payload)
-			
-			// If nickname changed, wait briefly for revalidation
-			if (payload.nickname !== memberData.nickname) {
-				await new Promise(resolve => {
-					setTimeout(resolve, 1000)
-				})
-			}
+		await modifyProfileData(payload);
 
-			router.refresh() // Force client-side cache refresh
-			router.push(`/profile/${payload.nickname}`)
+		// If nickname changed, wait briefly for revalidation
+		if (payload.nickname !== memberData.nickname) {
+			await new Promise(resolve => {
+				setTimeout(resolve, 1000)
+			})
+		}
 
-	}
+		router.refresh(); // Force client-side cache refresh
+		router.push(`/profile/${payload.nickname}`);
+	};
 
 	return (
 		<div className="mb-20">
@@ -108,7 +120,7 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 								hashTag={hashTag}
 								nickname={nickname}
 								email={email}
-								joined={memberData.joined}
+								joined={formatDate(memberData.joined)}
 							/>
 							<ProfileModifyInfoRight
 								bio={bio}
@@ -167,7 +179,7 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 
 				<div className="mx-auto flex w-[90%] justify-end py-12">
 					<Link
-						href="/profile/1"
+						href={`/profile/${nickname}`}
 						className="px-10py-6 inline-flex h-9 items-center justify-center gap-2 whitespace-nowrap rounded-md bg-gradient-to-r from-[#FFCCDF] to-[#FFB6C1] px-10 py-6 text-sm font-medium text-white shadow transition-colors hover:from-[#FFB6C1] hover:to-[#FF69B4] focus-visible:outline-none focus-visible:ring-1 disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
 						<span className="font-semibold text-gray-500">취소</span>
 					</Link>
