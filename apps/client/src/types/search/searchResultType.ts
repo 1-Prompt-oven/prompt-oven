@@ -1,10 +1,11 @@
 export interface SearchResultPromptType {
-	id: string
+	productUuid: string
+	productName: string
 	model: string
 	title: string
-	rating: number
-	price: string
-	thumbnail: string
+	avgStar: number
+	price: number
+	thumbnailUrl: string
 }
 
 export interface SearchResultCreatorType {
@@ -35,3 +36,4 @@ export interface PromptDetailType {
 	avgStar: number
 	createdAt: string
 }
+
