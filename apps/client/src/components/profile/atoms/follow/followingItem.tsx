@@ -1,10 +1,13 @@
+"use client";
+
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar";
-import { Button } from "@repo/ui/button";
+import  { Button } from "@repo/ui/button";
+import type { toggleFollow } from "@/action/profile/following";
 import type { Follower } from "@/types/profile/followingType";
 
 interface FollowingItemProps {
 	follower: Follower
-	onToggleFollow: (id: string) => void
+	onToggleFollow: typeof toggleFollow;
 }
 
 export default function FollowingItem({ follower, onToggleFollow }: FollowingItemProps) {
@@ -19,7 +22,7 @@ export default function FollowingItem({ follower, onToggleFollow }: FollowingIte
 			</div>
 			<Button
 				variant={follower.isFollowing ? "outline" : "default"}
-				onClick={() => onToggleFollow(follower.memberUuid)}
+				onClick={() => onToggleFollow(follower.memberUuid, follower.isFollowing)}
 			>
 				{follower.isFollowing ? "팔로잉" : "팔로우"}
 			</Button>

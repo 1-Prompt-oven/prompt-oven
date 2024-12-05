@@ -80,6 +80,14 @@ export async function getFollowerList(id: string): Promise<Follower[]> {
 	return Promise.all(data)
 }
 
+export async function toggleFollow(id: string, isFollowing: boolean): Promise<void> {
+	if (isFollowing) {
+		await unfollowMember(id)
+	} else {
+		await followMember(id)
+	}
+}
+
 export async function followMember(id: string): Promise<void> {
 	const headers = await initializeHeaders()
 
