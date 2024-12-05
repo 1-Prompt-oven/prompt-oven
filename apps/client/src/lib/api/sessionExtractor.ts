@@ -1,4 +1,3 @@
-// eslint-disable-next-line import/no-cycle -- Avoiding cycle dependency for modularization
 import { getServerSession } from "next-auth"
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOption"
 
