@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useRef, useState } from "react"
 import type { Address } from "react-daum-postcode"
 import DaumPostcode from "react-daum-postcode"
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card"
@@ -18,6 +18,7 @@ const TOTAL_STEPS = 2
 export default function SellerRegistrationPage() {
 	const [currentStep, setCurrentStep] = useState<number>(1)
 	const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false)
+	const modalRef = useRef<HTMLDivElement>(null)
 
 	const sellerInfoForm = useForm<SellerInfo>({
 		resolver: zodResolver(sellerInfoSchema),
@@ -64,8 +65,25 @@ export default function SellerRegistrationPage() {
 		}
 	}
 
+	const handleClickOutside = (event: MouseEvent) => {
+		if (modalRef.current && !modalRef.current.contains(event.target as Node)) {
+			setIsAddressModalOpen(false)
+		}
+	}
+
+	useEffect(() => {
+		if (isAddressModalOpen) {
+			document.addEventListener("mousedown", handleClickOutside)
+		} else {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside)
+		}
+	}, [isAddressModalOpen])
+
 	return (
-		<div className="flex min-h-screen items-center justify-center bg-po-black-200 p-4">
+		<div className="flex min-h-[calc(100vh-80px)] items-center justify-center bg-po-black-200 p-4">
 			<Card className="w-full max-w-2xl border-[#A913F9]/50 bg-po-black-150">
 				<CardHeader>
 					<CardTitle className="text-center text-2xl font-semibold text-white">
@@ -115,8 +133,13 @@ export default function SellerRegistrationPage() {
 			</Card>
 			{isAddressModalOpen ? (
 				<div className="fixed inset-0 flex items-center justify-center bg-black/50 bg-opacity-50">
-					<div className="rounded-lg bg-white p-4">
-						<DaumPostcode onComplete={handleComplete} autoClose />
+					<div ref={modalRef} className="rounded-lg bg-white p-4">
+						<DaumPostcode
+							onComplete={handleComplete}
+							scriptUrl="https://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"
+							style={{ width: "350px", height: "500px" }}
+							autoClose
+						/>
 					</div>
 				</div>
 			) : null}
