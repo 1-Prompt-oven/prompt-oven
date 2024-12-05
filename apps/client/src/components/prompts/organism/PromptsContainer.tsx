@@ -1,101 +1,132 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
+import { ThreeDots } from "react-loader-spinner"
 import { getPromptList } from "@/action/prompts/getPromptsData"
 import type { CategoryType } from "@/types/prompts/categoryType"
-import type { PromptItemType } from "@/types/prompts/promptsType"
+import type { PromptItemType, PromptsType } from "@/types/prompts/promptsType"
 import PromptsFilterSidebar from "../molecule/PromptsFilterSidebar"
 import PromptsItemFilter from "../molecule/PromptsItemFilter"
 import PromptList from "../molecule/PromptList"
 
 interface PromptsTemplateProps {
-	promptList: PromptItemType[]
+	promptData: PromptsType
 	categoryList: CategoryType[]
 }
 
 export default function PromptsContainer({
-	promptList,
+	promptData,
 	categoryList,
 }: PromptsTemplateProps) {
-	const [list, setList] = useState<PromptItemType[]>(promptList)
+	const [list, setList] = useState<PromptItemType[]>(promptData.productList)
 	const [allForm, setAllForm] = useState<FormData>(new FormData())
+	const [loading, setLoading] = useState(false)
+	const [hasNext, setHasNext] = useState<boolean>(promptData.hasNext)
+	const [cursorId, setCursorId] = useState<string | null>(
+		promptData.nextCursorId,
+	)
+	const observerRef = useRef<HTMLDivElement | null>(null)
 
-	// const [pageNo, setPageNo] = useState(1)
-	// const [loading, setLoading] = useState(false)
-	// const [hasMore, setHasMore] = useState(true)
-	// const observerRef = useRef<HTMLDivElement | null>(null)
+	const fetchMoreProducts = () => {
+		if (loading || !promptData.hasNext || !cursorId) return
 
-	// useEffect(() => {
-	// 	const observer = new IntersectionObserver(
-	// 		(entries) => {
-	// 			if (entries[0].isIntersecting && !loading && hasMore) {
-	// 				fetchMoreProducts()
-	// 			}
-	// 		},
-	// 		{ threshold: 1 },
-	// 	)
+		setLoading(true)
+		getPromptList(allForm, cursorId)
+			.then((newProducts) => {
+				setHasNext(newProducts.hasNext)
+				setCursorId(newProducts.nextCursorId)
+				setList((prevList) => [...prevList, ...newProducts.productList])
+			})
+			.catch((error) => {
+				// eslint-disable-next-line no-console -- Error to Fetching
+				console.error("상품을 불러오는 중 오류 발생:", error)
+			})
+			.finally(() => {
+				setLoading(false)
+			})
+	}
 
-	// 	const currentObserver = observerRef.current
-	// 	if (currentObserver) {
-	// 		observer.observe(currentObserver)
-	// 	}
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			async (entries) => {
+				if (entries[0].isIntersecting && !loading && hasNext && cursorId) {
+					await fetchMoreProducts() // 비동기 작업이 완료될 때까지 기다림
 
-	// 	return () => {
-	// 		if (currentObserver) observer.unobserve(currentObserver)
-	// 	}
-	// }, [loading, hasMore])
+					// 데이터 로드가 성공적으로 완료된 후 스크롤 위치를 중앙으로 설정
+					const scrollY = window.scrollY
+					const windowHeight = window.innerHeight
+					const newScrollY = scrollY + windowHeight / 2
+					window.scrollTo({ top: newScrollY, behavior: "smooth" })
+				}
+			},
+			{ threshold: 1 },
+		)
 
-	// const fetchMoreProducts = () => {
-	// 	if (loading || !hasMore) return
+		const currentObserver = observerRef.current
+		if (currentObserver) {
+			observer.observe(currentObserver)
+		}
 
-	// 	setLoading(true)
-	// 	getProductCodeList(categoryCode, pageNo + 1)
-	// 		.then((newProducts) => {
-	// 			if (newProducts.length === 0) {
-	// 				setHasMore(false)
-	// 			} else {
-	// 				setProductCodeList((prevList) => [...prevList, ...newProducts])
-	// 				setPageNo((prevPageNo) => prevPageNo + 1)
-	// 			}
-	// 		})
-	// 		.catch((error) => {
-	// 			console.error("상품을 불러오는 중 오류 발생:", error)
-	// 		})
-	// 		.finally(() => {
-	// 			setLoading(false)
-	// 		})
-	// }
+		return () => {
+			if (currentObserver) observer.unobserve(currentObserver)
+		}
+	}, [loading, hasNext, cursorId])
+
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	}, [])
 
 	const handleFilter = async (filterFormData: FormData) => {
 		setAllForm(filterFormData)
-		const updateList = await getPromptList(allForm)
+		const updateList = await getPromptList(filterFormData)
+
+		setHasNext(updateList.hasNext)
+		setCursorId(updateList.nextCursorId)
 		setList(updateList.productList)
+
+		window.scrollTo(0, 0)
 	}
 
 	return (
 		<form action={handleFilter}>
-			<div className="mx-12 mb-16 flex flex-col gap-8 md:!flex-row">
+			<div className="mx-12 mb-12 flex flex-col gap-8 md:!flex-row">
 				<PromptsFilterSidebar categoryList={categoryList} />
 				<div className="flex w-full flex-col gap-8">
-					<PromptsItemFilter
-						promptCount={promptList.length}
-						handleFilter={handleFilter}
-						allForm={allForm}
-					/>
+					<PromptsItemFilter handleFilter={handleFilter} allForm={allForm} />
 					<PromptList promptList={list} />
 				</div>
 			</div>
 
 			{/* 로딩 표시 */}
-			{/* {loading && <div className="p-4 text-center">LOADING...</div>} */}
+			{loading ? (
+				<div className="mb-8 flex flex-col items-center justify-center">
+					<ThreeDots
+						visible
+						height="80"
+						width="80"
+						color="#A913F9"
+						radius="9"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+					<span className="text-xl font-medium leading-[150%] text-white">
+						Loading...
+					</span>
+				</div>
+			) : null}
 
 			{/* 더 이상 불러올 데이터가 없으면 표시 */}
-			{/* {!hasMore && (
-				<div className="p-4 text-center">상품이 존재하지 않습니다.</div>
-			)} */}
+			{!hasNext ? (
+				<div className="mb-8 p-4 text-center text-white">
+					<span className="font-bold">END</span>
+				</div>
+			) : null}
 
 			{/* 스크롤 감지용 */}
-			{/* <div ref={observerRef} className="h-[1px] w-full"></div> */}
+			{hasNext && cursorId ? (
+				<div ref={observerRef} className="h-[1px] w-full" />
+			) : null}
 		</form>
 	)
 }

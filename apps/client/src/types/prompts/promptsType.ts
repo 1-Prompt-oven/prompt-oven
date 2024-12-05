@@ -20,4 +20,9 @@ export interface PromptItemType {
 	reviewCount: number
 	createdAt: string
 	thumbnailUrl?: string
+	llmName?: string
+}
+
+export interface LLMNameType {
+	llmName: string
 }

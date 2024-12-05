@@ -52,7 +52,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 					<div className="relative flex h-[130px] flex-col justify-between bg-[#3d2d50] px-3 pt-1">
 						<div className="flex flex-col gap-2">
 							<StarAnimation
-								rateData={productInfo.reviewCount}
+								rateData={productInfo.avgStar}
 								noAnimation={false}
 							/>
 
@@ -60,7 +60,11 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 						</div>
 
 						<div className="mb-2 flex items-center justify-between">
-							<PromptLLMId llmId={productInfo.llmId} />
+							<PromptLLMId
+								llmId={
+									productInfo.llmName ? productInfo.llmName : productInfo.llmId
+								}
+							/>
 							<PromptPrice price={productInfo.price} />
 						</div>
 					</div>
