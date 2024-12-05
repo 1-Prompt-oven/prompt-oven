@@ -1,10 +1,11 @@
-import React from "react"
 import { Input as ShadcnInput } from "@repo/ui/input"
+import type { InputHTMLAttributes } from "react"
+import { forwardRef } from "react"
 
-interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
 	className?: string
 }
-export const RsInput = React.forwardRef<HTMLInputElement, InputProps>(
+export const RsInput = forwardRef<HTMLInputElement, InputProps>(
 	({ className, ...props }, ref) => {
 		return (
 			<ShadcnInput

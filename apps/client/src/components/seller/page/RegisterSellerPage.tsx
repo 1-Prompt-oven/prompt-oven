@@ -12,12 +12,19 @@ import { RsSellerInfoForm } from "@/components/seller/organism/RsSellerInfoForm"
 import { RsAddressForm } from "@/components/seller/organism/RsAddressForm"
 import type { AddressInfo, SellerInfo } from "@/schema/seller.ts"
 import { addressSchema, sellerInfoSchema } from "@/schema/seller.ts"
+import RsLoadingButton from "@/components/seller/atom/RsLoadingButton.tsx"
+import { RsRegistrationCompleteDialog } from "@/components/seller/molecule/RsRegistrationCompleteDialog.tsx"
+import type { RegisterSellerRequestType } from "@/types/settlement/settlementType.ts"
+import { registerSeller } from "@/action/settlement/settlementAction.ts"
+import { delay } from "@/lib/utils.ts"
 
 const TOTAL_STEPS = 2
 
 export default function SellerRegistrationPage() {
 	const [currentStep, setCurrentStep] = useState<number>(1)
 	const [isAddressModalOpen, setIsAddressModalOpen] = useState<boolean>(false)
+	const [isDialogOpen, setIsDialogOpen] = useState(false)
+	const [isSubmitting, setIsSubmitting] = useState(false)
 	const modalRef = useRef<HTMLDivElement>(null)
 
 	const sellerInfoForm = useForm<SellerInfo>({
@@ -45,8 +52,19 @@ export default function SellerRegistrationPage() {
 		setCurrentStep(2)
 	}
 
-	const handleAddressSubmit = () => {
+	const handleAddressSubmit = async () => {
+		setIsSubmitting(true)
 		// Here you would typically send the combined data to your backend
+		const addressObj = addressForm.getValues()
+		const reqBody: Omit<RegisterSellerRequestType, "memberID"> = {
+			...sellerInfoForm.getValues(),
+			postcode: addressObj.postcode,
+			address: `${addressObj.address} ${addressObj.detailAddress ? `, (${addressObj.detailAddress})` : ""}`,
+		}
+		await registerSeller(reqBody)
+		await delay(1000)
+		setIsSubmitting(false)
+		setIsDialogOpen(true)
 	}
 
 	const handleAddressSearch = () => {
@@ -121,12 +139,13 @@ export default function SellerRegistrationPage() {
 								Next
 							</RsButton>
 						) : (
-							<RsButton
+							<RsLoadingButton
 								type="submit"
 								form="rsAddressForm"
-								className="ml-auto hover:bg-po-purple-50">
+								isLoading={isSubmitting}
+								className="ml-auto w-[9.8rem] hover:bg-po-purple-50">
 								Register as Seller
-							</RsButton>
+							</RsLoadingButton>
 						)}
 					</div>
 				</CardContent>
@@ -143,6 +162,11 @@ export default function SellerRegistrationPage() {
 					</div>
 				</div>
 			) : null}
+
+			<RsRegistrationCompleteDialog
+				isOpen={isDialogOpen}
+				onClose={() => setIsDialogOpen(false)}
+			/>
 		</div>
 	)
 }

@@ -1,7 +1,7 @@
-import React from "react"
+import type { LabelHTMLAttributes } from "react"
 import { Label as ShadcnLabel } from "@repo/ui/label"
 
-interface LabelProps extends React.LabelHTMLAttributes<HTMLLabelElement> {
+interface LabelProps extends LabelHTMLAttributes<HTMLLabelElement> {
 	className?: string
 }
 

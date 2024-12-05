@@ -1,23 +1,25 @@
-import React from "react"
+import type { ButtonHTMLAttributes} from "react";
+import React, { forwardRef } from "react"
 import { Button as ShadcnButton } from "@repo/ui/button"
 
-interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
 	variant?: "default" | "secondary"
 	className?: string
 }
 
-export function RsButton({
-	variant = "default",
-	className,
-	...props
-}: ButtonProps) {
-	const baseClass = "text-white"
-	const variantClass =
-		variant === "default" ? "bg-[#A913F9]" : "bg-[#A913F9]/50"
-	return (
-		<ShadcnButton
-			className={`${baseClass} ${variantClass} ${className}`}
-			{...props}
-		/>
-	)
-}
+export const RsButton = forwardRef<HTMLButtonElement, ButtonProps>(
+	({ variant = "default", className, ...props }, ref) => {
+		const baseClass = "text-white"
+		const variantClass =
+			variant === "default" ? "bg-po-purple-100" : "bg-po-purple-100/50"
+		return (
+			<ShadcnButton
+				ref={ref}
+				className={`${baseClass} ${variantClass} ${className}`}
+				{...props}
+			/>
+		)
+	},
+)
+
+RsButton.displayName = "RsButton"
