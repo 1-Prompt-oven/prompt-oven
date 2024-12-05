@@ -6,7 +6,6 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import type { z } from "zod"
 import type { Session } from "next-auth"
 import { useRouter } from "next/navigation"
-import { ThreeDots } from "react-loader-spinner"
 import dayjs from "dayjs"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import {
@@ -27,7 +26,11 @@ import PcTextPromptSampleList from "@/components/product-create/organism/PcTextP
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSampleSkeleton.tsx"
 import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
-import { getStorageItem, setProductUuid } from "@/lib/localStorage.ts"
+import {
+	getStorageItem,
+	removeStorageItem,
+	setProductUuid,
+} from "@/lib/localStorage.ts"
 import {
 	getProductDetail,
 	updateProduct,
@@ -38,20 +41,9 @@ import type {
 	ModifyProductRequestType,
 } from "@/types/product/productUpsertType.ts"
 import { localStorageKeys } from "@/config/product/localStorage.ts"
-
-interface DropResult {
-	draggableId: string
-	type: string
-	source: {
-		droppableId: string
-		index: number
-	}
-	destination: {
-		droppableId: string
-		index: number
-	} | null
-	reason: "DROP" | "CANCEL"
-}
+import type { DropResult } from "@/types/product/componentType.ts"
+import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
+import PcError from "@/components/product-create/atom/PcError.tsx"
 
 type FormData = z.infer<typeof createProductSecondTextSchema>
 
@@ -195,21 +187,22 @@ export default function CreateProductSecondTextPage({
 	}
 
 	// save handler
-	const onSave = (type: "draft" | "next") => {
-		updatePromptProduct()
+	const onSave = async (type: "draft" | "next") => {
+		await updatePromptProduct()
 
-		if (type === "next") return false
-		// {
-		// 	removeStorageItem(localStorageKeys.curTempProductUuid)
-		// 	router.push(`account?view=create-product&step=3`)
-		// }
+		if (type === "next") {
+			removeStorageItem(localStorageKeys.curTempProductUuid)
+			router.push(
+				`account?view=create-product&step=3&productName=${product?.productName}&productUuid=${product?.productUuid}`,
+			)
+		}
 	}
 
 	const onBack = () => {
 		router.back()
 	}
 
-	const updatePromptProduct = () => {
+	const updatePromptProduct = async () => {
 		const values = getValues()
 
 		const reqBody: ModifyProductRequestType = {
@@ -224,35 +217,12 @@ export default function CreateProductSecondTextPage({
 		}
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("updateProduct reqbody", reqBody)
-		updateProduct(reqBody).then(() => {
-			setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
-		})
+		await updateProduct(reqBody)
+		setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
 	}
 
-	if (loading)
-		return (
-			<div className="flex max-w-5xl flex-col gap-4">
-				<AccountTitleText className="w-full">
-					Create New Product
-				</AccountTitleText>
-				<div className="mt-6 flex flex-col items-center">
-					<ThreeDots
-						visible
-						height="80"
-						width="80"
-						color="#A913F9"
-						radius="9"
-						ariaLabel="three-dots-loading"
-						wrapperStyle={{}}
-						wrapperClass=""
-					/>
-					<span className="text-xl font-medium leading-[150%] text-white">
-						Loading...
-					</span>
-				</div>
-			</div>
-		)
-	if (error) return <div>{error}</div>
+	if (loading) return <PcLoading />
+	if (error) return <PcError error={error} />
 
 	return (
 		<form className="flex max-w-5xl flex-col gap-4">
@@ -263,6 +233,7 @@ export default function CreateProductSecondTextPage({
 					<PcTitle>Model Version</PcTitle>
 					<Controller
 						name={createProductSecondTextSchemaKeys.llmVersionId}
+						rules={{ required: "Model Version is required" }}
 						control={control}
 						render={({ field }) => (
 							<PcSelect

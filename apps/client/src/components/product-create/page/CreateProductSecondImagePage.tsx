@@ -4,10 +4,9 @@ import React, { useCallback, useEffect, useState } from "react"
 import { Controller, useFieldArray, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import type { z } from "zod"
-import { ThreeDots } from "react-loader-spinner"
 import type { Session } from "next-auth"
 import dayjs from "dayjs"
-import { router } from "next/client"
+import { useRouter } from "next/navigation"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcTitle from "@/components/product-create/atom/PcTitle.tsx"
 import {
@@ -28,39 +27,26 @@ import PcPromptSampleSkeleton from "@/components/product-create/atom/PcPromptSam
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import PcImagePromptSampleList from "@/components/product-create/organism/PcImagePromptSampleList.tsx"
 import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
-import { removeStorageItem, setProductUuid } from "@/lib/localStorage.ts"
+import {
+	getStorageItem,
+	removeStorageItem,
+	setProductUuid,
+} from "@/lib/localStorage.ts"
 import {
 	getProductDetail,
 	updateProduct,
 } from "@/action/product/productUpsertAction.ts"
 import { getLlmVersionList } from "@/action/product/llmAction.ts"
 import { localStorageKeys } from "@/config/product/localStorage.ts"
-import type { ModifyProductRequestType } from "@/types/product/productUpsertType.ts"
-
-interface DropResult {
-	draggableId: string
-	type: string
-	source: {
-		droppableId: string
-		index: number
-	}
-	destination: {
-		droppableId: string
-		index: number
-	} | null
-	reason: "DROP" | "CANCEL"
-}
+import type {
+	GetProductDetailResponseType,
+	ModifyProductRequestType,
+} from "@/types/product/productUpsertType.ts"
+import type { DropResult } from "@/types/product/componentType.ts"
+import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
+import PcError from "@/components/product-create/atom/PcError.tsx"
 
 type FormData = z.infer<typeof createProductSecondImageSchema>
-
-/*
- * todo:
- *   1) model version API로 가져오기
- *   2) prompt API로 가져오기
- *   3) prompt 가져오는 중에 loading spinner 추가하기
- *   4) prompt 가져오는 중에 error handling 추가하기
- *   5) 상품 등록 API 호출하기
- */
 
 interface CreateProductSecondImagePageProps {
 	searchParams: CreateProductQueryParams
@@ -69,12 +55,18 @@ interface CreateProductSecondImagePageProps {
 export default function CreateProductSecondImagePage({
 	searchParams,
 }: CreateProductSecondImagePageProps) {
+	const router = useRouter()
+
 	const [prompt, setPrompt] = useState("")
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
 	const [lastSaved, setLastSaved] = useState<string>("")
 	const [llmVersionList, setLlmVersionList] = useState<SelectOption[]>([])
 	const [currentImage, setCurrentImage] = useState<File | null>(null)
+
+	const [product, setProduct] = useState<GetProductDetailResponseType | null>(
+		null,
+	)
 	// const minResults = 4
 
 	const extractPromptVars = useCallback((_prompt: string) => {
@@ -115,6 +107,7 @@ export default function CreateProductSecondImagePage({
 				const productUuid = setProductUuid(searchParams.productUuid ?? "")
 
 				const productData = (await getProductDetail({ productUuid })).result
+				setProduct(productData)
 
 				// llm version list 조회
 				const _llmVersionList = (
@@ -137,9 +130,6 @@ export default function CreateProductSecondImagePage({
 
 				// 마지막 저장 시간 세팅
 				setLastSaved(dayjs(productData.updatedAt).format("YYYY-MM-DD HH:mm"))
-
-				// setValue(createProductSecondImageSchemaKeys.promptResult, "")
-
 				// 이 단계에 오면 결국에는 productUuid가 있을 거 같은데 조건문이 필요할까?
 				// 저장된 상품이 있을 경우, 상품 정보를 세팅
 				if (productUuid) {
@@ -158,9 +148,12 @@ export default function CreateProductSecondImagePage({
 			}
 		}
 
-		initExistingData().then(() => {
-			// do nothing
-		})
+		const _productUuid = getStorageItem(localStorageKeys.curTempProductUuid)
+		if (!_productUuid && !searchParams.productUuid) {
+			router.back()
+		}
+
+		initExistingData().then()
 	}, [extractPromptVars, replace]) // eslint-disable-line react-hooks/exhaustive-deps -- 빈 배열로 둬도 됨.
 
 	const onSubmit = (data: FormData) => {
@@ -204,11 +197,13 @@ export default function CreateProductSecondImagePage({
 	}
 
 	// save handler
-	const onSave = (type: "draft" | "next") => {
-		updatePromptProduct()
+	const onSave = async (type: "draft" | "next") => {
+		await updatePromptProduct()
 		if (type === "next") {
 			removeStorageItem(localStorageKeys.curTempProductUuid)
-			router.push(`account?view=create-product&step=3`)
+			router.push(
+				`account?view=create-product&step=3&productName=${product?.productName}&productUuid=${product?.productUuid}`,
+			)
 		}
 	}
 
@@ -216,10 +211,11 @@ export default function CreateProductSecondImagePage({
 		router.back()
 	}
 
-	const updatePromptProduct = () => {
+	const updatePromptProduct = async () => {
 		const values = getValues()
 
 		const reqBody: ModifyProductRequestType = {
+			...product,
 			seed: values.seed,
 			llmVersionId: Number(values.llmVersionId),
 			contents: contentFields.map((content, index) => ({
@@ -230,35 +226,12 @@ export default function CreateProductSecondImagePage({
 		}
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("updateProduct reqbody", reqBody)
-		updateProduct(reqBody).then(() => {
-			setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
-		})
+		await updateProduct(reqBody)
+		setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
 	}
 
-	if (loading)
-		return (
-			<div className="flex max-w-5xl flex-col gap-4">
-				<AccountTitleText className="w-full">
-					Create New Product
-				</AccountTitleText>
-				<div className="mt-6 flex flex-col">
-					<ThreeDots
-						visible
-						height="80"
-						width="80"
-						color="#A913F9"
-						radius="9"
-						ariaLabel="three-dots-loading"
-						wrapperStyle={{}}
-						wrapperClass=""
-					/>
-					<span className="text-xl font-medium leading-[150%] text-white">
-						Loading prompt...
-					</span>
-				</div>
-			</div>
-		)
-	if (error) return <div>{error}</div>
+	if (loading) return <PcLoading />
+	if (error) return <PcError error={error} />
 
 	return (
 		<form className="flex max-w-5xl flex-col gap-4">
@@ -269,6 +242,7 @@ export default function CreateProductSecondImagePage({
 					<PcTitle>Model Version</PcTitle>
 					<Controller
 						name={createProductSecondImageSchemaKeys.llmVersionId}
+						rules={{ required: "Model Version is required" }}
 						control={control}
 						render={({ field }) => (
 							<PcSelect

@@ -3,11 +3,9 @@
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import React, { useEffect, useState } from "react"
-import { ThreeDots } from "react-loader-spinner"
 import type { Session } from "next-auth"
 import { useRouter } from "next/navigation"
 import dayjs from "dayjs"
-import _ from "lodash"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
@@ -41,6 +39,8 @@ import {
 } from "@/action/product/productUpsertAction.ts"
 import { getStorageItem, setProductUuid } from "@/lib/localStorage.ts"
 import { localStorageKeys } from "@/config/product/localStorage.ts"
+import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
+import PcError from "@/components/product-create/atom/PcError.tsx"
 
 const TITLE_MAX_LENGTH = 50
 const TEXTAREA_MAX_LENGTH = 4096
@@ -303,30 +303,8 @@ export default function CreateProductFirstPage({
 		return updateProduct(reqBody)
 	}
 
-	if (loading)
-		return (
-			<div className="flex max-w-5xl flex-col gap-4">
-				<AccountTitleText className="w-full">
-					Create New Product
-				</AccountTitleText>
-				<div className="mt-6 flex flex-col items-center">
-					<ThreeDots
-						visible
-						height="80"
-						width="80"
-						color="#A913F9"
-						radius="9"
-						ariaLabel="three-dots-loading"
-						wrapperStyle={{}}
-						wrapperClass=""
-					/>
-					<span className="text-xl font-medium leading-[150%] text-white">
-						Loading...
-					</span>
-				</div>
-			</div>
-		)
-	if (error) return <div>{error}</div>
+	if (loading) return <PcLoading />
+	if (error) return <PcError error={error} />
 
 	return (
 		<form className="flex max-w-5xl flex-col gap-4">
@@ -337,7 +315,7 @@ export default function CreateProductFirstPage({
 				<Controller
 					name={createProductFirstSchemaKeys.llmId}
 					control={control}
-					rules={{ required: "Theme is required" }}
+					rules={{ required: "AI Model is required" }}
 					render={({ field }) => (
 						<PcSelect
 							className="w-80"
@@ -368,7 +346,7 @@ export default function CreateProductFirstPage({
 				<Controller
 					name={createProductFirstSchemaKeys.topCategoryUuid}
 					control={control}
-					rules={{ required: "Theme is required" }}
+					rules={{ required: "Category value is required" }}
 					render={({ field }) => (
 						<PcSelect
 							options={topCategories}
@@ -391,7 +369,7 @@ export default function CreateProductFirstPage({
 						<Controller
 							name={createProductFirstSchemaKeys.subCategoryUuid}
 							control={control}
-							rules={{ required: "Theme is required" }}
+							rules={{ required: "Category value is required" }}
 							render={({ field }) => (
 								<PcSelect
 									options={subCategories}
