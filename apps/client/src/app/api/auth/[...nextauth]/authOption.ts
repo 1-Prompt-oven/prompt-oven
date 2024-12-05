@@ -31,14 +31,18 @@ export const authOptions: NextAuthOptions = {
 				try {
 					// Encrypt password using DH key exchange
 					const { encryptedPassword, sessionId } = await encryptPasswordWithDH(credentials.password)
-
 					// Call sign-in API with encrypted password
 					const response = await signInByAuth({
 						email: credentials.email,
 						password: encryptedPassword,
 						sessionId,
-					});
+					})
 
+					// Check if response.result is valid
+					if (!response || !response.result) {
+						console.error("Invalid response from sign-in API:", response)
+						return null
+					}
 					// Cleanup: Destroy DH session after use
 					await destroyDHSession(sessionId);
 
