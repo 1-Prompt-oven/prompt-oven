@@ -7,6 +7,11 @@ export const PROFILE_FIELDS = {
 	email: 'string | undefined',
 } as const
 
+export interface ProfileImageType {
+	memberUUID: string
+	picture: string | undefined
+}
+
 // Base type with all shared fields
 export interface BaseProfileFields {
 	bannerImageUrl?: string | undefined

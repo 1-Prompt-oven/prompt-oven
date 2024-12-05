@@ -20,6 +20,52 @@ export default function PromptsContainer({
 	const [list, setList] = useState<PromptItemType[]>(promptList)
 	const [allForm, setAllForm] = useState<FormData>(new FormData())
 
+	// const [pageNo, setPageNo] = useState(1)
+	// const [loading, setLoading] = useState(false)
+	// const [hasMore, setHasMore] = useState(true)
+	// const observerRef = useRef<HTMLDivElement | null>(null)
+
+	// useEffect(() => {
+	// 	const observer = new IntersectionObserver(
+	// 		(entries) => {
+	// 			if (entries[0].isIntersecting && !loading && hasMore) {
+	// 				fetchMoreProducts()
+	// 			}
+	// 		},
+	// 		{ threshold: 1 },
+	// 	)
+
+	// 	const currentObserver = observerRef.current
+	// 	if (currentObserver) {
+	// 		observer.observe(currentObserver)
+	// 	}
+
+	// 	return () => {
+	// 		if (currentObserver) observer.unobserve(currentObserver)
+	// 	}
+	// }, [loading, hasMore])
+
+	// const fetchMoreProducts = () => {
+	// 	if (loading || !hasMore) return
+
+	// 	setLoading(true)
+	// 	getProductCodeList(categoryCode, pageNo + 1)
+	// 		.then((newProducts) => {
+	// 			if (newProducts.length === 0) {
+	// 				setHasMore(false)
+	// 			} else {
+	// 				setProductCodeList((prevList) => [...prevList, ...newProducts])
+	// 				setPageNo((prevPageNo) => prevPageNo + 1)
+	// 			}
+	// 		})
+	// 		.catch((error) => {
+	// 			console.error("상품을 불러오는 중 오류 발생:", error)
+	// 		})
+	// 		.finally(() => {
+	// 			setLoading(false)
+	// 		})
+	// }
+
 	const handleFilter = async (filterFormData: FormData) => {
 		setAllForm(filterFormData)
 		const updateList = await getPromptList(allForm)
@@ -39,6 +85,17 @@ export default function PromptsContainer({
 					<PromptList promptList={list} />
 				</div>
 			</div>
+
+			{/* 로딩 표시 */}
+			{/* {loading && <div className="p-4 text-center">LOADING...</div>} */}
+
+			{/* 더 이상 불러올 데이터가 없으면 표시 */}
+			{/* {!hasMore && (
+				<div className="p-4 text-center">상품이 존재하지 않습니다.</div>
+			)} */}
+
+			{/* 스크롤 감지용 */}
+			{/* <div ref={observerRef} className="h-[1px] w-full"></div> */}
 		</form>
 	)
 }
