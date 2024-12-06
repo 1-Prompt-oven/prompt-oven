@@ -31,7 +31,6 @@ export default function PromptDetailTemplate({
 			/>
 
 			<PromptDetailReview
-				reviewCount={productReview.content.length}
 				productDetail={productDetail}
 				productReview={productReview}
 			/>

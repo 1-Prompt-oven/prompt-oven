@@ -15,11 +15,10 @@ export default function PromptDetailInfo({
 	return (
 		<div className="flex flex-col gap-12 lg:justify-between">
 			<PromptDetailStandardInfo
+				productUUID={productDetail.productUuid}
 				productRegistDate={productDetail.updatedAt}
 				price={productDetail.price}
 				productName={productDetail.productName}
-				productStar={productDetail.avgStar}
-				reviewCount={productDetail.reviewCount}
 			/>
 
 			<PromptDetailDescription

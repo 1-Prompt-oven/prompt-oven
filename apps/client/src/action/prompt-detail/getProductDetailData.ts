@@ -142,14 +142,6 @@ export async function changeFavoriteAction(
 		return false
 	}
 	return true
-
-	// const rawData: FavoriteStateData = await res.json() // RawData 타입으로 지정
-
-	// if (!isValidResponse<FavoriteStateData>(rawData)) {
-	// 	throw new Error("Invalid response format")
-	// }
-
-	// return rawData.result
 }
 
 export async function getCartStateAction(
