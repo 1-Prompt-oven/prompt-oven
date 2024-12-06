@@ -1,8 +1,8 @@
 "use server"
 
+import { revalidateTag } from "next/cache"
 import { getAuthHeaders } from "@/lib/api/headers"
 import { getMemberUUID, getNickname } from "@/lib/api/sessionExtractor"
-import { revalidateTag } from "next/cache"
 
 interface FollowingStateData {
 	result: boolean

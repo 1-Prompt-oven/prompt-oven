@@ -53,6 +53,9 @@ const config: Omit<Config, "content"> = {
         "grf-gradient-filter": "#3F1C24",
         "grt-gradient-filter": "#262038",
       },
+      backgroundColor: {
+        "purple-500": "rgb(168 85 247 / var(--tw-bg-opacity, 1))",
+      },
     },
   },
   plugins: [],
