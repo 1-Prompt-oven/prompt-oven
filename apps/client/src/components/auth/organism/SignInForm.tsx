@@ -10,6 +10,7 @@ import { Button } from "@repo/ui/button"
 import { CheckBox } from "@repo/ui/checkbox"
 import { loginSchema } from "@/schema/auth.ts"
 import SignInField from "@/components/auth/molecule/SignInField.tsx"
+import SuccessModal from "@/components/common/atom/SuccessModal"
 
 function SignInForm() {
 	const {
@@ -22,7 +23,7 @@ function SignInForm() {
 		resolver: zodResolver(loginSchema),
 		mode: "onChange",
 	})
-	const [isClient, setIsClient] = useState(false)
+	const loginSchemaKeys = loginSchema.keyof().enum
 	const [rememberMe, setRememberMe] = useState(false)
 	const [errorMessage, setErrorMessage] = useState("")
 	const [loginType, setLoginType] = useState<
@@ -30,22 +31,35 @@ function SignInForm() {
 	>(null)
 	const email = watch("email")
 	const password = watch("password")
-
+	const [successModalOpen, setSuccessModalOpen] = useState(false)
+	const [modalMessage, setModalMessage] = useState<string | null>(null)
+	const [modalCallback, setModalCallback] = useState<(() => void) | null>(null)
+	//rememberMe
 	useEffect(() => {
-		setIsClient(true)
-	}, [])
-
-	useEffect(() => {
-		if (isClient) {
-			const savedEmail = localStorage.getItem("rememberedEmail")
+		if (typeof window !== "undefined") {
 			const savedRememberMe = localStorage.getItem("rememberMe") === "true"
+			const savedEmail = localStorage.getItem("rememberedEmail")
 
-			if (savedEmail) {
-				setValue("email", savedEmail)
+			if (savedRememberMe) {
+				setRememberMe(true)
+				if (savedEmail) {
+					setValue("email", savedEmail)
+				}
 			}
-			setRememberMe(savedRememberMe)
 		}
-	}, [isClient, setValue])
+	}, [setValue])
+
+	useEffect(() => {
+		if (typeof window !== "undefined") {
+			if (rememberMe) {
+				localStorage.setItem("rememberMe", "true")
+				localStorage.setItem("rememberedEmail", (email as string) || "")
+			} else {
+				localStorage.setItem("rememberMe", "false")
+				localStorage.removeItem("rememberedEmail")
+			}
+		}
+	}, [rememberMe, email])
 
 	useEffect(() => {
 		if (errorMessage) {
@@ -53,44 +67,35 @@ function SignInForm() {
 		}
 	}, [email, errorMessage, password])
 
-	useEffect(() =>
-		// eslint-disable-next-line @typescript-eslint/no-empty-function -- This is no problem
-		{}, [loginType])
-
-	const loginSchemaKeys = loginSchema.keyof().enum
-
+	// login success
 	const handleOnSubmitSuccess = async (data: FieldValues) => {
 		if (!loginType) {
-			setErrorMessage("Login type is not selected. Please try again.")
+			showSuccessModal("Login type is not selected. Please try again.")
 			return
 		}
+		const response = await signIn(loginType, {
+			email: data.email,
+			password: data.password,
+			redirect: false,
+		})
 
-		try {
-			const response = await signIn(loginType, {
-				email: data.email,
-				password: data.password,
-				redirect: true,
-				callbackUrl: "/",
+		if (response && response.ok) {
+			showSuccessModal("Login successful!", () => {
+				window.location.href = response.url || "/"
 			})
-
-			if (!response?.ok) {
-				setErrorMessage("Login failed. Please try again.")
-			}
-		} catch (error) {
-			setErrorMessage("An error occurred during login. Please try again.")
+		} else {
+			showSuccessModal("Login failed. Please try again.")
 		}
 	}
-	const handleOnSubmitFailure = (submissionErrors: FieldValues) => {
-		// eslint-disable-next-line no-console -- This is a client-side only log
-		console.log(submissionErrors)
-		setErrorMessage("Invalid email or password. Please try again.")
-
+	//login fail
+	const handleOnSubmitFailure = () => {
+		showSuccessModal("Sign-in fail")
 		return true
 	}
 	const handleLoginClick = (type: "credentials") => {
 		setLoginType(type)
 	}
-
+	//social
 	const handleSocialLogin = async (provider: "google" | "kakao" | "naver") => {
 		try {
 			const response = await signIn(provider, {
@@ -107,7 +112,18 @@ function SignInForm() {
 			)
 		}
 	}
-
+	//showmodal
+	const showSuccessModal = (message: string, onConfirm?: () => void) => {
+		setModalMessage(message)
+		setSuccessModalOpen(true)
+		setModalCallback(() => onConfirm || null)
+	}
+	const closeSuccessModal = () => {
+		setSuccessModalOpen(false)
+		setModalMessage(null)
+		if (modalCallback) modalCallback()
+		setModalCallback(null)
+	}
 	return (
 		<div className="select-none gap-0 rounded border-none bg-[#252525] px-6 pb-12 pt-16 md:max-h-[780px] md:min-h-[780px] md:max-w-[650px] md:px-10 md:pb-16 md:pt-24">
 			<div className="mb-5 flex h-fit flex-col justify-center gap-[5px] md:mb-14">
@@ -168,8 +184,10 @@ function SignInForm() {
 						<div className="flex items-center space-x-2">
 							<CheckBox
 								id="remember"
-								checked={!(!isClient || !rememberMe)}
-								onCheckedChange={(checked) => setRememberMe(Boolean(checked))}
+								checked={rememberMe}
+								onCheckedChange={(checked: boolean) => {
+									setRememberMe(checked)
+								}}
 								className="h-[18px] w-[18px] rounded-none border-none !bg-[#333333] shadow-[0px_0px_30px_rgba(0,0,0,0.2)] data-[state=checked]:bg-[#333333] data-[state=checked]:text-white"
 							/>
 							<label
@@ -239,6 +257,10 @@ function SignInForm() {
 					</Link>
 				</div>
 			</form>
+			{/* FailModal */}
+			<SuccessModal isOpen={successModalOpen} onClose={closeSuccessModal}>
+				{modalMessage}
+			</SuccessModal>
 		</div>
 	)
 }
