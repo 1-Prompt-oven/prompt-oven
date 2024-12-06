@@ -15,7 +15,7 @@ export default function PromptDetailReview({
 	productReview,
 }: PromptDetailReviewProps) {
 	return (
-		<div className="mx-auto mt-12 flex flex-col gap-8 text-white sm:mt-0">
+		<div className="mx-auto mt-12 flex flex-col gap-8 text-white lg:mt-0">
 			<PromptDetailReviewCount reviewCount={reviewCount} />
 			<PromptReviewContents
 				productDetail={productDetail}

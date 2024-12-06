@@ -23,7 +23,7 @@ export default function PromptDetailTemplate({
 	productReview,
 }: PromptDetailProps) {
 	return (
-		<section className="mx-auto mt-12 flex max-w-screen-xl flex-col lg:gap-16">
+		<section className="mx-4 mt-12 flex max-w-screen-xl flex-col xs:mx-auto lg:gap-16">
 			<PromptDetailMain
 				contents={productDetail.contents}
 				productUuid={productDetail.productUuid}

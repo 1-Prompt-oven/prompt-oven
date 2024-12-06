@@ -1,3 +1,4 @@
+import { STATIC_DEFAULT_AVATAR } from "@/app/static/data"
 import { getSellorShort } from "@/action/prompt-detail/getProductDetailData"
 import PromptDetailLinkSellor from "./PromptDetailLinkSellor"
 import PromptDetailSellorFollow from "./PromptDetailSellorFollow"
@@ -15,7 +16,11 @@ export default async function PromptDetailSellor({
 		<div className="flex items-center justify-start gap-4">
 			<PromptDetailLinkSellor
 				memberNickname={sellorInfo.memberNickname}
-				memberProfileImage={sellorInfo.memberProfileImage}
+				memberProfileImage={
+					sellorInfo.memberProfileImage !== ""
+						? sellorInfo.memberProfileImage
+						: STATIC_DEFAULT_AVATAR
+				}
 			/>
 
 			<PromptDetailSellorFollow />

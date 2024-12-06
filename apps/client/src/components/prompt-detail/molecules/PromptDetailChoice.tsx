@@ -57,18 +57,15 @@ export default function PromptDetailChoice({
 
 		if (result.res) {
 			setIsCart(result.cartId)
-		} else {
-			if (result.state === "NoUser") {
-				// eslint-disable-next-line no-console -- Fail to Update Cart State1
-				console.log("사용자가 없습니다.")
-			} else if (result.state === "resError") {
-				// eslint-disable-next-line no-console -- Fail to Update Cart State2
-				console.log("장바구니 업데이트 요청에 실패했습니다.")
-			} else {
-				// eslint-disable-next-line no-console -- Fail to Update Cart State3
-				console.log("알 수 없는 오류가 발생했습니다.")
-			}
 		}
+		if (result.state === "NoUser")
+			// eslint-disable-next-line no-console -- Fail to Update Cart State1
+			console.log("사용자가 없습니다.")
+		else if (result.state === "resError")
+			// eslint-disable-next-line no-console -- Fail to Update Cart State2
+			console.log("장바구니 업데이트 요청에 실패했습니다.")
+		// eslint-disable-next-line no-console -- Fail to Update Cart State3
+		else console.log("알 수 없는 오류가 발생했습니다.")
 	}
 
 	return (
@@ -79,7 +76,7 @@ export default function PromptDetailChoice({
 					className="flex h-[60px] w-[60px] items-center justify-center rounded-full border-none bg-white p-0"
 					onClick={likeHandler}>
 					{isFavorite.liked ? (
-						<Heart className="scale-110 transform fill-[#ef4444] text-[#ef4444] transition-transform duration-300 ease-in-out" />
+						<Heart className="scale-150 transform fill-[#ef4444] text-[#ef4444] transition-transform duration-300 ease-in-out" />
 					) : (
 						<Heart className="scale-100 transform text-[#ef4444] transition-transform duration-300 ease-in-out" />
 					)}
@@ -90,9 +87,9 @@ export default function PromptDetailChoice({
 					className="h-[60px] w-[60px] rounded-full border-none bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] p-0"
 					onClick={cartHandler}>
 					{isCart !== null ? (
-						<ShoppingCartIcon className="fill-white text-white hover:opacity-90" />
+						<ShoppingCartIcon className="scale-150 fill-white text-white transition-transform duration-300 ease-in-out hover:opacity-90" />
 					) : (
-						<ShoppingCartIcon className="text-white hover:opacity-90" />
+						<ShoppingCartIcon className="scale-100 text-white transition-transform duration-300 ease-in-out hover:opacity-90" />
 					)}
 				</Button>
 			</div>
