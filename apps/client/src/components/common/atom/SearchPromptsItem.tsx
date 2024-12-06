@@ -16,7 +16,7 @@ function SearchPromptsItem({
 			className="flex w-full cursor-pointer items-start gap-3 rounded-lg p-2 hover:bg-white"
 			onClick={onClick}>
 			<Image
-				src={prompt.thumbnail || "/placeholder.svg"}
+				src={prompt.thumbnailUrl || "/placeholder.svg"}
 				alt="prompt thumbnail"
 				className="rounded border border-[#424242] object-cover"
 				width={64}
@@ -30,7 +30,7 @@ function SearchPromptsItem({
 				<div className="text-muted-foreground flex items-center gap-4 text-sm">
 					<span className="flex items-center">
 						<Star className="text-muted-foreground mr-1 h-3 w-3 fill-current" />
-						{prompt.rating}
+						{prompt.avgStar}
 					</span>
 					<span className="text-muted-foreground ml-auto font-medium">
 						$ {prompt.price}
@@ -42,3 +42,4 @@ function SearchPromptsItem({
 }
 
 export default SearchPromptsItem
+

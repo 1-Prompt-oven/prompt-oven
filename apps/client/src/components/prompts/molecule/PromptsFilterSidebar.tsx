@@ -56,7 +56,7 @@ export default function PromptsFilterSidebar({
 
 	return (
 		<div
-			className="hidden h-full rounded-lg bg-opacity-20 bg-gradient-to-r from-[#3F1C24] to-[#262038] p-4 xs:!flex xs:flex-col lg:sticky lg:!block lg:max-w-[200px]"
+			className="z-[10] hidden h-full rounded-lg bg-opacity-20 bg-gradient-to-r from-[#3F1C24] to-[#262038] p-4 xs:!flex xs:flex-col lg:sticky lg:!block lg:max-w-[200px]"
 			style={{
 				top: Math.max(sidebarPosition, 100),
 			}}>

@@ -11,4 +11,6 @@ export const routes = {
 	specialExhibition: "/special-exhibition",
 	settings: "/settings",
 	dashboard: "/dashboard",
+	account: "/account",
 }
+

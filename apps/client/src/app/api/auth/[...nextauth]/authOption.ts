@@ -1,31 +1,31 @@
-import CredentialsProvider from "next-auth/providers/credentials";
-import type { NextAuthOptions, User } from "next-auth";
-import GoogleProvider from "next-auth/providers/google";
-import NaverProvider from "next-auth/providers/naver";
-import KakaoProvider from "next-auth/providers/kakao";
-import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts";
-import { refreshAccessToken } from '@/action/auth/authTokenAction';
-import type {ExtendedToken} from "@/types/auth/AuthToken"
-import { logoutAuthMember } from '@/action/auth/memberManageAction';
-import { getProfileImage } from "@/action/profile/getProfilePic";
+import CredentialsProvider from "next-auth/providers/credentials"
+import type { NextAuthOptions, User } from "next-auth"
+import GoogleProvider from "next-auth/providers/google"
+import NaverProvider from "next-auth/providers/naver"
+import KakaoProvider from "next-auth/providers/kakao"
+import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts"
+import { refreshAccessToken } from "@/action/auth/authTokenAction"
+import type { ExtendedToken } from "@/types/auth/AuthToken"
+import { logoutAuthMember } from "@/action/auth/memberManageAction"
+import { getProfileImage } from "@/action/profile/getProfilePic"
 
 export const authOptions: NextAuthOptions = {
-    session: {
-        strategy: "jwt",
-        maxAge: 24 * 60 * 60, // 24 hours
-        updateAge: 6 * 24 * 60 * 60, // 6 * 24 hours
-    },
-    providers: [
-        CredentialsProvider({
-            name: "credentials",
-            credentials: {
-                email: { label: "email", type: "text" },
-                password: { label: "password", type: "password" },
-            },
-            async authorize(credentials): Promise<User | null> {
-                if (!credentials?.email || !credentials?.password) {
-                    return null;
-                }
+	session: {
+		strategy: "jwt",
+		maxAge: 24 * 60 * 60, // 24 hours
+		updateAge: 6 * 24 * 60 * 60, // 6 * 24 hours
+	},
+	providers: [
+		CredentialsProvider({
+			name: "credentials",
+			credentials: {
+				email: { label: "email", type: "text" },
+				password: { label: "password", type: "password" },
+			},
+			async authorize(credentials): Promise<User | null> {
+				if (!credentials?.email || !credentials?.password) {
+					return null
+				}
 
                 const response = await signInByAuth({
                     email: credentials.email,
@@ -71,38 +71,38 @@ export const authOptions: NextAuthOptions = {
             //소셜 로그인 공통 처리
             if (account?.provider) {
               console.log(`${account.provider} Sign-In detected:`, account, profile)
-          
+
               let providerID: string;
               let email: string | undefined
-          
+
               switch (account.provider) {
                 case "google":
                   providerID = account.id as string
                   email = profile?.email || "";
                   break;
-          
+
                 case "naver":
                   providerID = account.id as string
                   email = user.email || "";
                   break;
-          
+
                 case "kakao":
                   providerID = account.id as string
                   email = user.email || "";
                   break;
-          
+
                 default:
                   console.error("Unsupported provider:", account.provider)
                   return false;
               }
-          
+
               // OAuth API 호출
               const response = await signInByOAuth({
                 provider: account.provider,
                 providerID,
                 email,
               });
-          
+
               if (response) {
                 // eslint-disable-next-line no-console -- This is a client-side only log
                 console.log(`${account.provider} OAuth API response:`, response)
@@ -112,15 +112,15 @@ export const authOptions: NextAuthOptions = {
                 console.error(`${account.provider} OAuth API failed:`, response)
                 return '/sign-up';
               }
-            }          
+            }
             return true;
           },
-          async jwt({ token, user }): Promise<ExtendedToken> {      
+          async jwt({ token, user }): Promise<ExtendedToken> {
             if (user) {
                 token.accesstoken = user.accesstoken
                 token.refreshtoken = user.refreshtoken
                 token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
-            }      
+            }
             if (Date.now() >= (token.tokenExpiration as number || 0)) {
                 const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "")
                 if (refreshedToken.result) {
@@ -128,40 +128,40 @@ export const authOptions: NextAuthOptions = {
                   token.profileImage = profileImage.picture || ""
                   user.profileImage = profileImage.picture || ""
 
-                  token.accesstoken = refreshedToken.result.accessToken;
-                  user.accesstoken = refreshedToken.result.accessToken
+					token.accesstoken = refreshedToken.result.accessToken
+					user.accesstoken = refreshedToken.result.accessToken
 
-                  token.role = refreshedToken.result.role
-                  user.role = refreshedToken.result.role
+					token.role = refreshedToken.result.role
+					user.role = refreshedToken.result.role
 
-                  token.nickname = refreshedToken.result.nickname
-                  user.nickname = refreshedToken.result.nickname
+					token.nickname = refreshedToken.result.nickname
+					user.nickname = refreshedToken.result.nickname
 
-                  token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000;
-              } else {
-                  await logoutAuthMember({
-                      Authorization: `Bearer ${token.accesstoken}`,
-                      Refreshtoken: token.refreshtoken as string,
-                  })           
-                  token.accesstoken = null;
-                  token.refreshtoken = null;
-                  token.tokenExpiration = null;
-                  token.error = "LoggedOut";
-              }
-            }        
-            return { ...token, ...user }
-        },
-        
-        async session({ session, token }) {
-          session.user = token;
-          return session;
-        },
-        async redirect({ url, baseUrl }) {
-            return url.startsWith(baseUrl) ? url : baseUrl
-          },
-    },
-    pages: {
-        signIn: "/sign-in",
-        // error: "/error",
-    },
-};
+					token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000
+				} else {
+					await logoutAuthMember({
+						Authorization: `Bearer ${token.accesstoken}`,
+						Refreshtoken: token.refreshtoken as string,
+					})
+					token.accesstoken = null
+					token.refreshtoken = null
+					token.tokenExpiration = null
+					token.error = "LoggedOut"
+				}
+			}
+			return { ...token, ...user }
+		},
+
+		async session({ session, token }) {
+			session.user = token
+			return session
+		},
+		async redirect({ url, baseUrl }) {
+			return url.startsWith(baseUrl) ? url : baseUrl
+		},
+	},
+	pages: {
+		signIn: "/sign-in",
+		// error: "/error",
+	},
+}

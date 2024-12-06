@@ -26,11 +26,11 @@ function FollowDashboard({ selectedPeriod, selectedUnit }: PeriodUnitType) {
 		chartInstanceRef.current = new Chart(ctx, {
 			type: "line",
 			data: {
-				labels: getLabels(selectedPeriod as string, selectedUnit as string), // X축 라벨 동적으로 설정
+				labels: getLabels(selectedPeriod, selectedUnit), // X축 라벨 동적으로 설정
 				datasets: [
 					{
 						label: "Sales Data",
-						data: getData(selectedPeriod as string, selectedUnit as string), // 데이터 동적으로 설정
+						data: getData(selectedPeriod, selectedUnit), // 데이터 동적으로 설정
 						fill: false,
 						borderColor: "rgba(75, 192, 192, 1)",
 						tension: 0.1,
