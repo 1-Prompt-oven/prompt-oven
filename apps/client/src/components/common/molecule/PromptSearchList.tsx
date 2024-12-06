@@ -1,6 +1,7 @@
 import Image from "next/image"
 import type { PromptApiResponseType } from "@/types/common/responseType"
 
+
 function PromptSearchList({ data }: { data: PromptApiResponseType }) {
 	const promptData = data.productList
 
