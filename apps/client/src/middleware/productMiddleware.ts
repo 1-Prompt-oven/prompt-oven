@@ -1,12 +1,6 @@
 import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 
-export const normalizeRegex = /\/$/
-
-export const getNormalizedPathname = (pathname: string): string => {
-	return pathname.replace(normalizeRegex, "").toLowerCase()
-}
-
 export const handleCreateProduct = (
 	request: NextRequest,
 ): NextResponse | undefined => {
