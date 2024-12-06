@@ -4,6 +4,11 @@ import { Label } from "@repo/ui/label"
 import { getSubCategory } from "@/action/prompts/getCategoryData"
 import type { CategoryType } from "@/types/prompts/categoryType"
 
+interface SelectCategoryValue {
+	top: string | null
+	sub: string | null
+}
+
 export function PromptsFilterCategory({
 	categoryList,
 	topCategoryUUID,
@@ -22,6 +27,10 @@ export function PromptsFilterCategory({
 	>({})
 	const [openCategory, setOpenCategory] = useState<string | null>(null)
 
+	const [selectedCategory, setSelectedCategory] = useState<SelectCategoryValue>(
+		{ top: null, sub: null },
+	)
+
 	const handleChange = async (selected: string) => {
 		if (!(selected in subCategories)) {
 			const res = await getSubCategory(selected)
@@ -37,19 +46,43 @@ export function PromptsFilterCategory({
 		setOpenCategory((prev) => (prev === categoryUuid ? null : categoryUuid))
 	}
 
-	const handleCategoryClick = (categoryUuid: string) => {
-		setTopCategoryUUID(categoryUuid) // topCategoryUUID 업데이트
-		handleChange(categoryUuid) // 선택된 값 업데이트
+	const handleCategoryClick = (categoryUuid: string, categoryName: string) => {
+		if (topCategoryUUID !== categoryUuid) {
+			setTopCategoryUUID(categoryUuid) // topCategoryUUID 업데이트
+			handleChange(categoryUuid) // 선택된 값 업데이트
+		}
 		toggleCategory(categoryUuid) // 카테고리 열기/닫기
+
+		setSelectedCategory((prevState) => {
+			if (prevState.top !== categoryName) {
+				return {
+					...prevState,
+					top: categoryName,
+					sub: "ALL",
+				}
+			}
+			return prevState
+		})
 	}
 
-	// topCategoryUUID가 빈 문자열일 때 openCategory를 null로 설정
+	const changeName = (categoryName: string) => {
+		setSelectedCategory((prevState) => ({
+			...prevState,
+			sub: categoryName,
+		}))
+	}
+
 	useEffect(() => {
 		if (topCategoryUUID === "") {
 			setOpenCategory(null)
+
+			setSelectedCategory((prevState) => ({
+				...prevState,
+				top: null,
+				sub: null,
+			}))
 		}
 	}, [topCategoryUUID])
-
 	return (
 		<RadioGroup value={selectedValue} onValueChange={handleChange}>
 			<input type="hidden" name="topCategoryUuid" value={topCategoryUUID} />
@@ -58,19 +91,43 @@ export function PromptsFilterCategory({
 				name="subCategoryUuid"
 				value={topCategoryUUID === selectedValue ? "" : selectedValue}
 			/>
-			<ul className="space-y-2">
+
+			{selectedCategory.top ? (
+				<div className="flex items-center gap-2 text-xs text-white">
+					<p className="rounded-lg bg-[#524f4f] px-3 py-[2px]">
+						{selectedCategory.top}
+					</p>
+
+					{selectedCategory.sub !== "ALL" ? (
+						<p className="rounded-lg bg-[#524f4f] px-3 py-[2px]">
+							{selectedCategory.sub}
+						</p>
+					) : null}
+				</div>
+			) : null}
+
+			<ul className="relative z-[10] grid grid-cols-2 gap-2">
 				{categoryList.map((category) => (
 					<li key={category.categoryUuid} className="flex flex-col">
 						<button
-							className="flex w-full cursor-pointer items-center justify-between rounded bg-gray-700 p-2 text-left"
 							type="button"
-							onClick={() => handleCategoryClick(category.categoryUuid)}
-							onKeyPress={(e) => {
+							className="flex w-full cursor-pointer items-center justify-between rounded bg-gray-700 p-2 text-left"
+							onClick={() =>
+								handleCategoryClick(
+									category.categoryUuid,
+									category.categoryName,
+								)
+							}
+							onKeyDown={(e) => {
 								if (e.key === "Enter" || e.key === " ") {
-									handleCategoryClick(category.categoryUuid)
+									handleCategoryClick(
+										category.categoryUuid,
+										category.categoryName,
+									)
+									e.preventDefault() // 기본 동작 방지
 								}
 							}}
-							aria-expanded={openCategory === category.categoryUuid} // 접근성을 위한 속성 추가
+							tabIndex={0} // 버튼은 기본적으로 키보드 탐색 가능
 						>
 							<p className="flex items-center space-x-2 text-sm text-white">
 								{category.categoryName}
@@ -80,42 +137,47 @@ export function PromptsFilterCategory({
 							</p>
 						</button>
 
-						{openCategory === category.categoryUuid &&
-						Array.isArray(subCategories[category.categoryUuid]) &&
-						subCategories[category.categoryUuid].length > 0 ? (
-							<ul className="my-4 ml-4 space-y-2">
-								<li className="flex items-center space-x-2">
-									<RadioGroupItem
-										value={category.categoryUuid} // ALL의 value 설정
-										checked={selectedValue === category.categoryUuid} // ALL이 선택된 경우 체크
-										id="ALL"
-										className="rounded-sm border-white/70 text-white"
-										isRectangle
-									/>
-									<Label htmlFor="ALL" className="text-sm text-white">
-										ALL
-									</Label>
-								</li>
-								{subCategories[category.categoryUuid].map((subCategory) => (
-									<li
-										key={subCategory.categoryUuid}
-										className="flex items-center space-x-2">
+						<div className="absolute top-[40px] rounded-md bg-gradient-to-r from-[#3F1C24] to-[#262038] md:left-[170px] md:top-[0] md:min-w-[200px] lg:left-[185px]">
+							{openCategory === category.categoryUuid &&
+							Array.isArray(subCategories[category.categoryUuid]) &&
+							subCategories[category.categoryUuid].length > 0 ? (
+								<ul className="my-4 ml-4 mr-6 flex flex-col space-y-2 pl-1">
+									<li className="flex items-center space-x-2">
 										<RadioGroupItem
-											value={subCategory.categoryUuid}
-											checked={selectedValue === subCategory.categoryUuid} // 선택된 경우 체크
-											id={subCategory.categoryUuid}
+											value={category.categoryUuid} // ALL의 value 설정
+											id="ALL"
 											className="rounded-sm border-white/70 text-white"
 											isRectangle
+											onClick={() => changeName("ALL")}
 										/>
-										<Label
-											htmlFor={subCategory.categoryUuid}
-											className="text-sm text-white">
-											{subCategory.categoryName}
+										<Label htmlFor="ALL" className="text-sm text-white">
+											ALL
 										</Label>
 									</li>
-								))}
-							</ul>
-						) : null}
+									{subCategories[category.categoryUuid].map((subCategory) => (
+										<li
+											key={subCategory.categoryUuid}
+											className="flex items-center space-x-2">
+											<RadioGroupItem
+												value={subCategory.categoryUuid}
+												checked={
+													selectedCategory.sub === subCategory.categoryName
+												}
+												id={subCategory.categoryUuid}
+												className="rounded-sm border-white/70 text-white"
+												isRectangle
+												onClick={() => changeName(subCategory.categoryName)}
+											/>
+											<Label
+												htmlFor={subCategory.categoryUuid}
+												className="text-sm text-white">
+												{subCategory.categoryName}
+											</Label>
+										</li>
+									))}
+								</ul>
+							) : null}
+						</div>
 					</li>
 				))}
 			</ul>

@@ -1,9 +1,14 @@
-import type { SearchResultCreatorType } from "@/types/search/searchResultType"
+"use server"
+
+import type {
+	SearchResultCreatorType,
+	PromptDetailType,
+} from "@/types/search/searchResultType"
 import type {
 	CommonResType,
 	PromptApiResponseType,
 } from "@/types/common/responseType"
-import type { PromptDetailType } from "@/types/search/searchResultType"
+import type { ProfileForSearchListType } from "@/types/profile/profileTypes"
 
 export interface FetchResults {
 	prompts: PromptDetailType[]
@@ -13,11 +18,12 @@ export interface FetchResults {
 export async function fetchSearchResults(
 	query: string,
 	tab: string,
-): Promise<FetchResults> {
+): Promise<PromptApiResponseType[] | ProfileForSearchListType[]> {
+	"use server"
 	// 상품 검색 결과 fetch
 	if (tab === "prompt") {
 		const promptResponse = await fetch(
-			`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/product/list?searchBar=${query}&pageSize=5`,
+			`${process.env.API_BASE_URL}/v1/product/list?searchBar=${query}&pageSize=15`,
 			{
 				headers: {
 					"Content-Type": "application/json",
@@ -27,14 +33,13 @@ export async function fetchSearchResults(
 				cache: "no-cache",
 			},
 		)
-		const promptData: CommonResType<PromptApiResponseType> =
+		const promptData: CommonResType<PromptApiResponseType[]> =
 			await promptResponse.json()
-		const prompts = promptData.result.productList
-		return { prompts, creators: [] }
+		return promptData.result
 	}
 	// 크리에이터 검색 결과 fetch
 	const creatorResponse = await fetch(
-		`${process.env.NEXT_PUBLIC_API_BASE_URL}/v1/profile/search?query=${query}`,
+		`${process.env.API_BASE_URL}/v1/profile/search?query=${query}`,
 		{
 			headers: {
 				"Content-Type": "application/json",
@@ -44,9 +49,8 @@ export async function fetchSearchResults(
 			cache: "no-cache",
 		},
 	)
-	const creatorData: CommonResType<SearchResultCreatorType[]> =
+	const creatorData: CommonResType<ProfileForSearchListType[]> =
 		await creatorResponse.json()
-	const creators = creatorData.result.slice(0, 5)
-	return { creators, prompts: [] }
+	return creatorData.result.slice(0, 15)
 }
 

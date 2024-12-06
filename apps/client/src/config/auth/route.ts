@@ -20,5 +20,8 @@ export const withAuthRoutes = {
 	purchase: "/purchase",
 	specialExhibition: "/special-exhibition",
 	settings: "/settings",
+	dashboard: "/dashboard",
 	account: "/account",
 }
+
+

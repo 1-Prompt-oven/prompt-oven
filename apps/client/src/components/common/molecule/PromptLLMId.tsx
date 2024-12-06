@@ -1,7 +1,7 @@
 import React from "react"
 
 interface PromptLLMIdProps {
-	llmId: number
+	llmId: string | number | null
 }
 
 export default function PromptLLMId({ llmId }: PromptLLMIdProps) {
