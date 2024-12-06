@@ -211,7 +211,8 @@ export default function CreateProductFirstPage({
 						memberUUID: session?.user?.memberUUID as string,
 					})
 					// note: 판매자 등록은 한 번 한다는 가정으로 작성한 코드
-					const _sellerUuid = sellerUuidRes.result[0].settlementProfileID
+
+					const _sellerUuid = sellerUuidRes.result[0].settlementProfileID // session?.user?.memberUUID as string // sellerUuidRes.result[0].settlementProfileID
 					setSellerUuid(_sellerUuid)
 				} catch (e) {
 					// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
