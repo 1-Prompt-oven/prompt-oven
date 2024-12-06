@@ -36,7 +36,7 @@ export default function ProfileItemFilter({
 			<div className="flex items-center gap-4">
 				<Select
 					onValueChange={(value) => {
-						handleSelectChange("sortDate", value)
+						handleSelectChange("sortBy", value)
 					}}>
 					<SelectTrigger className="font-mulish hidden h-[2.2rem] w-[7rem] rounded-full border border-white/20 bg-transparent text-white xs:!flex">
 						<SelectValue placeholder="날짜 순서" />

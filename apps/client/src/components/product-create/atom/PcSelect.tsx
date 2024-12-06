@@ -32,7 +32,7 @@ function PcSelect({
 	variant = "black",
 }: PcSelectProps) {
 	return (
-		<Select value={defaultValue} onValueChange={onValueChange}>
+		<Select value={defaultValue || undefined} onValueChange={onValueChange}>
 			<SelectTrigger variant={variant} className={className}>
 				<SelectValue placeholder={placeholder} />
 			</SelectTrigger>

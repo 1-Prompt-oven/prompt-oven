@@ -21,5 +21,6 @@ export interface CreateProductQueryParams {
 	productUuid?: string
 	llmType?: CreateProductType
 	llmId?: string
+	productName?: string
 }
 // ------------------------------ End of SearchParams ------------------------------

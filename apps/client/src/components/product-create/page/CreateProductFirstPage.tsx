@@ -3,9 +3,9 @@
 import { Controller, useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import React, { useEffect, useState } from "react"
-import { ThreeDots } from "react-loader-spinner"
 import type { Session } from "next-auth"
 import { useRouter } from "next/navigation"
+import dayjs from "dayjs"
 import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
 import PcSaveBar from "@/components/product-create/molecule/PcSaveBar.tsx"
 import { PcInput } from "@/components/product-create/atom/PcInput.tsx"
@@ -28,6 +28,7 @@ import type { GetLlmListResponseType } from "@/types/product/llmType.ts"
 import type { GetCategoryListResponseType } from "@/types/product/productCategory.ts"
 import type {
 	CreateProductTempRequestType,
+	GetProductDetailResponseType,
 	ModifyProductRequestType,
 } from "@/types/product/productUpsertType.ts"
 import { getSellerProfile } from "@/action/settlement/settlementAction.ts"
@@ -38,6 +39,9 @@ import {
 } from "@/action/product/productUpsertAction.ts"
 import { getStorageItem, setProductUuid } from "@/lib/localStorage.ts"
 import { localStorageKeys } from "@/config/product/localStorage.ts"
+import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
+import PcError from "@/components/product-create/atom/PcError.tsx"
+import { extractPromptVariables } from "@/lib/productUtils.ts"
 
 const TITLE_MAX_LENGTH = 50
 const TEXTAREA_MAX_LENGTH = 4096
@@ -55,6 +59,12 @@ export default function CreateProductFirstPage({
 	const [sellerUuid, setSellerUuid] = useState<string>("")
 	const [loading, setLoading] = useState<boolean>(true)
 	const [error, setError] = useState<string | null>(null)
+	const [lastSaved, setLastSaved] = useState<string>("")
+
+	const [product, setProduct] = useState<GetProductDetailResponseType | null>(
+		null,
+	)
+	const [promptTextError, setPromptTextError] = useState<string>("")
 
 	const { control, register, watch, getValues, setValue } = useForm({
 		resolver: zodResolver(createProductFirstSchema),
@@ -82,9 +92,6 @@ export default function CreateProductFirstPage({
 	const selectedTopCategory = watch(
 		createProductFirstSchemaKeys.topCategoryUuid,
 	)
-
-	// todo: API를 통해서 필요한 값들을 가져와야 합니다.
-	const lastSaved = ""
 
 	const [aiModelOptions, setAiModelOptions] = useState<SelectOption[]>([])
 	const [topCategories, setTopCategories] = useState<SelectOption[]>([])
@@ -120,6 +127,7 @@ export default function CreateProductFirstPage({
 					const productUuid = setProductUuid(searchParams.productUuid ?? "")
 					if (productUuid) {
 						const productData = (await getProductDetail({ productUuid })).result
+						setProduct(productData)
 						setValue(
 							createProductFirstSchemaKeys.llmId,
 							String(productData.llmId),
@@ -145,6 +153,10 @@ export default function CreateProductFirstPage({
 						setValue(
 							createProductFirstSchemaKeys.discountRate,
 							productData.discountRate,
+						)
+
+						setLastSaved(
+							dayjs(productData.updatedAt).format("YYYY-MM-DD HH:mm"),
 						)
 					}
 				} catch (e) {
@@ -230,17 +242,38 @@ export default function CreateProductFirstPage({
 		}
 	}
 
-	const onSave = (type: "draft" | "next") => {
-		if (getStorageItem(localStorageKeys.curTempProductUuid)) {
-			updatePromptProduct()
+	const checkPromptText = () => {
+		const values = getValues()
+		const extractedPromptVars = extractPromptVariables(values.prompt)
+		if (extractedPromptVars.length === 0) {
+			setPromptTextError(
+				`Please make variables with [square brackets] in the prompt text.`,
+			)
+			return false
+		}
+		return true
+	}
+
+	const onSave = async (type: "draft" | "next") => {
+		// next 버튼 클릭 시 prompt text 체크
+		setPromptTextError("")
+		if (type === "next" && !checkPromptText()) return
+
+		let productUuid = getStorageItem(localStorageKeys.curTempProductUuid)
+		if (productUuid) {
+			await updatePromptProduct()
 		} else {
-			savePromptDraft()
+			productUuid = await savePromptDraft()
 		}
 		if (type === "next") {
 			const llmId = getValues(createProductFirstSchemaKeys.llmId)
 			const llmType = aiModelOptions.find((llm) => llm.value === llmId)
 				?.extraProps?.llmType as string
-			router.push(`account?view=create-product&step=2&llmType=${llmType}`)
+			router.push(
+				`account?view=create-product&step=2&llmType=${llmType}&productUuid=${productUuid}`,
+			)
+		} else {
+			setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))
 		}
 	}
 
@@ -248,7 +281,7 @@ export default function CreateProductFirstPage({
 		router.back()
 	}
 
-	const savePromptDraft = () => {
+	const savePromptDraft = async () => {
 		const values = getValues()
 		const reqBody: CreateProductTempRequestType = {
 			sellerUuid,
@@ -263,16 +296,17 @@ export default function CreateProductFirstPage({
 		}
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("onSaveDraft reqbody", reqBody)
-		createTempProduct(reqBody).then((res) => {
-			// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
-			console.log("onSaveDraft", res.result)
-			setProductUuid(res.result.productUuid)
-		})
+		const res = await createTempProduct(reqBody)
+		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
+		console.log("onSaveDraft", res.result)
+		setProductUuid(res.result.productUuid)
+		return res.result.productUuid
 	}
 
 	const updatePromptProduct = () => {
 		const values = getValues()
 		const reqBody: ModifyProductRequestType = {
+			...product,
 			productUuid: getStorageItem(localStorageKeys.curTempProductUuid),
 			productName: values.productName,
 			price: values.price,
@@ -285,33 +319,11 @@ export default function CreateProductFirstPage({
 		}
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("updateProduct reqbody", reqBody)
-		updateProduct(reqBody).then()
+		return updateProduct(reqBody)
 	}
 
-	if (loading)
-		return (
-			<div className="flex max-w-5xl flex-col gap-4">
-				<AccountTitleText className="w-full">
-					Create New Product
-				</AccountTitleText>
-				<div className="mt-6 flex flex-col items-center">
-					<ThreeDots
-						visible
-						height="80"
-						width="80"
-						color="#A913F9"
-						radius="9"
-						ariaLabel="three-dots-loading"
-						wrapperStyle={{}}
-						wrapperClass=""
-					/>
-					<span className="text-xl font-medium leading-[150%] text-white">
-						Loading...
-					</span>
-				</div>
-			</div>
-		)
-	if (error) return <div>{error}</div>
+	if (loading) return <PcLoading />
+	if (error) return <PcError error={error} />
 
 	return (
 		<form className="flex max-w-5xl flex-col gap-4">
@@ -322,7 +334,7 @@ export default function CreateProductFirstPage({
 				<Controller
 					name={createProductFirstSchemaKeys.llmId}
 					control={control}
-					rules={{ required: "Theme is required" }}
+					rules={{ required: "AI Model is required" }}
 					render={({ field }) => (
 						<PcSelect
 							className="w-80"
@@ -353,7 +365,7 @@ export default function CreateProductFirstPage({
 				<Controller
 					name={createProductFirstSchemaKeys.topCategoryUuid}
 					control={control}
-					rules={{ required: "Theme is required" }}
+					rules={{ required: "Category value is required" }}
 					render={({ field }) => (
 						<PcSelect
 							options={topCategories}
@@ -376,7 +388,7 @@ export default function CreateProductFirstPage({
 						<Controller
 							name={createProductFirstSchemaKeys.subCategoryUuid}
 							control={control}
-							rules={{ required: "Theme is required" }}
+							rules={{ required: "Category value is required" }}
 							render={({ field }) => (
 								<PcSelect
 									options={subCategories}
@@ -400,7 +412,8 @@ export default function CreateProductFirstPage({
 						</PcDescription>
 						<FieldLengthCounter
 							maxLength={TEXTAREA_MAX_LENGTH}
-							length={promptWatch}>
+							length={promptWatch}
+							errMsg={promptTextError}>
 							<PcTextarea
 								maxLength={TEXTAREA_MAX_LENGTH}
 								placeholder="Enter your prompt text here. Include all the settings you used. Put all variables in [square brackets]."

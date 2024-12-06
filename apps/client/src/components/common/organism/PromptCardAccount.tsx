@@ -20,6 +20,11 @@ export default function PromptCardAccount({
 }: PromptCardAccountProps) {
 	const formattedDate = PromptCardDateFormatted(productInfo.createdAt)
 	const isNew = PromptIsNew(productInfo.createdAt)
+	const defaultImg =
+		"https://promptoven.s3.ap-northeast-2.amazonaws.com/client/product/7f39f6bc72cbe91aa91b92ebe775b981d75c52d6c21be653a8a7dadd01bee416.png"
+	const imgUrl = productInfo.thumbnailUrl
+		? productInfo.thumbnailUrl
+		: defaultImg
 
 	return (
 		<li className="flex justify-center">
@@ -27,7 +32,7 @@ export default function PromptCardAccount({
 				<Card className="relative flex w-[210px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
 					<div className="relative h-[250px]">
 						<Image
-							src={productInfo.thumbnailUrl}
+							src={imgUrl}
 							sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
 							fill
 							priority
