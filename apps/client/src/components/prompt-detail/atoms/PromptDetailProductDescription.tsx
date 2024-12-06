@@ -59,7 +59,7 @@ export default function PromptDetailContent({
 					<p
 						className={`mt-4 text-lg leading-relaxed text-[#969696] transition-all duration-500 ease-in-out ${
 							isExpanded
-								? "max-h-[1000px] opacity-100"
+								? "opacity-100"
 								: "line-clamp-1 max-h-6 overflow-hidden opacity-50"
 						}`}>
 						{isExpanded ? (

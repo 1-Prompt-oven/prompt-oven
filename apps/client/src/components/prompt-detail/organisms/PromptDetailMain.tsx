@@ -11,7 +11,7 @@ interface PromptDetailMainProps {
 	productDetail: PromptDetailInfoType
 }
 
-export default function PromptDetailMain({
+export default async function PromptDetailMain({
 	contents,
 	productUuid,
 	productDetail,

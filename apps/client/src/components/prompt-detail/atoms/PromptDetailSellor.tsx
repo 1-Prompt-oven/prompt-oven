@@ -1,29 +1,32 @@
 import { STATIC_DEFAULT_AVATAR } from "@/app/static/data"
-import { getSellorShort } from "@/action/prompt-detail/getProductDetailData"
+import type { ProfileDetailSellorShortType } from "@/types/prompt-detail/promptDetailType"
 import PromptDetailLinkSellor from "./PromptDetailLinkSellor"
 import PromptDetailSellorFollow from "./PromptDetailSellorFollow"
 
 interface PromptDetailSellorProps {
-	memberUuid: string
+	sellerData: ProfileDetailSellorShortType
+	followState: boolean
 }
 
 export default async function PromptDetailSellor({
-	memberUuid,
+	sellerData,
+	followState,
 }: PromptDetailSellorProps) {
-	const sellorInfo = await getSellorShort(memberUuid)
-
 	return (
 		<div className="flex items-center justify-start gap-4">
 			<PromptDetailLinkSellor
-				memberNickname={sellorInfo.memberNickname}
+				memberNickname={sellerData.memberNickname}
 				memberProfileImage={
-					sellorInfo.memberProfileImage !== ""
-						? sellorInfo.memberProfileImage
+					sellerData.memberProfileImage !== ""
+						? sellerData.memberProfileImage
 						: STATIC_DEFAULT_AVATAR
 				}
 			/>
 
-			<PromptDetailSellorFollow />
+			<PromptDetailSellorFollow
+				sellerData={sellerData}
+				followState={followState}
+			/>
 		</div>
 	)
 }

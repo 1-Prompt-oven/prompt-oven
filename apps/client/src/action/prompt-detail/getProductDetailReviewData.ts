@@ -13,7 +13,7 @@ export async function getReviewSimpleData(
 ): Promise<PromptSimpleReviewData> {
 	"use server"
 	const headers = await getAuthHeaders()
-	//const memberUUID = getMemberUUID()
+	//const memberUUID = await getMemberUUID()
 
 	const res = await fetch(
 		`${process.env.API_BASE_URL}/v1/review-aggregate/${productUUID}`,
@@ -42,7 +42,7 @@ export async function getProductReview(
 ): Promise<PromptReviewType> {
 	"use server"
 	const headers = await getAuthHeaders()
-	//const memberUUID = getMemberUUID()
+	//const memberUUID = await getMemberUUID()
 
 	const payload = {
 		productUuid: productUUID,

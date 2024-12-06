@@ -36,13 +36,14 @@ export async function getProductDetail(
 ): Promise<PromptDetailInfoType> {
 	"use server"
 	const headers = await getAuthHeaders()
-	//const memberUUID = getMemberUUID()
+	//const memberUUID = await getMemberUUID()
 
 	const res = await fetch(
 		`${process.env.API_BASE_URL}/v1/product/${productId}`,
 		{
 			method: "GET",
 			headers,
+			next: { tags: ["chageFollowing"] },
 		},
 	)
 
