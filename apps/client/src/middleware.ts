@@ -2,7 +2,7 @@ import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 import { routes } from "@/config/auth/route.ts"
-import { handleWithAuthRequest } from "@/middleware/commonMiddleware.ts"
+// import { handleWithAuthRequest } from "@/middleware/commonMiddleware.ts"
 
 const withAuth = async (req: NextRequest, token: boolean) => {
 	const url = req.nextUrl.clone()
@@ -14,7 +14,7 @@ const withAuth = async (req: NextRequest, token: boolean) => {
 		return NextResponse.redirect(url)
 	}
 
-	return handleWithAuthRequest(req)
+	// return handleWithAuthRequest(req)
 }
 
 const FALLBACK_URL = "/"
