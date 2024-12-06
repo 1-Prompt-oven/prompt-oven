@@ -14,6 +14,7 @@ export default function PromptReviewContents({
 }: PromptReviewContentsProps) {
 	// eslint-disable-next-line no-console -- This is a client-side only log
 	console.log(productDetail)
+
 	return (
 		<div>
 			{productReview.content.length > 0 ? (

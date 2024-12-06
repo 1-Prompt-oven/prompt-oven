@@ -5,6 +5,7 @@ import { getMemberUUID } from "@/lib/api/sessionExtractor"
 import { isValidResponse } from "@/lib/api/validation"
 import type {
 	ProfileDetailSellorShortType,
+	PromptDetailCartAllNumberType,
 	PromptDetailCartStateType,
 	PromptDetailFavoriteStateType,
 	PromptDetailInfoType,
@@ -20,6 +21,14 @@ interface SellorShortData {
 
 interface FavoriteStateData {
 	result: PromptDetailFavoriteStateType
+}
+
+interface AllCartNumberData {
+	result: PromptDetailCartAllNumberType[]
+}
+
+interface ResponseCartData {
+	result: { res: boolean; state: string; cartId: number | null }
 }
 
 export async function getProductDetail(
@@ -84,6 +93,8 @@ export async function getFavoriteState(
 	const headers = await getAuthHeaders()
 	const memberUUID = await getMemberUUID()
 
+	if (!memberUUID) return { liked: false }
+
 	const res = await fetch(
 		`${process.env.API_BASE_URL}/v1/member/product/like/${memberUUID}/${productId}`,
 		{
@@ -107,10 +118,12 @@ export async function getFavoriteState(
 
 export async function changeFavoriteAction(
 	productUUID: string,
-): Promise<PromptDetailFavoriteStateType> {
+): Promise<boolean> {
 	"use server"
 	const headers = await getAuthHeaders()
 	const memberUUID = await getMemberUUID()
+
+	if (!memberUUID) return false
 
 	const res = await fetch(
 		`${process.env.API_BASE_URL}/v1/member/product/like`,
@@ -125,22 +138,28 @@ export async function changeFavoriteAction(
 	)
 
 	if (!res.ok) {
-		throw new Error("Failed to fetch FavoriteState Data")
+		// throw new Error("Failed to fetch FavoriteState Data")
+		return false
 	}
+	return true
 
-	const rawData: FavoriteStateData = await res.json() // RawData 타입으로 지정
+	// const rawData: FavoriteStateData = await res.json() // RawData 타입으로 지정
 
-	if (!isValidResponse<FavoriteStateData>(rawData)) {
-		throw new Error("Invalid response format")
-	}
+	// if (!isValidResponse<FavoriteStateData>(rawData)) {
+	// 	throw new Error("Invalid response format")
+	// }
 
-	return rawData.result
+	// return rawData.result
 }
 
-export async function getCartState(productUUID: string): Promise<boolean> {
+export async function getCartStateAction(
+	productUUID: string,
+): Promise<number | null> {
 	"use server"
 	const memberUUID = await getMemberUUID()
 	const headers = await getAuthHeaders()
+
+	if (!memberUUID) return null
 
 	const res = await fetch(
 		`${process.env.API_BASE_URL}/v1/member/cart/exist?memberUuid=${memberUUID}&productUuid=${productUUID}`,
@@ -156,5 +175,100 @@ export async function getCartState(productUUID: string): Promise<boolean> {
 
 	const rawData: PromptDetailCartStateType = await res.json() // RawData 타입으로 지정
 
+	if (rawData.result) {
+		const allNumberArray = await getAllCartNumber()
+		const foundItem = allNumberArray.find(
+			(item) => item.productUuid === productUUID,
+		)
+		const cartId = foundItem ? foundItem.id : null // id 값을 찾거나 null 반환
+		return cartId
+	}
+	return null
+}
+
+export async function getAllCartNumber(): Promise<
+	PromptDetailCartAllNumberType[]
+> {
+	"use server"
+
+	const memberUUID = await getMemberUUID()
+	const headers = await getAuthHeaders()
+
+	const res = await fetch(
+		`${process.env.API_BASE_URL}/v1/member/cart/list/${memberUUID}`,
+		{
+			method: "GET",
+			headers,
+		},
+	)
+
+	if (!res.ok) {
+		throw new Error("Failed to fetch All Cart Number Data")
+	}
+
+	const rawData: AllCartNumberData = await res.json() // RawData 타입으로 지정
+
 	return rawData.result
+}
+
+export async function createCart(
+	productUUID: string,
+): Promise<ResponseCartData> {
+	"use server"
+
+	const memberUUID = await getMemberUUID()
+	const headers = await getAuthHeaders()
+
+	if (!memberUUID)
+		return { result: { res: false, state: "NoUser", cartId: null } }
+
+	const payload = {
+		memberUuid: memberUUID,
+		productUuid: productUUID,
+	}
+
+	const res = await fetch(`${process.env.API_BASE_URL}/v1/member/cart`, {
+		method: "POST",
+		headers,
+		body: JSON.stringify(payload),
+	})
+
+	if (res.ok) {
+		const allNumberArray = await getAllCartNumber()
+		const foundItem = allNumberArray.find(
+			(item) => item.productUuid === productUUID,
+		)
+		const newCartId = foundItem ? foundItem.id : null // id 값을 찾거나 null 반환
+		return { result: { res: true, state: "success", cartId: newCartId } }
+	}
+	//throw new Error("Failed to fetch Create Cart Data")
+	return { result: { res: false, state: "resError", cartId: null } }
+}
+
+export async function changeCartState(
+	cartId: number,
+): Promise<ResponseCartData> {
+	"use server"
+
+	const memberUUID = await getMemberUUID()
+	const headers = await getAuthHeaders()
+
+	if (!memberUUID) {
+		return { result: { res: false, state: "NoUser", cartId: null } }
+	}
+
+	const res = await fetch(
+		`${process.env.API_BASE_URL}/v1/member/cart/${cartId}`,
+		{
+			method: "DELETE",
+			headers,
+		},
+	)
+
+	if (res.ok) {
+		return { result: { res: true, state: "success", cartId: null } }
+	}
+
+	//throw new Error("Failed to fetch Update Cart Data")
+	return { result: { res: false, state: "resError", cartId: null } }
 }

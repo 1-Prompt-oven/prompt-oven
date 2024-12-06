@@ -4,8 +4,10 @@ import { useEffect, useState } from "react"
 import { Button } from "@repo/ui/button"
 import { Heart, ShoppingCartIcon } from "@repo/ui/lucide"
 import {
+	changeCartState,
 	changeFavoriteAction,
-	getCartState,
+	createCart,
+	getCartStateAction,
 	getFavoriteState,
 } from "@/action/prompt-detail/getProductDetailData"
 import PromptDetailGet from "../atoms/PromptDetailGet"
@@ -20,12 +22,12 @@ export default function PromptDetailChoice({
 	const [isFavorite, setIsFavorite] = useState<{ liked: boolean }>({
 		liked: false,
 	})
-	const [isCart, setIsCart] = useState<boolean>(false)
+	const [isCart, setIsCart] = useState<number | null>(null)
 
 	useEffect(() => {
 		const fetchState = async () => {
 			const favoriteState = await getFavoriteState(productUuid)
-			const cartState = await getCartState(productUuid)
+			const cartState = await getCartStateAction(productUuid)
 			setIsFavorite(favoriteState)
 			setIsCart(cartState)
 		}
@@ -34,8 +36,39 @@ export default function PromptDetailChoice({
 	}, [productUuid])
 
 	const likeHandler = async () => {
-		await changeFavoriteAction(productUuid)
-		setIsFavorite((prev) => ({ liked: !prev.liked }))
+		const isSuccess = await changeFavoriteAction(productUuid)
+		if (isSuccess) setIsFavorite((prev) => ({ liked: !prev.liked }))
+		else {
+			// eslint-disable-next-line no-console -- Fail to Update Like State
+			console.log("좋아요 버튼 업데이트에 실패했습니다.")
+		}
+	}
+
+	const cartHandler = async () => {
+		let response
+
+		if (isCart !== null) {
+			response = await changeCartState(isCart)
+		} else {
+			response = await createCart(productUuid)
+		}
+
+		const result = response.result
+
+		if (result.res) {
+			setIsCart(result.cartId)
+		} else {
+			if (result.state === "NoUser") {
+				// eslint-disable-next-line no-console -- Fail to Update Cart State1
+				console.log("사용자가 없습니다.")
+			} else if (result.state === "resError") {
+				// eslint-disable-next-line no-console -- Fail to Update Cart State2
+				console.log("장바구니 업데이트 요청에 실패했습니다.")
+			} else {
+				// eslint-disable-next-line no-console -- Fail to Update Cart State3
+				console.log("알 수 없는 오류가 발생했습니다.")
+			}
+		}
 	}
 
 	return (
@@ -54,8 +87,9 @@ export default function PromptDetailChoice({
 
 				<Button
 					variant="outline"
-					className="h-[60px] w-[60px] rounded-full border-none bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] p-0">
-					{isCart ? (
+					className="h-[60px] w-[60px] rounded-full border-none bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] p-0"
+					onClick={cartHandler}>
+					{isCart !== null ? (
 						<ShoppingCartIcon className="fill-white text-white hover:opacity-90" />
 					) : (
 						<ShoppingCartIcon className="text-white hover:opacity-90" />

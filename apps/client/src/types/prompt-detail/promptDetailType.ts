@@ -40,3 +40,13 @@ export interface PromptDetailFavoriteStateType {
 export interface PromptDetailCartStateType {
 	result: boolean
 }
+
+export interface PromptDetailCartAllNumberType {
+	id: number
+	memberUuid: string
+	productUuid: string
+	selected: boolean
+	deleted: boolean
+	createdDate: string
+	lastModifiedDate: string
+}

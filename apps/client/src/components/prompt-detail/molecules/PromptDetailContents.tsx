@@ -24,7 +24,7 @@ export default function PromptDetailContents({
 				{productContents.map((content, index) => (
 					<Button
 						key={content.contentOrder}
-						className={`my-2 ${selectedContent === index ? "bg-[#a913f9]" : ""}`}
+						className={`my-2 hover:bg-[#cd74fd] ${selectedContent === index ? "bg-[#a913f9]" : ""}`}
 						onClick={() => handleContent(index)}>
 						{index + 1}
 					</Button>
