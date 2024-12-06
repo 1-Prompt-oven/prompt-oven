@@ -2,15 +2,13 @@ import React from "react"
 import { cn } from "@/lib/utils.ts"
 import SideMenuItem from "@/components/account/atom/SideMenuItem.tsx"
 import SideMenuToggleItem from "@/components/account/molecule/SideMenuToggleItem.tsx"
-import { routes } from "@/config/account/route.ts"
 import type { MenuNavItemType } from "@/lib/navigation.ts"
 
 interface AccountSideMenuProps {
 	menuItems: MenuNavItemType[]
-	activeRoute: string
 }
 
-function SideMenu({ menuItems, activeRoute }: AccountSideMenuProps) {
+function SideMenu({ menuItems }: AccountSideMenuProps) {
 	return (
 		<div
 			className={cn(
@@ -24,9 +22,9 @@ function SideMenu({ menuItems, activeRoute }: AccountSideMenuProps) {
 							<SideMenuToggleItem
 								// eslint-disable-next-line react/no-array-index-key -- This is a static array
 								key={index}
-								view={item.query}
 								label={item.label}
-								activeRoute={activeRoute}
+								href={item.href}
+								query={item.query}
 								Icon={item.icon}
 								subMenu={item.subMenu}
 							/>
@@ -35,12 +33,12 @@ function SideMenu({ menuItems, activeRoute }: AccountSideMenuProps) {
 								// eslint-disable-next-line react/no-array-index-key -- This is a static array
 								key={index}
 								href={{
-									pathname: routes.account,
-									query: { view: item.query },
+									pathname: item.href,
+									query: item.query,
 								}}
-								view={item.query}
+								_href={item.href}
+								query={item.query}
 								label={item.label}
-								activeRoute={activeRoute}
 								Icon={item.icon}
 							/>
 						),

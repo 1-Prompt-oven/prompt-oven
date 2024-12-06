@@ -23,3 +23,19 @@ export const createQueryParamObj = (query: string) => {
 	)
 	return queryObj
 }
+
+interface UrlParams {
+	href: string
+	query: Record<string, string>
+}
+
+export function buildUrl({ href, query }: UrlParams): string {
+	const url = new URL(href, "http://placeholder.com")
+
+	Object.entries(query).forEach(([key, value]) => {
+		url.searchParams.append(key, value)
+	})
+
+	// Remove the base URL and return only the path and query string
+	return `${url.pathname}${url.search}`
+}
