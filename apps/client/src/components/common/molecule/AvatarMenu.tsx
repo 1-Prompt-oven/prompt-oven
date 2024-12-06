@@ -36,7 +36,7 @@ export function AvatarMenu({ userAuth }: AvatarMenuProps) {
 					<Link
 						// eslint-disable-next-line react/no-array-index-key  -- This is a static array
 						key={index}
-						href={{ pathname: item.href, query: { view: item.query } }}>
+						href={{ pathname: item.href, query: item.query }}>
 						<DropdownMenuItem className="h-[56px] cursor-pointer gap-3 p-0 *:text-white *:hover:text-po-purple-50 focus:bg-[#252525]">
 							<item.icon className="!h-4 !w-4" />
 							<span className="text-base font-normal">{item.label}</span>

@@ -6,12 +6,18 @@ import { ChevronUp } from "@repo/ui/lucide"
 import { cn } from "@/lib/utils.ts"
 import SideMenuToggleSubItem from "@/components/account/atom/SideMenuToggleSubItem.tsx"
 import { useSideMenuToggleStore } from "@/provider/account/sideMenuStoreProvider.tsx"
-import type { MenuIconType, SubMenuItemType } from "@/lib/navigation.ts"
+import type {
+	MenuIconType,
+	NavQueryType,
+	SubMenuItemType,
+} from "@/lib/navigation.ts"
+import { buildUrl } from "@/lib/query.ts"
+import { useIsActive } from "@/hooks/navigation/useIsActive.ts"
 
 interface SideMenuToggleItemProps extends HTMLAttributes<HTMLDivElement> {
 	label: string
-	view: string
-	activeRoute: string
+	href: string
+	query: NavQueryType
 	subMenu: SubMenuItemType[]
 	Icon: MenuIconType
 	subMenuProps?: HTMLAttributes<HTMLDivElement>
@@ -20,9 +26,9 @@ interface SideMenuToggleItemProps extends HTMLAttributes<HTMLDivElement> {
 
 function SideMenuToggleItem({
 	subMenu,
-	activeRoute,
 	label,
-	view,
+	href,
+	query,
 	Icon,
 	containerProps,
 	subMenuProps,
@@ -31,7 +37,10 @@ function SideMenuToggleItem({
 	const { sideMenuItems, toggleSideMenuItem } = useSideMenuToggleStore(
 		(state) => state,
 	)
-	const isOpen = Boolean(sideMenuItems.get(view))
+	const isActive = useIsActive()
+	const isActiveLink = isActive({ href, query })
+	const activeRoute = buildUrl({ href, query })
+	const isOpen = Boolean(sideMenuItems.get(activeRoute))
 	return (
 		<div
 			{...containerProps}
@@ -39,17 +48,16 @@ function SideMenuToggleItem({
 			<div
 				role="button"
 				tabIndex={0}
-				onClick={() => toggleSideMenuItem(view)}
+				onClick={() => toggleSideMenuItem(activeRoute)}
 				onKeyDown={(e) => {
 					if (e.key === "Enter" || e.key === " ") {
-						toggleSideMenuItem(view)
+						toggleSideMenuItem(activeRoute)
 					}
 				}}
 				{...props}
 				className={cn(
 					"flex h-[60px] items-center justify-between rounded-lg px-5 py-4 transition-colors hover:!bg-white/10",
-					// note: 상위 메뉴의 색상이 반영되려면 activeRoute 텍스트가 view를 포함하고 있어야 함
-					activeRoute.includes(view) ? "text-[#E2ADFF]" : "text-white",
+					isActiveLink ? "text-[#E2ADFF]" : "text-white",
 					props.className,
 				)}>
 				<div className="flex items-center gap-3">
@@ -76,11 +84,11 @@ function SideMenuToggleItem({
 						key={index}
 						href={{
 							pathname: item.href,
-							query: { view: item.query },
+							query: item.query,
 						}}
-						view={item.query}
+						_href={item.href}
+						query={item.query}
 						label={item.label}
-						activeRoute={activeRoute}
 					/>
 				))}
 			</div>

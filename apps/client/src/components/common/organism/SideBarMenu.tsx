@@ -11,7 +11,6 @@ import {
 	SheetTitle,
 	SheetTrigger,
 } from "@repo/ui/sheet"
-import { useSearchParams } from "next/navigation"
 import SideMenuToggleItem from "@/components/account/molecule/SideMenuToggleItem.tsx"
 import SideMenuItem from "@/components/account/atom/SideMenuItem.tsx"
 import { getUserAuthNavitems, type MenuNavItemType } from "@/lib/navigation.ts"
@@ -24,8 +23,6 @@ export function SideBarMenu({ userAuth }: SideBarMenuProps) {
 	const menuItems: MenuNavItemType[] = getUserAuthNavitems(userAuth)
 
 	const [open, setOpen] = useState(false)
-	const searchParams = useSearchParams()
-	const viewQuery = searchParams.get("view") ?? ""
 
 	// todo: 유저의 권한에 따라 다른 메뉴를 보여줘야함
 	return (
@@ -55,9 +52,9 @@ export function SideBarMenu({ userAuth }: SideBarMenuProps) {
 							<SideMenuToggleItem
 								// eslint-disable-next-line react/no-array-index-key -- This is a static array
 								key={index}
-								view={item.query}
+								href={item.href}
+								query={item.query}
 								label={item.label}
-								activeRoute={viewQuery}
 								Icon={item.icon}
 								subMenu={item.subMenu}
 								subMenuProps={{ onClick: () => setOpen(false) }}
@@ -72,12 +69,12 @@ export function SideBarMenu({ userAuth }: SideBarMenuProps) {
 								key={index}
 								href={{
 									pathname: item.href,
-									query: { view: item.query },
+									query: item.query,
 								}}
+								_href={item.href}
+								query={item.query}
 								className="w-[calc(18.75rem-3.25rem)] sm:w-[calc(22.5rem-3.25rem)]"
-								view={item.query}
 								label={item.label}
-								activeRoute={viewQuery}
 								Icon={item.icon}
 								onClick={() => setOpen(false)}
 							/>
