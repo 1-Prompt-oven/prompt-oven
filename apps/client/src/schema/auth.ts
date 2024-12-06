@@ -19,7 +19,7 @@ export const signupSchemaObject = z
     }),
     emailCode: z.string({required_error: "Enter your authentication number"}),
     password: z.string().regex(passwordRegex, {
-      message: "Special characters, number, uppercase are requied",
+      message: "Special characters, number, uppercase are required",
     }),
     passwordValidate: z.string().regex(passwordRegex, {
       message: "Special characters, number, uppercase are requied",
