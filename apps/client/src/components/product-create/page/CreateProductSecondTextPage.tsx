@@ -196,7 +196,7 @@ export default function CreateProductSecondTextPage({
 		if (type === "next") {
 			removeStorageItem(localStorageKeys.curTempProductUuid)
 			router.push(
-				`account?view=create-product&step=3&productName=${product?.productName}&productUuid=${product?.productUuid}`,
+				`account?view=create-product&step=3&productName=${product?.productName}`,
 			)
 		}
 	}

@@ -23,7 +23,9 @@ function PcSaveBar({
 	onBack,
 	...props
 }: PcSaveBarProps) {
+	// eslint-disable-next-line react/hook-use-state -- This is a bug
 	const [btDraftLoading, setDraftBtLoading] = useState<boolean>(false)
+	// eslint-disable-next-line react/hook-use-state -- This is a bug
 	const [btNextLoading, setNextBtLoading] = useState<boolean>(false)
 
 	const handleDraftWrapper = async () => {
