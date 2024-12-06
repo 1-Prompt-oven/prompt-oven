@@ -25,6 +25,7 @@ export default function ProfileModifyAvatar({
 					alt="avatar"
 					className="rounded-xl"
 					priority
+					unoptimized
 				/>
 			) : null}
 			<div className="absolute inset-0 flex items-center justify-center rounded-xl border-2 border-white bg-gray-800 bg-opacity-50 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
