@@ -9,5 +9,6 @@ export const routes = {
 	prompts: "/prompts",
 	purchase: "/purchase",
 	specialExhibition: "/special-exhibition",
-	settings: "/settings"
+	settings: "/settings",
+	dashboard: "/dashboard",
 }

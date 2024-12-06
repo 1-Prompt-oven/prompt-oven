@@ -29,7 +29,7 @@ const withOutAuth = async (
   } 
 }
 
-const withAuthList: string[] = [routes.cart, routes.profile, routes.favorite, routes.settings]
+const withAuthList: string[] = [routes.cart, routes.profile, routes.favorite, routes.settings, routes.dashboard]
 const withOutAuthList: string[] = [routes.signIn, routes.signUp]
 
 export default async function middleware(request: NextRequest) {
