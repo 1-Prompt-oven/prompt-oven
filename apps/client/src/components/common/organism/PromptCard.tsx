@@ -26,7 +26,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 
 	return (
 		<li className="flex justify-center">
-			<Link href="/prompt-detail/1">
+			<Link href={`/prompt-detail/${productInfo.productUuid}`}>
 				<Card className="relative flex w-[220px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
 					<div className="relative h-[260px] bg-white">
 						{/* 잘못된 이미지에 대한 처리 추가 */}

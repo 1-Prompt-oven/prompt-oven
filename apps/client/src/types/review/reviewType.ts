@@ -1,3 +1,9 @@
+export interface PromptSimpleReviewData {
+	productUuid: string
+	avgStar: number
+	reviewCount: number
+}
+
 export interface PromptReviewType {
 	content: ReviewContentType[]
 	lastCreatedAt: string // ISO 8601 형식의 날짜 문자열
@@ -8,12 +14,13 @@ export interface PromptReviewType {
 }
 
 export interface ReviewContentType {
-	id: number // 리뷰 ID
-	productUuid: string // 제품 UUID
-	content: string // 리뷰 내용
-	createdAt: string // 생성 일자 (ISO 8601 형식)
-	updatedAt: string // 업데이트 일자 (ISO 8601 형식)
-	memberUuid: string // 회원 UUID
-	memberProfileImage: string | undefined // 회원 프로필
-	memberNickname: string //회원 별칭
+	id: string
+	productUuid: string
+	contents: string
+	star: number
+	authorUuid: string
+	authorProfileImage: string
+	authorNickname: string
+	createdAt: string
+	updatedAt: string
 }

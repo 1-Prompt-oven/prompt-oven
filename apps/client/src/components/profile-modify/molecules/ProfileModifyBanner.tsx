@@ -32,6 +32,7 @@ export default function ProfileModifyBanner({
 						fill
 						className="rounded-lg"
 						priority
+						unoptimized
 						alt="Banner"
 					/>
 				) : null}
