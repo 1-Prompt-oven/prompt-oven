@@ -5,7 +5,6 @@ import React from "react"
 import { ChevronUp } from "@repo/ui/lucide"
 import { cn } from "@/lib/utils.ts"
 import SideMenuToggleSubItem from "@/components/account/atom/SideMenuToggleSubItem.tsx"
-import { routes } from "@/config/account/route.ts"
 import { useSideMenuToggleStore } from "@/provider/account/sideMenuStoreProvider.tsx"
 import type { MenuIconType, SubMenuItemType } from "@/lib/navigation.ts"
 
@@ -76,7 +75,7 @@ function SideMenuToggleItem({
 						// eslint-disable-next-line react/no-array-index-key -- This is a static array
 						key={index}
 						href={{
-							pathname: routes.account,
+							pathname: item.href,
 							query: { view: item.query },
 						}}
 						view={item.query}
