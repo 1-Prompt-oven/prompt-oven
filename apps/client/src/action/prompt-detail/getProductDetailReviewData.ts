@@ -1,3 +1,5 @@
+"use server"
+
 import type {
 	PromptReviewType,
 	PromptSimpleReviewData,
@@ -36,6 +38,7 @@ export async function getReviewSimpleData(
 
 export async function getProductReview(
 	productUUID: string,
+	nextPage?: number,
 ): Promise<PromptReviewType> {
 	"use server"
 	const headers = await getAuthHeaders()
@@ -43,6 +46,7 @@ export async function getProductReview(
 
 	const payload = {
 		productUuid: productUUID,
+		page: nextPage ? nextPage : 1,
 	}
 
 	const query = createQueryParamString(payload)

@@ -1,3 +1,6 @@
+"use client"
+
+import { useEffect, useState } from "react"
 import {
 	Dialog,
 	DialogContent,
@@ -6,28 +9,63 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@repo/ui/dialog"
-import { getSellorShort } from "@/action/prompt-detail/getProductDetailData"
-import { getReviewSimpleData } from "@/action/prompt-detail/getProductDetailReviewData"
-import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
-import type { PromptReviewType } from "@/types/review/reviewType"
+import { Button } from "@repo/ui/button"
+import { getProductReview } from "@/action/prompt-detail/getProductDetailReviewData"
+import type {
+	ProfileDetailSellorShortType,
+	PromptDetailInfoType,
+} from "@/types/prompt-detail/promptDetailType"
+import type {
+	PromptReviewType,
+	PromptSimpleReviewData,
+} from "@/types/review/reviewType"
 import PromptDetailHoverMouse from "../../atoms/PromptDetailHoverMouse"
 import PromptDetailReviewModal from "./PromptDetailReviewModal"
 
 interface PromptDetailReviewMoreProps {
+	reviewSimpleData: PromptSimpleReviewData
+	sellorInfo: ProfileDetailSellorShortType
 	productDetail: PromptDetailInfoType
 	productReview: PromptReviewType
 }
 
-export default async function PromptDetailReviewMore({
+export default function PromptDetailReviewMore({
+	reviewSimpleData,
+	sellorInfo,
 	productDetail,
 	productReview,
 }: PromptDetailReviewMoreProps) {
-	const reviewSimpleData = await getReviewSimpleData(productDetail.productUuid)
-	const sellorInfo = await getSellorShort(productDetail.sellerUuid)
+	const [reviewList, setReviewList] = useState<PromptReviewType>(productReview)
+	const [hasNext, setHasNext] = useState<boolean>(productReview.hasNext)
+	const [page, setPage] = useState<number>(productReview.page)
+	const [isOpen, setIsOpen] = useState<boolean>(false)
+
+	const moreReviewHandler = async () => {
+		if (!hasNext) return
+
+		const newReviews = await getProductReview(
+			productDetail.productUuid,
+			page + 1,
+		)
+		setReviewList((prev) => ({
+			...prev,
+			content: [...prev.content, ...newReviews.content],
+		}))
+		setHasNext(newReviews.hasNext)
+		setPage((prev) => prev + 1)
+	}
+
+	useEffect(() => {
+		if (!isOpen) {
+			setReviewList(productReview)
+			setHasNext(productReview.hasNext)
+			setPage(productReview.page)
+		}
+	}, [isOpen])
 
 	return (
 		<div className="mx-auto my-5 flex justify-center">
-			<Dialog>
+			<Dialog open={isOpen} onOpenChange={setIsOpen}>
 				<DialogTrigger>
 					<div
 						role="button"
@@ -50,10 +88,21 @@ export default async function PromptDetailReviewMore({
 						</DialogDescription>
 					</DialogHeader>
 					<ul className="grid max-h-[550px] grid-cols-1 gap-2 overflow-auto">
-						{productReview.content.map((review) => (
-							<PromptDetailReviewModal key={review.id} review={review} />
+						{reviewList.content.map((review, index) => (
+							<PromptDetailReviewModal
+								// eslint-disable-next-line react/no-array-index-key -- Test Data has Duplicate id
+								key={review.id + index}
+								review={review}
+							/>
 						))}
 					</ul>
+					<div className={`flex justify-center ${hasNext ? "" : "hidden"}`}>
+						<Button
+							className="bg-gradient-to-r from-[#d48585] to-[#ca4646]"
+							onClick={moreReviewHandler}>
+							<span className="font-semibold">더보기</span>
+						</Button>
+					</div>
 				</DialogContent>
 			</Dialog>
 		</div>
