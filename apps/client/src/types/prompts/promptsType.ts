@@ -19,5 +19,10 @@ export interface PromptItemType {
 	discountRate: number
 	reviewCount: number
 	createdAt: string
-	thumbnailUrl: string
+	thumbnailUrl?: string
+	llmName?: string
+}
+
+export interface LLMNameType {
+	llmName: string
 }

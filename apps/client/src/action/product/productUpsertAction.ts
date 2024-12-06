@@ -18,6 +18,7 @@ import { initializeHeaders } from "@/lib/api/headers.ts"
 export const getProductSeller = async (
 	req: GetProductSellerRequestType,
 ): Promise<CommonResType<GetProductSellerResponseType>> => {
+	"use server"
 	const accessToken = await getAccessToken()
 	const headers = initializeHeaders(accessToken ?? undefined)
 	return actionHandler<CommonResType<GetProductSellerResponseType>>({
@@ -34,6 +35,7 @@ export const getProductSeller = async (
 export const getProductDetail = async (
 	req: GetProductDetailRequestType,
 ): Promise<CommonResType<GetProductDetailResponseType>> => {
+	"use server"
 	return actionHandler<CommonResType<GetProductDetailResponseType>>({
 		name: "getProductDetail",
 		url: `/v1/product/${req.productUuid}`,
@@ -47,6 +49,7 @@ export const getProductDetail = async (
 export const createProduct = async (
 	req: CreateProductRequestType,
 ): Promise<CommonResType<object>> => {
+	"use server"
 	const accessToken = await getAccessToken()
 	const headers = initializeHeaders(accessToken ?? undefined)
 	return actionHandler<CommonResType<object>>({
@@ -64,6 +67,7 @@ export const createProduct = async (
 export const updateProduct = async (
 	req: ModifyProductRequestType,
 ): Promise<CommonResType<object>> => {
+	"use server"
 	const accessToken = await getAccessToken()
 	const headers = initializeHeaders(accessToken ?? undefined)
 	return actionHandler<CommonResType<object>>({
@@ -80,6 +84,7 @@ export const updateProduct = async (
 
 // /v1/seller/product/temporary
 export const createTempProduct = async (req: CreateProductTempRequestType) => {
+	"use server"
 	const accessToken = await getAccessToken()
 	const headers = initializeHeaders(accessToken ?? undefined)
 	return actionHandler<CommonResType<CreateProductTempResponseType>>({
