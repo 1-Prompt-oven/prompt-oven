@@ -1,29 +1,36 @@
+"use client"
+
 import type { ComponentProps } from "react"
 import React from "react"
 import Link from "next/link"
 import { cn } from "@/lib/utils.ts"
-import type { MenuIconType } from "@/lib/navigation.ts"
+import type { MenuIconType, NavQueryType } from "@/lib/navigation.ts"
+import { useIsActive } from "@/hooks/navigation/useIsActive.ts"
 
 interface SideMenuItemProps extends ComponentProps<typeof Link> {
-	view: string
 	label: string
-	activeRoute: string
 	Icon: MenuIconType
+	_href: string
+	query: NavQueryType
 }
 
+// todo: 활성화된 경로 하이라이팅 하기
 function SideMenuItem({
 	label,
 	Icon,
-	activeRoute,
-	view,
+	_href,
+	query,
 	...props
 }: SideMenuItemProps) {
+	const isActive = useIsActive()
+	const isActiveLink = isActive({ href: _href, query })
 	return (
 		<Link
 			{...props}
 			className={cn(
 				"flex h-[60px] items-center justify-between rounded-lg px-5 py-4 transition-colors hover:!bg-white/10",
-				view.includes(activeRoute) ? "text-[#E2ADFF]" : "text-white",
+				"text-white",
+				isActiveLink ? "text-[#E2ADFF]" : "text-white",
 				props.className,
 			)}>
 			<div className="flex items-center gap-3">
