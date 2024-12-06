@@ -10,5 +10,8 @@ export const routes = {
 	purchase: "/purchase",
 	specialExhibition: "/special-exhibition",
 	settings: "/settings",
+	dashboard: "/dashboard",
 	account: "/account",
 }
+
+

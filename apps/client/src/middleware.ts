@@ -2,8 +2,7 @@ import type { NextRequest } from "next/server"
 import { NextResponse } from "next/server"
 import { getToken } from "next-auth/jwt"
 import { routes } from "@/config/auth/route.ts"
-import { handleWithAuthRequest } from "@/middleware/commonMiddleware.ts"
-
+// import { handleWithAuthRequest } from "@/middleware/commonMiddleware.ts"
 const withAuth = async (req: NextRequest, token: boolean) => {
 	const url = req.nextUrl.clone()
 	const { pathname } = req.nextUrl
@@ -13,8 +12,6 @@ const withAuth = async (req: NextRequest, token: boolean) => {
 		url.search = `callbackUrl=${pathname}`
 		return NextResponse.redirect(url)
 	}
-
-	return handleWithAuthRequest(req)
 }
 
 const FALLBACK_URL = "/"
@@ -24,21 +21,15 @@ const withOutAuth = async (
 	to: string | null,
 ) => {
 	const url = req.nextUrl.clone()
-	if (token) {
-		url.pathname = to ?? FALLBACK_URL
-		url.search = ""
+  if (token) {
+    url.pathname = to ?? FALLBACK_URL;
+    url.search = "";
 
-		return NextResponse.redirect(url)
-	}
+    return NextResponse.redirect(url);
+  } 
 }
-
-const withAuthList: string[] = [
-	routes.cart,
-	routes.profile,
-	routes.favorite,
-	routes.settings,
-	routes.account,
-]
+	// return handleWithAuthRequest(req)
+const withAuthList: string[] = [routes.cart, routes.profile, routes.favorite, routes.settings]
 const withOutAuthList: string[] = [routes.signIn, routes.signUp]
 
 export default async function middleware(request: NextRequest) {

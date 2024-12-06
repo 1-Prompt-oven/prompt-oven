@@ -17,7 +17,9 @@ function maskEmail(email: string): string {
 
 function ShowEmail({ email }: { email: string }) {
 	const maskedEmail = maskEmail(email)
-	return <div className="text-2xl text-white">Your Email: {maskedEmail}</div>
+	return (
+		<div className="py-4 text-xl text-white">Your Email: {maskedEmail}</div>
+	)
 }
 
 export default ShowEmail
