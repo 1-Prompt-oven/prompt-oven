@@ -75,7 +75,7 @@ function ForgotPassword() {
 				code: emailCode,
 			})
 
-			if (response) {
+			if (response.result) {
 				clearErrors(forgotPasswordSchemaKeys.emailCode)
 				setEmailVerified(true)
 				setShowTimerField(false)

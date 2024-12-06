@@ -13,3 +13,10 @@ export interface RegisterOAuthMemberResponse {
 	role: string
 	memberUUID: string
 }
+
+export interface ResgisterEmailCheckResponse {
+  httpStatus: string,
+  isSuccess: boolean,
+  message: string,
+  result: boolean
+}

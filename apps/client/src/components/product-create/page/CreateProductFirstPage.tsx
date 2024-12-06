@@ -118,120 +118,114 @@ export default function CreateProductFirstPage({
 		)
 	}
 
-	useEffect(
-		() => {
-			// 상품 생성 화면에 진입하면, 기존에 작업 중인 상품 아이디가 있는지 로컬 스토리지와 url의 쿼리스트링을 확인합니다.
-			// 존재하면 작업 중인 상품 정보를 들고와서 상품 정보를 업데이트 하고, 없으면 상품 정보를 업데이트 하지 않습니다.
-			const initExistingProductData = async () => {
-				try {
-					const productUuid = setProductUuid(searchParams.productUuid ?? "")
-					if (productUuid) {
-						const productData = (await getProductDetail({ productUuid })).result
-						setProduct(productData)
-						setValue(
-							createProductFirstSchemaKeys.llmId,
-							String(productData.llmId),
-						)
-						setValue(
-							createProductFirstSchemaKeys.productName,
-							productData.productName,
-						)
-						setValue(
-							createProductFirstSchemaKeys.topCategoryUuid,
-							productData.topCategoryUuid,
-						)
-						setValue(
-							createProductFirstSchemaKeys.subCategoryUuid,
-							productData.subCategoryUuid,
-						)
-						setValue(createProductFirstSchemaKeys.prompt, productData.prompt)
-						setValue(
-							createProductFirstSchemaKeys.description,
-							productData.description,
-						)
-						setValue(createProductFirstSchemaKeys.price, productData.price)
-						setValue(
-							createProductFirstSchemaKeys.discountRate,
-							productData.discountRate,
-						)
-
-						setLastSaved(
-							dayjs(productData.updatedAt).format("YYYY-MM-DD HH:mm"),
-						)
-					}
-				} catch (e) {
-					// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
-					console.error("Error fetching subcategories:", e)
-					setError("Failed to fetch ProductData. Please try again later.")
-				}
-			}
-			const fetchPageData = async () => {
-				try {
-					setLoading(true)
-					// llm list api 호출
-					const llmList = (await getLlmList({ llmType: "" })).result
-					setAiModelOptions(
-						llmList.map((llm: GetLlmListResponseType) => ({
-							value: llm.llmId.toString(),
-							label: llm.llmName,
-							extraProps: {
-								...llm,
-							},
-						})),
+	useEffect(() => {
+		// 상품 생성 화면에 진입하면, 기존에 작업 중인 상품 아이디가 있는지 로컬 스토리지와 url의 쿼리스트링을 확인합니다.
+		// 존재하면 작업 중인 상품 정보를 들고와서 상품 정보를 업데이트 하고, 없으면 상품 정보를 업데이트 하지 않습니다.
+		const initExistingProductData = async () => {
+			try {
+				const productUuid = setProductUuid(searchParams.productUuid ?? "")
+				if (productUuid) {
+					const productData = (await getProductDetail({ productUuid })).result
+					setProduct(productData)
+					setValue(
+						createProductFirstSchemaKeys.llmId,
+						String(productData.llmId),
 					)
-
-					// top category list api 호출
-					const categoryResponse = await getProductCategoryList({
-						parentCategoryUuid: "",
-					})
-					const categoryList = categoryResponse.result
-					setTopCategories(
-						categoryList.map((category: GetCategoryListResponseType) => ({
-							value: category.categoryUuid,
-							label: category.categoryName,
-							extraProps: {
-								...category,
-							},
-						})),
+					setValue(
+						createProductFirstSchemaKeys.productName,
+						productData.productName,
 					)
-
-					const topCategoryUuid = getValues(
+					setValue(
 						createProductFirstSchemaKeys.topCategoryUuid,
+						productData.topCategoryUuid,
 					)
-					const subCategoryUuid = getValues(
+					setValue(
 						createProductFirstSchemaKeys.subCategoryUuid,
+						productData.subCategoryUuid,
 					)
-					if (topCategoryUuid) {
-						await getSubCategories(topCategoryUuid, subCategoryUuid)
-					}
+					setValue(createProductFirstSchemaKeys.prompt, productData.prompt)
+					setValue(
+						createProductFirstSchemaKeys.description,
+						productData.description,
+					)
+					setValue(createProductFirstSchemaKeys.price, productData.price)
+					setValue(
+						createProductFirstSchemaKeys.discountRate,
+						productData.discountRate,
+					)
 
-					// user seller uuid 가져오기 api 호출
-					const sellerUuidRes = await getSellerProfile({
-						// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- memberUUID는 세션에 있습니다.
-						memberUUID: session?.user?.memberUUID as string,
-					})
-					// note: 판매자 등록은 한 번 한다는 가정으로 작성한 코드
-
-					const _sellerUuid = sellerUuidRes.result[0].settlementProfileID // session?.user?.memberUUID as string // sellerUuidRes.result[0].settlementProfileID
-					setSellerUuid(_sellerUuid)
-				} catch (e) {
-					// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
-					console.error("Error fetching data:", e)
-					setError("Failed to fetch data. Please try again later.")
-				} finally {
-					setLoading(false)
+					setLastSaved(dayjs(productData.updatedAt).format("YYYY-MM-DD HH:mm"))
 				}
+			} catch (e) {
+				// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
+				console.error("Error fetching subcategories:", e)
+				setError("Failed to fetch ProductData. Please try again later.")
 			}
+		}
+		const fetchPageData = async () => {
+			try {
+				setLoading(true)
+				// llm list api 호출
+				const llmList = (await getLlmList({ llmType: "" })).result
+				setAiModelOptions(
+					llmList.map((llm: GetLlmListResponseType) => ({
+						value: llm.llmId.toString(),
+						label: llm.llmName,
+						extraProps: {
+							...llm,
+						},
+					})),
+				)
 
-			const mainEffect = async () => {
-				await initExistingProductData()
-				await fetchPageData()
+				// top category list api 호출
+				const categoryResponse = await getProductCategoryList({
+					parentCategoryUuid: "",
+				})
+				const categoryList = categoryResponse.result
+				setTopCategories(
+					categoryList.map((category: GetCategoryListResponseType) => ({
+						value: category.categoryUuid,
+						label: category.categoryName,
+						extraProps: {
+							...category,
+						},
+					})),
+				)
+
+				const topCategoryUuid = getValues(
+					createProductFirstSchemaKeys.topCategoryUuid,
+				)
+				const subCategoryUuid = getValues(
+					createProductFirstSchemaKeys.subCategoryUuid,
+				)
+				if (topCategoryUuid) {
+					await getSubCategories(topCategoryUuid, subCategoryUuid)
+				}
+
+				// user seller uuid 가져오기 api 호출
+				const sellerUuidRes = await getSellerProfile({
+					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- memberUUID는 세션에 있습니다.
+					memberUUID: session?.user?.memberUUID as string,
+				})
+				// note: 판매자 등록은 한 번 한다는 가정으로 작성한 코드
+
+				const _sellerUuid = sellerUuidRes.result[0].settlementProfileID // session?.user?.memberUUID as string // sellerUuidRes.result[0].settlementProfileID
+				setSellerUuid(_sellerUuid)
+			} catch (e) {
+				// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
+				console.error("Error fetching data:", e)
+				setError("Failed to fetch data. Please try again later.")
+			} finally {
+				setLoading(false)
 			}
-			mainEffect().then()
-		},
-		// eslint-disable-next-line react-hooks/exhaustive-deps -- 해당 의존성 외에는 의존성이 필요 없습니다.
-		[searchParams.productUuid, session],
-	)
+		}
+
+		const mainEffect = async () => {
+			await initExistingProductData()
+			await fetchPageData()
+		}
+		mainEffect().then()
+	}, [searchParams.productUuid, session])
 
 	const handleTopCategoryChange = async (value: string) => {
 		try {

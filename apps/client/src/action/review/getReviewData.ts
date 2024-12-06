@@ -1,7 +1,7 @@
 import type { PromptReviewType } from "@/types/review/reviewType"
 import { ProductReviewDatas } from "@/dummy/review/productReviewDatas"
 
-export async function getProductReview(): Promise<PromptReviewType> {
+export async function getProductReview2(): Promise<PromptReviewType> {
 	const res: PromptReviewType = await ProductReviewDatas
 	// const res: ProfileMemberInfoType = await profileMemberInfoUndefineData
 

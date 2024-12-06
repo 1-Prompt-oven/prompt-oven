@@ -5,7 +5,7 @@ import type { FieldValues } from "react-hook-form"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Button } from "@repo/ui/button"
-import { signupSchema, signupSchemaObject } from "@/schema/auth.ts"
+import { signupSchemaObject } from "@/schema/auth.ts"
 import { useAuthTimer } from "@/hooks/auth/useAuthTimer.ts"
 import {
 	registerAuthMember,
@@ -19,6 +19,7 @@ import {
 } from "@/action/auth/forgotPasswardAction"
 import SignUpField from "@/components/auth/molecule/SignUpField.tsx"
 import SignUpTimerField from "@/components/auth/molecule/SignUpTimerField.tsx"
+import SuccessModal from "@/components/common/atom/SuccessModal"
 import ValidTermsCheckBox from "../molecule/TermsValidCheckBox"
 
 function SignUpForm() {
@@ -32,15 +33,18 @@ function SignUpForm() {
 		setValue,
 		formState: { errors },
 	} = useForm({
-		resolver: zodResolver(signupSchema),
+		resolver: zodResolver(signupSchemaObject),
 		mode: "onChange",
 	})
 
-	const signUpSchemaKeys = signupSchemaObject.keyof().enum
+	const signUpSchemaKeys = signupSchemaObject._def.schema.keyof().enum
 	const email: string = watch(signUpSchemaKeys.email) as string
 	const emailCode: string = watch(signUpSchemaKeys.emailCode) as string
 	const nickName: string = watch(signUpSchemaKeys.nickname) as string
 	const [showTimerField, setShowTimerField] = useState(true)
+	const [successModalOpen, setSuccessModalOpen] = useState(false)
+	const [modalMessage, setModalMessage] = useState<string | null>(null)
+	const [modalCallback, setModalCallback] = useState<(() => void) | null>(null)
 
 	const handleOnSubmitSuccess = async (data: FieldValues) => {
 		if (!emailVerified) {
@@ -52,49 +56,28 @@ function SignUpForm() {
 		}
 		const responseData = data as RegisterOAuthMemberResponse
 		await registerAuthMember(responseData)
-		window.location.href = "/sign-in"
+		showSuccessModal("Emailcode is validated", () => {
+			window.location.href = "/sign-in"
+		})
 	}
-	const handleOnSubmitFailure = (error: FieldValues) => {
-		// eslint-disable-next-line no-console -- This is a client-side only log
-		console.log("login data - failure : ", error, errors)
-		return true
+	const handleOnSubmitFailure = () => {
+		setError(signUpSchemaKeys.emailCode, {
+			type: "manual",
+			message: "Sign-in fail",
+		})
 	}
-
 	// email validation
-	const emailValidationHandler = async () => {
-		try {
-			// Step 1: Verify email duplication
-			const verifyResponse = await verifyEmail({ email })
-			if (!verifyResponse.isSuccess || !verifyResponse.result) {
-				setError(signUpSchemaKeys.email, {
-					type: "manual",
-					message: "Email is already taken. Please use a different email.",
-				})
-				return
-			}
-
-			// Step 2: Send email verification request
-			await requestPasswordResetEmail({ email })
-			startTimer() // Start the timer for email validation
-			clearErrors(signUpSchemaKeys.email) // Clear any existing errors
-		} catch (error) {
-			setError(signUpSchemaKeys.email, {
-				type: "manual",
-				message: "Failed to validate email. Please try again.",
-			})
-		}
-	}
 	const emailCodeValidationHandler = async () => {
 		try {
 			const response = await checkEmailVerificationCode({
 				email,
 				code: emailCode,
 			})
-
-			if (response) {
+			if (response.isSuccess && response.result) {
 				clearErrors(signUpSchemaKeys.emailCode)
 				setEmailVerified(true)
 				setShowTimerField(false)
+				showSuccessModal("Emailcode is validated")
 			} else {
 				setError(signUpSchemaKeys.emailCode, {
 					type: "manual",
@@ -109,15 +92,41 @@ function SignUpForm() {
 		}
 	}
 
+	const emailValidationHandler = async () => {
+		try {
+			// Step 1: Verify email duplication
+			const verifyResponse = await verifyEmail({ email })
+			if (!verifyResponse.isSuccess || !verifyResponse.result) {
+				setError(signUpSchemaKeys.email, {
+					type: "manual",
+					message: "Email is already taken. Please use a different email.",
+				})
+				return
+			}
+			// Step 2: Send email verification request
+			await requestPasswordResetEmail({ email })
+			clearErrors(signUpSchemaKeys.email) // Clear any existing errors
+			setShowTimerField(false) // 타이머 필드를 초기화
+			setTimeout(() => {
+				setShowTimerField(true) // 새로 갱신
+				startTimer() // 타이머 시작
+			}, 0)
+		} catch (error) {
+			setError(signUpSchemaKeys.email, {
+				type: "manual",
+				message: "Failed to validate email. Please try again.",
+			})
+		}
+	}
 	const emailValidationTime = 180 // 3 minutes in seconds
 	const [timeLeft, startTimer] = useAuthTimer({ emailValidationTime })
-
 	// nickname validation
 	const nickNameValidationHandler = async () => {
 		try {
 			const response = await verifyNickname({ nickname: nickName })
 			if (response.isSuccess && response.result) {
 				clearErrors(signUpSchemaKeys.nickname)
+				showSuccessModal("Nickname is validated")
 			} else {
 				setError(signUpSchemaKeys.nickname, {
 					type: "manual",
@@ -131,6 +140,19 @@ function SignUpForm() {
 			})
 		}
 	}
+
+	//showmodal
+	const showSuccessModal = (message: string, onConfirm?: () => void) => {
+		setModalMessage(message)
+		setSuccessModalOpen(true)
+		setModalCallback(() => onConfirm || null) // 확인 버튼 콜백 저장
+	}
+	const closeSuccessModal = () => {
+		setSuccessModalOpen(false)
+		setModalMessage(null)
+		if (modalCallback) modalCallback() // 콜백 실행
+		setModalCallback(null) // 콜백 초기화
+	}
 	return (
 		<div className="min-w-[500px] select-none gap-0 rounded border-none bg-[#252525] px-6 pb-12 pt-16 md:min-h-[780px] md:max-w-[650px] md:px-10 md:pb-16 md:pt-24">
 			<div className="mb-5 flex h-fit flex-col justify-center gap-[5px] md:mb-14">
@@ -141,7 +163,6 @@ function SignUpForm() {
 					Enter your details to create your account
 				</p>
 			</div>
-
 			<form
 				onSubmit={handleSubmit(handleOnSubmitSuccess, handleOnSubmitFailure)}>
 				<div className="mb-11 flex h-fit w-full flex-col gap-5">
@@ -170,7 +191,7 @@ function SignUpForm() {
 					/>
 
 					{/* Email Validation */}
-					{showTimerField && timeLeft !== null ? (
+					{showTimerField && timeLeft !== null && !emailVerified ? ( // 인증되지 않았을 때만 렌더링
 						<SignUpTimerField
 							inputProps={{
 								id: signUpSchemaKeys.emailCode,
@@ -193,6 +214,7 @@ function SignUpForm() {
 							timeLeft={timeLeft}
 						/>
 					) : null}
+
 					{/* Password */}
 					<SignUpField
 						labelText="Password"
@@ -215,7 +237,7 @@ function SignUpForm() {
 					<SignUpField
 						labelText="Password connfirm"
 						labelProps={{
-							htmlFor: "Password Confirm",
+							htmlFor: signUpSchemaKeys.passwordValidate,
 						}}
 						inputProps={{
 							type: "password",
@@ -270,7 +292,9 @@ function SignUpForm() {
 						/>
 					</div>
 				</div>
-
+				<SuccessModal isOpen={successModalOpen} onClose={closeSuccessModal}>
+					<div>{modalMessage}</div>
+				</SuccessModal>
 				<div className="mb-8 flex h-fit w-full flex-col items-center gap-4">
 					<Button
 						type="submit"

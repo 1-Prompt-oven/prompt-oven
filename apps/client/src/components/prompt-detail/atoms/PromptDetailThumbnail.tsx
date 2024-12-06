@@ -12,7 +12,7 @@ export default function PromptDetailThumbnail({
 }: PromptDetailThumbnailProps) {
 	return (
 		<div className="relative h-[600px] min-w-[380px] overflow-hidden rounded-lg sm:h-[800px] sm:min-w-[600px]">
-			<div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/60 to-black/90" />
+			<div className="absolute inset-0 bg-white" />
 			<Image
 				sizes="(max-width: 500px) 100vw, 145px"
 				src={thumbnailUrl}
