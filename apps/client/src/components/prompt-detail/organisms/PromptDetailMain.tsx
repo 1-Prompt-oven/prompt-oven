@@ -1,15 +1,18 @@
-import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
+import type {
+	PromptDetailContentsType,
+	PromptDetailInfoType,
+} from "@/types/prompt-detail/promptDetailType"
 import PromptDetailThumbnail from "../atoms/PromptDetailThumbnail"
 import PromptDetailInfo from "./PromptDetailInfo"
 
 interface PromptDetailMainProps {
-	thumbnailUrl: string
+	contents: PromptDetailContentsType[]
 	productUuid: string
 	productDetail: PromptDetailInfoType
 }
 
-export default function PromptDetailMain({
-	thumbnailUrl,
+export default async function PromptDetailMain({
+	contents,
 	productUuid,
 	productDetail,
 }: PromptDetailMainProps) {
@@ -17,7 +20,7 @@ export default function PromptDetailMain({
 		<div className="rounded-lg">
 			<div className="flex flex-col gap-12 lg:!flex-row">
 				<PromptDetailThumbnail
-					thumbnailUrl={thumbnailUrl}
+					thumbnailUrl={contents[0].contentUrl}
 					productUuid={productUuid}
 				/>
 
