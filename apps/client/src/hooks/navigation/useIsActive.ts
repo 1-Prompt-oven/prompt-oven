@@ -9,7 +9,7 @@ export function useIsActive() {
 	const pathname = usePathname()
 	const searchParams = useSearchParams()
 
-	const isActive = ({ href, query }: ActiveLink): boolean => {
+	return ({ href, query }: ActiveLink): boolean => {
 		// Check if the current pathname matches the href
 		if (pathname !== href) {
 			return false
@@ -24,6 +24,4 @@ export function useIsActive() {
 
 		return true
 	}
-
-	return isActive
 }
