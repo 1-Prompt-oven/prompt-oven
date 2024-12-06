@@ -159,7 +159,7 @@ export default function CreateProductSecondTextPage({
 		}
 
 		initExistingData().then()
-	}, [extractPromptVars, replace]) // eslint-disable-line react-hooks/exhaustive-deps -- 빈 배열로 둬도 됨.
+	}, [extractPromptVars, replace])
 
 	const onSubmit = (data: FormData) => {
 		const varObj: Record<string, string> = data.promptVars.reduce(

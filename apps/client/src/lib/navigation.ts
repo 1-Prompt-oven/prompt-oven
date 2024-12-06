@@ -4,14 +4,17 @@ import {
 	FileText,
 	Heart,
 	LayoutDashboard,
+	LogIn,
 	Package,
 	Settings,
 	ShoppingBag,
 	Store,
 	TagsIcon,
 	User,
+	UserPlus,
 	Wallet,
 } from "@repo/ui/lucide"
+import type { UserAuthType } from "@/lib/userAuth.ts"
 
 export type MenuIconType = ForwardRefExoticComponent<
 	Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
@@ -99,7 +102,7 @@ export const sellerNavs: MenuNavItemType[] = [
 export const userNavs: MenuNavItemType[] = [
 	{
 		label: "To Be Seller",
-		href: "/seller-registration",
+		href: "/seller/registration",
 		query: "",
 		icon: Store,
 	},
@@ -113,4 +116,31 @@ export const userNavs: MenuNavItemType[] = [
 	{ icon: Settings, label: "Settings", href: "/account", query: "settings" },
 ]
 
+export const guestNavs: MenuNavItemType[] = [
+	{
+		icon: LogIn,
+		label: "Sign In",
+		href: "/sign-in",
+		query: "",
+	},
+	{
+		icon: UserPlus,
+		label: "Sign Up",
+		href: "/sign-up",
+		query: "",
+	},
+]
+
 // ----------------- SideBar Menu Navs -----------------
+
+export const getUserAuthNavitems = (userAuth: UserAuthType) => {
+	let menuItems!: MenuNavItemType[]
+	if (userAuth === "seller" || userAuth === "admin") {
+		menuItems = sellerNavs
+	} else if (userAuth === "member") {
+		menuItems = userNavs
+	} else {
+		menuItems = guestNavs
+	}
+	return menuItems
+}

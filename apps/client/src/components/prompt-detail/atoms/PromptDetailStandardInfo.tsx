@@ -1,31 +1,33 @@
-import React from "react"
 import StarAnimation from "@repo/ui/star-animation"
+import { getReviewSimpleData } from "@/action/prompt-detail/getProductDetailReviewData"
 
 interface PromptDetailStandardInfoProps {
+	productUUID: string
 	productRegistDate: string
 	price: number
 	productName: string
-	productStar: number
-	productReviewCount: number
 }
 
-export default function PromptDetailStandardInfo({
+export default async function PromptDetailStandardInfo({
+	productUUID,
 	productRegistDate,
 	price,
 	productName,
-	productStar,
-	productReviewCount,
 }: PromptDetailStandardInfoProps) {
 	const formattedDate = new Date(productRegistDate).toISOString().split("T")[0]
 	const formattedNumber = price.toFixed(2)
+
+	const reviewData = await getReviewSimpleData(productUUID)
+	const avgStar = reviewData.avgStar !== 0 ? reviewData.avgStar : 0
+	const reviewCount = reviewData.reviewCount !== 0 ? reviewData.reviewCount : 0
 
 	return (
 		<div className="flex flex-col gap-4">
 			<p className="text-[40px] font-semibold text-white">{productName}</p>
 			<div className="flex items-center justify-between text-sm text-white">
 				<div className="flex items-center gap-4">
-					<StarAnimation rateData={productStar} noAnimation={false} />
-					<span className="font-semibold">( {productReviewCount} )</span>
+					<StarAnimation rateData={avgStar} noAnimation={false} />
+					<span className="font-semibold">( {reviewCount} )</span>
 				</div>
 				<p className="mr-4 flex gap-2">
 					<span className="font-bold">등록일</span>
