@@ -2,6 +2,7 @@
 
 import React, { useState } from "react"
 import { signOut } from "next-auth/react"
+import { ThreeDots } from "react-loader-spinner"
 import GradientButton from "@/components/common/atom/GradientButton"
 
 function LogoutButton() {
@@ -31,7 +32,20 @@ function LogoutButton() {
 				onClick={handleLogout}
 				disabled={loading}
 				className="w-[378px]">
-				{loading ? "Logging out..." : "Logout"}
+				{loading ? (
+					<ThreeDots
+						visible
+						width="100"
+						height="80"
+						radius="9"
+						color="#ffffff"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+				) : (
+					"Logout"
+				)}
 			</GradientButton>
 			{error ? <p className="mt-2 text-sm text-red-500">{error}</p> : null}
 		</div>

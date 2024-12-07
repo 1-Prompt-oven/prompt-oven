@@ -46,7 +46,7 @@ function SalesAmountDashboard({
 				plugins: {
 					title: {
 						display: true,
-						text: "FOLLOW",
+						text: "SalesAmount",
 						padding: {
 							top: 10,
 							bottom: 30,

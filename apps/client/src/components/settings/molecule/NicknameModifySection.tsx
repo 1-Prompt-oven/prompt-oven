@@ -1,24 +1,27 @@
 "use client"
 
 import React, { useState } from "react"
+import { ThreeDots } from "react-loader-spinner"
 import { z } from "zod"
 import { updateNickname } from "@/action/auth/updateNickname"
 import { nicknameSchemaObject } from "@/schema/auth"
 import GradientButton from "@/components/common/atom/GradientButton"
+import SuccessModal from "@/components/common/atom/SuccessModal"
 import NicknameInput from "../atom/NicknameInput"
 
 function NicknameModifySection({ memberUUID }: { memberUUID: string }) {
-	const [nickname, setNickname] = useState<string>("") // 닉네임 상태
-	const [isLoading, setIsLoading] = useState<boolean>(false) // 로딩 상태
-	const [error, setError] = useState<string | null>(null) // 에러 메시지
+	const [nickname, setNickname] = useState<string>("")
+	const [isLoading, setIsLoading] = useState<boolean>(false)
+	const [error, setError] = useState<string | null>(null)
+	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
+	const [modalMessage, setModalMessage] = useState<string>("")
 
 	const handleSave = async () => {
 		if (!nickname) {
-			setError("닉네임을 입력해주세요.")
+			setError("Enter your new nincname")
 			return
 		}
 
-		// Zod 유효성 검사
 		try {
 			nicknameSchemaObject.parse({ nickname })
 		} catch (zodError) {
@@ -33,8 +36,11 @@ function NicknameModifySection({ memberUUID }: { memberUUID: string }) {
 
 		try {
 			await updateNickname({ memberUUID, nickname })
+			setModalMessage("Nickname is changed")
+			setIsModalOpen(true)
 		} catch (err) {
-			setError("닉네임 업데이트 실패. 다시 시도해주세요.")
+			setModalMessage("Fail nickname change")
+			setIsModalOpen(true)
 		} finally {
 			setIsLoading(false)
 		}
@@ -61,18 +67,35 @@ function NicknameModifySection({ memberUUID }: { memberUUID: string }) {
 					value={nickname}
 					onChange={handleChange}
 					className="w-[270px]"
-					placeholder="새 닉네임을 입력하세요"
+					placeholder="Enter your new nickname"
 				/>
 				<div>
 					<GradientButton
 						onClick={handleSave}
 						disabled={isLoading || Boolean(error)}
 						className="h-[50px] w-[100px] px-[35px] py-[15px]">
-						{isLoading ? "Saving..." : "Save"}
+						{isLoading ? (
+							<ThreeDots
+								visible
+								height="20"
+								width="30"
+								radius="9"
+								color="#ffffff"
+								ariaLabel="three-dots-loading"
+							/>
+						) : (
+							"Save"
+						)}
 					</GradientButton>
 				</div>
 			</div>
 			{error ? <p className="text-sm text-red-500">{error}</p> : null}
+			<SuccessModal
+				isOpen={isModalOpen}
+				onClose={() => setIsModalOpen(false)} // 모달 닫기
+			>
+				{modalMessage}
+			</SuccessModal>
 		</div>
 	)
 }
