@@ -11,11 +11,14 @@ import {
 import Link from "next/link"
 import Avatar from "@/components/common/atom/Avatar"
 import type { MenuNavItemType } from "@/lib/navigation.ts"
-import { sellerNavs } from "@/lib/navigation.ts"
+import { getUserAuthNavitems } from "@/lib/navigation.ts"
+import type { UserAuthType } from "@/lib/userAuth.ts"
 
-export function AvatarMenu() {
-	// todo : 유저의 권한에 따라 보여줘야할 내비게이션 아이템이 다름
-	const menuItems: MenuNavItemType[] = sellerNavs
+export interface AvatarMenuProps {
+	userAuth: UserAuthType
+}
+export function AvatarMenu({ userAuth }: AvatarMenuProps) {
+	const menuItems: MenuNavItemType[] = getUserAuthNavitems(userAuth)
 
 	return (
 		<DropdownMenu>
@@ -33,7 +36,7 @@ export function AvatarMenu() {
 					<Link
 						// eslint-disable-next-line react/no-array-index-key  -- This is a static array
 						key={index}
-						href={{ pathname: item.href, query: { view: item.query } }}>
+						href={{ pathname: item.href, query: item.query }}>
 						<DropdownMenuItem className="h-[56px] cursor-pointer gap-3 p-0 *:text-white *:hover:text-po-purple-50 focus:bg-[#252525]">
 							<item.icon className="!h-4 !w-4" />
 							<span className="text-base font-normal">{item.label}</span>

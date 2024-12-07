@@ -9,7 +9,3 @@ export interface EmailCheckPayload extends EmailPayload {
 export interface ResetPasswordPayload extends EmailPayload {
   password: string;
 }
-
-export interface EmailCheckResponse {
-  valid: boolean;
-}

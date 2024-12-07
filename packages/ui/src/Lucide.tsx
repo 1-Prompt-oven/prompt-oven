@@ -47,5 +47,6 @@ export {
 	CheckCircle2,
 	ArrowLeft,
 	ExternalLink,
+	LogIn,
 	type LucideProps,
 } from "lucide-react"

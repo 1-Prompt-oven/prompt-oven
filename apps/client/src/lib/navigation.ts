@@ -4,24 +4,28 @@ import {
 	FileText,
 	Heart,
 	LayoutDashboard,
+	LogIn,
 	Package,
 	Settings,
 	ShoppingBag,
 	Store,
 	TagsIcon,
 	User,
+	UserPlus,
 	Wallet,
 } from "@repo/ui/lucide"
+import type { UserAuthType } from "@/lib/userAuth.ts"
 
 export type MenuIconType = ForwardRefExoticComponent<
 	Omit<LucideProps, "ref"> & RefAttributes<SVGSVGElement>
 >
 
+export type NavQueryType = Record<string, string>
 export interface BaseMenuItemType {
 	icon: MenuIconType
 	label: string
 	href: string
-	query: string
+	query: NavQueryType
 }
 export interface SubMenuItemType extends Omit<BaseMenuItemType, "icon"> {
 	icon?: ForwardRefExoticComponent<
@@ -65,52 +69,139 @@ export const sellerNavs: MenuNavItemType[] = [
 		icon: LayoutDashboard,
 		label: "Overview",
 		href: "/account",
-		query: "overview",
+		query: { view: "overview" },
 	},
 	{
 		icon: Package,
 		label: "Product",
 		href: "account",
-		query: "product-list",
+		query: { view: "product-list" },
 		subMenu: [
-			{ label: "Create Product", href: "/account", query: "create-product" },
-			{ label: "Product List", href: "/account", query: "product-list" },
-			{ label: "Category", href: "/account", query: "product-category" },
+			{
+				label: "Create Product",
+				href: "/account",
+				query: { view: "create-product" },
+			},
+			{
+				label: "Product List",
+				href: "/account",
+				query: { view: "product-list" },
+			},
+			{
+				label: "Category",
+				href: "/account",
+				query: { view: "product-category" },
+			},
 		],
 	},
-	{ icon: User, label: "Profile", href: "/account", query: "profile" },
-	{ icon: FileText, label: "Prompts", href: "/account", query: "prompts" },
-	{ icon: TagsIcon, label: "Sales", href: "/account", query: "sales" },
-	{ icon: Wallet, label: "Payouts", href: "/account", query: "payouts" },
+	{
+		icon: User,
+		label: "Profile",
+		href: "/account",
+		query: { view: "profile" },
+	},
+	{
+		icon: FileText,
+		label: "Prompts",
+		href: "/account",
+		query: { view: "prompts" },
+	},
+	{
+		icon: TagsIcon,
+		label: "Sales",
+		href: "/account",
+		query: { view: "sales" },
+	},
+	{
+		icon: Wallet,
+		label: "Payouts",
+		href: "/account",
+		query: { view: "payouts" },
+	},
 	{
 		icon: ShoppingBag,
 		label: "Purchases",
 		href: "/account",
-		query: "purchases",
+		query: { view: "purchases" },
 		subMenu: [
-			{ label: "Ongoing", href: "/account", query: "purchase-ongoing" },
-			{ label: "Completed", href: "/account", query: "purchase-completed" },
+			{
+				label: "Ongoing",
+				href: "/account",
+				query: { view: "purchase-ongoing" },
+			},
+			{
+				label: "Completed",
+				href: "/account",
+				query: { view: "purchase-completed" },
+			},
 		],
 	},
-	{ icon: Heart, label: "Favorites", href: "/account", query: "favorites" },
-	{ icon: Settings, label: "Settings", href: "/account", query: "settings" },
+	{
+		icon: Heart,
+		label: "Favorites",
+		href: "/account",
+		query: { view: "favorites" },
+	},
+	{
+		icon: Settings,
+		label: "Settings",
+		href: "/account",
+		query: { view: "settings" },
+	},
 ]
 
 export const userNavs: MenuNavItemType[] = [
 	{
 		label: "To Be Seller",
-		href: "/seller-registration",
-		query: "",
+		href: "/seller/registration",
+		query: {},
 		icon: Store,
 	},
-	{ icon: User, label: "Profile", href: "/account", query: "profile" },
+	{
+		icon: User,
+		label: "Profile",
+		href: "/account",
+		query: { view: "profile" },
+	},
 	{
 		icon: ShoppingBag,
 		label: "Purchases",
 		href: "/account",
-		query: "purchases",
+		query: { view: "purchases" },
 	},
-	{ icon: Settings, label: "Settings", href: "/account", query: "settings" },
+	{
+		icon: Settings,
+		label: "Settings",
+		href: "/account",
+		query: { view: "settings" },
+	},
+]
+
+export const guestNavs: MenuNavItemType[] = [
+	{
+		icon: LogIn,
+		label: "Sign In",
+		href: "/sign-in",
+		query: {},
+	},
+	{
+		icon: UserPlus,
+		label: "Sign Up",
+		href: "/sign-up",
+		query: {},
+	},
 ]
 
 // ----------------- SideBar Menu Navs -----------------
+
+export const getUserAuthNavitems = (userAuth: UserAuthType) => {
+	let menuItems!: MenuNavItemType[]
+	if (userAuth === "seller" || userAuth === "admin") {
+		menuItems = sellerNavs
+	} else if (userAuth === "member") {
+		menuItems = userNavs
+	} else {
+		menuItems = guestNavs
+	}
+	return menuItems
+}

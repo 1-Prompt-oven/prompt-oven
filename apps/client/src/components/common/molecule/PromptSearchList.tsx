@@ -1,6 +1,6 @@
-import React from "react"
-import type { PromptApiResponseType } from "@/types/common/responseType"
 import Image from "next/image"
+import type { PromptApiResponseType } from "@/types/common/responseType"
+
 
 function PromptSearchList({ data }: { data: PromptApiResponseType }) {
 	const promptData = data.productList
@@ -23,4 +23,3 @@ function PromptSearchList({ data }: { data: PromptApiResponseType }) {
 }
 
 export default PromptSearchList
-

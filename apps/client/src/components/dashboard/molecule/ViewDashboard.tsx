@@ -43,7 +43,7 @@ function ViewDashboard({ selectedPeriod, selectedUnit }: PeriodUnitType) {
 				plugins: {
 					title: {
 						display: true,
-						text: "FOLLOW",
+						text: "View",
 						padding: {
 							top: 10,
 							bottom: 30,

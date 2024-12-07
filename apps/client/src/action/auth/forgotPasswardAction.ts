@@ -1,4 +1,5 @@
 import type { EmailCheckPayload, EmailPayload, ResetPasswordPayload } from '@/types/auth/ForgotPassword';
+import type { ResgisterEmailCheckResponse } from '@/types/auth/memberRegisterType';
 import { actionHandler, actionHandlerNoresponse } from '../actionHandler';
 
 export const requestPasswordResetEmail = async (
@@ -20,8 +21,8 @@ export const requestPasswordResetEmail = async (
 
 export const checkEmailVerificationCode = async (
   data: EmailCheckPayload,
-): Promise<boolean> => {
-  return actionHandler<boolean>({
+): Promise<ResgisterEmailCheckResponse> => {
+  return actionHandler<ResgisterEmailCheckResponse>({
       name: "checkEmailVerificationCode",
       url: "/v1/auth/email/check",
       options: {
