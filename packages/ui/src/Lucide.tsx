@@ -50,5 +50,6 @@ export {
 	LogIn,
 	MoreHorizontal,
 	Edit,
+	PackageX,
 	type LucideProps,
 } from "lucide-react"

@@ -1,7 +1,7 @@
 import React from "react"
 import type { GetSellerProductListRequestType } from "@/types/product/productUpsertType"
 import type { ProductListSearchParams } from "@/types/account/searchParams.ts"
-import SpProductDashboard from "@/components/seller/organism/SpProduct-dashboard.tsx"
+import SpProductDashboard from "@/components/seller/organism/SpProductDashboard.tsx"
 import { getSellerProductList } from "@/action/product/productAction.ts"
 
 export interface SellerProductListPageProps {
