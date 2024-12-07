@@ -1,3 +1,5 @@
+import type { Sort, SortDirection } from "@/types/seller/sellerProduct.ts"
+
 export interface QueryParams {
 	view: string | undefined
 }
@@ -6,7 +8,9 @@ export interface SearchParams {
 	searchParams: QueryParams
 }
 
-export interface AccountQueryParams extends CreateProductQueryParams {
+export interface AccountQueryParams
+	extends CreateProductQueryParams,
+		ProductListSearchParams {
 	view: string | undefined
 }
 
@@ -23,4 +27,15 @@ export interface CreateProductQueryParams {
 	llmId?: string
 	productName?: string
 }
+
+export interface ProductListSearchParams {
+	sortOption?: Sort
+	searchBar?: string
+	sortBy?: SortDirection
+	enable?: boolean
+	temporary?: boolean
+	cursorId?: string
+	pageSize?: string // number type string
+}
+
 // ------------------------------ End of SearchParams ------------------------------

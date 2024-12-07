@@ -1,9 +1,9 @@
 "use client"
 
 import React, { useEffect, useState } from "react"
-import { ThreeDots } from "react-loader-spinner"
 import { useRouter } from "next/navigation"
 import { delay } from "@/lib/utils.ts"
+import PageLoader from "@/components/seller/atom/PageLoader.tsx"
 
 interface SellerRegistrationTemplateProps {
 	isSeller: boolean
@@ -24,26 +24,7 @@ function SellerRegistrationTemplate({
 			setLoading(false)
 		})
 	}, [isSeller, router])
-	return (
-		<>
-			{loading || isSeller ? (
-				<div className="flex min-h-[calc(100vh-80px)] w-full items-center justify-center">
-					<ThreeDots
-						visible
-						width="100"
-						height="80"
-						radius="9"
-						color="#ffffff"
-						ariaLabel="three-dots-loading"
-						wrapperStyle={{}}
-						wrapperClass=""
-					/>
-				</div>
-			) : (
-				children
-			)}
-		</>
-	)
+	return <>{loading || isSeller ? <PageLoader /> : children}</>
 }
 
 export default SellerRegistrationTemplate

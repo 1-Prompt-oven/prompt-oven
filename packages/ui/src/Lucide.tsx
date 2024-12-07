@@ -48,5 +48,7 @@ export {
 	ArrowLeft,
 	ExternalLink,
 	LogIn,
+	MoreHorizontal,
+	Edit,
 	type LucideProps,
 } from "lucide-react"

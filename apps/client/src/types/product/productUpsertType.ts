@@ -44,6 +44,30 @@ export interface PromptContentType {
 	sampleValue: string
 }
 
+export interface GetSellerProductListRequestType {
+	sellerUuid: string // 판매자 UUID (path)
+	searchBar?: string // 검색어 (query)
+	sortOption?: "price" | "sells" | "createdAt" // 정렬 기준 price, sells, createdAt(default) (query)
+	sortBy?: "ASC" | "DESC" // 정렬 방향 ASC, DESC(default) (query)
+	enable?: boolean // 상품 판매 여부 true(default), false (query)
+	temporary?: boolean // 임시 등록 여부 true(default), false (query)
+	cursorId?: string // 페이징 커서 (query)
+	pageSize?: number // 페이지 사이즈 (query) default: 16
+}
+export interface GetSellerProductListResponseType {
+	productList: GetSellerProductResultType[]
+	nextCursorId: string
+	hasNext: boolean
+}
+export interface GetSellerProductResultType {
+	productName: string
+	productUuid: string
+	price: number
+	sells: number
+	enable: boolean
+	temporary: boolean
+}
+
 // 상품 조회
 export interface GetProductDetailRequestType {
 	// path

@@ -8,6 +8,8 @@ import type {
 	GetProductDetailResponseType,
 	GetProductSellerRequestType,
 	GetProductSellerResponseType,
+	GetSellerProductListRequestType,
+	GetSellerProductListResponseType,
 	ModifyProductRequestType,
 } from "@/types/product/productUpsertType.ts"
 import type { CommonResType } from "@/types/common/responseType.ts"
@@ -24,6 +26,23 @@ export const getProductSeller = async (
 	return actionHandler<CommonResType<GetProductSellerResponseType>>({
 		name: "getProductSeller",
 		url: `/v1/product/${req.productUuid}/seller`,
+		options: {
+			headers,
+			method: "GET",
+			cache: "no-cache",
+		},
+	})
+}
+
+export const getSellerProductList = async (
+	req: GetSellerProductListRequestType,
+): Promise<CommonResType<GetSellerProductListResponseType>> => {
+	"use server"
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+	return actionHandler<CommonResType<GetSellerProductListResponseType>>({
+		name: "getSellerProductList",
+		url: `/v1/product/${req.sellerUuid}/list`,
 		options: {
 			headers,
 			method: "GET",
