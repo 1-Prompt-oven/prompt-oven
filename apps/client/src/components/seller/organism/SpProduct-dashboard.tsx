@@ -50,7 +50,7 @@ export default function SpProductDashboard({
 				newParams.set(key, value.toString())
 			}
 		})
-		router.push(`/account?view=product-list&${newParams.toString()}`)
+		router.push(`/account?${newParams.toString()}`)
 	}
 
 	const handleSearch = (searchTerm: string) => {

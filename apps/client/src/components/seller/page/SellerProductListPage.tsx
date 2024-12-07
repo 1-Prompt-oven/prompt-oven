@@ -1,9 +1,8 @@
-import React, { Suspense } from "react"
+import React from "react"
 import type { GetSellerProductListRequestType } from "@/types/product/productUpsertType"
 import type { ProductListSearchParams } from "@/types/account/searchParams.ts"
 import SpProductDashboard from "@/components/seller/organism/SpProduct-dashboard.tsx"
 import { getSellerProductList } from "@/action/product/productAction.ts"
-import PageLoader from "@/components/seller/atom/PageLoader.tsx"
 
 export interface SellerProductListPageProps {
 	searchParams: ProductListSearchParams
@@ -25,15 +24,9 @@ export default async function SellerProductListPage({
 	}
 
 	const initialData = (await getSellerProductList(request)).result
+	// console.log("initialData -- ", initialData)
 
 	return (
-		<main className="min-h-screen bg-[#1B1818] p-8">
-			<Suspense fallback={<PageLoader />}>
-				<SpProductDashboard
-					initialData={initialData}
-					initialRequest={request}
-				/>
-			</Suspense>
-		</main>
+		<SpProductDashboard initialData={initialData} initialRequest={request} />
 	)
 }
