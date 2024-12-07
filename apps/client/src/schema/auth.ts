@@ -38,29 +38,29 @@ export const signupSchemaObject = z
 
 export const signupSchema = signupSchemaObject.refine((data) => data.password === data.passwordValidate, {
   path: ["passwordValidate"],
-  message: "비밀번호가 일치하지 않습니다.",
+  message: "Passwords do not match",
 })
 .refine((data) => data.emailCode !== "", {
   path: ["emailCode"],
-  message: "이메일 인증 코드를 입력해주세요.",
+  message: "Enter emailcode",
 });
 
 export const forgotSchemaObject = z
   .object({
     email: z.string().regex(emailRegex, {
-      message: "아이디 형식이 일치하지 않습니다.",
+      message: "Enter in email format",
     }),
-    emailCode: z.string({required_error: "인증번호를 입력해주세요"}),
+    emailCode: z.string({required_error: "Enter emailcode"}),
     password: z.string().regex(passwordRegex, {
-      message: "비밀번호 형식이 일치하지 않습니다.",
+      message: "Special characters, number, uppercase are required",
     }),
     passwordValidate: z.string().regex(passwordRegex, {
-      message: "비밀번호 형식이 일치하지 않습니다.",
+      message: "Special characters, number, uppercase are required",
     }),
   });
 
   export const nicknameSchemaObject = z.object(
     {nickname: z.string().regex(nicknameRegex, {
-      message: "닉네임은 1글자 이상, 영문이어야합니다"
+      message: "Need at least 1 character and except number"
     })}
   )

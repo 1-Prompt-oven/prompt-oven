@@ -43,7 +43,7 @@ function SalesDashboard({ selectedPeriod, selectedUnit }: PeriodUnitType) {
 				plugins: {
 					title: {
 						display: true,
-						text: "FOLLOW",
+						text: "Sales",
 						padding: {
 							top: 10,
 							bottom: 30,
