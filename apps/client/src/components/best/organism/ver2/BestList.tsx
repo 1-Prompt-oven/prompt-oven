@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useRef, useState } from "react"
 import { ThreeDots } from "react-loader-spinner"
 import { fetchRankingList } from "@/action/best/getBestData"
