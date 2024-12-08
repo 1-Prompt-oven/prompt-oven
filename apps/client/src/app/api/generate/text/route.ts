@@ -18,6 +18,6 @@ export async function POST(res: Request) {
 
 		return new NextResponse(JSON.stringify(response), { status: 200 })
 	} catch (err) {
-		return new NextResponse("Sever Error", { status: 500 })
+		return new NextResponse("Server Error", { status: 500 })
 	}
 }
