@@ -2,6 +2,7 @@
 
 import { signOut } from "next-auth/react"
 import React, { useState } from "react"
+import { ThreeDots } from "react-loader-spinner"
 import { Button } from "@repo/ui/button"
 import Link from "next/link"
 import { DeleteEmail } from "@/action/auth/updateNickname"
@@ -18,7 +19,7 @@ function DeleteAccount() {
 			await DeleteEmail()
 			await signOut({ redirect: true, callbackUrl: "/" })
 		} catch (err) {
-			setError("계정 삭제 중 문제가 발생했습니다. 다시 시도해주세요.")
+			setError("Delete account fail, Contact us")
 		} finally {
 			setIsLoading(false)
 		}
@@ -28,10 +29,21 @@ function DeleteAccount() {
 		<div className="flex flex-col items-center gap-2 pt-20">
 			<Button
 				variant="destructive"
-				className="h-[40px] w-[159px] px-[35px] py-[15px]"
+				className="flex h-[40px] w-[159px] items-center justify-center px-[35px] py-[15px]"
 				onClick={handleDelete}
 				disabled={isLoading}>
-				{isLoading ? "Delete..." : "Delete Account"}
+				{isLoading ? (
+					<ThreeDots
+						visible
+						height="20"
+						width="30"
+						radius="9"
+						color="#ffffff"
+						ariaLabel="three-dots-loading"
+					/>
+				) : (
+					"Delete Account"
+				)}
 			</Button>
 			{error ? <p className="text-sm text-red-500">{error}</p> : null}
 			<p className="pt-10 text-sm text-gray-400">
@@ -40,7 +52,7 @@ function DeleteAccount() {
 			<Link
 				className="text-sm text-gray-400 underline decoration-white"
 				href="www.google.com">
-				Contect us
+				Contact us
 			</Link>
 		</div>
 	)

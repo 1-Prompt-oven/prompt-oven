@@ -43,7 +43,7 @@ function FollowDashboard({ selectedPeriod, selectedUnit }: PeriodUnitType) {
 				plugins: {
 					title: {
 						display: true,
-						text: "FOLLOW",
+						text: "Follow",
 						padding: {
 							top: 10,
 							bottom: 30,
