@@ -4,6 +4,7 @@ import { useEffect, useState } from "react"
 import { Card, CardContent } from "@repo/ui/card"
 import { ArrowDownCircleIcon, ArrowUpCircleIcon } from "@repo/ui/lucide"
 import type { PromptDetailContentsType } from "@/types/prompt-detail/promptDetailType"
+import PromptGenerate from "../molecules/generate/PromptGenerate"
 
 interface PromptDetailContentProps {
 	productContent: PromptDetailContentsType
@@ -42,7 +43,17 @@ export default function PromptDetailContent({
 			<Card className="border-none bg-[#252525] shadow-lg">
 				<CardContent className="p-6">
 					<div className="flex justify-between">
-						<p className="text-xl font-bold text-white">Execution Code</p>
+						<div className="flex items-center gap-8">
+							<p className="text-xl font-bold text-white">Execution Code</p>
+							<PromptGenerate
+								keyWord={
+									isExpanded
+										? productContent.sampleValue
+										: productContent.sampleValue.slice(0, sliceLength)
+								}
+							/>
+						</div>
+
 						{isExpanded ? (
 							<ArrowUpCircleIcon
 								className="cursor-pointer text-white"
