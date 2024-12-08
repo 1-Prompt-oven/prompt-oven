@@ -1,5 +1,6 @@
 "use server"
 
+import _ from "lodash"
 import type {
 	CreateProductRequestType,
 	CreateProductTempRequestType,
@@ -8,12 +9,16 @@ import type {
 	GetProductDetailResponseType,
 	GetProductSellerRequestType,
 	GetProductSellerResponseType,
+	GetSellerProductListRequestType,
+	GetSellerProductListResponseType,
 	ModifyProductRequestType,
+	RemoveProductRequestType,
 } from "@/types/product/productUpsertType.ts"
 import type { CommonResType } from "@/types/common/responseType.ts"
 import { actionHandler } from "@/action/actionHandler.ts"
 import { getAccessToken } from "@/lib/api/sessionExtractor.ts"
 import { initializeHeaders } from "@/lib/api/headers.ts"
+import { createQueryParamString } from "@/lib/query.ts"
 
 export const getProductSeller = async (
 	req: GetProductSellerRequestType,
@@ -24,6 +29,24 @@ export const getProductSeller = async (
 	return actionHandler<CommonResType<GetProductSellerResponseType>>({
 		name: "getProductSeller",
 		url: `/v1/product/${req.productUuid}/seller`,
+		options: {
+			headers,
+			method: "GET",
+			cache: "no-cache",
+		},
+	})
+}
+
+export const getSellerProductList = async (
+	req: GetSellerProductListRequestType,
+): Promise<CommonResType<GetSellerProductListResponseType>> => {
+	"use server"
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+	const query = createQueryParamString(_.omit(req, ["sellerUuid"]))
+	return actionHandler<CommonResType<GetSellerProductListResponseType>>({
+		name: "getSellerProductList",
+		url: `/v1/product/${req.sellerUuid}/list?${query}`,
 		options: {
 			headers,
 			method: "GET",
@@ -94,6 +117,21 @@ export const createTempProduct = async (req: CreateProductTempRequestType) => {
 			headers,
 			method: "POST",
 			body: JSON.stringify(req),
+			cache: "no-cache",
+		},
+	})
+}
+
+export const deleteProduct = async (rea: RemoveProductRequestType) => {
+	"use server"
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+	return actionHandler<CommonResType<object>>({
+		name: "deleteProduct",
+		url: `/v1/seller/product/${rea.productUuid}`,
+		options: {
+			headers,
+			method: "DELETE",
 			cache: "no-cache",
 		},
 	})

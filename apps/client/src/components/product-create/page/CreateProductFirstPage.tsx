@@ -36,7 +36,7 @@ import {
 	createTempProduct,
 	getProductDetail,
 	updateProduct,
-} from "@/action/product/productUpsertAction.ts"
+} from "@/action/product/productAction.ts"
 import { getStorageItem, setProductUuid } from "@/lib/localStorage.ts"
 import { localStorageKeys } from "@/config/product/localStorage.ts"
 import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
