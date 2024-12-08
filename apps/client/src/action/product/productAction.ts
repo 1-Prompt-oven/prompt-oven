@@ -1,5 +1,6 @@
 "use server"
 
+import _ from "lodash"
 import type {
 	CreateProductRequestType,
 	CreateProductTempRequestType,
@@ -16,6 +17,7 @@ import type { CommonResType } from "@/types/common/responseType.ts"
 import { actionHandler } from "@/action/actionHandler.ts"
 import { getAccessToken } from "@/lib/api/sessionExtractor.ts"
 import { initializeHeaders } from "@/lib/api/headers.ts"
+import { createQueryParamString } from "@/lib/query.ts"
 
 export const getProductSeller = async (
 	req: GetProductSellerRequestType,
@@ -40,9 +42,10 @@ export const getSellerProductList = async (
 	"use server"
 	const accessToken = await getAccessToken()
 	const headers = initializeHeaders(accessToken ?? undefined)
+	const query = createQueryParamString(_.omit(req, ["sellerUuid"]))
 	return actionHandler<CommonResType<GetSellerProductListResponseType>>({
 		name: "getSellerProductList",
-		url: `/v1/product/${req.sellerUuid}/list`,
+		url: `/v1/product/${req.sellerUuid}/list?${query}`,
 		options: {
 			headers,
 			method: "GET",

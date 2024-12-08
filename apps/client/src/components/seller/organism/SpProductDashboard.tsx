@@ -105,14 +105,14 @@ export default function SpProductDashboard({
 				initStatus={status as ProductStatusOption}
 			/>
 			<SpProductTable products={initialData.productList} />
-			<div className="mt-4 flex items-center justify-between">
-				<SpPaginationControls
-					hasNext={initialData.hasNext}
-					onPrevPage={handlePrevPage}
-					onNextPage={handleNextPage}
-					isFirstPage={!initialRequest.cursorId}
-				/>
-			</div>
+
+			<SpPaginationControls
+				className="mt-4"
+				hasNext={initialData.hasNext}
+				onPrevPage={handlePrevPage}
+				onNextPage={handleNextPage}
+				isFirstPage={!initialRequest.cursorId}
+			/>
 		</div>
 	)
 }

@@ -1,6 +1,6 @@
 import type { NextRequest, NextResponse } from "next/server"
-import { handleCreateProduct } from "@/middleware/productMiddleware.ts"
 import { withAuthRoutes } from "@/config/auth/route.ts"
+import { handleAccount } from "@/middleware/productMiddleware.ts"
 
 export const normalizeRegex = /\/$/
 
@@ -11,7 +11,7 @@ export const getNormalizedPathname = (pathname: string): string => {
 type RouterHandlerType = (req: NextRequest) => NextResponse | undefined
 
 const routeHandlers: Record<string, RouterHandlerType | undefined> = {
-	[withAuthRoutes.account]: handleCreateProduct,
+	[withAuthRoutes.account]: handleAccount,
 	// Add other routes and their handlers here
 }
 

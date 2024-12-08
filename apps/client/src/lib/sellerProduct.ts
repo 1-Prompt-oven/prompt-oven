@@ -1,5 +1,8 @@
 import type { ProductStatusOption } from "@/types/seller/sellerProduct.ts"
-import type { AccountQueryParams } from "@/types/account/searchParams.ts"
+import type {
+	AccountQueryParams,
+	ProductListSearchParams,
+} from "@/types/account/searchParams.ts"
 
 export const extractProductStatusOption = (status: ProductStatusOption) => {
 	let enable: boolean | undefined
@@ -47,7 +50,7 @@ export const extractProductStatusOptionReverse = (obj: {
 
 export const getSellerProductSearchParams = (
 	searchParams: AccountQueryParams,
-) => {
+): ProductListSearchParams => {
 	const {
 		sortOption,
 		searchBar,
@@ -62,8 +65,8 @@ export const getSellerProductSearchParams = (
 		sortOption: sortOption ?? "createdAt",
 		searchBar: searchBar ?? "",
 		sortBy: sortBy ?? "DESC",
-		enable: enable ?? true,
-		temporary: temporary ?? false,
+		enable: enable ?? "true",
+		temporary: temporary ?? "false",
 		cursorId: cursorId ?? "1",
 		pageSize: pageSize ?? "8",
 	}

@@ -1,11 +1,13 @@
 import { ChevronLeft, ChevronRight } from "@repo/ui/lucide"
 import { Button } from "@repo/ui/button"
+import { cn } from "@/lib/utils.ts"
 
 interface PaginationControlsProps {
 	hasNext: boolean
 	isFirstPage: boolean
 	onPrevPage: () => void
 	onNextPage: () => void
+	className?: string
 }
 
 export default function SpPaginationControls({
@@ -13,9 +15,14 @@ export default function SpPaginationControls({
 	onNextPage,
 	onPrevPage,
 	isFirstPage,
+	className,
 }: PaginationControlsProps) {
 	return (
-		<div className="flex w-full max-w-[1070px] items-center justify-end gap-2">
+		<div
+			className={cn(
+				"flex w-full max-w-[1070px] items-center justify-end gap-2",
+				className,
+			)}>
 			<div className="flex">
 				<Button
 					variant="ghost"

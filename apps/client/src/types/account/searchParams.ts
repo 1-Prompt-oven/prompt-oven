@@ -32,8 +32,8 @@ export interface ProductListSearchParams {
 	sortOption?: Sort
 	searchBar?: string
 	sortBy?: SortDirection
-	enable?: boolean
-	temporary?: boolean
+	enable?: string // boolean type string
+	temporary?: string // boolean type string
 	cursorId?: string
 	pageSize?: string // number type string
 }
