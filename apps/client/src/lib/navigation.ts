@@ -78,11 +78,6 @@ export const sellerNavs: MenuNavItemType[] = [
 		query: { view: "product-list" },
 		subMenu: [
 			{
-				label: "Create Product",
-				href: "/account",
-				query: { view: "create-product" },
-			},
-			{
 				label: "Product List",
 				href: "/account",
 				query: { view: "product-list" },

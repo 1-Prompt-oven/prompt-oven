@@ -1,7 +1,8 @@
 "use client"
 
-import { useCallback } from "react"
+import React, { useCallback } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
+import { Plus } from "@repo/ui/lucide"
 import SpProductTable from "@/components/seller/molecule/SpProductTable"
 import { SpProductFilter } from "@/components/seller/molecule/SpProductFilter.tsx"
 import type {
@@ -14,6 +15,8 @@ import {
 	extractProductStatusOptionReverse,
 } from "@/lib/sellerProduct.ts"
 import type { ProductStatusOption } from "@/types/seller/sellerProduct.ts"
+import AccountTitleText from "@/components/common/atom/AccountTitleText.tsx"
+import SpLink from "@/components/seller/atom/SpLink.tsx"
 
 interface ProductDashboardProps {
 	initialData: GetSellerProductListResponseType
@@ -83,6 +86,16 @@ export default function SpProductDashboard({
 
 	return (
 		<div className="mx-auto w-full max-w-[1070px] px-4 sm:px-6 lg:px-8">
+			<div className="mb-4 flex flex-row items-center justify-between">
+				<AccountTitleText>Product List</AccountTitleText>
+				<SpLink
+					className="flex items-center"
+					href="/account?view=create-product&step=1">
+					<Plus className="mr-2 h-6 w-6" />
+					Create Product
+				</SpLink>
+			</div>
+
 			<SpProductFilter
 				onSearch={handleSearch}
 				onSort={handleSort}

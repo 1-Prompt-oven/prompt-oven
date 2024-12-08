@@ -51,5 +51,6 @@ export {
 	MoreHorizontal,
 	Edit,
 	PackageX,
+	Plus,
 	type LucideProps,
 } from "lucide-react"
