@@ -1,12 +1,9 @@
 import { dummyRankingData } from "@/dummy/best/bestCreatorData2"
 import { BestCreatorDatas } from "@/dummy/best/bestCreatorData"
-import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import type {
 	BestCreatorCursorListTypes,
-	BestCreatorDataType2,
-	RenderedRankingItemTypes,
+	BestCreatorCursorListTypes2,
 } from "@/types/best/bestTypes"
-import { CommonResType2 } from "@/types/common/responseType"
 
 interface FetchBestCreatorsParams {
 	lastRanking?: number
@@ -52,7 +49,7 @@ export async function getBestCreatorData(
 
 export async function fetchRankingList(
 	_params: FetchBestCreatorsParams,
-): Promise<RenderedRankingItemTypes[]> {
+): Promise<BestCreatorCursorListTypes2> {
 	// "use server"
 	// try {
 	// 	// 1. 베스트 API 호출

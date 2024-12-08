@@ -1,12 +1,78 @@
-import React from "react"
+import { useEffect, useRef, useState } from "react"
+import { ThreeDots } from "react-loader-spinner"
+import { fetchRankingList } from "@/action/best/getBestData"
 import type { RenderedRankingItemTypes } from "@/types/best/bestTypes"
 import { BestCreatorListItem } from "@/components/best/molecule/ver2/BestCreatorListItem"
 
 interface BestListProps<T> {
 	data: T[]
+	pagingInfo: {
+		nextCursor: number
+		hasNext: boolean
+		pageSize: number
+		page: number
+	}
 }
 
-function BestList({ data }: BestListProps<RenderedRankingItemTypes>) {
+function BestList({
+	data,
+	pagingInfo,
+}: BestListProps<RenderedRankingItemTypes>) {
+	const [loading, setLoading] = useState(false)
+	const [hasNext, setHasNext] = useState<boolean>(pagingInfo.hasNext)
+	const [nextCursor, setNextCursor] = useState<number | null>(
+		pagingInfo.nextCursor,
+	)
+	const observerRef = useRef<HTMLDivElement | null>(null)
+
+	const fetchMoreData = () => {
+		if (loading || !hasNext || !nextCursor) return
+
+		setLoading(true)
+
+		fetchRankingList({ lastRanking: nextCursor, date: data[0].date })
+			.then((newCreators) => {
+				setNextCursor(newCreators.nextCursor)
+				setHasNext(newCreators.hasNext)
+			})
+			.catch((error) => {
+				// eslint-disable-next-line no-console -- Error to Fetching
+				console.error("크리에이터를 불러오는 중 오류 발생:", error)
+			})
+			.finally(() => {
+				setLoading(false)
+			})
+	}
+
+	useEffect(() => {
+		const observer = new IntersectionObserver(
+			async (entries) => {
+				if (entries[0].isIntersecting && !loading && hasNext && nextCursor) {
+					await fetchMoreData() // 비동기 작업이 완료될 때까지 기다림
+
+					// 데이터 로드가 성공적으로 완료된 후 스크롤 위치를 중앙으로 설정
+					const scrollY = window.scrollY
+					const windowHeight = window.innerHeight
+					const newScrollY = scrollY + windowHeight / 2
+					window.scrollTo({ top: newScrollY, behavior: "smooth" })
+				}
+			},
+			{ threshold: 1 },
+		)
+
+		const currentObserver = observerRef.current
+		if (currentObserver) {
+			observer.observe(currentObserver)
+		}
+
+		return () => {
+			if (currentObserver) observer.unobserve(currentObserver)
+		}
+	}, [loading, hasNext, nextCursor])
+
+	useEffect(() => {
+		window.scrollTo(0, 0)
+	}, [])
 	return (
 		<div className="mx-auto w-full max-w-[1716px]">
 			<div>
@@ -24,8 +90,39 @@ function BestList({ data }: BestListProps<RenderedRankingItemTypes>) {
 				<div className="h-1 w-full bg-rose-200" />
 			</div>
 			{data.map((creator) => (
-				<BestCreatorListItem key={creator.memberUUID} {...creator} />
+				<BestCreatorListItem
+					_date={creator.date}
+					_views={0}
+					key={creator.memberUUID}
+					{...creator}
+				/>
 			))}
+			{loading ? (
+				<div className="mb-8 flex flex-col items-center justify-center">
+					<ThreeDots
+						visible
+						height="80"
+						width="80"
+						color="#A913F9"
+						radius="9"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+					<span className="text-xl font-medium leading-[150%] text-white">
+						Loading...
+					</span>
+				</div>
+			) : null}
+			{!hasNext ? (
+				<div className="mb-8 p-4 text-center text-white">
+					<span className="font-bold">END</span>
+				</div>
+			) : null}
+
+			{hasNext && nextCursor ? (
+				<div ref={observerRef} className="h-[1px] w-full" />
+			) : null}
 		</div>
 	)
 }

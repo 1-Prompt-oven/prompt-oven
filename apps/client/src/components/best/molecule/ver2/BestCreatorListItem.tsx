@@ -17,13 +17,13 @@ interface BestCardProps {
 	rankingChange: number // 베스트
 	dailySellsCount: number // 베스트
 	avgStar: number // 베스트
-	date: string // 베스트
+	_date: string // 베스트
 	avatarImage: string | undefined // 프로필
 	nickname: string // 프로필
 	follower: number // 프로필
 	hashTag: string | undefined // 프로필
 	totalSales: number
-	views: number
+	_views: number
 }
 
 export function BestCreatorListItem({
@@ -32,13 +32,13 @@ export function BestCreatorListItem({
 	rankingChange,
 	dailySellsCount,
 	avgStar,
-	date,
+	_date,
 	avatarImage = "https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
 	nickname,
 	follower,
 	hashTag,
 	totalSales,
-	views,
+	_views,
 }: BestCardProps) {
 	return (
 		<Link href={`/profile/${memberUUID}`}>

@@ -1,7 +1,7 @@
 import React from "react"
 import BestTemplate from "@/components/best/template/BestTemplate"
 import { fetchRankingList } from "@/action/best/getBestData"
-import type { RenderedRankingItemTypes } from "@/types/best/bestTypes"
+import type { BestCreatorCursorListTypes2 } from "@/types/best/bestTypes"
 
 interface FetchBestCreatorsParams {
 	lastRanking?: number
@@ -15,7 +15,7 @@ export default async function Page() {
 		pageSize: 10,
 		lastRanking: 0,
 	}
-	const bestData: RenderedRankingItemTypes[] = await fetchRankingList(params)
+	const bestData: BestCreatorCursorListTypes2 = await fetchRankingList(params)
 	// const top5Data: BestCreatorDataTypes[] = bestData.content.slice(0, 5)
 	// const restData: BestCreatorDataTypes[] = bestData.content.slice(5)
 	return (

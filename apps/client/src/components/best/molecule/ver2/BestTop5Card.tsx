@@ -67,13 +67,13 @@ export default function BestTop5Card({
 					{rankingChange === 0 ? (
 						<Badge
 							variant="secondary"
-							className={"flex items-center gap-1 px-2 py-1"}>
+							className="flex items-center gap-1 px-2 py-1">
 							<Minus color="#8c8c8c" strokeWidth={2.5} size={20} />
 						</Badge>
 					) : (
 						<Badge
 							variant="secondary"
-							className={"flex items-center gap-1 px-2 py-1"}>
+							className="flex items-center gap-1 px-2 py-1">
 							{rankingChange > 0 ? (
 								<div className="font-xs flex items-center text-green-600">
 									<ArrowUp className="h-4 w-4" />
@@ -92,10 +92,12 @@ export default function BestTop5Card({
 				{/* Avatar Section */}
 				<div className="pb-4 pt-12">
 					<div className="relative mb-4 aspect-square overflow-hidden rounded-lg">
-						<img
+						<Image
 							src={avatarImage}
 							alt={nickname}
 							className="h-full w-full object-cover"
+							width={100}
+							height={100}
 						/>
 					</div>
 

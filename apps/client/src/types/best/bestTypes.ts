@@ -30,7 +30,7 @@ export interface BestCreatorCursorListTypes {
 
 // 크리에이터 페이징 정보 api
 export interface BestCreatorCursorListTypes2 {
-	content: BestCreatorDataType2[]
+	content: RenderedRankingItemTypes[]
 	nextCursor: number
 	hasNext: boolean
 	pageSize: number
