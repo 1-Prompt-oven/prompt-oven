@@ -34,7 +34,7 @@ export async function getProfileImage(
 		// eslint-disable-next-line no-console -- This is a error
 		console.error("Error fetching profile image:", error)
 		return {
-			memberUUID: memberUUID,
+			memberUUID,
 			picture: "",
 		}
 	}
