@@ -56,7 +56,6 @@ const nextConfig = {
 		},
 	},
 	images: {
-
 		remotePatterns: [
 			{
 				protocol: "https",
@@ -79,6 +78,12 @@ const nextConfig = {
 			{
 				protocol: "https",
 				hostname: "hebbkx1anhila5yf.public.blob.vercel-storage.com",
+				port: "",
+				pathname: "/**",
+			},
+			{
+				protocol: "https",
+				hostname: "oaidalleapiprodscus.blob.core.windows.net",
 				port: "",
 				pathname: "/**",
 			},
