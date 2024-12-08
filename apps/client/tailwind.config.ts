@@ -14,9 +14,19 @@ const config: Config = {
 			screens: {
 				xs: "480px", // xs 브레이크포인트 추가
 			},
+      animation: {
+        "gradient-border": "gradientBorder 4s linear infinite",
+      },
+      keyframes: {
+        gradientBorder: {
+          "0%": { stroke: "url(#gradient-border-start)" },
+          "100%": { stroke: "url(#gradient-border-end)" },
+				},
+			},
 		},
 	},
 	presets: [sharedConfig],
 }
 
 export default config
+

@@ -46,7 +46,7 @@ export interface HeaderNavType
 export const mainNavs: HeaderNavType[] = [
 	{
 		label: "HOME",
-		href: "/home",
+		href: "/",
 	},
 	{
 		label: "PROMPTS",
