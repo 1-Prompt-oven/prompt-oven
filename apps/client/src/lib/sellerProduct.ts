@@ -21,10 +21,10 @@ export const extractProductStatusOption = (status: ProductStatusOption) => {
 			temporary = false
 			enable = false
 			break
-		case "all":
-			temporary = false
-			enable = true
-			break
+		// case "all":
+		// 	temporary = true
+		// 	enable = true
+		// 	break
 	}
 
 	return { enable, temporary }
@@ -67,7 +67,7 @@ export const getSellerProductSearchParams = (
 		sortBy: sortBy ?? "DESC",
 		enable: enable ?? "true",
 		temporary: temporary ?? "false",
-		cursorId: cursorId ?? "1",
+		cursorId: cursorId ?? "",
 		pageSize: pageSize ?? "8",
 	}
 }

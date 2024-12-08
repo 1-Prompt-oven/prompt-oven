@@ -15,7 +15,7 @@ export default async function SellerProductListPage({
 }: SellerProductListPageProps) {
 	const request: GetSellerProductListRequestType = {
 		sellerUuid,
-		searchBar: searchParams.searchBar,
+		searchBar: searchParams.searchBar ?? "",
 		sortOption: searchParams.sortOption,
 		sortBy: searchParams.sortBy,
 		enable: stringToBoolean(searchParams.enable as string),

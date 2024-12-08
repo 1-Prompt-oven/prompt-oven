@@ -1,8 +1,10 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Search } from "@repo/ui/lucide"
 import { Input } from "@repo/ui/input"
+// eslint-disable-next-line import/named -- lodash는 named export입니다.
+import { debounce } from "lodash"
 
 interface SpSearchBarProps {
 	onSearch: (searchTerm: string) => void
@@ -11,13 +13,11 @@ interface SpSearchBarProps {
 function SpSearchBar({ onSearch }: SpSearchBarProps) {
 	const [searchTerm, setSearchTerm] = useState("")
 
-	useEffect(() => {
-		const timer = setTimeout(() => {
-			onSearch(searchTerm)
-		}, 300)
-
-		return () => clearTimeout(timer)
-	}, [searchTerm, onSearch])
+	const debouncedOnSearch = debounce(onSearch, 400)
+	const searchBarHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
+		setSearchTerm(e.target.value)
+		debouncedOnSearch(e.target.value)
+	}
 
 	return (
 		<div className="relative w-full">
@@ -26,7 +26,9 @@ function SpSearchBar({ onSearch }: SpSearchBarProps) {
 				className="!h-11 w-full rounded-md border-0 border-b border-[#E2ADFF]/25 bg-black !pl-10 text-[#475569] focus-visible:ring-0"
 				placeholder="Search by email or name"
 				value={searchTerm}
-				onChange={(e) => setSearchTerm(e.target.value)}
+				onChange={(e) => {
+					searchBarHandler(e)
+				}}
 			/>
 		</div>
 	)

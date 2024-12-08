@@ -41,7 +41,7 @@ export function SpProductFilter({
 	onSearch,
 	initSort = "createdAt",
 	initSortDirection = "DESC",
-	initStatus = "all",
+	initStatus = "approved",
 }: ProductFilterProps) {
 	const sort = setSort(initSort, initSortDirection)
 	const status = initStatus as ProductStatusOption
@@ -56,7 +56,7 @@ export function SpProductFilter({
 	}
 
 	const statusOptions: Record<ProductStatusOption, string> = {
-		all: "All Prompts",
+		// all: "All Prompts",
 		draft: "Draft",
 		declined: "Declined",
 		approved: "Approved",
