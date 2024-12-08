@@ -110,6 +110,9 @@ export default function SpProductDashboard({
 
 			<SpPaginationControls
 				className="mt-4"
+				total={initialData.totalElements}
+				currentPage={initialData.number}
+				pageSize={initialData.size}
 				hasNext={!initialData.last}
 				onPrevPage={handlePrevPage}
 				onNextPage={handleNextPage}
