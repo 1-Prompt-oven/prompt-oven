@@ -1,13 +1,15 @@
 "use server"
 
 import { BestCreatorDatas } from "@/dummy/best/bestCreatorData"
-import type { BestCreatorCursorListTypes } from "@/types/best/bestTypes"
+import { BestCreatorDatas2 } from "@/dummy/best/updatedBestCreatorData"
+import type {
+	BestCreatorCursorListTypes,
+	BestCreatorCursorListTypes2,
+} from "@/types/best/bestTypes"
 
 interface FetchBestCreatorsParams {
-	lastCreatedAt: string
-	lastId: string
+	lastRanking: number
 	pageSize: number
-	page: number
 }
 
 export async function getBestCreatorData(
@@ -23,6 +25,40 @@ export async function getBestCreatorData(
 	// if (_query?.page) params.append('page', _query?.page.toString())
 
 	// const fetchUrl = `${process.env.API_BASE_URL}/v1/creator/best?${params.toString()}`
+
+	// try {
+	//   const response = await fetch(fetchUrl, {
+	//     method: 'GET',
+	//     headers: {
+	//       'Content-Type': 'application/json',
+	//     },
+	//     cache: 'no-cache',
+	//   })
+
+	//   if (!response.ok) {
+	//     throw new Error('Network response was not ok')
+	//   }
+	//  const data: BestCreatorCursorListTypes = await response.json()
+	//  return data
+	// } catch (error) {
+	//   console.error('Error:', error)
+	//   return
+	// }
+
+	return res
+}
+
+export async function updatedGetBestCreatorData(
+	params?: FetchBestCreatorsParams,
+): Promise<BestCreatorCursorListTypes2> {
+	const _query = params
+	const res: BestCreatorCursorListTypes2 = await BestCreatorDatas2
+
+	// const params = new URLSearchParams()
+	// if (_query?.lastRanking) params.append('lastRanking', _query?.lastRanking)
+	// if (_query?.pageSize) params.append('pageSize', _query?.pageSize)
+
+	// const fetchUrl = `${process.env.API_BASE_URL}/v1/seller-batch/aggregate/bestSellers?${params.toString()}`
 
 	// try {
 	//   const response = await fetch(fetchUrl, {
@@ -66,3 +102,4 @@ export const followAction = async (_memberUUID: string) => {
 	// console.log("팔로우 성공:", data)
 	return true
 }
+

@@ -43,3 +43,11 @@ export interface S3ResponseType {
 	responseImageUrl: string | undefined
 }
 
+export interface BestCreatorApiResponseType {
+	content: SearchResultPromptType[]
+	nextCursor: number
+	hasNext: boolean
+	pageSize: number
+	page: number
+}
+
