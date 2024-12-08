@@ -48,5 +48,10 @@ export {
 	ArrowLeft,
 	ExternalLink,
 	LogIn,
+	Calendar,
+	TrendingUp,
+	TrendingDown,
+	Users,
+	DollarSign,
 	type LucideProps,
 } from "lucide-react"

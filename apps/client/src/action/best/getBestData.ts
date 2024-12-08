@@ -1,15 +1,17 @@
-"use server"
-
+import { dummyRankingData } from "@/dummy/best/bestCreatorData2"
 import { BestCreatorDatas } from "@/dummy/best/bestCreatorData"
-import { BestCreatorDatas2 } from "@/dummy/best/updatedBestCreatorData"
+import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import type {
 	BestCreatorCursorListTypes,
-	BestCreatorCursorListTypes2,
+	BestCreatorDataType2,
+	RenderedRankingItemTypes,
 } from "@/types/best/bestTypes"
+import { CommonResType2 } from "@/types/common/responseType"
 
 interface FetchBestCreatorsParams {
-	lastRanking: number
-	pageSize: number
+	lastRanking?: number
+	pageSize?: number
+	date: string
 }
 
 export async function getBestCreatorData(
@@ -48,38 +50,58 @@ export async function getBestCreatorData(
 	return res
 }
 
-export async function updatedGetBestCreatorData(
-	params?: FetchBestCreatorsParams,
-): Promise<BestCreatorCursorListTypes2> {
-	const _query = params
-	const res: BestCreatorCursorListTypes2 = await BestCreatorDatas2
-
-	// const params = new URLSearchParams()
-	// if (_query?.lastRanking) params.append('lastRanking', _query?.lastRanking)
-	// if (_query?.pageSize) params.append('pageSize', _query?.pageSize)
-
-	// const fetchUrl = `${process.env.API_BASE_URL}/v1/seller-batch/aggregate/bestSellers?${params.toString()}`
-
+export async function fetchRankingList(
+	_params: FetchBestCreatorsParams,
+): Promise<RenderedRankingItemTypes[]> {
+	// "use server"
 	// try {
-	//   const response = await fetch(fetchUrl, {
-	//     method: 'GET',
-	//     headers: {
-	//       'Content-Type': 'application/json',
-	//     },
-	//     cache: 'no-cache',
-	//   })
+	// 	// 1. 베스트 API 호출
+	// 	const bestResponse = await fetch(
+	// 		`${process.env.API_BASE_URL}/v1/seller-batch/aggregate/bestSellers?date=${params.date}&pageSize=${params.pageSize}&lastRanking${params.lastRanking}`,
+	// 	)
+	// 	if (!bestResponse.ok) {
+	// 		throw new Error("Failed to fetch best ranking data")
+	// 	}
+	// 	const bestData = (await bestResponse.json()) as CommonResType2<
+	// 		BestCreatorDataType2[]
+	// 	>
 
-	//   if (!response.ok) {
-	//     throw new Error('Network response was not ok')
-	//   }
-	//  const data: BestCreatorCursorListTypes = await response.json()
-	//  return data
+	// 	// 2. 프로필 API 병렬 호출
+	// 	const profilePromises = bestData.result.map(async (bestItem) => {
+	// 		const profileResponse = await fetch(
+	// 			`${process.env.API_BASE_URL}/v1/profile/uuid/${bestItem.memberUuid}`,
+	// 		)
+	// 		if (!profileResponse.ok) {
+	// 			throw new Error(
+	// 				`Failed to fetch profile for UUID: ${bestItem.memberUuid}`,
+	// 			)
+	// 		}
+	// 		const profileData =
+	// 			(await profileResponse.json()) as CommonResType2<ProfileMemberInfoType>
+
+	// 		// 3. 데이터 결합
+	// 		return {
+	// 			memberUUID: bestItem.memberUuid,
+	// 			ranking: bestItem.ranking,
+	// 			rankingChange: bestItem.rankingChange,
+	// 			dailySellsCount: bestItem.dailySellsCount,
+	// 			avgStar: bestItem.reviewAvg,
+	// 			date: bestItem.date,
+	// 			avatarImage: profileData.result.avatarImageUrl,
+	// 			nickname: profileData.result.nickname,
+	// 			follower: profileData.result.follower,
+	// 			hashTag: profileData.result.hashTag,
+	// 		}
+	// 	})
+
+	// 	// 4. 모든 프로필 데이터 병렬 처리
+	// 	const renderedData = await Promise.all(profilePromises)
+	// 	return renderedData
 	// } catch (error) {
-	//   console.error('Error:', error)
-	//   return
+	// 	console.error("Error fetching ranking data:", error)
+	// 	return []
 	// }
-
-	return res
+	return dummyRankingData
 }
 
 export const followAction = async (_memberUUID: string) => {
@@ -102,4 +124,3 @@ export const followAction = async (_memberUUID: string) => {
 	// console.log("팔로우 성공:", data)
 	return true
 }
-
