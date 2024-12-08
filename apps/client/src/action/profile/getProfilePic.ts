@@ -10,23 +10,32 @@ export async function getProfileImage(
 		"Content-Type": "application/json",
 	}
 
-	const res = await fetch(
-		`${process.env.API_BASE_URL}/v1/profile/picture/${memberUUID}`,
+	try {
+		const res = await fetch(
+			`${process.env.API_BASE_URL}/v1/profile/picture/${memberUUID}`,
 		{
 			method: "GET",
 			headers,
 		},
-	)
+		)
 
-	if (!res.ok) {
-		throw new Error("Failed to fetch profile image")
+		if (!res.ok) {
+			throw new Error("Failed to fetch profile image")
+		}
+
+		const rawData: unknown = await res.json()
+
+		if (!isValidResponse<ProfileImageType>(rawData)) {
+			throw new Error("Invalid response format")
+		}
+
+		return rawData.result
+	} catch (error) {
+		// eslint-disable-next-line no-console -- This is a error
+		console.error("Error fetching profile image:", error)
+		return {
+			memberUUID: memberUUID,
+			picture: "",
+		}
 	}
-
-	const rawData: unknown = await res.json()
-
-	if (!isValidResponse<ProfileImageType>(rawData)) {
-		throw new Error("Invalid response format")
-	}
-
-	return rawData.result
 }
