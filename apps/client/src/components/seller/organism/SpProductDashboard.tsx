@@ -57,14 +57,14 @@ export default function SpProductDashboard({
 	}
 
 	const handleSearch = (searchTerm: string) => {
-		updateQueryParams({ searchBar: searchTerm, cursorId: undefined })
+		updateQueryParams({ searchBar: searchTerm, page: 0 })
 	}
 
 	const handleSort = (
 		sortOption: "price" | "sells" | "createdAt",
 		sortBy: "ASC" | "DESC",
 	) => {
-		updateQueryParams({ sortOption, sortBy, cursorId: undefined })
+		updateQueryParams({ sortOption, sortBy, page: 0 })
 	}
 
 	const handleStatusChange = (_status: ProductStatusOption) => {
@@ -73,17 +73,17 @@ export default function SpProductDashboard({
 		updateQueryParams({
 			enable,
 			temporary,
-			cursorId: undefined,
+			page: 0,
 		})
 	}
 
 	const handleNextPage = () => {
 		// note:  현재 커서 위치를 알아야 이전 커서 위치를 저장할 수 있을 거 같음
-		updateQueryParams({ cursorId: initialData.nextCursorId })
+		updateQueryParams({ page: initialData.number + 1 })
 	}
 	const handlePrevPage = () => {
 		// note: 추가 정보가 있어야 구현 가능함
-		//	updateQueryParams({ cursorId: data.prevCursorId })
+		updateQueryParams({ page: initialData.number - 1 })
 	}
 
 	return (
@@ -106,14 +106,14 @@ export default function SpProductDashboard({
 				initSortDirection={initialRequest.sortBy}
 				initStatus={status as ProductStatusOption}
 			/>
-			<SpProductTable products={initialData.productList} />
+			<SpProductTable products={initialData.content} />
 
 			<SpPaginationControls
 				className="mt-4"
-				hasNext={initialData.hasNext}
+				hasNext={!initialData.last}
 				onPrevPage={handlePrevPage}
 				onNextPage={handleNextPage}
-				isFirstPage={!initialRequest.cursorId}
+				isFirstPage={initialData.first}
 			/>
 		</div>
 	)

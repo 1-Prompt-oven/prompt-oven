@@ -51,15 +51,8 @@ export const extractProductStatusOptionReverse = (obj: {
 export const getSellerProductSearchParams = (
 	searchParams: AccountQueryParams,
 ): ProductListSearchParams => {
-	const {
-		sortOption,
-		searchBar,
-		sortBy,
-		enable,
-		temporary,
-		cursorId,
-		pageSize,
-	} = searchParams
+	const { sortOption, searchBar, sortBy, enable, temporary, page, size } =
+		searchParams
 
 	return {
 		sortOption: sortOption ?? "createdAt",
@@ -67,7 +60,7 @@ export const getSellerProductSearchParams = (
 		sortBy: sortBy ?? "DESC",
 		enable: enable ?? "true",
 		temporary: temporary ?? "false",
-		cursorId: cursorId ?? "",
-		pageSize: pageSize ?? "8",
+		page: page ?? "0",
+		size: size ?? "8",
 	}
 }

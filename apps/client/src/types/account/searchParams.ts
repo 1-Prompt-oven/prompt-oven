@@ -1,5 +1,3 @@
-import type { Sort, SortDirection } from "@/types/seller/sellerProduct.ts"
-
 export interface QueryParams {
 	view: string | undefined
 }
@@ -28,14 +26,15 @@ export interface CreateProductQueryParams {
 	productName?: string
 }
 
+// GetSellerProductListRequestType에서 sellerUuid를 제외한 나머지 필드
 export interface ProductListSearchParams {
-	sortOption?: Sort
-	searchBar?: string
-	sortBy?: SortDirection
-	enable?: string // boolean type string
-	temporary?: string // boolean type string
-	cursorId?: string
-	pageSize?: string // number type string
+	searchBar?: string // 검색어 (query)
+	sortOption?: "price" | "sells" | "createdAt" // 정렬 기준 price, sells, createdAt(default) (query)
+	sortBy?: "ASC" | "DESC" // 정렬 방향 ASC, DESC(default) (query)
+	enable?: string // 상품 판매 여부 true(default), false (query)
+	temporary?: string // 임시 등록 여부 true(default), false (query)
+	page?: string // 페이지 번호 (query) default: 0
+	size?: string // 페이지 사이즈 (query) default: 16
 }
 
 // ------------------------------ End of SearchParams ------------------------------

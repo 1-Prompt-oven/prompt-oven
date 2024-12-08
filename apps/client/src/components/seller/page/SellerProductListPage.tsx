@@ -20,14 +20,11 @@ export default async function SellerProductListPage({
 		sortBy: searchParams.sortBy,
 		enable: stringToBoolean(searchParams.enable as string),
 		temporary: stringToBoolean(searchParams.temporary as string),
-		cursorId: searchParams.cursorId,
-		pageSize: parseInt(searchParams.pageSize as string, 10),
+		page: parseInt(searchParams.page ?? "0", 10),
+		size: parseInt(searchParams.size ?? "8", 10),
 	}
 
 	const initialData = (await getSellerProductList(request)).result
-	// console.log("searchParams: ", searchParams)
-	// console.log("product list req : ", request)
-	// console.log("initialData -- ", initialData)
 
 	return (
 		<SpProductDashboard initialData={initialData} initialRequest={request} />

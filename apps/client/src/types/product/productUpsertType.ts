@@ -51,17 +51,37 @@ export interface GetSellerProductListRequestType {
 	sortBy?: "ASC" | "DESC" // 정렬 방향 ASC, DESC(default) (query)
 	enable?: boolean // 상품 판매 여부 true(default), false (query)
 	temporary?: boolean // 임시 등록 여부 true(default), false (query)
-	cursorId?: string // 페이징 커서 (query)
-	pageSize?: number // 페이지 사이즈 (query) default: 16
-
-	// note: fe에서 사용하는 필드들 -- 아직 사용되지는 않음
-	// presentCursorId?: string
-	// previousCursorId?: string
+	page?: number // 페이지 번호 (query) default: 0
+	size?: number // 페이지 사이즈 (query) default: 16
 }
 export interface GetSellerProductListResponseType {
-	productList: GetSellerProductResultType[]
-	nextCursorId: string
-	hasNext: boolean
+	totalElements: number
+	totalPages: number
+	first: boolean
+	last: boolean
+	size: number
+	content: GetSellerProductResultType[]
+	number: number
+	sort: Sort[]
+	numberOfElements: number
+	pageable: Pageable
+	empty: boolean
+}
+export interface Sort {
+	direction: string
+	nullHandling: string
+	ascending: boolean
+	property: string
+	ignoreCase: boolean
+}
+
+export interface Pageable {
+	offset: number
+	sort: Sort[]
+	paged: boolean
+	pageNumber: number
+	pageSize: number
+	unpaged: boolean
 }
 export interface GetSellerProductResultType {
 	productName: string
