@@ -78,9 +78,11 @@ export default function SpProductDashboard({
 	}
 
 	const handleNextPage = () => {
-		//  updateQueryParams({ cursorId: data.nextCursorId })
+		// note:  현재 커서 위치를 알아야 이전 커서 위치를 저장할 수 있을 거 같음
+		updateQueryParams({ cursorId: initialData.nextCursorId })
 	}
 	const handlePrevPage = () => {
+		// note: 추가 정보가 있어야 구현 가능함
 		//	updateQueryParams({ cursorId: data.prevCursorId })
 	}
 

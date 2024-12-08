@@ -53,6 +53,10 @@ export interface GetSellerProductListRequestType {
 	temporary?: boolean // 임시 등록 여부 true(default), false (query)
 	cursorId?: string // 페이징 커서 (query)
 	pageSize?: number // 페이지 사이즈 (query) default: 16
+
+	// note: fe에서 사용하는 필드들 -- 아직 사용되지는 않음
+	// presentCursorId?: string
+	// previousCursorId?: string
 }
 export interface GetSellerProductListResponseType {
 	productList: GetSellerProductResultType[]

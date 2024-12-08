@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import { MoreHorizontal, Edit, Trash2 } from "@repo/ui/lucide"
+import { Edit, MoreHorizontal, Trash2 } from "@repo/ui/lucide"
 import { Button } from "@repo/ui/button"
 import { Badge } from "@repo/ui/badge"
 import {
@@ -18,6 +18,7 @@ import type { GetSellerProductResultType } from "@/types/product/productUpsertTy
 import { extractProductStatusOptionReverse } from "@/lib/sellerProduct.ts"
 import { SpEmptyState } from "@/components/seller/atom/SpEmtpyState.tsx"
 import SpDeleteProductConfirmDialog from "@/components/seller/atom/SpDeleteProductConfirmDialog.tsx"
+import { deleteProduct } from "@/action/product/productAction.ts"
 
 export type ProductUuid = string
 
@@ -32,24 +33,29 @@ export default function ProductTable({ products }: ProductTableProps) {
 	const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
 	const [productToDelete, setProductToDelete] =
 		useState<GetSellerProductResultType | null>(null)
+	const [isLoading, setIsLoading] = useState(false)
 
 	const handleDeleteClick = (product: GetSellerProductResultType) => {
 		setProductToDelete(product)
 		setDeleteDialogOpen(true)
 	}
 
-	const handleDeleteConfirm = () => {
+	const handleDeleteConfirm = async () => {
 		if (productToDelete) {
-			// console.log(`Deleting product: ${productToDelete.productName}`)
-			// Here you would typically call an API to delete the product
+			setIsLoading(true)
+			await deleteProduct({ productUuid: productToDelete.productUuid })
+			setIsLoading(false)
+			setDeleteDialogOpen(false)
+			setProductToDelete(null)
+			router.refresh()
 		}
-		setDeleteDialogOpen(false)
-		setProductToDelete(null)
 	}
 
 	const handleEditClick = (productUuid: string) => {
-		// todo: asdfasdfasdfasdf
-		router.push(`/account?view=create-product&productUuid=${productUuid}`)
+		// note: 현재는 생성 페이지로 이동함 -- 기능상 크게 문제는 없음
+		router.push(
+			`/account?view=create-product&step=1&productUuid=${productUuid}`,
+		)
 	}
 
 	return (
@@ -66,7 +72,10 @@ export default function ProductTable({ products }: ProductTableProps) {
 									<th
 										// eslint-disable-next-line react/no-array-index-key -- it's a static list
 										key={index}
-										className="whitespace-nowrap p-4 text-left text-sm font-medium">
+										className={cn(
+											"whitespace-nowrap p-4 text-left text-sm font-medium",
+											index === 0 ? "w-[40%]" : "w-[15%]",
+										)}>
 										{head}
 									</th>
 								))}
@@ -84,17 +93,19 @@ export default function ProductTable({ products }: ProductTableProps) {
 										className="border-b border-white/15 bg-po-black-200">
 										<td className="p-4 text-left">
 											<div className="flex items-center">
-												<div className="mr-4 h-[40px] w-[56px] rounded-lg bg-blue-600/20" />
-												<span className="text-sm text-white">
+												<div className="mr-4 h-[40px] w-[56px] flex-shrink-0 rounded-lg bg-blue-600/20" />
+												<span className="max-w-[200px] truncate text-sm text-white">
 													{product.productName}
 												</span>
 											</div>
 										</td>
-										<td className="p-4 text-sm text-white">
+										<td className="w-[15%] p-4 text-sm text-white">
 											${product.price.toFixed(2)}
 										</td>
-										<td className="p-4 text-sm text-white">{product.sells}</td>
-										<td className="p-4">
+										<td className="w-[15%] p-4 text-sm text-white">
+											{product.sells}
+										</td>
+										<td className="w-[15%] p-4">
 											<Badge
 												className={
 													// eslint-disable-next-line no-nested-ternary -- it's a static list
@@ -114,7 +125,7 @@ export default function ProductTable({ products }: ProductTableProps) {
 												}
 											</Badge>
 										</td>
-										<td className="p-4">
+										<td className="w-[15%] p-4">
 											<DropdownMenu>
 												<DropdownMenuTrigger asChild>
 													<Button variant="ghost" className="h-8 w-8 p-0">
@@ -156,6 +167,7 @@ export default function ProductTable({ products }: ProductTableProps) {
 
 			<SpDeleteProductConfirmDialog
 				isOpen={deleteDialogOpen}
+				isLoading={isLoading}
 				onClose={() => {
 					setDeleteDialogOpen(false)
 					setProductToDelete(null)

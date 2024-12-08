@@ -7,18 +7,21 @@ import {
 	DialogTitle,
 } from "@repo/ui/dialog"
 import { Button } from "@repo/ui/button"
+import { ThreeDots } from "react-loader-spinner"
 
 interface DeleteConfirmDialogProps {
 	isOpen: boolean
 	onClose: () => void
 	onConfirm: () => void
 	productName: string
+	isLoading: boolean
 }
 function SpDeleteProductConfirmDialog({
 	isOpen,
 	onClose,
 	onConfirm,
 	productName,
+	isLoading,
 }: DeleteConfirmDialogProps) {
 	return (
 		<Dialog open={isOpen} onOpenChange={onClose}>
@@ -42,8 +45,13 @@ function SpDeleteProductConfirmDialog({
 					<Button
 						variant="destructive"
 						onClick={onConfirm}
-						className="bg-red-600 text-white hover:bg-red-700">
-						Delete
+						className="bg-red-600 text-white hover:bg-red-700"
+						disabled={isLoading}>
+						{isLoading ? (
+							<ThreeDots color="#ffffff" height={24} width={24} />
+						) : (
+							"Delete"
+						)}
 					</Button>
 				</DialogFooter>
 			</DialogContent>

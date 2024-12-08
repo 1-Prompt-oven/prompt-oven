@@ -12,6 +12,7 @@ import type {
 	GetSellerProductListRequestType,
 	GetSellerProductListResponseType,
 	ModifyProductRequestType,
+	RemoveProductRequestType,
 } from "@/types/product/productUpsertType.ts"
 import type { CommonResType } from "@/types/common/responseType.ts"
 import { actionHandler } from "@/action/actionHandler.ts"
@@ -116,6 +117,21 @@ export const createTempProduct = async (req: CreateProductTempRequestType) => {
 			headers,
 			method: "POST",
 			body: JSON.stringify(req),
+			cache: "no-cache",
+		},
+	})
+}
+
+export const deleteProduct = async (rea: RemoveProductRequestType) => {
+	"use server"
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+	return actionHandler<CommonResType<object>>({
+		name: "deleteProduct",
+		url: `/v1/seller/product/${rea.productUuid}`,
+		options: {
+			headers,
+			method: "DELETE",
 			cache: "no-cache",
 		},
 	})
