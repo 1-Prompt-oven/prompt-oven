@@ -7,6 +7,7 @@ import { Badge } from "@repo/ui/badge"
 import { Card } from "@repo/ui/card"
 import StarAnimation from "@repo/ui/star-animation"
 import { PromptCardDateFormatted, PromptIsNew } from "@/lib/utils"
+import { getProductImage } from "@/lib/thumbnail"
 import type { PromptItemType } from "@/types/prompts/promptsType"
 import PromptLLMId from "../molecule/PromptLLMId"
 import PromptName from "../molecule/PromptName"
@@ -24,11 +25,10 @@ export default function PromptCardAccount({
 
 	const formattedDate = PromptCardDateFormatted(productInfo.createdAt)
 	const isNew = PromptIsNew(productInfo.createdAt)
-	const defaultImg =
-		"https://promptoven.s3.ap-northeast-2.amazonaws.com/client/product/7f39f6bc72cbe91aa91b92ebe775b981d75c52d6c21be653a8a7dadd01bee416.png"
-	const imgUrl = productInfo.thumbnailUrl
-		? productInfo.thumbnailUrl
-		: defaultImg
+	const thumbnailImage = getProductImage(
+		productInfo.productName,
+		productInfo.thumbnailUrl,
+	)
 
 	let hoverTimeout: ReturnType<typeof setTimeout>
 	const handleMouseEnter = () => {
@@ -51,7 +51,7 @@ export default function PromptCardAccount({
 				<Card className="relative flex w-[220px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
 					<div className="relative h-[260px] bg-white">
 						<Image
-							src={imgUrl}
+							src={thumbnailImage}
 							sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
 							fill
 							priority
@@ -94,7 +94,7 @@ export default function PromptCardAccount({
 			</Link>
 
 			{isHovered ? (
-				<PromptHoverModal productInfo={productInfo} imgUrl={imgUrl} />
+				<PromptHoverModal productInfo={productInfo} imgUrl={thumbnailImage} />
 			) : null}
 		</li>
 	)

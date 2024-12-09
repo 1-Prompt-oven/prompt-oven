@@ -83,6 +83,7 @@ export default function PromptHoverModal({
 							width={300}
 							height={300}
 							alt={productInfo.productName}
+							className="rounded-t-md"
 							priority
 							unoptimized
 						/>
