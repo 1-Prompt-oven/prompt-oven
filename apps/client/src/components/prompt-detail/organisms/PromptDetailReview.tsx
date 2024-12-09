@@ -12,7 +12,7 @@ export default function PromptDetailReview({
 	productReview,
 }: PromptDetailReviewProps) {
 	return (
-		<div className="mx-auto mt-12 flex w-full flex-col gap-8 text-white lg:mt-0">
+		<div className="mx-auto mb-12 mt-12 flex w-full flex-col gap-8 text-white lg:mb-2 lg:mt-0">
 			<p className="text-2xl font-semibold xs:!text-4xl">Prompt reviews</p>
 			<PromptReviewContents
 				productDetail={productDetail}
