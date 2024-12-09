@@ -9,8 +9,10 @@ interface FetchBestCreatorsParams {
 }
 
 export default async function Page() {
+	const now = new Date()
+	const todayDate = now.toISOString().split("T")[0]
 	const params: FetchBestCreatorsParams = {
-		date: "2024-12-08",
+		date: todayDate,
 		pageSize: 10,
 		lastRanking: 0,
 	}
