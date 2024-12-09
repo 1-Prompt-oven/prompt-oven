@@ -19,6 +19,7 @@ import { extractProductStatusOptionReverse } from "@/lib/sellerProduct.ts"
 import { SpEmptyState } from "@/components/seller/atom/SpEmtpyState.tsx"
 import SpDeleteProductConfirmDialog from "@/components/seller/atom/SpDeleteProductConfirmDialog.tsx"
 import { deleteProduct } from "@/action/product/productAction.ts"
+import SpProductThumbnail from "@/components/seller/atom/SpProductThumbnail.tsx"
 
 export type ProductUuid = string
 
@@ -93,7 +94,10 @@ export default function ProductTable({ products }: ProductTableProps) {
 										className="border-b border-white/15 bg-po-black-200">
 										<td className="p-4 text-left">
 											<div className="flex items-center">
-												<div className="mr-4 h-[40px] w-[56px] flex-shrink-0 rounded-lg bg-blue-600/20" />
+												<SpProductThumbnail
+													thumbnail={product.thumbnailUrl}
+													productName={product.productName}
+												/>
 												<span className="max-w-[200px] truncate text-sm text-white">
 													{product.productName}
 												</span>
