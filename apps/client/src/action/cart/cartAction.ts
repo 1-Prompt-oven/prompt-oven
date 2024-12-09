@@ -174,24 +174,29 @@ export const cartCheckUpdate = async (
 	return isSuccess
 }
 export async function postCheckoutData(
-	productUuids: string[],
-	cartIds: number[],
+	items: {
+		productUuid: string
+		productName: string
+		price: number
+	}[],
 ): Promise<boolean> {
 	"use server"
 	const headers = await getAuthHeaders()
 	const memberUUID = await getMemberUUID()
 
 	try {
-		const response = await fetch("/api/checkout", {
-			method: "POST",
-			headers,
-			body: JSON.stringify({
-				memberUUID,
-				productUuids,
-				cartIds,
-			}),
-		})
-
+		const itemsWithMemberUuid = items.map((item) => ({
+			...item,
+			memberUuid: memberUUID,
+		}))
+		const response = await fetch(
+			`${process.env.API_BASE_URL}/v1/member/purchase/temp`,
+			{
+				method: "POST",
+				headers,
+				body: JSON.stringify(itemsWithMemberUuid),
+			},
+		)
 		if (!response.ok) {
 			throw new Error("결제 정보를 전송하는 데 실패했습니다.")
 		}
@@ -199,10 +204,9 @@ export async function postCheckoutData(
 
 		if (data.isSuccess) {
 			return true
-		} else {
-			console.error("결제 요청 실패:", data.message)
-			return false
 		}
+		console.error("결제 요청 실패:", data.message)
+		return false
 	} catch (error) {
 		console.error("Checkout API error:", error)
 		return false
