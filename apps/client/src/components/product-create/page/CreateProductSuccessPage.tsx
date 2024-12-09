@@ -37,10 +37,11 @@ export default function CreateProductSuccessPage({
 							<dl className="space-y-2">
 								<div className="flex justify-between">
 									<dt className="text-[#94A3B8]">Status</dt>
-									<dd className="text-white">Pending Review</dd>
+									<dd className="text-white">Approved</dd>
+									{/*<dd className="text-white">Pending Review</dd>*/}
 								</div>
 								<div className="flex justify-between">
-									<dt className="text-[#94A3B8]">Product ID</dt>
+									<dt className="text-[#94A3B8]">Product Name</dt>
 									<dd className="text-white">{searchParams.productName}</dd>
 								</div>
 								<div className="flex justify-between">

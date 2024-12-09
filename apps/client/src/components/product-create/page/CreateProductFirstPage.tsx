@@ -42,6 +42,7 @@ import { localStorageKeys } from "@/config/product/localStorage.ts"
 import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
 import PcError from "@/components/product-create/atom/PcError.tsx"
 import { extractPromptVariables } from "@/lib/productUtils.ts"
+import PcErrorMessage from "@/components/product-create/atom/PcErrorMessage.tsx"
 
 const TITLE_MAX_LENGTH = 50
 const TEXTAREA_MAX_LENGTH = 4096
@@ -64,7 +65,16 @@ export default function CreateProductFirstPage({
 	const [product, setProduct] = useState<GetProductDetailResponseType | null>(
 		null,
 	)
+
+	// error state for product fields
 	const [promptTextError, setPromptTextError] = useState<string>("")
+	const [topCategError, setTopCategError] = useState<string>("")
+	const [subCategError, setSubCategError] = useState<string>("")
+	const resetErrors = () => {
+		setPromptTextError("")
+		setTopCategError("")
+		setSubCategError("")
+	}
 
 	const { control, register, watch, getValues, setValue } = useForm({
 		resolver: zodResolver(createProductFirstSchema),
@@ -237,10 +247,17 @@ export default function CreateProductFirstPage({
 		}
 	}
 
-	const checkPromptText = () => {
+	const checkRequiredFieldsValid = () => {
 		const values = getValues()
-		const extractedPromptVars = extractPromptVariables(values.prompt)
-		if (extractedPromptVars.length === 0) {
+		let isValid = true
+		if (!checkPromptText(values.prompt)) isValid = false
+		if (!checkTopCategoryId(values.topCategoryUuid)) isValid = false
+		if (!checkSubCategoryId(values.subCategoryUuid)) isValid = false
+		return isValid
+	}
+	const checkPromptText = (prompt: string) => {
+		const _prompt = extractPromptVariables(prompt)
+		if (_prompt.length === 0) {
 			setPromptTextError(
 				`Please make variables with [square brackets] in the prompt text.`,
 			)
@@ -248,11 +265,25 @@ export default function CreateProductFirstPage({
 		}
 		return true
 	}
+	const checkTopCategoryId = (topCategId: string) => {
+		if (!topCategId) {
+			setTopCategError(`Please select category.`)
+			return false
+		}
+		return true
+	}
+	const checkSubCategoryId = (subCategId: string) => {
+		if (!subCategId) {
+			setSubCategError(`Please select sub-category.`)
+			return false
+		}
+		return true
+	}
 
 	const onSave = async (type: "draft" | "next") => {
 		// next 버튼 클릭 시 prompt text 체크
-		setPromptTextError("")
-		if (type === "next" && !checkPromptText()) return
+		resetErrors()
+		if (type === "next" && !checkRequiredFieldsValid()) return
 
 		let productUuid = getStorageItem(localStorageKeys.curTempProductUuid)
 		if (productUuid) {
@@ -373,6 +404,11 @@ export default function CreateProductFirstPage({
 						/>
 					)}
 				/>
+				{topCategError ? (
+					<PcErrorMessage errorMessage={topCategError} />
+				) : (
+					<span className="h-[18px] w-full text-transparent"> -- </span>
+				)}
 			</PcBaseWrapper>
 
 			{/* 메인 카테고리가 선택되면 나머지 컴포넌트들을 렌더링한다. */}
@@ -395,8 +431,12 @@ export default function CreateProductFirstPage({
 								/>
 							)}
 						/>
+						{subCategError ? (
+							<PcErrorMessage errorMessage={subCategError} />
+						) : (
+							<span className="h-[18px] w-full text-transparent"> -- </span>
+						)}
 					</PcBaseWrapper>
-					<div className="grid grid-cols-1 gap-4 md:grid-cols-2" />
 
 					<PcBaseWrapper className="mt-6">
 						<PcTitle>Prompt</PcTitle>
