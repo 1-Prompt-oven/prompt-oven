@@ -1,7 +1,7 @@
-import React from "react"
+import type { HTMLAttributes } from "react"
 import { cn } from "@/lib/utils.ts"
 
-interface PcErrorMessageProps extends React.HTMLAttributes<HTMLSpanElement> {
+interface PcErrorMessageProps extends HTMLAttributes<HTMLSpanElement> {
 	errorMessage: string
 }
 
