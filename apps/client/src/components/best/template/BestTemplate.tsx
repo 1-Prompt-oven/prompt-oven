@@ -3,8 +3,8 @@ import type {
 	BestCreatorCursorListTypes2,
 	RenderedRankingItemTypes,
 } from "@/types/best/bestTypes"
-import BestList from "@/components/best/organism/ver2/BestList"
-import BestTop5 from "@/components/best/organism/ver2/BestTop5"
+import BestList from "@/components/best/organism/BestList"
+import BestTop5 from "@/components/best/organism/BestTop5"
 
 interface BestTemplateProps {
 	data: BestCreatorCursorListTypes2
@@ -29,3 +29,4 @@ function BestTemplate({ data }: BestTemplateProps) {
 }
 
 export default BestTemplate
+
