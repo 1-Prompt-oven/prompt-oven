@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 import Link from "next/link"
-import { Bell, MessageSquareText, ShoppingCart } from "@repo/ui/lucide"
+import { Bell, MessageSquareText } from "@repo/ui/lucide"
 import CommonHeader from "@/components/common/atom/Header"
 import MainLogo from "@/components/common/atom/icon/MainLogo.tsx"
 import { AvatarMenu } from "@/components/common/molecule/AvatarMenu.tsx"
@@ -10,6 +10,7 @@ import MainHeaderLinkList from "@/components/common/atom/MainHeaderLinkList.tsx"
 import { getUserAuth } from "@/lib/userAuth.ts"
 import GradientLink from "@/components/common/molecule/GradientLink.tsx"
 import SearchInputWrapper from "../atom/SearchInputWrapper"
+import CartCountBadge from "../atom/icon/CartCountBadge"
 
 export default async function MainHeader() {
 	const userAuth = await getUserAuth()
@@ -46,12 +47,9 @@ export default async function MainHeader() {
 									strokeWidth={2}
 								/>
 							</BadgeContainer>
-							<BadgeContainer count={10}>
-								<ShoppingCart
-									className="!h-7 !w-7 text-po-gray-150"
-									strokeWidth={2}
-								/>
-							</BadgeContainer>
+							<Link href="/cart">
+								<CartCountBadge userAuth={userAuth} />
+							</Link>
 						</div>
 						<AvatarMenu userAuth={userAuth} />
 					</>
@@ -69,3 +67,4 @@ export default async function MainHeader() {
 		</CommonHeader>
 	)
 }
+
