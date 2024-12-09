@@ -4,9 +4,10 @@ export class DHKeyExchange {
 	private prime: bigint
 	private generator: bigint
 	private sharedSecret: Uint8Array | null = null
+	private readonly KEY_SIZE = 2048
 
 	constructor() {
-		// Use the same parameters as Java side
+		// RFC 3526 MODP Group 14 (2048-bit)
 		this.prime = BigInt('0x' + 
 			'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1' +
 			'29024E088A67CC74020BBEA63B139B22514A08798E3404DD' +
@@ -29,59 +30,136 @@ export class DHKeyExchange {
 	}
 
 	private generatePrivateKey(): bigint {
-		// Generate 32 random bytes using Web Crypto API
-		const array = new Uint8Array(32);
+		// Generate random bytes for 2048-bit private key
+		const array = new Uint8Array(this.KEY_SIZE / 8);
 		crypto.getRandomValues(array);
 		return BigInt('0x' + Array.from(array).map(b => b.toString(16).padStart(2, '0')).join(''));
 	}
 
 	getPublicKey(): string {
-		const publicKeyHex = this.publicKey.toString(16).padStart(512, '0');
+		const publicKeyHex = this.publicKey.toString(16).padStart(this.KEY_SIZE / 4, '0');
 		const publicKeyBytes = this.hexToBytes(publicKeyHex);
+		const primeBytes = this.hexToBytes(this.prime.toString(16).padStart(this.KEY_SIZE / 4, '0'));
 		
-		// Create DER encoding that matches Java's SubjectPublicKeyInfo format
-		const derPublicKey = new Uint8Array([
-			0x30, 0x82, 0x01, 0x44, // SEQUENCE
-			0x30, 0x81, 0x9F,       // SEQUENCE
-			0x06, 0x09,             // OBJECT IDENTIFIER
-			0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x03, 0x01, // dhpublicnumber
-			0x30, 0x81, 0x91,       // SEQUENCE
-			0x02, 0x81, 0x81,       // INTEGER (prime)
-			...Array.from(this.hexToBytes(this.prime.toString(16).padStart(512, '0'))),
-			0x02, 0x01,             // INTEGER (generator)
-			0x02,                   // generator value
-			0x02, 0x81, 0x81,       // INTEGER (public key)
-			...Array.from(publicKeyBytes)
-		]);
-
+		// Calculate sizes
+		const sequenceSize = 4;  // SEQUENCE header
+		const innerSequenceSize = 3;  // Inner SEQUENCE
+		const oidSize = 11;  // Object identifier
+		const paramsSequenceSize = 3;  // Parameters SEQUENCE
+		const primeSize = 3 + primeBytes.length;  // Prime INTEGER
+		const generatorSize = 3;  // Generator INTEGER
+		const publicKeySize = 4 + publicKeyBytes.length;  // BIT STRING for public key
+		
+		const totalSize = sequenceSize + innerSequenceSize + oidSize + 
+						 paramsSequenceSize + primeSize + generatorSize + publicKeySize;
+		
+		// Create DER encoding
+		const derPublicKey = new Uint8Array(totalSize);
+		let offset = 0;
+		
+		// Outer SEQUENCE
+		derPublicKey[offset++] = 0x30;  // SEQUENCE tag
+		derPublicKey[offset++] = 0x82;  // Long form, 2 bytes
+		derPublicKey[offset++] = ((totalSize - 4) >> 8) & 0xff;  // Length high byte
+		derPublicKey[offset++] = (totalSize - 4) & 0xff;  // Length low byte
+		
+		// Inner SEQUENCE
+		derPublicKey[offset++] = 0x30;
+		derPublicKey[offset++] = 0x81;
+		derPublicKey[offset++] = totalSize - 7;
+		
+		// Object Identifier
+		derPublicKey[offset++] = 0x06;
+		derPublicKey[offset++] = 0x09;
+		derPublicKey[offset++] = 0x2A;
+		derPublicKey[offset++] = 0x86;
+		derPublicKey[offset++] = 0x48;
+		derPublicKey[offset++] = 0x86;
+		derPublicKey[offset++] = 0xF7;
+		derPublicKey[offset++] = 0x0D;
+		derPublicKey[offset++] = 0x01;
+		derPublicKey[offset++] = 0x03;
+		derPublicKey[offset++] = 0x01;
+		
+		// Parameters SEQUENCE
+		derPublicKey[offset++] = 0x30;
+		derPublicKey[offset++] = 0x81;
+		derPublicKey[offset++] = primeSize + generatorSize;
+		
+		// Prime INTEGER
+		derPublicKey[offset++] = 0x02;
+		derPublicKey[offset++] = 0x81;
+		derPublicKey[offset++] = primeBytes.length;
+		derPublicKey.set(primeBytes, offset);
+		offset += primeBytes.length;
+		
+		// Generator INTEGER
+		derPublicKey[offset++] = 0x02;
+		derPublicKey[offset++] = 0x01;
+		derPublicKey[offset++] = 0x02;
+		
+		// Public Key BIT STRING
+		derPublicKey[offset++] = 0x03;  // BIT STRING tag
+		derPublicKey[offset++] = 0x81;  // Long form, 1 byte
+		derPublicKey[offset++] = publicKeyBytes.length + 1;  // Length including leading zero
+		derPublicKey[offset++] = 0x00;  // Leading zero byte
+		derPublicKey.set(publicKeyBytes, offset);
+		
+		console.debug('[DH] Generated public key DER (hex):', 
+				Array.from(derPublicKey).map(b => b.toString(16).padStart(2, '0')).join(''));
+		
 		return btoa(String.fromCharCode(...Array.from(derPublicKey)));
 	}
 
 	computeSharedSecret(serverPublicKeyBase64: string): void {
-		const derBytes = Uint8Array.from(atob(serverPublicKeyBase64), c => c.charCodeAt(0));
-		
-		// Extract the public key value from the DER structure
-		// Skip the header and find the actual key bytes
-		let offset = 0;
-		while (offset < derBytes.length && derBytes[offset] !== 0x02) {
-			offset++;
+		try {
+			const derBytes = Uint8Array.from(atob(serverPublicKeyBase64), c => c.charCodeAt(0));
+			console.debug('[DH] Received public key bytes (hex):', 
+				Array.from(derBytes).map(b => b.toString(16).padStart(2, '0')).join(''));
+
+			// Find the BIT STRING tag for the public key
+			let offset = 0;
+			let found = false;
+
+			// Find the BIT STRING with length 0x8100 (256 bytes + leading zero)
+			while (offset < derBytes.length - 4) {
+				if (derBytes[offset] === 0x03 && // BIT STRING tag
+					derBytes[offset + 1] === 0x81 && // Long form length
+					derBytes[offset + 2] === 0x00) { // Length byte
+					found = true;
+					break;
+				}
+				offset++;
+			}
+
+			if (!found) {
+				throw new Error("Invalid DER encoding: public key not found");
+			}
+
+			// Skip BIT STRING tag, length bytes, and leading zero
+			offset += 4;
+
+			// Verify we have enough bytes remaining
+			if (offset + (this.KEY_SIZE / 8) > derBytes.length) {
+				throw new Error("Invalid DER encoding: insufficient data");
+			}
+
+			const publicKeyBytes = derBytes.slice(offset, offset + (this.KEY_SIZE / 8));
+			console.debug('[DH] Extracted public key (hex):', 
+				Array.from(publicKeyBytes).map(b => b.toString(16).padStart(2, '0')).join(''));
+
+			const serverPublicKey = BigInt('0x' + Array.from(publicKeyBytes)
+				.map(b => b.toString(16).padStart(2, '0')).join(''));
+
+			const secret = this.modPow(serverPublicKey, this.privateKey, this.prime);
+			this.sharedSecret = this.hexToBytes(secret.toString(16).padStart(this.KEY_SIZE / 4, '0'));
+			
+			console.debug('[DH] Generated shared secret (hex):', 
+				Array.from(this.sharedSecret).map(b => b.toString(16).padStart(2, '0')).join(''));
+		} catch (error) {
+			console.error('[DH] Failed to compute shared secret:', error);
+			throw new Error('Failed to compute shared secret');
 		}
-		offset++; // Skip the INTEGER tag
-		
-		// Skip the length bytes
-		if ((derBytes[offset] & 0x80) !== 0) {
-			offset += (derBytes[offset] & 0x7F) + 1;
-		} else {
-			offset++;
-		}
-		
-		const publicKeyBytes = derBytes.slice(offset);
-		const serverPublicKey = BigInt('0x' + Array.from(publicKeyBytes)
-			.map(b => b.toString(16).padStart(2, '0')).join(''));
-		
-		// Calculate shared secret: (other_public)^private mod p
-		const secret = this.modPow(serverPublicKey, this.privateKey, this.prime);
-		this.sharedSecret = this.hexToBytes(secret.toString(16).padStart(512, '0'));
 	}
 
 	getSharedSecret(): Uint8Array | null {
@@ -117,37 +195,57 @@ export class DHKeyExchange {
 		}
 
 		try {
-			// Generate a key from shared secret using SHA-256
-			const keyMaterial = await crypto.subtle.digest('SHA-256', this.sharedSecret);
+			console.debug('[Encrypt] Shared secret (hex):', 
+				Array.from(this.sharedSecret).map(b => b.toString(16).padStart(2, '0')).join(''));
 
-			// Import the key for AES-CBC
+			const keyMaterial = await crypto.subtle.digest('SHA-256', this.sharedSecret);
+			console.debug('[Encrypt] Key material (hex):', 
+				Array.from(new Uint8Array(keyMaterial)).map(b => b.toString(16).padStart(2, '0')).join(''));
+
 			const key = await crypto.subtle.importKey(
 				'raw',
 				keyMaterial,
-				{ name: 'AES-CBC', length: 256 },
+				{ name: 'AES-GCM' },
 				false,
 				['encrypt']
 			);
 
-			// Generate random IV
-			const iv = crypto.getRandomValues(new Uint8Array(16));
+			const iv = crypto.getRandomValues(new Uint8Array(12));
+			console.debug('[Encrypt] IV (hex):', 
+				Array.from(iv).map(b => b.toString(16).padStart(2, '0')).join(''));
 
-			// Encrypt the password
 			const encodedPassword = new TextEncoder().encode(password);
+			console.debug('[Encrypt] Input text length:', encodedPassword.length);
+
 			const encryptedData = await crypto.subtle.encrypt(
-				{ name: 'AES-CBC', iv },
+				{
+					name: 'AES-GCM',
+					iv,
+					additionalData: new Uint8Array(),
+					tagLength: 128
+				},
 				key,
 				encodedPassword
 			);
 
-			// Combine IV and encrypted data
-			const combined = new Uint8Array(iv.length + encryptedData.byteLength);
-			combined.set(iv);
-			combined.set(new Uint8Array(encryptedData), iv.length);
+			const ciphertext = new Uint8Array(encryptedData).slice(0, -16);
+			const tag = new Uint8Array(encryptedData).slice(-16);
 
-			return btoa(String.fromCharCode(...Array.from(combined)));
+			console.debug('[Encrypt] Ciphertext (hex):', 
+				Array.from(ciphertext).map(b => b.toString(16).padStart(2, '0')).join(''));
+			console.debug('[Encrypt] Tag (hex):', 
+				Array.from(tag).map(b => b.toString(16).padStart(2, '0')).join(''));
+
+			const combined = new Uint8Array(iv.length + ciphertext.byteLength + tag.byteLength);
+			combined.set(iv);
+			combined.set(new Uint8Array(ciphertext), iv.length);
+			combined.set(tag, iv.length + ciphertext.byteLength);
+
+			const result = btoa(String.fromCharCode(...Array.from(combined)));
+			console.debug('[Encrypt] Final base64:', result);
+			return result;
 		} catch (error) {
-			console.error('[DH] Encryption failed:', error);
+			console.error('[Encrypt] Failed:', error);
 			throw new Error('Failed to encrypt password');
 		}
 	}

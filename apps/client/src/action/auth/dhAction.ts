@@ -51,24 +51,14 @@ export const encryptPasswordWithDH = async (password: string) => {
         
         // Generate shared secret and encrypt password
         dh.computeSharedSecret(serverPublicKey);
-        const encryptedPassword = dh.encryptPassword(password);
-        
-        // debuging logs
-        // eslint-disable-next-line no-console -- 오류 출력
-        console.log("serverPublicKey", serverPublicKey);
-        // eslint-disable-next-line no-console -- 오류 출력
-        console.log("clientPublicKey", dh.getPublicKey());
-        // eslint-disable-next-line no-console -- 오류 출력
-        console.log("sharedSecret", dh.getSharedSecret());
-        // eslint-disable-next-line no-console -- 오류 출력
-        console.log("encryptedPassword", encryptedPassword);
+        const encryptedPassword = await dh.encryptPassword(password);
 
         return {
             encryptedPassword,
             sessionId
         };
     } catch (error) {
-		// eslint-disable-next-line no-console -- 오류 출력
+         // eslint-disable-next-line no-console -- 오류 출력
         console.error("DH encryption error:", error);
         throw error;
     }

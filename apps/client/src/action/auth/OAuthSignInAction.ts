@@ -63,7 +63,7 @@ export async function signInByAuth({
 
 		// Add sessionId header only for v2
 		if (version === 'v2' && sessionId) {
-			headers['X-DH-Session-ID'] = sessionId
+			headers['X-Session-ID'] = sessionId
 		}
 
 		const response = await fetch(`${process.env.API_BASE_URL}${endpoint}`, {
@@ -76,6 +76,9 @@ export async function signInByAuth({
 		})
 
 		if (!response.ok) {
+			const errorData = await response.json()
+			// eslint-disable-next-line no-console -- 오류 출력
+			console.error('Sign in failed:', errorData)
 			throw new Error(`HTTP error! status: ${response.status}`)
 		}
 
