@@ -129,4 +129,3 @@ export const followAction = async (_memberUUID: string) => {
 	// console.log("팔로우 성공:", data)
 	return true
 }
-
