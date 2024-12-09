@@ -91,7 +91,7 @@ export function SuccessPage() {
 				}
 
 				const purchaseList = JSON.parse(json.metadata.paymentList) as PaymentItemType[]
-				await appendLedger(purchaseList)
+				await appendLedger(purchaseList, json.orderId)
 
 				// eslint-disable-next-line no-console -- This is a  payload
 				console.log("payload --> ", payload)
