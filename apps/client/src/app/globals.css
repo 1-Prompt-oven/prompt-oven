@@ -87,6 +87,19 @@
 }
 /* seller 등록 관련 style END */
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.hide-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.hide-scrollbar {
+	-ms-overflow-style: none;  /* IE and Edge */
+	scrollbar-width: none;  /* Firefox */
+}
+
+
+
 @layer components {
 	.gradient-button-1 {
 		background: linear-gradient(98.49deg, #a913f9 -11.31%, #9d3d81 76.26%);

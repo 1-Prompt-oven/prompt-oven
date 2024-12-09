@@ -48,6 +48,11 @@ jobs:
               
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
+
+      - name: make .env file
+        run: |
+          echo "${{ secrets.FE_CLIENT_ENV }}" > ${{ github.workspace }}/apps/client/.env
+          echo "${{ secrets.FE_ADMIN_ENV }}" > ${{ github.workspace }}/apps/admin/.env
       
       - name: Build applications
         run: pnpm turbo build 

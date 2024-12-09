@@ -2,7 +2,8 @@
 
 import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import type { RequestPaymentType } from "@/types/purchase.ts/purchase-ongoing"
+import type { PaymentItemType, RequestPaymentType } from "@/types/purchase.ts/purchase-ongoing"
+import { appendLedger } from "@/action/settlement/ledgerAppendAction"
 import SuccessLinkPage from "./SuccessLinkPage"
 
 interface RequestData {
@@ -88,6 +89,9 @@ export function SuccessPage() {
 					message: json.metadata.message,
 					purchaseList: JSON.parse(json.metadata.paymentList),
 				}
+
+				const purchaseList = JSON.parse(json.metadata.paymentList) as PaymentItemType[]
+				await appendLedger(purchaseList)
 
 				// eslint-disable-next-line no-console -- This is a  payload
 				console.log("payload --> ", payload)

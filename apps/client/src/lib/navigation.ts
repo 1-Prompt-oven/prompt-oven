@@ -1,7 +1,6 @@
 import type { ForwardRefExoticComponent, RefAttributes } from "react"
 import type { LucideProps } from "@repo/ui/lucide"
 import {
-	FileText,
 	Heart,
 	LayoutDashboard,
 	LogIn,
@@ -9,10 +8,8 @@ import {
 	Settings,
 	ShoppingBag,
 	Store,
-	TagsIcon,
 	User,
 	UserPlus,
-	Wallet,
 } from "@repo/ui/lucide"
 import type { UserAuthType } from "@/lib/userAuth.ts"
 
@@ -46,7 +43,7 @@ export interface HeaderNavType
 export const mainNavs: HeaderNavType[] = [
 	{
 		label: "HOME",
-		href: "/home",
+		href: "/",
 	},
 	{
 		label: "PROMPTS",
@@ -78,11 +75,6 @@ export const sellerNavs: MenuNavItemType[] = [
 		query: { view: "product-list" },
 		subMenu: [
 			{
-				label: "Create Product",
-				href: "/account",
-				query: { view: "create-product" },
-			},
-			{
 				label: "Product List",
 				href: "/account",
 				query: { view: "product-list" },
@@ -100,23 +92,29 @@ export const sellerNavs: MenuNavItemType[] = [
 		href: "/account",
 		query: { view: "profile" },
 	},
+	// {
+	// 	icon: FileText,
+	// 	label: "Prompts",
+	// 	href: "/account",
+	// 	query: { view: "prompts" },
+	// },
+	// {
+	// 	icon: TagsIcon,
+	// 	label: "Sales",
+	// 	href: "/account",
+	// 	query: { view: "sales" },
+	// },
+	// {
+	// 	icon: Wallet,
+	// 	label: "Payouts",
+	// 	href: "/account",
+	// 	query: { view: "payouts" },
+	// },
 	{
-		icon: FileText,
-		label: "Prompts",
+		icon: Heart,
+		label: "Favorites",
 		href: "/account",
-		query: { view: "prompts" },
-	},
-	{
-		icon: TagsIcon,
-		label: "Sales",
-		href: "/account",
-		query: { view: "sales" },
-	},
-	{
-		icon: Wallet,
-		label: "Payouts",
-		href: "/account",
-		query: { view: "payouts" },
+		query: { view: "favorites" },
 	},
 	{
 		icon: ShoppingBag,
@@ -135,12 +133,6 @@ export const sellerNavs: MenuNavItemType[] = [
 				query: { view: "purchase-completed" },
 			},
 		],
-	},
-	{
-		icon: Heart,
-		label: "Favorites",
-		href: "/account",
-		query: { view: "favorites" },
 	},
 	{
 		icon: Settings,
@@ -162,6 +154,12 @@ export const userNavs: MenuNavItemType[] = [
 		label: "Profile",
 		href: "/account",
 		query: { view: "profile" },
+	},
+	{
+		icon: Heart,
+		label: "Favorites",
+		href: "/account",
+		query: { view: "favorites" },
 	},
 	{
 		icon: ShoppingBag,

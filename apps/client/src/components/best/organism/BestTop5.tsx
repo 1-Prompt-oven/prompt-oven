@@ -5,7 +5,6 @@ import BestTop5Card from "../molecule/BestTop5Card"
 interface BestListProps<T> {
 	data: T[]
 }
-
 function BestTop5({ data }: BestListProps<BestCreatorDataTypes>) {
 	const top1Data = data[0]
 	const restData = data.slice(1, 5)
