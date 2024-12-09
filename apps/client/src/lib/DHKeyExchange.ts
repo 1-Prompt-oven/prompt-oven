@@ -1,13 +1,13 @@
-import { Buffer } from "node:buffer"
-import crypto from "node:crypto"
-
 export class DHKeyExchange {
-	private dh: crypto.DiffieHellman
-	private sharedSecret: Buffer | null = null
+	private privateKey: bigint
+	private publicKey: bigint
+	private prime: bigint
+	private generator: bigint
+	private sharedSecret: Uint8Array | null = null
 
 	constructor() {
-		// Use the same parameters as the Java side
-		const prime = Buffer.from(
+		// Use the same parameters as Java side
+		this.prime = BigInt('0x' + 
 			'FFFFFFFFFFFFFFFFC90FDAA22168C234C4C6628B80DC1CD1' +
 			'29024E088A67CC74020BBEA63B139B22514A08798E3404DD' +
 			'EF9519B3CD3A431B302B0A6DF25F14374FE1356D6D51C245' +
@@ -18,77 +18,137 @@ export class DHKeyExchange {
 			'670C354E4ABC9804F1746C08CA18217C32905E462E36CE3B' +
 			'E39E772C180E86039B2783A2EC07A28FB5C55DF06F4C52C9' +
 			'DE2BCBF6955817183995497CEA956AE515D2261898FA0510' +
-			'15728E5A8AACAA68FFFFFFFFFFFFFFFF', 'hex');
-		const generator = Buffer.from('02', 'hex');
+			'15728E5A8AACAA68FFFFFFFFFFFFFFFF');
+		this.generator = BigInt(2);
+
+		// Generate private key (random number)
+		this.privateKey = this.generatePrivateKey();
 		
-		this.dh = crypto.createDiffieHellman(prime, generator);
-		this.dh.generateKeys();
+		// Calculate public key: g^private mod p
+		this.publicKey = this.modPow(this.generator, this.privateKey, this.prime);
 	}
 
-	// Get public key to send to server
+	private generatePrivateKey(): bigint {
+		// Generate 32 random bytes using Web Crypto API
+		const array = new Uint8Array(32);
+		crypto.getRandomValues(array);
+		return BigInt('0x' + Array.from(array).map(b => b.toString(16).padStart(2, '0')).join(''));
+	}
+
 	getPublicKey(): string {
-		const publicKeyBuffer = this.dh.getPublicKey();
+		const publicKeyHex = this.publicKey.toString(16).padStart(512, '0');
+		const publicKeyBytes = this.hexToBytes(publicKeyHex);
 		
-		// Create ASN.1 DER encoding for the public key
-		const derPrefix = Buffer.from([
-			0x30, // SEQUENCE
-			0x82, // Length field, 2 bytes
-			0x01, // Length high byte
-			0x22, // Length low byte (290 bytes total)
-			0x30, // SEQUENCE
-			0x82,
-			0x01,
-			0x1D, // Length of remaining sequence
-			0x02, // INTEGER
-			0x81, // Length field, 1 byte
-			0x81  // Length (129 bytes)
+		// Create DER encoding that matches Java's SubjectPublicKeyInfo format
+		const derPublicKey = new Uint8Array([
+			0x30, 0x82, 0x01, 0x44, // SEQUENCE
+			0x30, 0x81, 0x9F,       // SEQUENCE
+			0x06, 0x09,             // OBJECT IDENTIFIER
+			0x2A, 0x86, 0x48, 0x86, 0xF7, 0x0D, 0x01, 0x03, 0x01, // dhpublicnumber
+			0x30, 0x81, 0x91,       // SEQUENCE
+			0x02, 0x81, 0x81,       // INTEGER (prime)
+			...Array.from(this.hexToBytes(this.prime.toString(16).padStart(512, '0'))),
+			0x02, 0x01,             // INTEGER (generator)
+			0x02,                   // generator value
+			0x02, 0x81, 0x81,       // INTEGER (public key)
+			...Array.from(publicKeyBytes)
 		]);
-		
-		// Combine DER prefix with the public key
-		const derPublicKey = Buffer.concat([
-			derPrefix,
-			Buffer.from([0x00]), // Prepend 0x00 to ensure positive integer
-			publicKeyBuffer
-		]);
-		
-		return derPublicKey.toString('base64');
+
+		return btoa(String.fromCharCode(...Array.from(derPublicKey)));
 	}
 
-	// Generate shared secret from server's public key
 	computeSharedSecret(serverPublicKeyBase64: string): void {
-		const serverPublicKey = Buffer.from(serverPublicKeyBase64, 'base64');
-		this.sharedSecret = this.dh.computeSecret(serverPublicKey);
+		const derBytes = Uint8Array.from(atob(serverPublicKeyBase64), c => c.charCodeAt(0));
+		
+		// Extract the public key value from the DER structure
+		// Skip the header and find the actual key bytes
+		let offset = 0;
+		while (offset < derBytes.length && derBytes[offset] !== 0x02) {
+			offset++;
+		}
+		offset++; // Skip the INTEGER tag
+		
+		// Skip the length bytes
+		if ((derBytes[offset] & 0x80) !== 0) {
+			offset += (derBytes[offset] & 0x7F) + 1;
+		} else {
+			offset++;
+		}
+		
+		const publicKeyBytes = derBytes.slice(offset);
+		const serverPublicKey = BigInt('0x' + Array.from(publicKeyBytes)
+			.map(b => b.toString(16).padStart(2, '0')).join(''));
+		
+		// Calculate shared secret: (other_public)^private mod p
+		const secret = this.modPow(serverPublicKey, this.privateKey, this.prime);
+		this.sharedSecret = this.hexToBytes(secret.toString(16).padStart(512, '0'));
 	}
 
-	// Encrypt password using shared secret
-	encryptPassword(password: string): string {
+	getSharedSecret(): Uint8Array | null {
+		return this.sharedSecret;
+	}
+
+	private modPow(base: bigint, exponent: bigint, modulus: bigint): bigint {
+		let result = BigInt(1);
+		base = base % modulus;
+		
+		while (exponent > BigInt(0)) {
+			if (exponent % BigInt(2) === BigInt(1)) {
+				result = (result * base) % modulus;
+			}
+			base = (base * base) % modulus;
+			exponent = exponent >> BigInt(1);
+		}
+		
+		return result;
+	}
+
+	private hexToBytes(hex: string): Uint8Array {
+		const bytes = new Uint8Array(Math.ceil(hex.length / 2));
+		for (let i = 0; i < bytes.length; i++) {
+			bytes[i] = parseInt(hex.substr(i * 2, 2), 16);
+		}
+		return bytes;
+	}
+
+	async encryptPassword(password: string): Promise<string> {
 		if (!this.sharedSecret) {
 			throw new Error("Shared secret not computed yet");
 		}
 
-		// Generate key from shared secret (same as server)
-		const key = crypto.createHash("sha256").update(this.sharedSecret).digest();
+		try {
+			// Generate a key from shared secret using SHA-256
+			const keyMaterial = await crypto.subtle.digest('SHA-256', this.sharedSecret);
 
-		// Generate random IV
-		const iv = crypto.randomBytes(16);
+			// Import the key for AES-CBC
+			const key = await crypto.subtle.importKey(
+				'raw',
+				keyMaterial,
+				{ name: 'AES-CBC', length: 256 },
+				false,
+				['encrypt']
+			);
 
-		// Create cipher with PKCS7 padding (compatible with Java's PKCS5Padding)
-		const cipher = crypto.createCipheriv("aes-256-cbc", key, iv);
-		cipher.setAutoPadding(true);  // Ensure PKCS7 padding is enabled
+			// Generate random IV
+			const iv = crypto.getRandomValues(new Uint8Array(16));
 
-		// Convert password to Buffer to ensure consistent encoding
-		const passwordBuffer = Buffer.from(password, 'utf8');
+			// Encrypt the password
+			const encodedPassword = new TextEncoder().encode(password);
+			const encryptedData = await crypto.subtle.encrypt(
+				{ name: 'AES-CBC', iv },
+				key,
+				encodedPassword
+			);
 
-		// Encrypt
-		const encryptedBuffer = Buffer.concat([
-			cipher.update(passwordBuffer),
-			cipher.final()
-		]);
+			// Combine IV and encrypted data
+			const combined = new Uint8Array(iv.length + encryptedData.byteLength);
+			combined.set(iv);
+			combined.set(new Uint8Array(encryptedData), iv.length);
 
-		// Combine IV and encrypted data
-		const combined = Buffer.concat([iv, encryptedBuffer]);
-		
-		// Return as base64
-		return combined.toString('base64');
+			return btoa(String.fromCharCode(...Array.from(combined)));
+		} catch (error) {
+			console.error('[DH] Encryption failed:', error);
+			throw new Error('Failed to encrypt password');
+		}
 	}
 }

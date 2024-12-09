@@ -29,22 +29,48 @@ export const authOptions: NextAuthOptions = {
 				}
 
 				try {
-					// Encrypt password using DH key exchange
-					const { encryptedPassword, sessionId } = await encryptPasswordWithDH(credentials.password)
-					// Call sign-in API with encrypted password
-					const response = await signInByAuth({
-						email: credentials.email,
-						password: encryptedPassword,
-						sessionId,
-					})
+					// Try DH key exchange first
+					let response = null;
+					let usedDH = false;
+
+					try {
+						// Attempt DH key exchange
+						const { encryptedPassword, sessionId } = await encryptPasswordWithDH(credentials.password)
+						if (!encryptedPassword) {
+							throw new Error("Failed to encrypt password")
+						}
+						// Call v2 sign-in API with encrypted password
+						response = await signInByAuth({
+							email: credentials.email,
+							password: await encryptedPassword,
+							sessionId,
+							version: 'v2'
+						})
+
+						// Cleanup DH session regardless of success
+						await destroyDHSession(sessionId)
+						
+						if (response?.result) {
+							usedDH = true
+						}
+					} catch (dhError) {
+						console.warn("DH key exchange failed, falling back to v1:", dhError)
+					}
+
+					// If DH failed, fall back to v1 login
+					if (!usedDH) {
+						response = await signInByAuth({
+							email: credentials.email,
+							password: credentials.password,
+							version: 'v1'
+						})
+					}
 
 					// Check if response.result is valid
 					if (!response || !response.result) {
 						console.error("Invalid response from sign-in API:", response)
 						return null
 					}
-					// Cleanup: Destroy DH session after use
-					await destroyDHSession(sessionId);
 
 					const profileImage = await getProfileImage(response.result.memberUUID)
 					
@@ -57,7 +83,7 @@ export const authOptions: NextAuthOptions = {
 						role: response.result.role,
 						profileImage: profileImage.picture || "",
 						failed: false,
-					};
+					}
 				} catch (error) {
 					console.error("Authentication error:", error)
 					return null
