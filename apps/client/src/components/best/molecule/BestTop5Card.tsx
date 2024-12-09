@@ -1,73 +1,176 @@
 "use client"
 import React from "react"
 import Link from "next/link"
-import { ArrowDown, ArrowUp, Minus } from "@repo/ui/lucide"
+import {
+	ArrowDown,
+	ArrowUp,
+	Minus,
+	Users,
+	Star,
+	TrendingUp,
+	Calendar,
+	Eye,
+	DollarSign,
+} from "@repo/ui/lucide"
 import { Card } from "@repo/ui/card"
+import { Badge } from "@repo/ui/badge"
 import Image from "next/image"
-import type { BestCreatorDataTypes } from "@/types/best/bestTypes"
 
-interface BestCardProps extends BestCreatorDataTypes {
-	name: string
-	rank: number
-	image: string
-	rankChange?: number
-	creatorTag?: string
-	id: number
+interface BestCardProps {
+	memberUuid: string // 베스트
+	ranking: number // 베스트
+	rankingChange: number // 베스트
+	dailySellsCount: number // 베스트
+	reviewAvg: number // 베스트
+	date: string // 베스트
+	avatarImage: string | undefined // 프로필
+	nickname: string // 프로필
+	follower: number // 프로필
+	hashTag: string | undefined // 프로필
+	totalSales: number
+	views: number
 }
 
 export default function BestTop5Card({
-	name = "Creator Name",
-	rank = 1,
-	rankChange = 2,
-	creatorTag = "Creator Tag",
-	id,
+	memberUuid,
+	ranking,
+	rankingChange,
+	dailySellsCount,
+	reviewAvg,
+	date,
+	avatarImage = "https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
+	nickname,
+	follower,
+	hashTag,
+	totalSales,
+	views,
 }: BestCardProps) {
+	const calculateDaysSinceJoined = (joinedDate: string) => {
+		const [year, month, day] = joinedDate.split("-").map(Number)
+		const joinDate = new Date(year, month - 1, day) // month is 0-indexed in Date constructor
+		const today = new Date()
+		const diffTime = Math.abs(today.getTime() - joinDate.getTime())
+		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+		return diffDays
+	}
+
+	const daysSinceJoined = calculateDaysSinceJoined(date)
+
 	return (
-		<Link href={`/profile/${id}`}>
-			<Card className="relative h-auto w-[17.5rem] border-none bg-gradient-to-br from-purple-700 to-fuchsia-900 py-6 pt-4 text-white transition-all duration-300 ease-in-out hover:scale-105 hover:shadow-lg hover:shadow-purple-500/50">
-				<div className="mb-3 flex items-center justify-between gap-2 px-5">
-					<div className="flex items-center gap-2 rounded-full bg-purple-600/50 px-4 py-1 text-sm font-medium">
-						<span className="text-base font-semibold">#{rank}</span>
-						{rankChange === 0 ? (
+		<Link href={`/profile/${memberUuid}`}>
+			<Card className="relative w-auto overflow-hidden bg-gradient-to-br from-purple-600 to-purple-700 p-4 text-white">
+				{/* Ranking */}
+				<div className="absolute left-3 top-3 flex items-center gap-2">
+					<Badge variant="secondary" className="px-3 py-1 text-lg font-bold">
+						#{ranking}
+					</Badge>
+					{rankingChange === 0 ? (
+						<Badge
+							variant="secondary"
+							className="flex items-center gap-1 px-2 py-1">
 							<Minus color="#8c8c8c" strokeWidth={2.5} size={20} />
-						) : (
-							<div className="flex items-center text-xs">
-								{rankChange > 0 ? (
-									<div className="font-xs flex items-center text-green-600">
-										<ArrowUp className="h-4 w-4" />
-										<span>{Math.abs(rankChange)}</span>
-									</div>
-								) : (
-									<div className="font-xs flex items-center text-red-600">
-										<ArrowDown className="h-4 w-4" />
-										<span>{Math.abs(rankChange)}</span>
-									</div>
-								)}
-							</div>
-						)}
-					</div>
-					<div className="col-end-7 mr-[-0.525rem] flex items-center justify-end" />
+						</Badge>
+					) : (
+						<Badge
+							variant="secondary"
+							className="flex items-center gap-1 px-2 py-1">
+							{rankingChange > 0 ? (
+								<div className="font-xs flex items-center text-green-600">
+									<ArrowUp className="h-4 w-4" />
+									<span>{Math.abs(rankingChange)}</span>
+								</div>
+							) : (
+								<div className="font-xs flex items-center text-red-600">
+									<ArrowDown className="h-4 w-4" />
+									<span>{Math.abs(rankingChange)}</span>
+								</div>
+							)}
+						</Badge>
+					)}
 				</div>
 
-				<div className="flex h-full flex-col items-center justify-center gap-4 p-6 pt-0">
-					<div className="h-auto w-auto overflow-hidden border-2 border-white/20">
+				{/* Avatar Section */}
+				<div className="pb-4 pt-12">
+					<div className="relative mb-4 aspect-square overflow-hidden rounded-lg">
 						<Image
-							src="/img/main/art1.png"
-							alt="Profile picture"
-							width={120}
-							height={80}
-							className="object-cover"
+							src={
+								avatarImage ||
+								"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png"
+							}
+							alt={nickname}
+							className="h-full w-full object-cover"
+							width={100}
+							height={100}
 						/>
 					</div>
 
-					<div className="flex flex-col gap-2 text-center">
-						<h2 className="text-2xl font-bold">{name}</h2>
-						<span className="rounded-full bg-purple-600/50 px-4 py-1 text-sm font-medium text-white/80">
-							{creatorTag}
-						</span>
+					{/* Creator Info */}
+					<div className="space-y-3">
+						<div className="flex items-center justify-between">
+							<h3 className="text-xl font-bold">{nickname}</h3>
+							{hashTag && (
+								<Badge
+									variant="outline"
+									className="flex items-center border-purple-400 text-white">
+									{hashTag}
+								</Badge>
+							)}
+						</div>
+
+						{/* Stats Grid */}
+						<div className="grid grid-cols-2 gap-2 text-sm">
+							<div className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2">
+								<div className="flex items-center gap-1">
+									<TrendingUp className="h-4 w-4" />
+									<span>Daily Sales</span>
+								</div>
+								<span className="font-semibold">{dailySellsCount}</span>
+							</div>
+							<div className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2">
+								<div className="flex items-center gap-1">
+									<Users className="h-4 w-4" />
+									<span>Followers</span>
+								</div>
+								<span className="font-semibold">
+									{(follower / 1000).toFixed(1)}k
+								</span>
+							</div>
+							<div className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2">
+								<div className="flex items-center gap-1">
+									<Star className="h-4 w-4 text-yellow-400" />
+									<span>Rating</span>
+								</div>
+								<span className="font-semibold">{reviewAvg.toFixed(1)}</span>
+							</div>
+							<div className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2">
+								<div className="flex items-center gap-1">
+									<Eye className="h-4 w-4" />
+									<span>Views</span>
+								</div>
+								<span className="font-semibold">{views.toLocaleString()}</span>
+							</div>
+						</div>
+
+						{/* Additional Info */}
+						<div className="flex items-center justify-between text-sm text-white/80">
+							<div className="flex items-center gap-1">
+								<Calendar className="h-4 w-4" />
+								<span>Joined {daysSinceJoined} days ago</span>
+							</div>
+						</div>
+
+						{/* Total Sales */}
+						<div className="mt-2 flex items-center justify-between rounded-full bg-white/20 px-4 py-2">
+							<div className="flex items-center gap-2">
+								<DollarSign className="h-4 w-4 text-yellow-400" />
+								<span>Total Sales</span>
+							</div>
+							<span className="font-bold">{totalSales.toLocaleString()}</span>
+						</div>
 					</div>
 				</div>
 			</Card>
 		</Link>
 	)
 }
+

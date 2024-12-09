@@ -34,7 +34,7 @@ import {
 import {
 	getProductDetail,
 	updateProduct,
-} from "@/action/product/productUpsertAction.ts"
+} from "@/action/product/productAction.ts"
 import { getLlmVersionList } from "@/action/product/llmAction.ts"
 import type {
 	GetProductDetailResponseType,
@@ -44,6 +44,7 @@ import { localStorageKeys } from "@/config/product/localStorage.ts"
 import type { DropResult } from "@/types/product/componentType.ts"
 import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
 import PcError from "@/components/product-create/atom/PcError.tsx"
+import PcErrorMessage from "@/components/product-create/atom/PcErrorMessage.tsx"
 
 type FormData = z.infer<typeof createProductSecondTextSchema>
 
@@ -70,6 +71,35 @@ export default function CreateProductSecondTextPage({
 		null,
 	)
 
+	// error state for product fields
+	const [llmVersionError, setLlmVersionError] = useState<string>("")
+	const [contentsError, setContentsError] = useState<string>("")
+	const resetFiledErrors = () => {
+		setLlmVersionError("")
+		setContentsError("")
+	}
+	const checkLlmVersion = (llmVersion: string) => {
+		if (!llmVersion) {
+			setLlmVersionError(`Please select llm version.`)
+			return false
+		}
+		return true
+	}
+	const checkContents = (contents: FormData["contents"]) => {
+		if (contents.length <= 1) {
+			setContentsError(`Please make example output at least 2.`)
+			return false
+		}
+		return true
+	}
+	const checkRequiredFieldsValid = () => {
+		const values = getValues()
+		let isValid = true
+		if (!checkLlmVersion(values.llmVersionId)) isValid = false
+		if (!checkContents(values.contents)) isValid = false
+		return isValid
+	}
+
 	const extractPromptVars = useCallback((_prompt: string) => {
 		return extractPromptVariables(_prompt)
 	}, [])
@@ -82,7 +112,7 @@ export default function CreateProductSecondTextPage({
 				promptResult: "",
 				contents: [],
 				seed: "",
-				llmVersionId: undefined,
+				llmVersionId: "",
 			},
 		})
 
@@ -139,9 +169,15 @@ export default function CreateProductSecondTextPage({
 				if (productUuid) {
 					setValue(createProductSecondTextSchemaKeys.seed, productData.seed)
 
+					const _llmVersionId =
+						_llmVersionList.find(
+							(item) => item.llmVersionId === productData.llmVersionId,
+						)?.llmVersionId ?? ""
+
 					setValue(
 						createProductSecondTextSchemaKeys.llmVersionId,
-						String(productData.llmVersionId),
+
+						String(_llmVersionId),
 					)
 				}
 			} catch (e) {
@@ -191,6 +227,9 @@ export default function CreateProductSecondTextPage({
 
 	// save handler
 	const onSave = async (type: "draft" | "next") => {
+		resetFiledErrors()
+		if (type === "next" && !checkRequiredFieldsValid()) return
+
 		await updatePromptProduct()
 
 		if (type === "next") {
@@ -247,6 +286,11 @@ export default function CreateProductSecondTextPage({
 							/>
 						)}
 					/>
+					{llmVersionError ? (
+						<PcErrorMessage errorMessage={llmVersionError} />
+					) : (
+						<span className="h-[18px] w-full text-transparent"> -- </span>
+					)}
 				</PcBaseWrapper>
 				<PcBaseWrapper>
 					<PcTitle>Seed</PcTitle>
@@ -256,6 +300,7 @@ export default function CreateProductSecondTextPage({
 						type="number"
 						{...register(createProductSecondTextSchemaKeys.seed)}
 					/>
+					<span className="h-[18px] w-full text-transparent"> -- </span>
 				</PcBaseWrapper>
 			</div>
 			{/* Sample variables and outputs */}
@@ -294,13 +339,27 @@ export default function CreateProductSecondTextPage({
 
 			<PcTitle className="mt-6">Examples</PcTitle>
 			{contentFields.length > 0 ? (
-				<PcTextPromptSampleList
-					contentFields={contentFields}
-					onDragEnd={onDragEnd}
-					onRemove={remove}
-				/>
+				<>
+					<PcTextPromptSampleList
+						contentFields={contentFields}
+						onDragEnd={onDragEnd}
+						onRemove={remove}
+					/>
+					{contentsError ? (
+						<PcErrorMessage errorMessage={contentsError} />
+					) : (
+						<span className="h-[18px] w-full text-transparent"> -- </span>
+					)}
+				</>
 			) : (
-				<PcPromptSampleSkeleton />
+				<>
+					<PcPromptSampleSkeleton />
+					{contentsError ? (
+						<PcErrorMessage errorMessage={contentsError} />
+					) : (
+						<span className="h-[18px] w-full text-transparent"> -- </span>
+					)}
+				</>
 			)}
 			<PcSaveBar
 				className="mt-10"

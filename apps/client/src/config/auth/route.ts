@@ -8,6 +8,7 @@ export const sellerRoutes = {
 export const withOutAuthRoutes = {
 	signIn: "/sign-in",
 	signUp: "/sign-up",
+	// best: "/best",
 }
 export const withAuthRoutes = {
 	...sellerRoutes,
@@ -23,5 +24,4 @@ export const withAuthRoutes = {
 	dashboard: "/dashboard",
 	account: "/account",
 }
-
 

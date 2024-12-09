@@ -72,3 +72,10 @@ export function delay(ms: number) {
 		setTimeout(resolve, ms)
 	})
 }
+
+// change string boolean into boolean type
+
+export function stringToBoolean(str: string) {
+	if (!str) return false
+	return str.toLowerCase() === "true"
+}
