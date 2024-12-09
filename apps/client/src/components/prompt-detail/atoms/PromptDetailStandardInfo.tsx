@@ -35,9 +35,9 @@ export default async function PromptDetailStandardInfo({
 					<span>{formattedDate}</span>
 				</p>
 			</div>
-			<p className="my-4 text-5xl font-bold text-white">
-				<span className="text-4xl">$</span>
-				{formattedNumber}
+			<p className="my-4 flex items-center gap-2 text-5xl font-bold text-white">
+				<span className="text-4xl">₩</span>
+				<span>{formattedNumber}</span>
 			</p>
 		</div>
 	)
