@@ -1,9 +1,8 @@
-import type { PromptItemType } from "@/types/prompts/promptsType"
-import FavoriteCountBar from "../molecule/FavoriteCountBar"
+import type { PromptsType } from "@/types/prompts/promptsType"
 import FavoriteList from "../molecule/FavoriteList"
 
 interface FavoriteContainerProps {
-	favoriteList: PromptItemType[]
+	favoriteList: PromptsType
 }
 
 export default function FavoriteContainer({
@@ -11,9 +10,9 @@ export default function FavoriteContainer({
 }: FavoriteContainerProps) {
 	return (
 		<div className="flex flex-col gap-8">
-			<FavoriteCountBar favoriteCount={favoriteList.length} />
-			<div className="mx-auto mb-16 flex flex-col gap-8 md:!flex-row">
-				<FavoriteList favoriteList={favoriteList} />
+			{/* <FavoriteResultBar /> */}
+			<div className="mx-7 mb-16 flex flex-col gap-8 md:!flex-row">
+				<FavoriteList favoriteList={favoriteList.productList} />
 			</div>
 		</div>
 	)
