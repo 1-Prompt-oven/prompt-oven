@@ -6,6 +6,7 @@ import KakaoProvider from "next-auth/providers/kakao"
 import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts"
 import { refreshAccessToken } from "@/action/auth/authTokenAction"
 import type { ExtendedToken } from "@/types/auth/AuthToken"
+import type { SignInResponse } from "@/types/auth/OAuthType"
 import { logoutAuthMember } from "@/action/auth/memberManageAction"
 import { getProfileImage } from "@/action/profile/getProfilePic"
 import { encryptPasswordWithDH, destroyDHSession } from "@/action/auth/dhAction"
@@ -30,7 +31,7 @@ export const authOptions: NextAuthOptions = {
 
 				try {
 					// Try DH key exchange first
-					let response = null;
+					let response: SignInResponse | null = null;
 					let usedDH = false;
 
 					try {
@@ -46,14 +47,14 @@ export const authOptions: NextAuthOptions = {
 							sessionId,
 							version: 'v2'
 						})
-
 						// Cleanup DH session regardless of success
-						await destroyDHSession(sessionId)
-						
-						if (response?.result) {
+						void destroyDHSession(sessionId)
+
+						if (response) {
 							usedDH = true
 						}
 					} catch (dhError) {
+						// eslint-disable-next-line no-console -- 오류 출력
 						console.warn("DH key exchange failed, falling back to v1:", dhError)
 					}
 
@@ -66,25 +67,27 @@ export const authOptions: NextAuthOptions = {
 						})
 					}
 
-					// Check if response.result is valid
-					if (!response || !response.result) {
+					// Check if response is valid
+					if (!response) {
+						// eslint-disable-next-line no-console -- 오류 출력
 						console.error("Invalid response from sign-in API:", response)
 						return null
 					}
 
-					const profileImage = await getProfileImage(response.result.memberUUID)
+					const profileImage = await getProfileImage(response.memberUUID)
 					
 					return {
-						accesstoken: response.result.accesstoken,
-						refreshtoken: response.result.refreshtoken,
+						accesstoken: response.accesstoken,
+						refreshtoken: response.refreshtoken,
 						email: credentials.email,
-						nickname: response.result.nickname,
-						memberUUID: response.result.memberUUID,
-						role: response.result.role,
+						nickname: response.nickname,
+						memberUUID: response.memberUUID,
+						role: response.role,
 						profileImage: profileImage.picture || "",
 						failed: false,
 					}
 				} catch (error) {
+					// eslint-disable-next-line no-console -- 오류 출력
 					console.error("Authentication error:", error)
 					return null
 				}
@@ -137,6 +140,7 @@ export const authOptions: NextAuthOptions = {
 						break;
 
 					default:
+						// eslint-disable-next-line no-console -- 오류 출력
 						console.error("Unsupported provider:", account.provider)
 						return false;
 				}

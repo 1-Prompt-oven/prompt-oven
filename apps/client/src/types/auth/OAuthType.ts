@@ -34,11 +34,9 @@ export interface OAuthSignInResponse extends Omit<AuthResponse['result'], 'role'
 
 // Regular sign-in response
 export interface SignInResponse {
-	result: {
-		accesstoken: string
-		refreshtoken: string
-		nickname: string
-		role: string
-		memberUUID: string
-	}
+	accesstoken: string
+	refreshtoken: string
+	nickname: string
+	role: string
+	memberUUID: string
 }
