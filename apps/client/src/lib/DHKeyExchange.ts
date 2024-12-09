@@ -121,13 +121,22 @@ export class DHKeyExchange {
 			let offset = 0;
 			let found = false;
 
-			// Find the BIT STRING with length 0x8100 (256 bytes + leading zero)
+			// Find the BIT STRING with either format:
+			// 1. 0x03 0x81 0x00 (server format 1)
+			// 2. 0x03 0x81 0x01 0x00 (server format 2)
 			while (offset < derBytes.length - 4) {
 				if (derBytes[offset] === 0x03 && // BIT STRING tag
-					derBytes[offset + 1] === 0x81 && // Long form length
-					derBytes[offset + 2] === 0x00) { // Length byte
-					found = true;
-					break;
+					derBytes[offset + 1] === 0x81) { // Long form length
+					if (derBytes[offset + 2] === 0x00) { // Format 1
+						offset += 4;
+						found = true;
+						break;
+					} else if (derBytes[offset + 2] === 0x01 && 
+							 derBytes[offset + 3] === 0x00) { // Format 2
+						offset += 5;
+						found = true;
+						break;
+					}
 				}
 				offset++;
 			}
@@ -135,9 +144,6 @@ export class DHKeyExchange {
 			if (!found) {
 				throw new Error("Invalid DER encoding: public key not found");
 			}
-
-			// Skip BIT STRING tag, length bytes, and leading zero
-			offset += 4;
 
 			// Verify we have enough bytes remaining
 			if (offset + (this.KEY_SIZE / 8) > derBytes.length) {

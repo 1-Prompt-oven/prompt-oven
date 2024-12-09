@@ -58,7 +58,7 @@ export const encryptPasswordWithDH = async (password: string) => {
             sessionId
         };
     } catch (error) {
-         // eslint-disable-next-line no-console -- 오류 출력
+        // eslint-disable-next-line no-console -- 오류 출력
         console.error("DH encryption error:", error);
         throw error;
     }
