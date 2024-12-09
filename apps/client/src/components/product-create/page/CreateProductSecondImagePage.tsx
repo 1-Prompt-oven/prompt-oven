@@ -40,7 +40,7 @@ import {
 import {
 	getProductDetail,
 	updateProduct,
-} from "@/action/product/productUpsertAction.ts"
+} from "@/action/product/productAction.ts"
 import { getLlmVersionList } from "@/action/product/llmAction.ts"
 import { localStorageKeys } from "@/config/product/localStorage.ts"
 import type {

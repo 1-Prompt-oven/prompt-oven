@@ -53,5 +53,9 @@ export {
 	TrendingDown,
 	Users,
 	DollarSign,
+	MoreHorizontal,
+	Edit,
+	PackageX,
+	Plus,
 	type LucideProps,
 } from "lucide-react"
