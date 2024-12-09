@@ -29,7 +29,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 	)
 
 	let hoverTimeout: ReturnType<typeof setTimeout>
-	const handleMouseEnter = () => {
+	const handleMouseEnter = async () => {
 		hoverTimeout = setTimeout(() => {
 			setIsHovered(true)
 		}, 1000) // 1000ms 딜레이
@@ -92,7 +92,11 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 			</Link>
 
 			{isHovered ? (
-				<PromptHoverModal productInfo={productInfo} imgUrl={thumbnailImage} />
+				<PromptHoverModal
+					productInfo={productInfo}
+					// allImage={allImage}
+					defaultImage={thumbnailImage}
+				/>
 			) : null}
 		</li>
 	)

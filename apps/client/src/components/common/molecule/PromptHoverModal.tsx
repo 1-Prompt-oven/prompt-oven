@@ -11,28 +11,33 @@ import {
 	createCart,
 	getCartStateAction,
 	getFavoriteState,
+	getProductDetail,
 } from "@/action/prompt-detail/getProductDetailData"
 import type { PromptItemType } from "@/types/prompts/promptsType"
+import type { PromptDetailContentsType } from "@/types/prompt-detail/promptDetailType"
 
 interface PromptHoverModalProps {
 	productInfo: PromptItemType
-	imgUrl: string
+	defaultImage: string
 }
 
 export default function PromptHoverModal({
 	productInfo,
-	imgUrl,
+	defaultImage,
 }: PromptHoverModalProps) {
 	const [isFavorite, setIsFavorite] = useState<{ liked: boolean }>({
 		liked: false,
 	})
 	const [isCart, setIsCart] = useState<number | null>(null)
+	const [allImage, setAllImage] = useState<PromptDetailContentsType[]>([])
 	const productUuid = productInfo.productUuid
 
 	useEffect(() => {
 		const fetchState = async () => {
+			const imgUrlArray = await getProductDetail(productInfo.productUuid)
 			const favoriteState = await getFavoriteState(productUuid)
 			const cartState = await getCartStateAction(productUuid)
+			setAllImage(imgUrlArray.contents)
 			setIsFavorite(favoriteState)
 			setIsCart(cartState)
 		}
@@ -44,7 +49,7 @@ export default function PromptHoverModal({
 		const isSuccess = await changeFavoriteAction(productUuid)
 		if (isSuccess) setIsFavorite((prev) => ({ liked: !prev.liked }))
 		else {
-			// eslint-disable-next-line no-console -- Fail to Update Like State
+			// eslint-disable-next-line no-console -- Fail to Update Like
 			console.log("좋아요 버튼 업데이트에 실패했습니다.")
 		}
 	}
@@ -73,23 +78,55 @@ export default function PromptHoverModal({
 		else console.log("알 수 없는 오류가 발생했습니다.")
 	}
 
+	const getImageClassName = (index: number): string => {
+		if (index === 0) {
+			return "rounded-tl-md"
+		} else if (index === 1) {
+			return "rounded-tr-md"
+		}
+		return ""
+	}
+
+	// allImage가 있을 때만 UI를 렌더링
+	if (allImage.length === 0) {
+		return null // allImage가 없으면 null을 반환하여 아무것도 렌더링하지 않음
+	}
+
 	return (
 		<div className="gradient-filter absolute top-10 z-30 w-[300px] rounded-md border border-white/20 p-4 shadow-lg">
 			<div className="flex flex-col items-center gap-2">
-				<div className="rounded-md bg-white">
+				<div className="rounded-md bg-[#3d2d50]">
 					<Link href={`/prompt-detail/${productInfo.productUuid}`}>
-						<Image
-							src={imgUrl}
-							width={300}
-							height={300}
-							alt={productInfo.productName}
-							className="rounded-t-md"
-							priority
-							unoptimized
-						/>
+						{allImage.length > 1 && allImage[0].contentUrl ? (
+							<ul className="grid grid-cols-2">
+								{allImage.map((item, index) => (
+									<li key={item.contentUrl}>
+										<Image
+											src={item.contentUrl}
+											width={300}
+											height={300}
+											className={getImageClassName(index)}
+											alt={productInfo.productName}
+											priority
+											unoptimized
+										/>
+									</li>
+								))}
+							</ul>
+						) : (
+							<Image
+								src={defaultImage}
+								width={300}
+								height={300}
+								className="rounded-t-md"
+								alt={productInfo.productName}
+								priority
+								unoptimized
+							/>
+						)}
 					</Link>
 
-					<div className="flex items-center justify-end rounded-full border-none bg-white p-0">
+					<div className="flex items-center justify-end rounded-b-md border-none bg-white p-0">
 						<Button
 							className="h-[30px] w-[30px] border border-white bg-white hover:bg-[#ffeaea]"
 							onClick={likeHandler}>

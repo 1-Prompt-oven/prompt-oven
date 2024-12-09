@@ -1,4 +1,4 @@
-import PromptCardAccount from "@/components/common/organism/PromptCardAccount"
+import PromptCard from "@/components/common/organism/PromptCard"
 import type { PromptItemType } from "@/types/prompts/promptsType"
 
 interface FavoriteListProps {
@@ -11,7 +11,7 @@ export default function FavoriteList({ favoriteList }: FavoriteListProps) {
 			{favoriteList.length > 0 ? (
 				<ul className="grid grid-cols-1 gap-8 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 					{favoriteList.map((item) => (
-						<PromptCardAccount productInfo={item} key={item.productUuid} />
+						<PromptCard productInfo={item} key={item.productUuid} />
 					))}
 				</ul>
 			) : (
