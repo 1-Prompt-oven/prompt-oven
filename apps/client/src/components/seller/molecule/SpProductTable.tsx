@@ -128,7 +128,9 @@ export default function ProductTable({ products }: ProductTableProps) {
 										<td className="w-[15%] p-4">
 											<DropdownMenu>
 												<DropdownMenuTrigger asChild>
-													<Button variant="ghost" className="h-8 w-8 p-0">
+													<Button
+														variant="ghost"
+														className="h-8 w-8 p-0 transition-opacity duration-200 hover:bg-transparent hover:opacity-75">
 														<span className="sr-only">Open menu</span>
 														<MoreHorizontal className="h-4 w-4 text-white" />
 													</Button>
@@ -141,7 +143,7 @@ export default function ProductTable({ products }: ProductTableProps) {
 													</DropdownMenuLabel>
 													<DropdownMenuSeparator className="bg-white/15" />
 													<DropdownMenuItem
-														className="pointer-cursor text-white hover:bg-opacity-75"
+														className="cursor-pointer hover:bg-opacity-75"
 														onClick={() =>
 															handleEditClick(product.productUuid)
 														}>
@@ -149,7 +151,7 @@ export default function ProductTable({ products }: ProductTableProps) {
 														Edit
 													</DropdownMenuItem>
 													<DropdownMenuItem
-														className="pointer-cursor text-white hover:bg-opacity-75"
+														className="cursor-pointer text-white hover:bg-opacity-75"
 														onClick={() => handleDeleteClick(product)}>
 														<Trash2 className="mr-2 h-4 w-4" />
 														Delete
