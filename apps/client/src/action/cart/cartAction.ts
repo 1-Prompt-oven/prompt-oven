@@ -204,10 +204,9 @@ export async function postCheckoutData(
 
 		if (data.isSuccess) {
 			return true
-		} else {
-			console.error("결제 요청 실패:", data.message)
-			return false
 		}
+		console.error("결제 요청 실패:", data.message)
+		return false
 	} catch (error) {
 		console.error("Checkout API error:", error)
 		return false
