@@ -105,17 +105,12 @@ export class DHKeyExchange {
 		derPublicKey[offset++] = 0x00;  // Leading zero byte
 		derPublicKey.set(publicKeyBytes, offset);
 		
-		console.debug('[DH] Generated public key DER (hex):', 
-				Array.from(derPublicKey).map(b => b.toString(16).padStart(2, '0')).join(''));
-		
 		return btoa(String.fromCharCode(...Array.from(derPublicKey)));
 	}
 
 	computeSharedSecret(serverPublicKeyBase64: string): void {
 		try {
 			const derBytes = Uint8Array.from(atob(serverPublicKeyBase64), c => c.charCodeAt(0));
-			console.debug('[DH] Received public key bytes (hex):', 
-				Array.from(derBytes).map(b => b.toString(16).padStart(2, '0')).join(''));
 
 			// Find the BIT STRING tag for the public key
 			let offset = 0;
@@ -151,18 +146,14 @@ export class DHKeyExchange {
 			}
 
 			const publicKeyBytes = derBytes.slice(offset, offset + (this.KEY_SIZE / 8));
-			console.debug('[DH] Extracted public key (hex):', 
-				Array.from(publicKeyBytes).map(b => b.toString(16).padStart(2, '0')).join(''));
 
 			const serverPublicKey = BigInt('0x' + Array.from(publicKeyBytes)
 				.map(b => b.toString(16).padStart(2, '0')).join(''));
 
 			const secret = this.modPow(serverPublicKey, this.privateKey, this.prime);
 			this.sharedSecret = this.hexToBytes(secret.toString(16).padStart(this.KEY_SIZE / 4, '0'));
-			
-			console.debug('[DH] Generated shared secret (hex):', 
-				Array.from(this.sharedSecret).map(b => b.toString(16).padStart(2, '0')).join(''));
 		} catch (error) {
+			// eslint-disable-next-line no-console -- 오류 출력
 			console.error('[DH] Failed to compute shared secret:', error);
 			throw new Error('Failed to compute shared secret');
 		}
@@ -201,12 +192,7 @@ export class DHKeyExchange {
 		}
 
 		try {
-			console.debug('[Encrypt] Shared secret (hex):', 
-				Array.from(this.sharedSecret).map(b => b.toString(16).padStart(2, '0')).join(''));
-
 			const keyMaterial = await crypto.subtle.digest('SHA-256', this.sharedSecret);
-			console.debug('[Encrypt] Key material (hex):', 
-				Array.from(new Uint8Array(keyMaterial)).map(b => b.toString(16).padStart(2, '0')).join(''));
 
 			const key = await crypto.subtle.importKey(
 				'raw',
@@ -217,12 +203,8 @@ export class DHKeyExchange {
 			);
 
 			const iv = crypto.getRandomValues(new Uint8Array(12));
-			console.debug('[Encrypt] IV (hex):', 
-				Array.from(iv).map(b => b.toString(16).padStart(2, '0')).join(''));
 
 			const encodedPassword = new TextEncoder().encode(password);
-			console.debug('[Encrypt] Input text length:', encodedPassword.length);
-
 			const encryptedData = await crypto.subtle.encrypt(
 				{
 					name: 'AES-GCM',
@@ -237,10 +219,6 @@ export class DHKeyExchange {
 			const ciphertext = new Uint8Array(encryptedData).slice(0, -16);
 			const tag = new Uint8Array(encryptedData).slice(-16);
 
-			console.debug('[Encrypt] Ciphertext (hex):', 
-				Array.from(ciphertext).map(b => b.toString(16).padStart(2, '0')).join(''));
-			console.debug('[Encrypt] Tag (hex):', 
-				Array.from(tag).map(b => b.toString(16).padStart(2, '0')).join(''));
 
 			const combined = new Uint8Array(iv.length + ciphertext.byteLength + tag.byteLength);
 			combined.set(iv);
@@ -248,9 +226,9 @@ export class DHKeyExchange {
 			combined.set(tag, iv.length + ciphertext.byteLength);
 
 			const result = btoa(String.fromCharCode(...Array.from(combined)));
-			console.debug('[Encrypt] Final base64:', result);
 			return result;
 		} catch (error) {
+			// eslint-disable-next-line no-console -- 오류 출력
 			console.error('[Encrypt] Failed:', error);
 			throw new Error('Failed to encrypt password');
 		}
