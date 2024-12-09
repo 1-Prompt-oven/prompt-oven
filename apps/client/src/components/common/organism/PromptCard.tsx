@@ -2,6 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
+import { useState } from "react"
 import { Badge } from "@repo/ui/badge"
 import { Card } from "@repo/ui/card"
 import StarAnimation from "@repo/ui/star-animation"
@@ -10,7 +11,6 @@ import type { PromptItemType } from "@/types/prompts/promptsType"
 import PromptLLMId from "../molecule/PromptLLMId"
 import PromptName from "../molecule/PromptName"
 import PromptPrice from "../molecule/PromptPrice"
-import { useState } from "react"
 import PromptHoverModal from "../molecule/PromptHoverModal"
 
 interface PromptCardProps {
