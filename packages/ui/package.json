@@ -33,7 +33,9 @@
 		"./drawer": "./src/Drawer.tsx",
 		"./tabs": "./src/Tabs.tsx",
 		"./progress": "./src/Progress.tsx",
-		"./tooltip": "./src/Tooltip.tsx"
+		"./tooltip": "./src/Tooltip.tsx",
+		"./accordion": "./src/Accordion.tsx",
+		"./custom-chat-accordion": "./src/CustomChatAccordion.tsx"
 	},
 	"license": "MIT",
 	"scripts": {
@@ -60,6 +62,7 @@
 	"dependencies": {
 		"@emotion/react": "^11.13.3",
 		"@emotion/styled": "^11.13.0",
+		"@radix-ui/react-accordion": "^1.2.1",
 		"@radix-ui/react-avatar": "^1.1.1",
 		"@radix-ui/react-checkbox": "^1.1.2",
 		"@radix-ui/react-dialog": "^1.1.2",
