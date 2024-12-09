@@ -1,4 +1,4 @@
-import { CommonResType } from "@/types/common/responseType"
+import type { CommonResType } from "@/types/common/responseType"
 
 export const fetchDataRevaliDateTime = async <T>(
 	url: string,

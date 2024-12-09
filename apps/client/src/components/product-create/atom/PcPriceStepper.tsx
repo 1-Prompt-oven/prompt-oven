@@ -55,8 +55,8 @@ const PriceStepper = React.forwardRef<HTMLInputElement, PriceStepperProps>(
 						<div className="relative flex flex-col items-center font-[500]">
 							<div className="absolute bottom-2 max-w-max text-white">
 								<span className="whitespace-nowrap">
-									{value.toFixed(toFixed)}
 									{currency}
+									{value.toFixed(toFixed)}
 								</span>
 							</div>
 							<div>
@@ -95,12 +95,12 @@ const PriceStepper = React.forwardRef<HTMLInputElement, PriceStepperProps>(
 				</div>
 				<span className="relative mt-1 flex w-full justify-between text-white">
 					<span className="absolute -bottom-6 left-0 translate-x-[-50%]">
-						{min.toFixed(toFixed)}
 						{currency}
+						{min.toFixed(toFixed)}
 					</span>
 					<span className="absolute -bottom-6 right-0 translate-x-[50%]">
-						{max.toFixed(toFixed)}
 						{currency}
+						{max.toFixed(toFixed)}
 					</span>
 				</span>
 			</div>

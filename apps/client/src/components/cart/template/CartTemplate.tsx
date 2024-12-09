@@ -84,17 +84,19 @@ function CartTemplate({
 			return
 		}
 		try {
-			const productUuids = selectedItems.map((item) => item.productUuid)
-			const cartIds = selectedItems.map((item) => item.id)
-
-			const success = await postCheckoutData(productUuids, cartIds)
+			const items = selectedItems.map((item) => ({
+				productUuid: item.productUuid,
+				productName: item.productName,
+				price: item.price,
+			}))
+			const success = await postCheckoutData(items)
 			if (success) {
-				router.push("/purchaseed")
+				router.push("/purchase/ing")
 			} else {
 				throw new Error("결제 중 오류 발생")
 			}
 		} catch (error) {
-			throw new Error("결제 중 오류 발생")
+			throw new Error("결제 처리 중 에러 발생")
 		}
 	}
 
