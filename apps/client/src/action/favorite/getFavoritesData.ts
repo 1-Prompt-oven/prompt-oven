@@ -15,9 +15,10 @@ interface RawData {
 	}
 }
 
-export async function getFavoriteList(): Promise<PromptsType> {
+export async function getFavoriteList(
+	cursorId?: string | null,
+): Promise<PromptsType> {
 	// favoriteFormData?: FormData,
-	// cursorId?: string | null,
 	"use server"
 
 	// if (categoryFormData) {
@@ -32,9 +33,13 @@ export async function getFavoriteList(): Promise<PromptsType> {
 
 	const payload = {
 		memberUuid: memberUUID,
-		// cursorId: favoriteFormData.get("topCategoryUuid") || "",
 		pageSize: 15,
+		cursorId: "",
 		sortBy: "DESC",
+	}
+
+	if (cursorId) {
+		payload.cursorId = cursorId
 	}
 
 	const query = createQueryParamString(payload)

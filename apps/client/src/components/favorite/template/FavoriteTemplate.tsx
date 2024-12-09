@@ -1,5 +1,4 @@
 import type { PromptsType } from "@/types/prompts/promptsType"
-import FavoriteTitle from "../atom/FavoriteTitle"
 import FavoriteContainer from "../organism/FavoriteContainer"
 
 interface PromptsTemplateProps {
@@ -11,7 +10,7 @@ export default function FavoriteTemplate({
 }: PromptsTemplateProps) {
 	return (
 		<div className="mx-auto mt-4 max-w-screen-xl">
-			<FavoriteTitle />
+			{/* <FavoriteTitle /> */}
 			<FavoriteContainer favoriteList={favoriteList} />
 		</div>
 	)
