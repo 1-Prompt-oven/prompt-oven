@@ -90,6 +90,7 @@ export interface GetSellerProductResultType {
 	sells: number
 	enable: boolean
 	temporary: boolean
+	thumbnailUrl: string
 }
 
 // 상품 조회

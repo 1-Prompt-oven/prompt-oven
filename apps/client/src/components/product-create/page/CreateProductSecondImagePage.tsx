@@ -50,6 +50,7 @@ import type {
 import type { DropResult } from "@/types/product/componentType.ts"
 import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
 import PcError from "@/components/product-create/atom/PcError.tsx"
+import PcErrorMessage from "@/components/product-create/atom/PcErrorMessage.tsx"
 
 type FormData = z.infer<typeof createProductSecondImageSchema>
 
@@ -75,6 +76,36 @@ export default function CreateProductSecondImagePage({
 	const [product, setProduct] = useState<GetProductDetailResponseType | null>(
 		null,
 	)
+
+	// error state for product fields
+	const [llmVersionError, setLlmVersionError] = useState<string>("")
+	const [contentsError, setContentsError] = useState<string>("")
+	const resetFiledErrors = () => {
+		setLlmVersionError("")
+		setContentsError("")
+	}
+	const checkLlmVersion = (llmVersion: string) => {
+		if (!llmVersion) {
+			setLlmVersionError(`Please select llm version.`)
+			return false
+		}
+		return true
+	}
+	const checkContents = (contents: FormData["contents"]) => {
+		if (contents.length <= 1) {
+			setContentsError(`Please make example output at least 2.`)
+			return false
+		}
+		return true
+	}
+	const checkRequiredFieldsValid = () => {
+		const values = getValues()
+		let isValid = true
+		if (!checkLlmVersion(values.llmVersionId)) isValid = false
+		if (!checkContents(values.contents)) isValid = false
+		return isValid
+	}
+
 	// const minResults = 4
 
 	const extractPromptVars = useCallback((_prompt: string) => {
@@ -89,7 +120,7 @@ export default function CreateProductSecondImagePage({
 				promptResult: undefined,
 				contents: [],
 				seed: "",
-				llmVersionId: undefined,
+				llmVersionId: "",
 			},
 		})
 
@@ -142,9 +173,14 @@ export default function CreateProductSecondImagePage({
 				if (productUuid) {
 					setValue(createProductSecondImageSchemaKeys.seed, productData.seed)
 
+					const _llmVersionId =
+						_llmVersionList.find(
+							(item) => item.llmVersionId === productData.llmVersionId,
+						)?.llmVersionId ?? ""
 					setValue(
 						createProductSecondImageSchemaKeys.llmVersionId,
-						String(productData.llmVersionId),
+
+						String(_llmVersionId),
 					)
 				}
 			} catch (err) {
@@ -211,6 +247,9 @@ export default function CreateProductSecondImagePage({
 
 	// save handler
 	const onSave = async (type: "draft" | "next") => {
+		resetFiledErrors()
+		if (type === "next" && !checkRequiredFieldsValid()) return
+
 		await updatePromptProduct()
 		if (type === "next") {
 			removeStorageItem(localStorageKeys.curTempProductUuid)
@@ -286,6 +325,11 @@ export default function CreateProductSecondImagePage({
 							/>
 						)}
 					/>
+					{llmVersionError ? (
+						<PcErrorMessage errorMessage={llmVersionError} />
+					) : (
+						<span className="h-[18px] w-full text-transparent"> -- </span>
+					)}
 				</PcBaseWrapper>
 				<PcBaseWrapper>
 					<PcTitle>Seed</PcTitle>
@@ -295,6 +339,7 @@ export default function CreateProductSecondImagePage({
 						type="number"
 						{...register(createProductSecondImageSchemaKeys.seed)}
 					/>
+					<span className="h-[18px] w-full text-transparent"> -- </span>
 				</PcBaseWrapper>
 			</div>
 			{/* Sample variables and outputs */}
@@ -334,13 +379,27 @@ export default function CreateProductSecondImagePage({
 
 			<PcTitle className="mt-6">Examples</PcTitle>
 			{contentFields.length > 0 ? (
-				<PcImagePromptSampleList
-					contentFields={contentFields}
-					onDragEnd={onDragEnd}
-					onRemove={remove}
-				/>
+				<>
+					<PcImagePromptSampleList
+						contentFields={contentFields}
+						onDragEnd={onDragEnd}
+						onRemove={remove}
+					/>
+					{contentsError ? (
+						<PcErrorMessage errorMessage={contentsError} />
+					) : (
+						<span className="h-[18px] w-full text-transparent"> -- </span>
+					)}
+				</>
 			) : (
-				<PcPromptSampleSkeleton />
+				<>
+					<PcPromptSampleSkeleton />
+					{contentsError ? (
+						<PcErrorMessage errorMessage={contentsError} />
+					) : (
+						<span className="h-[18px] w-full text-transparent"> -- </span>
+					)}
+				</>
 			)}
 			<PcSaveBar
 				className="mt-10"
