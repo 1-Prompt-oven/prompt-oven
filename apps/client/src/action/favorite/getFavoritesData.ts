@@ -34,12 +34,8 @@ export async function getFavoriteList(
 	const payload = {
 		memberUuid: memberUUID,
 		pageSize: 15,
-		cursorId: "",
+		cursorId: cursorId ? cursorId : "",
 		sortBy: "DESC",
-	}
-
-	if (cursorId) {
-		payload.cursorId = cursorId
 	}
 
 	const query = createQueryParamString(payload)

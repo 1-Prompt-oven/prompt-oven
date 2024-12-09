@@ -1,8 +1,8 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { getFavoriteList } from "@/action/favorite/getFavoritesData"
 import { ThreeDots } from "react-loader-spinner"
+import { getFavoriteList } from "@/action/favorite/getFavoritesData"
 import type { PromptItemType, PromptsType } from "@/types/prompts/promptsType"
 import FavoriteList from "../molecule/FavoriteList"
 import FavoriteResultBar from "../molecule/FavoriteCountBar"
