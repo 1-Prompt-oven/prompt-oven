@@ -1,4 +1,4 @@
-import { MoreVertical, Phone, Search, Video } from "@repo/ui/lucide"
+import { MessageSquare, MoreVertical, Video } from "@repo/ui/lucide"
 import { ChAvatar } from "@/components/chat/atom/ChAvatar.tsx"
 
 interface ChatHeaderProps {
@@ -6,6 +6,7 @@ interface ChatHeaderProps {
 	isActive?: boolean
 	avatarSrc?: string
 	onProfileClick?: () => void
+	onOpenSidebar?: () => void
 }
 
 export function ChatHeader({
@@ -13,6 +14,7 @@ export function ChatHeader({
 	isActive,
 	avatarSrc,
 	onProfileClick,
+	onOpenSidebar,
 }: ChatHeaderProps) {
 	return (
 		<div className="flex items-center justify-between border-b border-[#E3E8E7]/40 bg-[#111111] px-8 py-6">
@@ -39,11 +41,10 @@ export function ChatHeader({
 			</div>
 
 			<div className="flex items-center gap-3.5">
-				<button className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
-					<Search className="h-5 w-5 text-[#E2ADFF]" />
-				</button>
-				<button className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
-					<Phone className="h-5 w-5 text-[#E2ADFF]" />
+				<button
+					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10"
+					onClick={onOpenSidebar}>
+					<MessageSquare className="h-5 w-5 text-[#E2ADFF]" />
 				</button>
 				<button className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
 					<Video className="h-5 w-5 text-[#E2ADFF]" />
@@ -55,3 +56,15 @@ export function ChatHeader({
 		</div>
 	)
 }
+
+/*
+<button className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
+					<Search className="h-5 w-5 text-[#E2ADFF]" />
+				</button>
+				<button className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
+					<Phone className="h-5 w-5 text-[#E2ADFF]" />
+				</button>
+				<button className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
+					<Video className="h-5 w-5 text-[#E2ADFF]" />
+				</button>
+ */

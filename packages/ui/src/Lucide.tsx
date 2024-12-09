@@ -66,5 +66,6 @@ export {
 	Copy,
 	Image,
 	MessageSquarePlus,
+	MessageSquare,
 	type LucideProps,
 } from "lucide-react"

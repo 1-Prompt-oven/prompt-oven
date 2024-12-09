@@ -20,9 +20,15 @@ interface ChatMainProps {
 		avatarSrc?: string
 	}
 	onProfileClick?: () => void
+	onOpenSidebar?: () => void
 }
 
-export function ChatMain({ messages, contact, onProfileClick }: ChatMainProps) {
+export function ChatMain({
+	messages,
+	contact,
+	onProfileClick,
+	onOpenSidebar,
+}: ChatMainProps) {
 	return (
 		<div className="flex h-full flex-1 flex-col overflow-hidden bg-[#424242]">
 			<ChatHeader
@@ -30,6 +36,7 @@ export function ChatMain({ messages, contact, onProfileClick }: ChatMainProps) {
 				isActive={contact.isActive}
 				avatarSrc={contact.avatarSrc}
 				onProfileClick={onProfileClick}
+				onOpenSidebar={onOpenSidebar}
 			/>
 
 			<div className="flex-1 space-y-4 overflow-y-auto p-4 md:space-y-6 md:p-8">

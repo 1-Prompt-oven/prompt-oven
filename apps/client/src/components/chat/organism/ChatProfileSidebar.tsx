@@ -22,8 +22,8 @@ export function ChatProfileSidebar({
 }: ChatProfileSidebarProps) {
 	return (
 		<div
-			className={`h-full overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "w-full md:w-[329px]" : "w-0"}`}>
-			<div className="flex h-full w-full flex-col border-l border-[#424242] bg-[#111111] transition-all duration-300 ease-in-out md:w-[329px]">
+			className={`h-full overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "w-full md:!w-80" : "w-0"}`}>
+			<div className="flex h-full w-full flex-col border-l border-[#424242] bg-[#111111] transition-all duration-300 ease-in-out md:!w-80">
 				{/* Header */}
 				<div className="flex justify-between p-4 md:p-6">
 					<button

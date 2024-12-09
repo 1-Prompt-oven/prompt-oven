@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import { Menu } from "@repo/ui/lucide"
 import { ChatSidebar } from "@/components/chat/organism/ChatSidebar.tsx"
 import { ChatMain } from "@/components/chat/organism/ChatMain.tsx"
 import { ChatProfileSidebar } from "@/components/chat/organism/ChatProfileSidebar.tsx"
@@ -58,7 +57,7 @@ export default function ChatPage() {
 	const [showSidebar, setShowSidebar] = useState(false)
 
 	return (
-		<div className="flex h-screen overflow-hidden bg-[#111111]">
+		<div className="flex h-[calc(100vh-80px)] overflow-hidden bg-[#111111]">
 			<div
 				className={`absolute inset-y-0 left-0 z-30 transition-transform duration-300 ease-in-out md:!static md:!w-[424px] ${showSidebar ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
 				<ChatSidebar
@@ -76,19 +75,11 @@ export default function ChatPage() {
 			</div>
 			<div className="flex flex-1 flex-col overflow-hidden md:!flex-row">
 				<div className="flex flex-1 flex-col">
-					<div className="flex items-center justify-between border-b border-[#E3E8E7]/40 bg-[#111111] p-4 md:!hidden">
-						<button
-							onClick={() => setShowSidebar(!showSidebar)}
-							className="text-[#E2ADFF]">
-							<Menu size={24} />
-						</button>
-						<h1 className="text-lg font-semibold text-[#E2ADFF]">Chat</h1>
-						<div className="w-6" />
-					</div>
 					<ChatMain
 						messages={MESSAGES}
 						contact={selectedContact}
-						onProfileClick={() => setShowProfile(true)}
+						onProfileClick={() => setShowProfile(!showProfile)}
+						onOpenSidebar={() => setShowSidebar(!showSidebar)}
 					/>
 				</div>
 				<div
