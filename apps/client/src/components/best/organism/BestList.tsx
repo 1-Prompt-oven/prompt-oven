@@ -25,3 +25,4 @@ function BestList({ data }: BestListProps<BestCreatorDataTypes>) {
 }
 
 export default BestList
+

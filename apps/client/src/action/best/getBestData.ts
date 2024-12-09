@@ -1,13 +1,14 @@
-"use server"
-
+import { dummyRankingData } from "@/dummy/best/bestCreatorData2"
 import { BestCreatorDatas } from "@/dummy/best/bestCreatorData"
-import type { BestCreatorCursorListTypes } from "@/types/best/bestTypes"
+import type {
+	BestCreatorCursorListTypes,
+	BestCreatorCursorListTypes2,
+} from "@/types/best/bestTypes"
 
 interface FetchBestCreatorsParams {
-	lastCreatedAt: string
-	lastId: string
-	pageSize: number
-	page: number
+	lastRanking?: number
+	pageSize?: number
+	date: string
 }
 
 export async function getBestCreatorData(
@@ -44,6 +45,60 @@ export async function getBestCreatorData(
 	// }
 
 	return res
+}
+
+export async function fetchRankingList(
+	_params: FetchBestCreatorsParams,
+): Promise<BestCreatorCursorListTypes2> {
+	// "use server"
+	// try {
+	// 	// 1. 베스트 API 호출
+	// 	const bestResponse = await fetch(
+	// 		`${process.env.API_BASE_URL}/v1/seller-batch/aggregate/bestSellers?date=${params.date}&pageSize=${params.pageSize}&lastRanking${params.lastRanking}`,
+	// 	)
+	// 	if (!bestResponse.ok) {
+	// 		throw new Error("Failed to fetch best ranking data")
+	// 	}
+	// 	const bestData = (await bestResponse.json()) as CommonResType2<
+	// 		BestCreatorDataType2[]
+	// 	>
+
+	// 	// 2. 프로필 API 병렬 호출
+	// 	const profilePromises = bestData.result.map(async (bestItem) => {
+	// 		const profileResponse = await fetch(
+	// 			`${process.env.API_BASE_URL}/v1/profile/uuid/${bestItem.memberUuid}`,
+	// 		)
+	// 		if (!profileResponse.ok) {
+	// 			throw new Error(
+	// 				`Failed to fetch profile for UUID: ${bestItem.memberUuid}`,
+	// 			)
+	// 		}
+	// 		const profileData =
+	// 			(await profileResponse.json()) as CommonResType2<ProfileMemberInfoType>
+
+	// 		// 3. 데이터 결합
+	// 		return {
+	// 			memberUUID: bestItem.memberUuid,
+	// 			ranking: bestItem.ranking,
+	// 			rankingChange: bestItem.rankingChange,
+	// 			dailySellsCount: bestItem.dailySellsCount,
+	// 			avgStar: bestItem.reviewAvg,
+	// 			date: bestItem.date,
+	// 			avatarImage: profileData.result.avatarImageUrl,
+	// 			nickname: profileData.result.nickname,
+	// 			follower: profileData.result.follower,
+	// 			hashTag: profileData.result.hashTag,
+	// 		}
+	// 	})
+
+	// 	// 4. 모든 프로필 데이터 병렬 처리
+	// 	const renderedData = await Promise.all(profilePromises)
+	// 	return renderedData
+	// } catch (error) {
+	// 	console.error("Error fetching ranking data:", error)
+	// 	return []
+	// }
+	return dummyRankingData
 }
 
 export const followAction = async (_memberUUID: string) => {
