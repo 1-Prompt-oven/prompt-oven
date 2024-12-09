@@ -12,11 +12,11 @@ import {
 } from "@repo/ui/lucide"
 
 interface BestCardProps {
-	memberUUID: string // 베스트
+	memberUuid: string // 베스트
 	ranking: number // 베스트
 	rankingChange: number // 베스트
 	dailySellsCount: number // 베스트
-	avgStar: number // 베스트
+	reviewAvg: number // 베스트
 	_date: string // 베스트
 	avatarImage: string | undefined // 프로필
 	nickname: string // 프로필
@@ -27,11 +27,11 @@ interface BestCardProps {
 }
 
 export function BestCreatorListItem({
-	memberUUID,
+	memberUuid,
 	ranking,
 	rankingChange,
 	dailySellsCount,
-	avgStar,
+	reviewAvg,
 	_date,
 	avatarImage = "https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
 	nickname,
@@ -41,7 +41,7 @@ export function BestCreatorListItem({
 	_views,
 }: BestCardProps) {
 	return (
-		<Link href={`/profile/${memberUUID}`}>
+		<Link href={`/profile/${memberUuid}`}>
 			<div className="ml-5 grid grid-cols-12 items-center border-b border-gray-800 px-4 py-3 transition-colors hover:bg-gray-800/50">
 				<div className="col-span-2 flex items-center gap-2">
 					<Trophy className="h-5 w-5 text-fuchsia-500" />
@@ -66,7 +66,10 @@ export function BestCreatorListItem({
 				</div>
 				<div className="col-span-3 flex items-center gap-2">
 					<Image
-						src={avatarImage}
+						src={
+							avatarImage ||
+							"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png"
+						}
 						alt={`${nickname}'s profile`}
 						width={32}
 						height={32}
@@ -89,7 +92,7 @@ export function BestCreatorListItem({
 				</div>
 				<div className="col-span-1 flex items-center gap-1 text-white/80">
 					<Star className="h-4 w-4 text-yellow-400" />
-					<span>{avgStar.toFixed(1)}</span>
+					<span>{reviewAvg.toFixed(1)}</span>
 				</div>
 				<div className="col-span-2 flex items-center gap-1 text-white/80">
 					<Users className="h-4 w-4" />
@@ -103,3 +106,4 @@ export function BestCreatorListItem({
 		</Link>
 	)
 }
+

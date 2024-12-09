@@ -11,7 +11,7 @@ interface FetchBestCreatorsParams {
 
 export default async function Page() {
 	const params: FetchBestCreatorsParams = {
-		date: "2023-01-01",
+		date: "2024-12-08",
 		pageSize: 10,
 		lastRanking: 0,
 	}
@@ -36,3 +36,4 @@ export default async function Page() {
 // 닉네임 -> 프로필
 // 팔로워 수 -> 프로필
 // 해시태그 -> 프로필
+

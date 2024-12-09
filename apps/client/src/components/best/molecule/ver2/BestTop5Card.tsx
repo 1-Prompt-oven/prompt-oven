@@ -17,11 +17,11 @@ import { Badge } from "@repo/ui/badge"
 import Image from "next/image"
 
 interface BestCardProps {
-	memberUUID: string // 베스트
+	memberUuid: string // 베스트
 	ranking: number // 베스트
 	rankingChange: number // 베스트
 	dailySellsCount: number // 베스트
-	avgStar: number // 베스트
+	reviewAvg: number // 베스트
 	date: string // 베스트
 	avatarImage: string | undefined // 프로필
 	nickname: string // 프로필
@@ -32,11 +32,11 @@ interface BestCardProps {
 }
 
 export default function BestTop5Card({
-	memberUUID,
+	memberUuid,
 	ranking,
 	rankingChange,
 	dailySellsCount,
-	avgStar,
+	reviewAvg,
 	date,
 	avatarImage = "https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
 	nickname,
@@ -57,7 +57,7 @@ export default function BestTop5Card({
 	const daysSinceJoined = calculateDaysSinceJoined(date)
 
 	return (
-		<Link href={`/profile/${memberUUID}`}>
+		<Link href={`/profile/${memberUuid}`}>
 			<Card className="relative w-auto overflow-hidden bg-gradient-to-br from-purple-600 to-purple-700 p-4 text-white">
 				{/* Ranking */}
 				<div className="absolute left-3 top-3 flex items-center gap-2">
@@ -93,7 +93,10 @@ export default function BestTop5Card({
 				<div className="pb-4 pt-12">
 					<div className="relative mb-4 aspect-square overflow-hidden rounded-lg">
 						<Image
-							src={avatarImage}
+							src={
+								avatarImage ||
+								"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png"
+							}
 							alt={nickname}
 							className="h-full w-full object-cover"
 							width={100}
@@ -137,7 +140,7 @@ export default function BestTop5Card({
 									<Star className="h-4 w-4 text-yellow-400" />
 									<span>Rating</span>
 								</div>
-								<span className="font-semibold">{avgStar.toFixed(1)}</span>
+								<span className="font-semibold">{reviewAvg.toFixed(1)}</span>
 							</div>
 							<div className="flex items-center justify-between rounded-lg bg-white/10 px-3 py-2">
 								<div className="flex items-center gap-1">
@@ -170,3 +173,4 @@ export default function BestTop5Card({
 		</Link>
 	)
 }
+

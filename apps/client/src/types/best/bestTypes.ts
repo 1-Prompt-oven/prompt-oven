@@ -19,13 +19,11 @@ export interface BestCreatorDataType2 {
 }
 
 export interface BestCreatorCursorListTypes {
-	content: BestCreatorDataTypes[]
-	lastCreatedAt: string | null
-	lastId: string | null
+	content: BestCreatorDataType2[]
+	nextCursor: number
 	hasNext: boolean
 	pageSize: number
 	page: number
-	timeRange?: "daily" | "weekly" | "monthly"
 }
 
 // 크리에이터 페이징 정보 api
@@ -39,11 +37,11 @@ export interface BestCreatorCursorListTypes2 {
 
 // 화면에 렌더링되는 베스트 크리에이터 정보 (개별 베스트 + 프로필)
 export interface RenderedRankingItemTypes {
-	memberUUID: string // 베스트
+	memberUuid: string // 베스트
 	ranking: number // 베스트
 	rankingChange: number // 베스트
 	dailySellsCount: number // 베스트
-	avgStar: number // 베스트
+	reviewAvg: number // 베스트
 	date: string // 베스트
 	avatarImage: string | undefined // 프로필
 	nickname: string // 프로필
@@ -64,3 +62,4 @@ export interface RenderedRankingItemTypes {
 // 닉네임 -> 프로필
 // 팔로워 수 -> 프로필
 // 해시태그 -> 프로필
+

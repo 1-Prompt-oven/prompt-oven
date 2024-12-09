@@ -3,11 +3,11 @@ import type { BestCreatorCursorListTypes2 } from "@/types/best/bestTypes"
 export const dummyRankingData: BestCreatorCursorListTypes2 = {
 	content: [
 		{
-			memberUUID: "member-1",
+			memberUuid: "member-1",
 			ranking: 1,
 			rankingChange: 5,
 			dailySellsCount: 30,
-			avgStar: 4.5,
+			reviewAvg: 4.5,
 			date: "2024-12-08",
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
@@ -18,11 +18,11 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-2",
+			memberUuid: "member-2",
 			ranking: 2,
 			rankingChange: -3,
 			dailySellsCount: 45,
-			avgStar: 3.8,
+			reviewAvg: 3.8,
 			date: "2024-12-08",
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
@@ -33,11 +33,11 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-3",
+			memberUuid: "member-3",
 			ranking: 3,
 			rankingChange: 0,
 			dailySellsCount: 20,
-			avgStar: 4.0,
+			reviewAvg: 4.0,
 			date: "2024-12-08",
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
@@ -48,11 +48,11 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-4",
+			memberUuid: "member-4",
 			ranking: 4,
 			rankingChange: 2,
 			dailySellsCount: 15,
-			avgStar: 3.5,
+			reviewAvg: 3.5,
 			date: "2024-12-08",
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
@@ -63,11 +63,11 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-5",
+			memberUuid: "member-5",
 			ranking: 5,
 			rankingChange: -1,
 			dailySellsCount: 25,
-			avgStar: 4.2,
+			reviewAvg: 4.2,
 			date: "2024-12-08",
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
@@ -78,12 +78,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-6",
+			memberUuid: "member-6",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -93,12 +93,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-7",
+			memberUuid: "member-7",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -108,12 +108,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-8",
+			memberUuid: "member-8",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -123,12 +123,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-9",
+			memberUuid: "member-9",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -138,12 +138,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-10",
+			memberUuid: "member-10",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -153,12 +153,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-11",
+			memberUuid: "member-11",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -168,12 +168,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-12",
+			memberUuid: "member-12",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -183,12 +183,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-13",
+			memberUuid: "member-13",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -198,12 +198,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-14",
+			memberUuid: "member-14",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -213,12 +213,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-15",
+			memberUuid: "member-15",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -228,12 +228,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-16",
+			memberUuid: "member-16",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -243,12 +243,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-17",
+			memberUuid: "member-17",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -258,12 +258,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-18",
+			memberUuid: "member-18",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -273,12 +273,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-19",
+			memberUuid: "member-19",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -288,12 +288,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-20",
+			memberUuid: "member-20",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -303,12 +303,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-21",
+			memberUuid: "member-21",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -318,12 +318,12 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 			views: 0,
 		},
 		{
-			memberUUID: "member-22",
+			memberUuid: "member-22",
 			ranking: 6,
 			avatarImage:
 				"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/prompt-detail/PromptDetailThumbnail.png",
 			date: "2024-12-08",
-			avgStar: 3.9,
+			reviewAvg: 3.9,
 			dailySellsCount: 10,
 			rankingChange: 1,
 			nickname: "Creator-6",
@@ -338,3 +338,4 @@ export const dummyRankingData: BestCreatorCursorListTypes2 = {
 	pageSize: 20,
 	page: 1,
 }
+

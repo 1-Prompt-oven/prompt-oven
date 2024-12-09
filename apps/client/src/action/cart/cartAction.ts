@@ -43,7 +43,6 @@ export async function cartData(): Promise<CartItemType[]> {
 
 async function fetchProductDetails(cartItems: CartItemApiResponseType[]) {
 	const productDetailsPromises = cartItems.map(async (cartItem) => {
-		console.log("productResponse", cartItem.productUuid)
 		const productResponse = await fetch(
 			`${process.env.API_BASE_URL}/v1/product/${cartItem.productUuid}`,
 			{

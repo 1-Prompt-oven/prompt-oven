@@ -20,6 +20,7 @@ function BestList({
 	data,
 	pagingInfo,
 }: BestListProps<RenderedRankingItemTypes>) {
+	const [list, setList] = useState<RenderedRankingItemTypes[]>(data)
 	const [loading, setLoading] = useState(false)
 	const [hasNext, setHasNext] = useState<boolean>(pagingInfo.hasNext)
 	const [nextCursor, setNextCursor] = useState<number | null>(
@@ -29,13 +30,12 @@ function BestList({
 
 	const fetchMoreData = () => {
 		if (loading || !hasNext || !nextCursor) return
-
 		setLoading(true)
-
 		fetchRankingList({ lastRanking: nextCursor, date: data[0].date })
 			.then((newCreators) => {
-				setNextCursor(newCreators.nextCursor)
 				setHasNext(newCreators.hasNext)
+				setNextCursor(newCreators.nextCursor)
+				setList((prevList) => [...prevList, ...newCreators.content])
 			})
 			.catch((error) => {
 				// eslint-disable-next-line no-console -- Error to Fetching
@@ -50,9 +50,7 @@ function BestList({
 		const observer = new IntersectionObserver(
 			async (entries) => {
 				if (entries[0].isIntersecting && !loading && hasNext && nextCursor) {
-					await fetchMoreData() // 비동기 작업이 완료될 때까지 기다림
-
-					// 데이터 로드가 성공적으로 완료된 후 스크롤 위치를 중앙으로 설정
+					await fetchMoreData()
 					const scrollY = window.scrollY
 					const windowHeight = window.innerHeight
 					const newScrollY = scrollY + windowHeight / 2
@@ -75,6 +73,7 @@ function BestList({
 	useEffect(() => {
 		window.scrollTo(0, 0)
 	}, [])
+
 	return (
 		<div className="mx-auto w-full max-w-[1716px]">
 			<div>
@@ -91,11 +90,11 @@ function BestList({
 				</div>
 				<div className="h-1 w-full bg-rose-200" />
 			</div>
-			{data.map((creator) => (
+			{list.map((creator) => (
 				<BestCreatorListItem
 					_date={creator.date}
 					_views={0}
-					key={creator.memberUUID}
+					key={creator.memberUuid}
 					{...creator}
 				/>
 			))}
@@ -130,3 +129,4 @@ function BestList({
 }
 
 export default BestList
+
