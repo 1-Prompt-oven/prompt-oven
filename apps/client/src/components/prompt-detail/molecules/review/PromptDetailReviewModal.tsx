@@ -1,5 +1,6 @@
 import Link from "next/link"
 import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
+import StarAnimation from "@repo/ui/star-animation"
 import { getCheckToday, ReviewDateFormatted } from "@/lib/utils"
 import { STATIC_DEFAULT_AVATAR } from "@/app/static/data"
 import type { ReviewContentType } from "@/types/review/reviewType"
@@ -19,21 +20,25 @@ export default function PromptDetailReviewModal({
 	return (
 		<li className="rounded-md bg-[#1b1b1b] text-white">
 			<div className="min-h-[100px]">
-				<Link
-					href={`/profile/${review.authorNickname}`}
-					className="ml-3 mt-1 flex items-center gap-4 lg:ml-6 lg:mt-2">
-					<Avatar className="h-4 w-4 lg:h-6 lg:w-6">
-						<AvatarImage src={profileImage} alt={review.authorNickname} />
-						<AvatarFallback>AU</AvatarFallback>
-					</Avatar>
-					<p className="mt-1 text-sm font-bold lg:text-lg">
-						{review.authorNickname}
-					</p>
-					<p className="mx-3 mt-1 flex gap-4 text-xs text-[#848898] lg:mx-6">
-						<span>{isNotToday !== null ? isNotToday : ""}</span>
-						<span>{formDate}</span>
-					</p>
-				</Link>
+				<div className="flex w-[98%] items-end justify-between">
+					<Link
+						href={`/profile/${review.authorNickname}`}
+						className="ml-3 mt-1 flex items-center gap-4 lg:ml-6 lg:mt-2">
+						<Avatar className="h-4 w-4 lg:h-6 lg:w-6">
+							<AvatarImage src={profileImage} alt={review.authorNickname} />
+							<AvatarFallback>AU</AvatarFallback>
+						</Avatar>
+						<p className="mt-1 text-sm font-bold lg:text-lg">
+							{review.authorNickname}
+						</p>
+						<p className="mx-3 mt-1 flex gap-4 text-xs text-[#848898] lg:mx-6">
+							<span>{isNotToday !== null ? isNotToday : ""}</span>
+							<span>{formDate}</span>
+						</p>
+					</Link>
+					<StarAnimation rateData={review.star} noAnimation={false} />
+				</div>
+
 				<PromptDetailReviewModalLine content={review.contents} />
 			</div>
 		</li>
