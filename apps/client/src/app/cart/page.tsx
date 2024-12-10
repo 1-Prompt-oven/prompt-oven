@@ -4,13 +4,13 @@ import { cartData } from "@/action/cart/cartAction"
 import { calculateTotalPrice } from "@/action/cart/cartDataAction"
 import CartTemplate from "@/components/cart/template/CartTemplate"
 
-async function cart() {
+async function Cart() {
 	const items: CartItemType[] = await cartData()
 	const selectedItem = items.filter((item) => item.selected)
 	const selectedItemsTotalPrice = await calculateTotalPrice(selectedItem)
 
 	return (
-		<main className="min-h-screen bg-black pt-10">
+		<main className="container mx-auto rounded-md bg-[#111111] py-1">
 			<CartTemplate
 				initialItems={items}
 				initialSelectedItems={selectedItem}
@@ -20,5 +20,4 @@ async function cart() {
 	)
 }
 
-export default cart
-
+export default Cart

@@ -2,6 +2,7 @@ import type { ForwardRefExoticComponent, RefAttributes } from "react"
 import type { LucideProps } from "@repo/ui/lucide"
 import {
 	Heart,
+	ShoppingCart,
 	LayoutDashboard,
 	LogIn,
 	Package,
@@ -117,6 +118,12 @@ export const sellerNavs: MenuNavItemType[] = [
 		query: { view: "favorites" },
 	},
 	{
+		icon: ShoppingCart,
+		label: "Cart",
+		href: "/account",
+		query: { view: "cart" },
+	},
+	{
 		icon: ShoppingBag,
 		label: "Purchases",
 		href: "/account",
@@ -162,10 +169,28 @@ export const userNavs: MenuNavItemType[] = [
 		query: { view: "favorites" },
 	},
 	{
+		icon: ShoppingCart,
+		label: "Cart",
+		href: "/account",
+		query: { view: "cart" },
+	},
+	{
 		icon: ShoppingBag,
 		label: "Purchases",
 		href: "/account",
 		query: { view: "purchases" },
+		subMenu: [
+			{
+				label: "Ongoing",
+				href: "/account",
+				query: { view: "purchase-ongoing" },
+			},
+			{
+				label: "Completed",
+				href: "/account",
+				query: { view: "purchase-completed" },
+			},
+		],
 	},
 	{
 		icon: Settings,
