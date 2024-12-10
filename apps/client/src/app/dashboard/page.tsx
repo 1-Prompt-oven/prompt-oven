@@ -1,12 +1,12 @@
 import React from "react"
-import Dashboard from "@/components/dashboard/templete/Dashboard"
+import DashboardTemplete from "@/components/dashboard/templete/DashboardTemplete"
 
-function page() {
+async function dashboard() {
 	return (
 		<section>
-			<Dashboard />
+			<DashboardTemplete />
 		</section>
 	)
 }
 
-export default page
+export default dashboard

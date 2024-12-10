@@ -7,7 +7,7 @@ import ViewDashboard from "../molecule/ViewDashboard"
 import FollowDashboard from "../molecule/FollowDashboard"
 import SalesAmountDashboard from "../molecule/SalesAmountDashboard"
 
-function Dashboard() {
+function DashboardTemplete() {
 	const [selectedPeriod, setSelectedPeriod] = useState<string>("")
 	const [selectedUnit, setSelectedUnit] = useState<string>("")
 	return (
@@ -50,4 +50,4 @@ function Dashboard() {
 	)
 }
 
-export default Dashboard
+export default DashboardTemplete
