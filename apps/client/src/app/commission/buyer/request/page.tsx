@@ -1,5 +1,5 @@
 import React from "react"
-import CommissionForm from "@/components/commission/buyer/request/organism/CommissionForm"
+import { CommissionForm } from "@/components/commission/buyer/request/organism/CommissionForm"
 
 function page() {
 	return (
