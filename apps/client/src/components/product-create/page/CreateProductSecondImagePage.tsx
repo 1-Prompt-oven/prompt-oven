@@ -254,7 +254,7 @@ export default function CreateProductSecondImagePage({
 		if (type === "next") {
 			removeStorageItem(localStorageKeys.curTempProductUuid)
 			router.push(
-				`account?view=create-product&step=3&productName=${product?.productName}`,
+				`account?view=create-product&step=3&productName=${product?.productName}&productUuid=${product?.productUuid}`,
 			)
 		}
 	}
@@ -297,6 +297,8 @@ export default function CreateProductSecondImagePage({
 				sampleValue: replaceVariables(prompt, content.value),
 				contentUrl: _contentUrls[index],
 			})),
+			enabled: true,
+			temporary: false,
 		}
 		await updateProduct(reqBody)
 		setLastSaved(dayjs().format("YYYY-MM-DD HH:mm"))

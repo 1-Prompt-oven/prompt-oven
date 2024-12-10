@@ -235,7 +235,7 @@ export default function CreateProductSecondTextPage({
 		if (type === "next") {
 			removeStorageItem(localStorageKeys.curTempProductUuid)
 			router.push(
-				`account?view=create-product&step=3&productName=${product?.productName}`,
+				`account?view=create-product&step=3&productName=${product?.productName}&productUuid=${product?.productUuid}`,
 			)
 		}
 	}
@@ -256,6 +256,8 @@ export default function CreateProductSecondTextPage({
 				sampleValue: replaceVariables(prompt, content.value),
 				contentUrl: "",
 			})),
+			enabled: true,
+			temporary: false,
 		}
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("updateProduct reqbody", reqBody)
