@@ -11,7 +11,7 @@ function CartCheckout({ totalPrice, onCheckout }: TotalPriceProps) {
 	const discount = 0
 
 	return (
-		<div className="mb-4 h-full space-y-6 rounded-lg bg-gray-900 p-6 lg:w-[300px] xl:w-[350px]">
+		<div className="mb-4 h-full min-w-[280px] space-y-6 rounded-lg bg-gray-900 p-6 xl:w-[350px]">
 			<div className="space-y-4">
 				<h2 className="text-base font-semibold text-gray-200">
 					<span>주문 예상 금액</span>
