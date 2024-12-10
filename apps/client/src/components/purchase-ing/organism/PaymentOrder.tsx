@@ -28,7 +28,7 @@ export default function PaymentOrder({
 	let orderName
 	if (paymentList.length > 1)
 		orderName = `${paymentList[0].productName} 외 ${paymentList.length - 1}건`
-	else if (paymentList.length === 1) paymentList[0].productName
+	else if (paymentList.length === 1) orderName = paymentList[0].productName
 	else ""
 
 	let content
