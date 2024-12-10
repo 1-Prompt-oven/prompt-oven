@@ -11,6 +11,7 @@ import {
 import { calculateTotalPrice } from "@/action/cart/cartDataAction"
 import CartItemContainer from "../organism/CartItemContainer"
 import CartCheckout from "../organism/CartCheckout"
+import CartTitle from "../atom/CartTitle"
 
 interface CartTemplateProps {
 	initialItems: CartItemType[]
@@ -46,7 +47,6 @@ function CartTemplate({
 	}
 
 	// 개별 체크 및 해제
-
 	const handleSelectItem = async (item: CartItemType) => {
 		const newItemState = { ...item, selected: !item.selected }
 
@@ -114,21 +114,18 @@ function CartTemplate({
 	}, [selectedItems])
 
 	return (
-		<div className="container mx-auto max-w-7xl">
-			<h1 className="mb-8 text-2xl font-bold text-white">My Cart</h1>
-			<div className="grid grid-cols-1 gap-8 lg:grid-cols-4">
-				<div className="lg:col-span-2">
-					<CartItemContainer
-						cartItems={cartItems}
-						handleSelectAll={handleSelectAll}
-						handleSelectItem={handleSelectItem}
-						handleDeleteItems={handleDeleteItems}
-						handleDeleteSelectedItems={handleDeleteSelectedItems}
-					/>
-				</div>
-				<div className="h-auto">
-					<CartCheckout totalPrice={totalPrice} onCheckout={handleCheckout} />
-				</div>
+		<div className="mx-auto mt-4 flex max-w-screen-xl flex-col gap-8">
+			<CartTitle />
+
+			<div className="mx-6 flex flex-col justify-between gap-12 lg:!flex-row">
+				<CartItemContainer
+					cartItems={cartItems}
+					handleSelectAll={handleSelectAll}
+					handleSelectItem={handleSelectItem}
+					handleDeleteItems={handleDeleteItems}
+					handleDeleteSelectedItems={handleDeleteSelectedItems}
+				/>
+				<CartCheckout totalPrice={totalPrice} onCheckout={handleCheckout} />
 			</div>
 		</div>
 	)
