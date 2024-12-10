@@ -80,7 +80,7 @@ export default function CreateProductSecondImagePage({
 	// error state for product fields
 	const [llmVersionError, setLlmVersionError] = useState<string>("")
 	const [contentsError, setContentsError] = useState<string>("")
-	const resetFiledErrors = () => {
+	const resetFieldErrors = () => {
 		setLlmVersionError("")
 		setContentsError("")
 	}
@@ -247,7 +247,7 @@ export default function CreateProductSecondImagePage({
 
 	// save handler
 	const onSave = async (type: "draft" | "next") => {
-		resetFiledErrors()
+		resetFieldErrors()
 		if (type === "next" && !checkRequiredFieldsValid()) return
 
 		await updatePromptProduct()
