@@ -9,6 +9,7 @@ import type {
 	ProductListSearchParams,
 } from "@/types/account/searchParams.ts"
 import CreateProductPage from "@/components/product-create/page/CreateProductPage.tsx"
+import SellerCommisionListPage from "@/app/commission/seller/page"
 import { authOptions } from "@/app/api/auth/[...nextauth]/authOption"
 import { getUserAuth } from "@/lib/userAuth.ts"
 import SellerProductListPage from "@/components/seller/page/SellerProductListPage.tsx"
@@ -59,3 +60,4 @@ export default async function page({ searchParams }: AccountSearchParams) {
 		</ContentWrapper>
 	)
 }
+

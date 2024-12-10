@@ -20,6 +20,8 @@ export interface Commission {
 	deadline: string
 	status: CommissionStatus
 	result?: string
+	createdAt: string
+	requester?: string
 }
 
 export interface RevisionRequest {
