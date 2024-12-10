@@ -5,9 +5,12 @@ import { ShoppingBag } from "@repo/ui/lucide"
 export default function PromptDetailGet() {
 	return (
 		<div>
-			<Button className="h-[60px] rounded-full bg-gradient-to-r from-[#FC466B] to-[#AD20F2] text-lg font-semibold text-white">
+			<Button className="h-[40px] rounded-full bg-gradient-to-r from-[#FC466B] to-[#AD20F2] text-lg font-semibold text-white xs:h-[60px]">
 				<ShoppingBag className="mx-2 h-5 w-5" />
-				<span className="pr-2">GET PROMPT</span>
+
+				<p className="flex gap-2 pr-2">
+					GET <span className="hidden xs:!block">PROMPT</span>
+				</p>
 			</Button>
 		</div>
 	)

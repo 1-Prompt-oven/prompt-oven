@@ -6,8 +6,10 @@ import KakaoProvider from "next-auth/providers/kakao"
 import { signInByAuth, signInByOAuth } from "@/action/auth/OAuthSignInAction.ts"
 import { refreshAccessToken } from "@/action/auth/authTokenAction"
 import type { ExtendedToken } from "@/types/auth/AuthToken"
+import type { SignInResponse } from "@/types/auth/OAuthType"
 import { logoutAuthMember } from "@/action/auth/memberManageAction"
 import { getProfileImage } from "@/action/profile/getProfilePic"
+import { encryptPasswordWithDH, destroyDHSession } from "@/action/auth/dhAction"
 
 export const authOptions: NextAuthOptions = {
 	session: {
@@ -27,106 +29,153 @@ export const authOptions: NextAuthOptions = {
 					return null
 				}
 
-                const response = await signInByAuth({
-                    email: credentials.email,
-                    password: credentials.password,
-                });
-                const profileImage = await getProfileImage(response.result.memberUUID)
-                console.log("signInByAuth",response)
-                return {
-                    accesstoken: response.result.accesstoken,
-                    refreshtoken: response.result.refreshtoken,
-                    email: credentials.email,
-                    nickname: response.result.nickname,
-                    memberUUID: response.result.memberUUID,
-                    role: response.result.role,
-                    profileImage: profileImage.picture || "",
-                    failed: false,
-                };
-            },
-        }),
-        NaverProvider({
-            clientId: process.env.NAVER_CLIENT_ID || "",
-            clientSecret: process.env.NAVER_CLIENT_SECRET || "",
-        }),
-        KakaoProvider({
-            clientId: process.env.KAKAO_CLIENT_ID || "",
-            clientSecret: process.env.KAKAO_CLIENT_SECRET || "",
-        }),
-        GoogleProvider({
-            clientId: process.env.GOOGLE_CLIENT_ID || "",
-            clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-        }),
-    ],
-    secret: process.env.NEXTAUTH_SECRET,
-    callbacks: {
-        async signIn({ user, account, profile }) {
-          if (account?.provider === "credentials") {
-            if (user) {
-              return true;
-            } else {
-              return false;
-            }
-          }
-            //소셜 로그인 공통 처리
-            if (account?.provider) {
-              console.log(`${account.provider} Sign-In detected:`, account, profile)
+				try {
+					// Try DH key exchange first
+					let response: SignInResponse | null = null;
+					let usedDH = false;
 
-              let providerID: string;
-              let email: string | undefined
+					try {
+						// Attempt DH key exchange
+						const { encryptedPassword, sessionId } = await encryptPasswordWithDH(credentials.password)
+						if (!encryptedPassword) {
+							throw new Error("Failed to encrypt password")
+						}
+						// Call v2 sign-in API with encrypted password
+						response = await signInByAuth({
+							email: credentials.email,
+							password: await encryptedPassword,
+							sessionId,
+							version: 'v2'
+						})
+						// Cleanup DH session regardless of success
+						void destroyDHSession(sessionId)
 
-              switch (account.provider) {
-                case "google":
-                  providerID = account.id as string
-                  email = profile?.email || "";
-                  break;
+						if (response) {
+							usedDH = true
+						}
+					} catch (dhError) {
+						// eslint-disable-next-line no-console -- 오류 출력
+						console.warn("DH key exchange failed, falling back to v1:", dhError)
+					}
 
-                case "naver":
-                  providerID = account.id as string
-                  email = user.email || "";
-                  break;
+					// If DH failed, fall back to v1 login
+					if (!usedDH) {
+						response = await signInByAuth({
+							email: credentials.email,
+							password: credentials.password,
+							version: 'v1'
+						})
+					}
 
-                case "kakao":
-                  providerID = account.id as string
-                  email = user.email || "";
-                  break;
+					// Check if response is valid
+					if (!response) {
+						// eslint-disable-next-line no-console -- 오류 출력
+						console.error("Invalid response from sign-in API:", response)
+						return null
+					}
 
-                default:
-                  console.error("Unsupported provider:", account.provider)
-                  return false;
-              }
+					const profileImage = await getProfileImage(response.memberUUID)
+					
+					return {
+						accesstoken: response.accesstoken,
+						refreshtoken: response.refreshtoken,
+						email: credentials.email,
+						nickname: response.nickname,
+						memberUUID: response.memberUUID,
+						role: response.role,
+						profileImage: profileImage.picture || "",
+						failed: false,
+					}
+				} catch (error) {
+					// eslint-disable-next-line no-console -- 오류 출력
+					console.error("Authentication error:", error)
+					return null
+				}
+			},
+		}),
+		NaverProvider({
+			clientId: process.env.NAVER_CLIENT_ID || "",
+			clientSecret: process.env.NAVER_CLIENT_SECRET || "",
+		}),
+		KakaoProvider({
+			clientId: process.env.KAKAO_CLIENT_ID || "",
+			clientSecret: process.env.KAKAO_CLIENT_SECRET || "",
+		}),
+		GoogleProvider({
+			clientId: process.env.GOOGLE_CLIENT_ID || "",
+			clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+		}),
+	],
+	secret: process.env.NEXTAUTH_SECRET,
+	callbacks: {
+		async signIn({ user, account, profile }) {
+			if (account?.provider === "credentials") {
+				if (user) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+			//소셜 로그인 공통 처리
+			if (account?.provider) {
+				console.log(`${account.provider} Sign-In detected:`, account, profile)
 
-              // OAuth API 호출
-              const response = await signInByOAuth({
-                provider: account.provider,
-                providerID,
-                email,
-              });
+				let providerID: string;
+				let email: string | undefined
 
-              if (response) {
-                // eslint-disable-next-line no-console -- This is a client-side only log
-                console.log(`${account.provider} OAuth API response:`, response)
-                return true
-              } else {
-                // eslint-disable-next-line no-console -- This is a client-side only log
-                console.error(`${account.provider} OAuth API failed:`, response)
-                return '/sign-up';
-              }
-            }
-            return true;
-          },
-          async jwt({ token, user }): Promise<ExtendedToken> {
-            if (user) {
-                token.accesstoken = user.accesstoken
-                token.refreshtoken = user.refreshtoken
-                token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
-            }
-            if (Date.now() >= (token.tokenExpiration as number || 0)) {
-                const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "")
-                if (refreshedToken.result) {
-                  const profileImage = await getProfileImage(user.memberUUID)
-                  token.profileImage = profileImage.picture || ""
-                  user.profileImage = profileImage.picture || ""
+				switch (account.provider) {
+					case "google":
+						providerID = account.id as string
+						email = profile?.email || "";
+						break;
+
+					case "naver":
+						providerID = account.id as string
+						email = user.email || "";
+						break;
+
+					case "kakao":
+						providerID = account.id as string
+						email = user.email || "";
+						break;
+
+					default:
+						// eslint-disable-next-line no-console -- 오류 출력
+						console.error("Unsupported provider:", account.provider)
+						return false;
+				}
+
+				// OAuth API 호출
+				const response = await signInByOAuth({
+					provider: account.provider,
+					providerID,
+					email,
+				});
+
+				if (response) {
+					// eslint-disable-next-line no-console -- This is a client-side only log
+					console.log(`${account.provider} OAuth API response:`, response)
+					return true
+				} else {
+					// eslint-disable-next-line no-console -- This is a client-side only log
+					console.error(`${account.provider} OAuth API failed:`, response)
+					return '/sign-up';
+				}
+			}
+			return true;
+		},
+		async jwt({ token, user }): Promise<ExtendedToken> {
+			if (user) {
+				token.accesstoken = user.accesstoken
+				token.refreshtoken = user.refreshtoken
+				token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
+			}
+			if (Date.now() >= (token.tokenExpiration as number || 0)) {
+				const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "")
+				if (refreshedToken.result) {
+					const profileImage = await getProfileImage(user.memberUUID)
+					token.profileImage = profileImage.picture || ""
+					user.profileImage = profileImage.picture || ""
 
 					token.accesstoken = refreshedToken.result.accessToken
 					user.accesstoken = refreshedToken.result.accessToken

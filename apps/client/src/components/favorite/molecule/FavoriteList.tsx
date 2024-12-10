@@ -1,4 +1,4 @@
-import PromptCardAccount from "@/components/common/organism/PromptCardAccount"
+import PromptCard from "@/components/common/organism/PromptCard"
 import type { PromptItemType } from "@/types/prompts/promptsType"
 
 interface FavoriteListProps {
@@ -7,14 +7,18 @@ interface FavoriteListProps {
 
 export default function FavoriteList({ favoriteList }: FavoriteListProps) {
 	return (
-		<div className="mx-auto">
-			<ul className="grid grid-cols-1 gap-8 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
-				{favoriteList.length > 0
-					? favoriteList.map((item) => (
-							<PromptCardAccount productInfo={item} key={item.productUuid} />
-						))
-					: null}
-			</ul>
+		<div className="mx-auto w-full">
+			{favoriteList.length > 0 ? (
+				<ul className="grid grid-cols-1 gap-8 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+					{favoriteList.map((item) => (
+						<PromptCard productInfo={item} key={item.productUuid} />
+					))}
+				</ul>
+			) : (
+				<div className="flex h-[400px] items-center justify-center">
+					<span className="text-[#969696]">찜한 프롬프트가 없습니다..</span>
+				</div>
+			)}
 		</div>
 	)
 }

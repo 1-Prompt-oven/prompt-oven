@@ -15,23 +15,28 @@ export interface OAuthSignInRequest {
 	providerID: string
 	email: string
 }
-export interface OAuthSignInResponse {
+
+// Base response type for auth results
+export interface AuthResponse {
+	result: {
+		accesstoken: string
+		refreshtoken: string
+		nickname: string
+		role: string
+		memberUUID: string
+	}
+}
+
+// OAuth specific response adds failed flag
+export interface OAuthSignInResponse extends Omit<AuthResponse['result'], 'role'> {
+	failed: boolean
+}
+
+// Regular sign-in response
+export interface SignInResponse {
 	accesstoken: string
 	refreshtoken: string
 	nickname: string
 	role: string
 	memberUUID: string
-	failed: boolean
-}
-
-// export type SignInResponse = Omit<OAuthSignInResponse, 'failed'>
-
-export interface SignInResponse {
-  result: {
-    accesstoken: string,
-    refreshtoken: string,
-    nickname: string,
-    role: string,
-    memberUUID: string
-}
 }
