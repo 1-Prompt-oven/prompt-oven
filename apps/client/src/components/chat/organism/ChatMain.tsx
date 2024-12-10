@@ -43,7 +43,7 @@ export function ChatMain({
 	const { messages: sseMessages } = useSSE(roomId)
 	const { ref, inView } = useInView()
 
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, ...result } =
 		useInfiniteQuery({
 			queryKey: ["chatMessages", roomId],
 			queryFn: async ({ pageParam = 0 }) => {
@@ -55,6 +55,8 @@ export function ChatMain({
 				})
 				// eslint-disable-next-line no-console -- 결과 출력
 				console.log("response in inf query: ", response)
+				// eslint-disable-next-line no-console -- 결과 출력
+				console.log("result in inf query: ", result)
 				if (!response.isSuccess) {
 					throw new Error("메시지를 가져오는데 실패했습니다")
 				}

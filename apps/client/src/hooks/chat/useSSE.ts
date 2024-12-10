@@ -12,6 +12,7 @@ This custom hook, `useSSE`, does the following:
 - The hook cleans up the connection when the component unmounts.
 
  */
+"use client"
 
 import { useEffect, useState } from "react"
 import type { GetReactiveChatMessageResponseType } from "@/types/chat/chatTypes"

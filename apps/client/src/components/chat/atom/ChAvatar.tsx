@@ -1,3 +1,5 @@
+import Image from "next/image"
+
 interface AvatarProps {
 	src?: string
 	alt?: string
@@ -16,9 +18,9 @@ export function ChAvatar({ src, alt, size = "md", fallback }: AvatarProps) {
 		<div
 			className={`${sizeClasses[size]} relative flex items-center justify-center rounded-full bg-[#E2ADFF]`}>
 			{src ? (
-				<img
+				<Image
 					src={src}
-					alt={alt}
+					alt={alt ?? "Chat Avatar"}
 					className="h-full w-full rounded-full object-cover"
 				/>
 			) : (
