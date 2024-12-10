@@ -38,6 +38,8 @@ export async function getReviewSimpleData(
 
 export async function getProductReview(
 	productUUID: string,
+	createAt?: string,
+	last?: string,
 	nextPage?: number,
 ): Promise<PromptReviewType> {
 	"use server"
@@ -46,6 +48,8 @@ export async function getProductReview(
 
 	const payload = {
 		productUuid: productUUID,
+		lastCreatedAt: createAt ? createAt : "",
+		lastId: last ? last : "",
 		page: nextPage ? nextPage : 1,
 	}
 

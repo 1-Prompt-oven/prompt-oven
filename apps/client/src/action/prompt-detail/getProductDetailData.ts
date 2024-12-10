@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidateTag } from "next/cache"
 import { getAuthHeaders } from "@/lib/api/headers"
 import { getMemberUUID } from "@/lib/api/sessionExtractor"
 import { isValidResponse } from "@/lib/api/validation"
@@ -43,7 +44,7 @@ export async function getProductDetail(
 		{
 			method: "GET",
 			headers,
-			next: { tags: ["chageFollowing"] },
+			next: { tags: ["updateFavorite"] },
 		},
 	)
 
@@ -142,6 +143,7 @@ export async function changeFavoriteAction(
 		// throw new Error("Failed to fetch FavoriteState Data")
 		return false
 	}
+	revalidateTag("updateFavorite")
 	return true
 }
 

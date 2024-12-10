@@ -6,7 +6,7 @@ import type { PromptApiResponseType } from "@/types/common/responseType"
 import type { ProfileForSearchListType } from "@/types/profile/profileTypes"
 import type { SearchQueryType } from "./SearchDialogDrawer"
 import PromptSearchList from "./PromptSearchList"
-import CreatorSeachList from "./CreatorSearchList"
+import CreatorSearchList from "./CreatorSearchList"
 
 function InnerDialogSearchResult({
 	searchQuery,
@@ -32,8 +32,6 @@ function InnerDialogSearchResult({
 				return
 			}
 			const res = await fetchSearchResults(keyword, tabName)
-			// console.log(tabName);
-			// console.log(res);
 			if (tabName === "prompt") {
 				if (
 					(res as unknown as PromptApiResponseType).productList.length === 0
@@ -52,7 +50,6 @@ function InnerDialogSearchResult({
 	)
 
 	useEffect(() => {
-		// if (searchQuery.keyword === '') return;
 		setIsNodata(false)
 		debounceRes(searchQuery.keyword, searchQuery.tabName)
 		return () => debounceRes.cancel()
@@ -64,7 +61,7 @@ function InnerDialogSearchResult({
 				<PromptSearchList data={promptData} />
 			) : null}
 			{searchQuery.tabName === "creator" && creatorData.length > 0 && (
-				<CreatorSeachList data={creatorData} />
+				<CreatorSearchList data={creatorData} />
 			)}
 			{isNodata ? <p className="text-sm text-white">no data</p> : null}
 		</section>
