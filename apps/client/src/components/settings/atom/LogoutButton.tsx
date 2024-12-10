@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { signOut } from "next-auth/react"
 import { ThreeDots } from "react-loader-spinner"
 import GradientButton from "@/components/common/atom/GradientButton"
+import { resetLocalStorage } from "@/lib/localStorage.ts"
 
 function LogoutButton() {
 	const [loading, setLoading] = useState(false)
@@ -15,6 +16,7 @@ function LogoutButton() {
 
 		try {
 			await signOut({ redirect: true, callbackUrl: "/sign-in" })
+			resetLocalStorage()
 		} catch (err) {
 			if (err instanceof Error) {
 				setError(err.message)
