@@ -18,7 +18,7 @@ export function TextAreaField({
 		<div className="space-y-2">
 			<Label htmlFor={id} className="text-sm font-medium text-gray-200">
 				{label}
-				{required && <span className="ml-1 text-purple-400">*</span>}
+				{required ? <span className="ml-1 text-purple-400">*</span> : null}
 			</Label>
 			<Textarea
 				id={id}

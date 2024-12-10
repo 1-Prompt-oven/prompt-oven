@@ -22,11 +22,10 @@ export function FormField({
 		<div className="space-y-2">
 			<FormLabel htmlFor={id} required={required}>
 				{label}
-				{required && <span className="ml-1 text-purple-400">*</span>}
 			</FormLabel>
 			{children}
-			{description && <FormDescription>{description}</FormDescription>}
-			{error && <p className="mt-1 text-sm text-red-500">{error}</p>}
+			{description ? <FormDescription>{description}</FormDescription> : null}
+			{error ? <p className="mt-1 text-sm text-red-500">{error}</p> : null}
 		</div>
 	)
 }

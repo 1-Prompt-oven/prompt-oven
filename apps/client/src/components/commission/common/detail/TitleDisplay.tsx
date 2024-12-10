@@ -1,7 +1,11 @@
 import React from "react"
 
-function TitleDisplay() {
-	return <div>TitleDisplay</div>
+interface TitleDisplayProps {
+	title: string
+}
+
+function TitleDisplay({ title }: TitleDisplayProps) {
+	return <h1 className="text-2xl font-bold text-white">{title}</h1>
 }
 
 export default TitleDisplay
