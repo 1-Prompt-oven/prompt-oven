@@ -108,13 +108,13 @@ export default function BestTop5Card({
 					<div className="space-y-3">
 						<div className="flex items-center justify-between">
 							<h3 className="text-xl font-bold">{nickname}</h3>
-							{hashTag && (
+							{hashTag ? (
 								<Badge
 									variant="outline"
 									className="flex items-center border-purple-400 text-white">
 									{hashTag}
 								</Badge>
-							)}
+							) : null}
 						</div>
 
 						{/* Stats Grid */}
@@ -173,4 +173,3 @@ export default function BestTop5Card({
 		</Link>
 	)
 }
-
