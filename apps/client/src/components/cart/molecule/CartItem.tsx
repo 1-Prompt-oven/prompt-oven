@@ -17,7 +17,7 @@ function CartItem({
 }: CartItemProps) {
 	return (
 		<div className="flex min-w-[280px] flex-col gap-4 rounded-lg bg-gray-900 p-4">
-			<div className="mx-3 flex items-center justify-between">
+			<div className="mx-3 flex items-center justify-between gap-4">
 				<div className="flex items-center gap-4">
 					<CheckBox
 						checked={item.selected}
