@@ -1,26 +1,32 @@
-"use client"
-
-import React, { useState, useEffect } from "react"
 import { ShoppingCart } from "@repo/ui/lucide"
 import { cartData } from "@/action/cart/cartAction"
 import BadgeContainer from "@/components/common/atom/BadgeContainer.tsx"
-import type { CartItemType } from "@/types/cart/cartTypes"
 
-function CartCountBadge({ userAuth }: { userAuth: string }) {
-	const [cartCount, setCartCount] = useState<number>(0)
+export default async function CartCountBadge({
+	userAuth,
+}: {
+	userAuth: string
+}) {
+	if (userAuth === "guest") return
 
-	useEffect(() => {
-		const fetchCartData = async () => {
-			if (userAuth === "guest") {
-				return
-			}
-			const cartItems: CartItemType[] = await cartData()
-			const activeItems = cartItems.filter((item) => !item.deleted)
-			setCartCount(activeItems.length)
-		}
+	const cartList = await cartData()
+	const activeItems = cartList.filter((item) => !item.deleted)
+	const cartCount = activeItems.length
 
-		fetchCartData()
-	}, [])
+	// const [cartCount, setCartCount] = useState<number>(0)
+
+	// useEffect(() => {
+	// 	const fetchCartData = async () => {
+	// 		if (userAuth === "guest") {
+	// 			return
+	// 		}
+	// 		const cartItems: CartItemType[] = await cartData()
+	// 		const activeItems = cartItems.filter((item) => !item.deleted)
+	// 		setCartCount(activeItems.length)
+	// 	}
+
+	// 	fetchCartData()
+	// }, [])
 
 	return (
 		<BadgeContainer count={cartCount}>
@@ -28,4 +34,3 @@ function CartCountBadge({ userAuth }: { userAuth: string }) {
 		</BadgeContainer>
 	)
 }
-export default CartCountBadge

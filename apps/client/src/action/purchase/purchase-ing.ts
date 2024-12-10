@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidateTag } from "next/cache"
 import { getMemberUUID } from "@/lib/api/sessionExtractor"
 import type { PaymentItemType } from "@/types/purchase.ts/purchase-ongoing"
 import {
@@ -41,5 +42,6 @@ export async function allDeleteNoCheckCart() {
 		.map((item) => item.id) // id만 추출
 
 	const result = deleteCartItemList(selectedIds)
+	revalidateTag("updateCarts")
 	return result
 }
