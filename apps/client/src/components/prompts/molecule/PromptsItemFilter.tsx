@@ -61,7 +61,7 @@ export default function PromptsItemFilter({
 					<SelectContent>
 						<SelectItem value="like">좋아요 순</SelectItem>
 						<SelectItem value="avgStar">별점 순</SelectItem>
-						<SelectItem value="sells">판매량 순</SelectItem>
+						{/* <SelectItem value="sells">판매량 순</SelectItem> */}
 						<SelectItem value="createdAt">생성 순</SelectItem>
 						{/* <SelectItem value="reviewCount">리뷰 순</SelectItem> */}
 					</SelectContent>

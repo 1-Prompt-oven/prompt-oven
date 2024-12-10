@@ -25,10 +25,11 @@ export default function PaymentOrder({
 }: PaymentOrderProps) {
 	const [message, setMessage] = useState<string>("X")
 
-	const orderName =
-		paymentList.length > 1
-			? `${paymentList[0].productName} 외 ${paymentList.length - 1}건`
-			: paymentList[0].productName
+	let orderName
+	if (paymentList.length > 1)
+		orderName = `${paymentList[0].productName} 외 ${paymentList.length - 1}건`
+	else if (paymentList.length === 1) orderName = paymentList[0].productName
+	else ""
 
 	let content
 	if (method.payment) {
@@ -36,7 +37,7 @@ export default function PaymentOrder({
 			content = (
 				<PaymentProceed
 					method={method.payment}
-					orderName={orderName}
+					orderName={orderName ? orderName : ""}
 					totalPrice={totalPrice}
 					paymentList={paymentList}
 					message={message ? message : "X"}

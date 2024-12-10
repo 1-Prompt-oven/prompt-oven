@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidateTag } from "next/cache"
 import { getAuthHeaders } from "@/lib/api/headers"
 import { getMemberUUID } from "@/lib/api/sessionExtractor"
 import { isValidResponse } from "@/lib/api/validation"
@@ -43,7 +44,7 @@ export async function getProductDetail(
 		{
 			method: "GET",
 			headers,
-			next: { tags: ["chageFollowing"] },
+			next: { tags: ["updateFavorite"] },
 		},
 	)
 
@@ -142,6 +143,7 @@ export async function changeFavoriteAction(
 		// throw new Error("Failed to fetch FavoriteState Data")
 		return false
 	}
+	revalidateTag("updateFavorite")
 	return true
 }
 
@@ -174,6 +176,7 @@ export async function getCartStateAction(
 			(item) => item.productUuid === productUUID,
 		)
 		const cartId = foundItem ? foundItem.id : null // id 값을 찾거나 null 반환
+		revalidateTag("updateCarts")
 		return cartId
 	}
 	return null
@@ -232,6 +235,7 @@ export async function createCart(
 			(item) => item.productUuid === productUUID,
 		)
 		const newCartId = foundItem ? foundItem.id : null // id 값을 찾거나 null 반환
+		revalidateTag("updateCarts")
 		return { result: { res: true, state: "success", cartId: newCartId } }
 	}
 	//throw new Error("Failed to fetch Create Cart Data")
@@ -259,6 +263,7 @@ export async function changeCartState(
 	)
 
 	if (res.ok) {
+		revalidateTag("updateCarts")
 		return { result: { res: true, state: "success", cartId: null } }
 	}
 

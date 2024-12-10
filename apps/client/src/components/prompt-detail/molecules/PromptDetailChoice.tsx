@@ -69,11 +69,11 @@ export default function PromptDetailChoice({
 	}
 
 	return (
-		<div className="mr-2 flex flex-col justify-between gap-6 xs:!flex-row xs:gap-0 xl:mr-4">
+		<div className="mr-2 flex flex-row justify-between gap-6 xs:gap-0 xl:mr-4">
 			<div className="flex gap-6">
 				<Button
 					variant="outline"
-					className="flex h-[60px] w-[60px] items-center justify-center rounded-full border-none bg-white p-0"
+					className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-none bg-white p-0 xs:h-[60px] xs:w-[60px]"
 					onClick={likeHandler}>
 					{isFavorite.liked ? (
 						<Heart className="scale-150 transform fill-[#ef4444] text-[#ef4444] transition-transform duration-300 ease-in-out" />
@@ -84,7 +84,7 @@ export default function PromptDetailChoice({
 
 				<Button
 					variant="outline"
-					className="h-[60px] w-[60px] rounded-full border-none bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] p-0"
+					className="h-[40px] w-[40px] rounded-full border-none bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] p-0 xs:h-[60px] xs:w-[60px]"
 					onClick={cartHandler}>
 					{isCart !== null ? (
 						<ShoppingCartIcon className="scale-150 fill-white text-white transition-transform duration-300 ease-in-out hover:opacity-90" />

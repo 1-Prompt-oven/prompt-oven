@@ -3,28 +3,30 @@ import type {
 	PromptDetailInfoType,
 } from "@/types/prompt-detail/promptDetailType"
 import PromptDetailThumbnail from "../atoms/PromptDetailThumbnail"
+import PromptDetailChoice from "../molecules/PromptDetailChoice"
+import PromptDetailContents from "../molecules/PromptDetailContents"
 import PromptDetailInfo from "./PromptDetailInfo"
 
 interface PromptDetailMainProps {
 	contents: PromptDetailContentsType[]
-	productUuid: string
 	productDetail: PromptDetailInfoType
 }
 
 export default async function PromptDetailMain({
 	contents,
-	productUuid,
 	productDetail,
 }: PromptDetailMainProps) {
 	return (
 		<div className="rounded-lg">
 			<div className="flex flex-col gap-12 lg:!flex-row">
-				<PromptDetailThumbnail
-					thumbnailUrl={contents[0].contentUrl}
-					productUuid={productUuid}
-				/>
-
-				<PromptDetailInfo productDetail={productDetail} />
+				<div className="flex flex-col gap-6">
+					<PromptDetailThumbnail contents={contents} />
+					<PromptDetailChoice productUuid={productDetail.productUuid} />
+				</div>
+				<div className="flex flex-col gap-6">
+					<PromptDetailInfo productDetail={productDetail} />
+					<PromptDetailContents productContents={productDetail.contents} />
+				</div>
 			</div>
 		</div>
 	)

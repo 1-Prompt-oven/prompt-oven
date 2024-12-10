@@ -3,8 +3,6 @@ import { getFollowingState } from "@/action/prompt-detail/getProductDetailFollow
 import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
 import PromptDetailDescription from "../atoms/PromptDetailHash"
 import PromptDetailStandardInfo from "../atoms/PromptDetailStandardInfo"
-import PromptDetailContents from "../molecules/PromptDetailContents"
-import PromptDetailChoice from "../molecules/PromptDetailChoice"
 import PromptDetailSellor from "../atoms/PromptDetailSellor"
 
 interface PromptDetailInfoProps {
@@ -18,7 +16,7 @@ export default async function PromptDetailInfo({
 	const followState = await getFollowingState(sellerData.memberNickname)
 
 	return (
-		<div className="flex flex-col gap-12 lg:justify-between">
+		<div className="flex flex-col justify-between gap-6 xl:h-[600px]">
 			<PromptDetailStandardInfo
 				productUUID={productDetail.productUuid}
 				productRegistDate={productDetail.updatedAt}
@@ -32,10 +30,6 @@ export default async function PromptDetailInfo({
 			/>
 
 			<PromptDetailSellor sellerData={sellerData} followState={followState} />
-
-			<PromptDetailContents productContents={productDetail.contents} />
-
-			<PromptDetailChoice productUuid={productDetail.productUuid} />
 		</div>
 	)
 }

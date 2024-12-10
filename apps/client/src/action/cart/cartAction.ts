@@ -1,5 +1,6 @@
 /* eslint-disable no-console -- 개발 중 디버깅을 위해 console 사용을 허용 */
 "use server"
+import { revalidateTag } from "next/cache"
 import { getAuthHeaders } from "@/lib/api/headers"
 import type { CartItemType } from "@/types/cart/cartTypes"
 import type {
@@ -23,6 +24,7 @@ export async function cartData(): Promise<CartItemType[]> {
 			{
 				method: "GET",
 				headers,
+				next: { tags: ["updateCarts"] },
 			},
 		)
 
@@ -43,7 +45,6 @@ export async function cartData(): Promise<CartItemType[]> {
 
 async function fetchProductDetails(cartItems: CartItemApiResponseType[]) {
 	const productDetailsPromises = cartItems.map(async (cartItem) => {
-		console.log("productResponse", cartItem.productUuid)
 		const productResponse = await fetch(
 			`${process.env.API_BASE_URL}/v1/product/${cartItem.productUuid}`,
 			{
@@ -138,6 +139,8 @@ export async function deleteCartItem(cartId: number): Promise<void> {
 		)
 
 		await response.json()
+
+		revalidateTag("updateCarts")
 	} catch (error) {
 		console.error("카트 데이터 fetching 실패", error)
 	}
@@ -148,6 +151,7 @@ export async function deleteCartItemList(cartIds: number[]): Promise<boolean> {
 	try {
 		const deletePromises = cartIds.map((id) => deleteCartItem(id))
 		await Promise.all(deletePromises)
+		revalidateTag("updateCarts")
 		return true
 	} catch (error) {
 		console.error("여러 상품 삭제 fetching 실패", error)
@@ -171,6 +175,7 @@ export const cartCheckUpdate = async (
 	})
 	const responseData: CommonResType<Record<string, never>> = await res.json()
 	const isSuccess = responseData.isSuccess
+	revalidateTag("updateCarts")
 	return isSuccess
 }
 export async function postCheckoutData(

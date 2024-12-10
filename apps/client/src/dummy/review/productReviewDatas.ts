@@ -54,7 +54,7 @@ export const ProductReviewDatas: PromptReviewType = {
 		},
 	],
 	lastCreatedAt: "2024-11-05T02:21:13.550Z",
-	lastId: 4,
+	lastId: "4",
 	hasNext: false,
 	pageSize: 5,
 	page: 1,

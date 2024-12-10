@@ -45,14 +45,16 @@ export default function PromptDetailReviewMore({
 
 		const newReviews = await getProductReview(
 			productDetail.productUuid,
-			page + 1,
+			productReview.lastCreatedAt,
+			productReview.lastId,
+			page,
 		)
 		setReviewList((prev) => ({
 			...prev,
 			content: [...prev.content, ...newReviews.content],
 		}))
 		setHasNext(newReviews.hasNext)
-		setPage((prev) => prev + 1)
+		setPage(newReviews.page)
 	}
 
 	useEffect(() => {

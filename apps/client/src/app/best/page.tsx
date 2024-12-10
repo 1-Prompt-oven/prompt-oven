@@ -1,20 +1,37 @@
 import React from "react"
-import BestTop5 from "@/components/best/organism/BestTop5"
-import BestList from "@/components/best/organism/BestList"
-import { getBestCreatorData } from "@/action/best/getBestData"
-import type {
-	BestCreatorCursorListTypes,
-	BestCreatorDataTypes,
-} from "@/types/best/bestTypes"
+import BestTemplate from "@/components/best/template/BestTemplate"
+import { fetchRankingList } from "@/action/best/getBestData"
+import type { BestCreatorCursorListTypes2 } from "@/types/best/bestTypes"
+
+interface FetchBestCreatorsParams {
+	lastRanking?: number
+	pageSize?: number
+	date: string
+}
 
 export default async function Page() {
-	const bestData: BestCreatorCursorListTypes = await getBestCreatorData()
-	const top5Data: BestCreatorDataTypes[] = bestData.content.slice(0, 5)
-	const restData: BestCreatorDataTypes[] = bestData.content.slice(5)
+	const now = new Date()
+	const todayDate = now.toISOString().split("T")[0]
+	const params: FetchBestCreatorsParams = {
+		date: todayDate,
+		pageSize: 10,
+		lastRanking: 0,
+	}
+	const bestData: BestCreatorCursorListTypes2 = await fetchRankingList(params)
 	return (
 		<section>
-			<BestTop5 data={top5Data} />
-			<BestList data={restData} />
+			<BestTemplate data={bestData} />
 		</section>
 	)
 }
+// 필요한 정보
+// 랭킹 -> 베스트
+// 순위 변동 -> 베스트
+// 판매량-> 베스트
+// 평균 별점 -> 베스트
+// 선택된 날짜 -> 베스트
+// --------------------------
+// 프로필 사진 -> 프로필
+// 닉네임 -> 프로필
+// 팔로워 수 -> 프로필
+// 해시태그 -> 프로필

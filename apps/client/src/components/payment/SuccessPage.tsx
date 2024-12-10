@@ -1,9 +1,13 @@
 "use client"
 
-import { useSearchParams } from "next/navigation"
 import { useEffect, useState } from "react"
-import type { PaymentItemType, RequestPaymentType } from "@/types/purchase.ts/purchase-ongoing"
+import { useSearchParams } from "next/navigation"
 import { appendLedger } from "@/action/settlement/ledgerAppendAction"
+import { allDeleteNoCheckCart } from "@/action/purchase/purchase-ing"
+import type {
+	PaymentItemType,
+	RequestPaymentType,
+} from "@/types/purchase.ts/purchase-ongoing"
 import SuccessLinkPage from "./SuccessLinkPage"
 
 interface RequestData {
@@ -90,11 +94,15 @@ export function SuccessPage() {
 					purchaseList: JSON.parse(json.metadata.paymentList),
 				}
 
-				const purchaseList = JSON.parse(json.metadata.paymentList) as PaymentItemType[]
-				await appendLedger(purchaseList)
+				const purchaseList = JSON.parse(
+					json.metadata.paymentList,
+				) as PaymentItemType[]
+				await appendLedger(purchaseList, json.orderId)
 
 				// eslint-disable-next-line no-console -- This is a  payload
 				console.log("payload --> ", payload)
+
+				await allDeleteNoCheckCart()
 			}
 		}
 

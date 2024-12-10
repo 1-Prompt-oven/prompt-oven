@@ -1,26 +1,28 @@
 import React from "react"
-import Image from "next/image"
+import PromptImageSlide from "@/components/common/molecule/PromptImageSlide"
+import type { PromptDetailContentsType } from "@/types/prompt-detail/promptDetailType"
 
 interface PromptDetailThumbnailProps {
-	thumbnailUrl: string
-	productUuid: string
+	contents: PromptDetailContentsType[]
 }
 
 export default function PromptDetailThumbnail({
-	thumbnailUrl,
-	productUuid,
+	contents,
 }: PromptDetailThumbnailProps) {
+	// const contentUrls = contents.map((item) => item.contentUrl)
+
 	return (
-		<div className="relative h-[600px] min-w-[380px] overflow-hidden rounded-lg sm:h-[800px] sm:min-w-[600px]">
-			<div className="absolute inset-0 bg-white" />
+		<div className="relative h-[400px] min-w-[200px] overflow-hidden rounded-lg xs:h-[520px] sm:h-[680px] sm:min-w-[600px] md:h-[810px] lg:h-[640px]">
+			<PromptImageSlide images={contents} />
+			{/* <div className="absolute inset-0 bg-white" />
 			<Image
 				sizes="(max-width: 500px) 100vw, 145px"
-				src={thumbnailUrl}
+				src={contents[0].contentUrl}
 				alt={productUuid}
 				fill
 				className="rounded-lg"
 				priority
-			/>
+			/> */}
 		</div>
 	)
 }
