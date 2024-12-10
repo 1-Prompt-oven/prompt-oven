@@ -166,6 +166,18 @@ export const userNavs: MenuNavItemType[] = [
 		label: "Purchases",
 		href: "/account",
 		query: { view: "purchases" },
+		subMenu: [
+			{
+				label: "Ongoing",
+				href: "/account",
+				query: { view: "purchase-ongoing" },
+			},
+			{
+				label: "Completed",
+				href: "/account",
+				query: { view: "purchase-completed" },
+			},
+		],
 	},
 	{
 		icon: Settings,
