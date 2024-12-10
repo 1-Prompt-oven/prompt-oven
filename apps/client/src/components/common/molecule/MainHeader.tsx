@@ -47,7 +47,8 @@ export default async function MainHeader() {
 									strokeWidth={2}
 								/>
 							</BadgeContainer>
-							<Link href="/cart">
+							{/* <Link href="/cart"> */}
+							<Link href="/account?view=cart">
 								<CartCountBadge userAuth={userAuth} />
 							</Link>
 						</div>
@@ -67,4 +68,3 @@ export default async function MainHeader() {
 		</CommonHeader>
 	)
 }
-

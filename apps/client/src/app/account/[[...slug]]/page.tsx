@@ -15,6 +15,7 @@ import SellerProductListPage from "@/components/seller/page/SellerProductListPag
 import { getSellerProductSearchParams } from "@/lib/sellerProduct.ts"
 import { getSellerProfile } from "@/action/settlement/settlementAction.ts"
 import Settings from "@/components/settings/templete/Settings.tsx"
+import Cart from "@/app/cart/page"
 
 export default async function page({ searchParams }: AccountSearchParams) {
 	// note: queryParam이 없는 경우 overview 사이드바 메뉴가 선택되게 하기 -- 필요에 따라 수정 필요
@@ -48,6 +49,7 @@ export default async function page({ searchParams }: AccountSearchParams) {
 			)}
 			{view === "settings" && <Settings />}
 			{view === "favorites" && <Favorite />}
+			{view === "cart" && <Cart />}
 			{view === "purchase-ongoing" && <PurchaseIng />}
 			{view === "purchase-completed" && <PurchaseEd />}
 			{view !== "purchase-ongoing" &&
