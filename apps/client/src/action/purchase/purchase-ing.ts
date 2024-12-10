@@ -41,7 +41,7 @@ export async function allDeleteNoCheckCart() {
 		.filter((item) => item.selected) // selected가 true인 항목 필터링
 		.map((item) => item.id) // id만 추출
 
-	const result = deleteCartItemList(selectedIds)
+	const result = await deleteCartItemList(selectedIds)
 	revalidateTag("updateCarts")
 	return result
 }
