@@ -18,7 +18,7 @@ export async function getPaymentList(): Promise<PaymentItemType[]> {
 			return {
 				productUUID: detail.productUuid,
 				productName: detail.productName,
-				productPrice: detail.price,
+				productPrice: String(detail.price),
 			}
 		}),
 	)

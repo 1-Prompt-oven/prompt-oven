@@ -26,7 +26,7 @@ export default function PurchaseIngTemplate({
 	})
 
 	const totalPrice = paymentList.reduce((sum, item) => {
-		return sum + item.productPrice
+		return sum + parseInt(item.productPrice)
 	}, 0)
 
 	return (
