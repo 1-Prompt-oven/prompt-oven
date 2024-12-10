@@ -1,7 +1,7 @@
 export interface PaymentItemType {
 	productUUID: string
 	productName: string
-	productPrice: number
+	productPrice: string
 }
 
 export interface RequestPaymentType {
