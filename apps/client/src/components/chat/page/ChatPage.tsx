@@ -5,6 +5,7 @@ import { ChatSidebar } from "@/components/chat/organism/ChatSidebar.tsx"
 import { ChatMain } from "@/components/chat/organism/ChatMain.tsx"
 import { ChatProfileSidebar } from "@/components/chat/organism/ChatProfileSidebar.tsx"
 
+// test contacts
 const CONTACTS = [
 	{
 		id: "1",
@@ -22,39 +23,18 @@ const CONTACTS = [
 		avatarSrc: "",
 		unread: 2,
 	},
-	// Add more contacts...
 ]
 
-const MESSAGES = [
-	{
-		id: "1",
-		content:
-			"Hi, how are you? It's been a while since we talked. I've just returned from a fantastic vacation. I'd love to catch up and hear how you've been. What's new?",
-		timestamp: "11:12 AM",
-		isOwn: true,
-		hasRead: true,
-	},
-	{
-		id: "2",
-		content:
-			"Hi John! I'm doing well, thanks for asking. Welcome back from your vacation. I've been keeping busy with work, but nothing too exciting. How was your trip?",
-		timestamp: "11:00 AM",
-		isOwn: false,
-	},
-	{
-		id: "3",
-		content:
-			"That sounds incredible! I'd love to see those photos. Maybe we can plan a trip together sometime.",
-		timestamp: "11:00 AM",
-		isOwn: false,
-	},
-	// Add more messages...
-]
+export interface ChatPageProps {
+	roomId: string
+}
 
-export default function ChatPage() {
-	const [selectedContact, setSelectedContact] = useState(CONTACTS[0])
+export default function ChatPage({ roomId }: ChatPageProps) {
 	const [showProfile, setShowProfile] = useState(false)
 	const [showSidebar, setShowSidebar] = useState(false)
+	const [selectedContact, setSelectedContact] = useState(
+		CONTACTS.find((c) => c.id === roomId) || CONTACTS[0],
+	)
 
 	return (
 		<div className="flex h-[calc(100vh-80px)] overflow-hidden bg-[#111111]">
@@ -70,16 +50,21 @@ export default function ChatPage() {
 							setShowSidebar(false)
 						}
 					}}
-					onClose={() => setShowSidebar(false)} // 추가
+					onClose={() => setShowSidebar(false)}
 				/>
 			</div>
 			<div className="flex flex-1 flex-col overflow-hidden md:!flex-row">
 				<div className="flex flex-1 flex-col">
 					<ChatMain
-						messages={MESSAGES}
-						contact={selectedContact}
-						onProfileClick={() => setShowProfile(!showProfile)}
-						onOpenSidebar={() => setShowSidebar(!showSidebar)}
+						roomId={roomId}
+						contact={{
+							id: selectedContact.id,
+							name: selectedContact.name,
+							isActive: true,
+							avatarSrc: selectedContact.avatarSrc,
+						}}
+						onProfileClick={() => setShowProfile(true)}
+						onOpenSidebar={() => setShowSidebar(true)}
 					/>
 				</div>
 				<div

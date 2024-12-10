@@ -42,14 +42,19 @@ export function ChatHeader({
 
 			<div className="flex items-center gap-3.5">
 				<button
+					type="button"
 					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10"
 					onClick={onOpenSidebar}>
 					<MessageSquare className="h-5 w-5 text-[#E2ADFF]" />
 				</button>
-				<button className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
+				<button
+					type="button"
+					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
 					<Video className="h-5 w-5 text-[#E2ADFF]" />
 				</button>
-				<button className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
+				<button
+					type="button"
+					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
 					<MoreVertical className="h-5 w-5 text-[#E2ADFF]" />
 				</button>
 			</div>

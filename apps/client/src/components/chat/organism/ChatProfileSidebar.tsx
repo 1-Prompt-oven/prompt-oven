@@ -27,11 +27,14 @@ export function ChatProfileSidebar({
 				{/* Header */}
 				<div className="flex justify-between p-4 md:p-6">
 					<button
+						type="button"
 						onClick={onClose}
 						className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-[#E2ADFF]">
 						<X className="h-5 w-5 text-[#E2ADFF]" />
 					</button>
-					<button className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-[#E2ADFF]">
+					<button
+						type="button"
+						className="flex h-[38px] w-[38px] items-center justify-center rounded-full border border-[#E2ADFF]">
 						<MoreVertical className="h-5 w-5 text-[#E2ADFF]" />
 					</button>
 				</div>
@@ -50,7 +53,7 @@ export function ChatProfileSidebar({
 						</h2>
 						<div className="flex items-center gap-3 text-white">
 							<span>{contact.phone}</span>
-							<button className="hover:opacity-80">
+							<button type="button" className="hover:opacity-80">
 								<Copy className="h-5 w-5" />
 							</button>
 						</div>
@@ -74,7 +77,9 @@ export function ChatProfileSidebar({
 							<ChFileItem name="Branding.pdf" size="45Mb" />
 							<ChFileItem name="Design changes.pdf" size="15Mb" />
 						</div>
-						<button className="mt-3.5 text-sm text-[#75C1D9]">Show more</button>
+						<button type="button" className="mt-3.5 text-sm text-[#75C1D9]">
+							Show more
+						</button>
 					</ChProfileSection>
 
 					<ChProfileSection title="Images" subtitle="10 Files" />
@@ -82,10 +87,14 @@ export function ChatProfileSidebar({
 
 				{/* Actions */}
 				<div className="mt-auto space-y-4 px-5 pb-5">
-					<button className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
+					<button
+						type="button"
+						className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
 						Block Lincoln
 					</button>
-					<button className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
+					<button
+						type="button"
+						className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
 						Delete History
 					</button>
 				</div>

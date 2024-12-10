@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth"
-import React from "react"
 import Favorite from "@/app/favorite/page"
 import PurchaseEd from "@/app/purchase/ed/page"
 import PurchaseIng from "@/app/purchase/ing/page"

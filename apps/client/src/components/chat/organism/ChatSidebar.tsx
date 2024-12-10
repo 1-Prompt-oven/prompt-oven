@@ -12,8 +12,8 @@ interface Contact {
 
 interface ChatSidebarProps {
 	contacts: Contact[]
-	onSelectContact: (id: string) => void
 	selectedId?: string
+	onSelectContact: (id: string) => void
 	onClose: () => void
 }
 
@@ -29,17 +29,24 @@ export function ChatSidebar({
 				<h1 className="text-lg font-semibold text-[#E2ADFF]">Messages</h1>
 				<div className="flex items-center gap-3.5">
 					<button
+						type="button"
 						className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10 md:!hidden"
 						onClick={onClose}>
 						<X className="h-5 w-5 text-[#E2ADFF]" />
 					</button>
-					<button className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
+					<button
+						type="button"
+						className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
 						<Search className="h-5 w-5 text-[#E2ADFF]" />
 					</button>
-					<button className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
+					<button
+						type="button"
+						className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
 						<MessageSquarePlus className="h-5 w-5 text-[#E2ADFF]" />
 					</button>
-					<button className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
+					<button
+						type="button"
+						className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
 						<MoreVertical className="h-5 w-5 text-[#E2ADFF]" />
 					</button>
 				</div>
@@ -48,6 +55,7 @@ export function ChatSidebar({
 			<div className="flex-1 overflow-y-auto">
 				{contacts.map((contact) => (
 					<button
+						type="button"
 						key={contact.id}
 						onClick={() => onSelectContact(contact.id)}
 						className={`flex items-center gap-2.5 p-6 transition-colors hover:bg-[#404040] ${
