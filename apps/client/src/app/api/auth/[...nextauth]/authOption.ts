@@ -1,5 +1,5 @@
 import CredentialsProvider from "next-auth/providers/credentials"
-import type { NextAuthOptions, User } from "next-auth"
+import type { NextAuthOptions, Session, User } from "next-auth"
 import GoogleProvider from "next-auth/providers/google"
 import NaverProvider from "next-auth/providers/naver"
 import KakaoProvider from "next-auth/providers/kakao"
@@ -9,7 +9,10 @@ import type { ExtendedToken } from "@/types/auth/AuthToken"
 import type { SignInResponse } from "@/types/auth/OAuthType"
 import { logoutAuthMember } from "@/action/auth/memberManageAction"
 import { getProfileImage } from "@/action/profile/getProfilePic"
-import { encryptPasswordWithDH, destroyDHSession } from "@/action/auth/dhAction"
+import { destroyDHSession, encryptPasswordWithDH } from "@/action/auth/dhAction"
+import { encode, JWT } from "next-auth/jwt"
+import { AdapterUser } from "next-auth/adapters"
+import { cookies } from "next/headers"
 
 export const authOptions: NextAuthOptions = {
 	session: {
@@ -31,12 +34,13 @@ export const authOptions: NextAuthOptions = {
 
 				try {
 					// Try DH key exchange first
-					let response: SignInResponse | null = null;
-					let usedDH = false;
+					let response: SignInResponse | null = null
+					let usedDH = false
 
 					try {
 						// Attempt DH key exchange
-						const { encryptedPassword, sessionId } = await encryptPasswordWithDH(credentials.password)
+						const { encryptedPassword, sessionId } =
+							await encryptPasswordWithDH(credentials.password)
 						if (!encryptedPassword) {
 							throw new Error("Failed to encrypt password")
 						}
@@ -45,7 +49,7 @@ export const authOptions: NextAuthOptions = {
 							email: credentials.email,
 							password: await encryptedPassword,
 							sessionId,
-							version: 'v2'
+							version: "v2",
 						})
 						// Cleanup DH session regardless of success
 						void destroyDHSession(sessionId)
@@ -63,7 +67,7 @@ export const authOptions: NextAuthOptions = {
 						response = await signInByAuth({
 							email: credentials.email,
 							password: credentials.password,
-							version: 'v1'
+							version: "v1",
 						})
 					}
 
@@ -75,7 +79,7 @@ export const authOptions: NextAuthOptions = {
 					}
 
 					const profileImage = await getProfileImage(response.memberUUID)
-					
+
 					return {
 						accesstoken: response.accesstoken,
 						refreshtoken: response.refreshtoken,
@@ -111,38 +115,38 @@ export const authOptions: NextAuthOptions = {
 		async signIn({ user, account, profile }) {
 			if (account?.provider === "credentials") {
 				if (user) {
-					return true;
+					return true
 				} else {
-					return false;
+					return false
 				}
 			}
 			//소셜 로그인 공통 처리
 			if (account?.provider) {
 				console.log(`${account.provider} Sign-In detected:`, account, profile)
 
-				let providerID: string;
+				let providerID: string
 				let email: string | undefined
 
 				switch (account.provider) {
 					case "google":
 						providerID = account.id as string
-						email = profile?.email || "";
-						break;
+						email = profile?.email || ""
+						break
 
 					case "naver":
 						providerID = account.id as string
-						email = user.email || "";
-						break;
+						email = user.email || ""
+						break
 
 					case "kakao":
 						providerID = account.id as string
-						email = user.email || "";
-						break;
+						email = user.email || ""
+						break
 
 					default:
 						// eslint-disable-next-line no-console -- 오류 출력
 						console.error("Unsupported provider:", account.provider)
-						return false;
+						return false
 				}
 
 				// OAuth API 호출
@@ -150,7 +154,7 @@ export const authOptions: NextAuthOptions = {
 					provider: account.provider,
 					providerID,
 					email,
-				});
+				})
 
 				if (response) {
 					// eslint-disable-next-line no-console -- This is a client-side only log
@@ -159,19 +163,21 @@ export const authOptions: NextAuthOptions = {
 				} else {
 					// eslint-disable-next-line no-console -- This is a client-side only log
 					console.error(`${account.provider} OAuth API failed:`, response)
-					return '/sign-up';
+					return "/sign-up"
 				}
 			}
-			return true;
+			return true
 		},
-		async jwt({ token, user }): Promise<ExtendedToken> {
+		async jwt({ token, user, trigger }): Promise<ExtendedToken> {
 			if (user) {
 				token.accesstoken = user.accesstoken
 				token.refreshtoken = user.refreshtoken
 				token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
 			}
-			if (Date.now() >= (token.tokenExpiration as number || 0)) {
-				const refreshedToken = await refreshAccessToken(token.refreshtoken as string || "")
+			if (Date.now() >= ((token.tokenExpiration as number) || 0)) {
+				const refreshedToken = await refreshAccessToken(
+					(token.refreshtoken as string) || "",
+				)
 				if (refreshedToken.result) {
 					const profileImage = await getProfileImage(user.memberUUID)
 					token.profileImage = profileImage.picture || ""
@@ -213,4 +219,29 @@ export const authOptions: NextAuthOptions = {
 		signIn: "/sign-in",
 		// error: "/error",
 	},
+}
+
+export async function updateSession(
+	token: JWT,
+	user: User | AdapterUser,
+	session: Session,
+	path?: string,
+): Promise<void> {
+	const res = (await authOptions.callbacks!.jwt!({
+		token,
+		trigger: "update",
+		user,
+		session,
+		account: null,
+	})) as ExtendedToken
+	const secret = process.env.NEXTAUTH_SECRET!
+
+	const encodedToken = await encode({ token: res, secret })
+
+	// 쿠키 업데이트
+	cookies().set("next-auth.session-token", encodedToken, {
+		httpOnly: true,
+		secure: process.env.NODE_ENV === "production",
+		path: path ?? "/",
+	})
 }

@@ -2,6 +2,7 @@ import React from "react"
 import BestTemplate from "@/components/best/template/BestTemplate"
 import { fetchRankingList } from "@/action/best/getBestData"
 import type { BestCreatorCursorListTypes2 } from "@/types/best/bestTypes"
+
 interface FetchBestCreatorsParams {
 	lastRanking?: number
 	pageSize?: number

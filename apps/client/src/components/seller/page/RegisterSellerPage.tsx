@@ -17,6 +17,7 @@ import { RsRegistrationCompleteDialog } from "@/components/seller/molecule/RsReg
 import type { RegisterSellerRequestType } from "@/types/settlement/settlementType.ts"
 import { registerSeller } from "@/action/settlement/settlementAction.ts"
 import { delay } from "@/lib/utils.ts"
+import { refreshAccessTokenAfterRoleChange } from "@/action/auth/refreshAfterRoleChangeAction.ts"
 
 const TOTAL_STEPS = 2
 
@@ -52,6 +53,19 @@ export default function SellerRegistrationPage() {
 		setCurrentStep(2)
 	}
 
+	const handlerRegisterSeller = async (
+		reqBody: Omit<RegisterSellerRequestType, "memberID">,
+	) => {
+		await registerSeller(reqBody)
+		const result = await refreshAccessTokenAfterRoleChange()
+		if (result.success) {
+			// Update the client-side session
+		} else {
+			// eslint-disable-next-line no-console -- 오류 출력
+			console.error(result.error)
+		}
+	}
+
 	const handleAddressSubmit = async () => {
 		setIsSubmitting(true)
 		// Here you would typically send the combined data to your backend
@@ -61,7 +75,8 @@ export default function SellerRegistrationPage() {
 			postcode: addressObj.postcode,
 			address: `${addressObj.address} ${addressObj.detailAddress ? `, (${addressObj.detailAddress})` : ""}`,
 		}
-		await registerSeller(reqBody)
+		await handlerRegisterSeller(reqBody)
+
 		await delay(1000)
 		setIsSubmitting(false)
 		setIsDialogOpen(true)

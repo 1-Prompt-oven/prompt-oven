@@ -80,11 +80,11 @@ export function BestCreatorListItem({
 					</span>
 				</div>
 				<div className="col-span-2">
-					{hashTag && (
+					{hashTag ? (
 						<span className="rounded-full bg-purple-600/50 px-3 py-1 text-sm font-medium text-white/80">
 							{hashTag}
 						</span>
-					)}
+					) : null}
 				</div>
 				<div className="col-span-1 flex items-center gap-1 text-white/80">
 					<TrendingUp className="h-4 w-4" />
@@ -106,4 +106,3 @@ export function BestCreatorListItem({
 		</Link>
 	)
 }
-
