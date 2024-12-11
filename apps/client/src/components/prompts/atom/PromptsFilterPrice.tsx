@@ -22,7 +22,7 @@ export function PromptsFilterPrice({
 					type="number"
 					name={minName}
 					placeholder="Min"
-					value={minValue}
+					value={minValue ? parseInt(minValue) : ""}
 					onChange={(e) => onMinChange?.(e.target.value)}
 					className="border-none bg-white/10 text-white placeholder:text-white/70"
 				/>
@@ -30,7 +30,7 @@ export function PromptsFilterPrice({
 					type="number"
 					name={maxName}
 					placeholder="Max"
-					value={maxValue}
+					value={maxValue ? parseInt(maxValue) : ""}
 					onChange={(e) => onMaxChange?.(e.target.value)}
 					className="border-none bg-white/10 text-white placeholder:text-white/70"
 				/>

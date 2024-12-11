@@ -94,7 +94,6 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 			{isHovered ? (
 				<PromptHoverModal
 					productInfo={productInfo}
-					// allImage={allImage}
 					defaultImage={thumbnailImage}
 				/>
 			) : null}

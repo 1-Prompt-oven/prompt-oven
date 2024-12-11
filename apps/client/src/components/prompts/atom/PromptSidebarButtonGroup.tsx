@@ -14,12 +14,12 @@ export default function PromptSidebarButtonGroup({
 				type="button"
 				className="flex-1 bg-[#35314D] text-white hover:bg-[#35314D]/90"
 				onClick={onClear}>
-				Clear
+				<span className="font-semibold">Clear</span>
 			</Button>
 			<Button
 				className="flex-1 bg-[#F24E1E] text-white hover:bg-[#F24E1E]/90"
 				type="submit">
-				Apply
+				<span className="font-semibold">Apply</span>
 			</Button>
 		</div>
 	)

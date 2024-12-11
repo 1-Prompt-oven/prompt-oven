@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import type { CategoryType } from "@/types/prompts/categoryType"
+import type { PropmtsSearchParamsProps } from "@/types/prompts/promptsType"
 import { PromptsFilterCategory } from "../atom/PromptsFilterCategory"
 import { PromptsFilterPrice } from "../atom/PromptsFilterPrice"
 import { PromptsFilterSearchInput } from "../atom/PromptsFilterSearchInput"
@@ -10,36 +11,29 @@ import { PromptsFilterSection } from "./PromptsFilterSection"
 
 interface PromptFilterSidebarProps {
 	categoryList: CategoryType[]
+	searchParams: PropmtsSearchParamsProps
 }
 
 export default function PromptsFilterSidebar({
 	categoryList,
+	searchParams,
 }: PromptFilterSidebarProps) {
 	const [sidebarPosition, setSidebarPosition] = useState(0)
 
-	const [topCategoryUUID, setTopCategoryUUID] = useState<string>("")
-	const [selectedValue, setSelectedValue] = useState<string>("")
-
 	const [filters, setFilters] = useState({
-		search: "",
-		topCategoryUuid: "",
-		subCategoryUuid: "",
+		search: searchParams.searchBar || "",
 		enable: [] as string[],
-		minPrice: "",
-		maxPrice: "",
+		minPrice: searchParams.minPrice || "",
+		maxPrice: searchParams.maxPrice || "",
 	})
 
 	const handleClear = () => {
 		setFilters({
 			search: "",
-			topCategoryUuid: "",
-			subCategoryUuid: "",
 			enable: [],
 			minPrice: "",
 			maxPrice: "",
 		})
-		setTopCategoryUUID("")
-		setSelectedValue("")
 	}
 
 	useEffect(() => {
@@ -61,7 +55,7 @@ export default function PromptsFilterSidebar({
 				top: Math.max(sidebarPosition, 100),
 			}}>
 			<div className="flex justify-between md:!block">
-				<h2 className="mb-4 font-medium text-white">FILTER BY</h2>
+				<h2 className="mb-4 font-semibold text-white">Filter by</h2>
 
 				<PromptsFilterSearchInput
 					value={filters.search}
@@ -73,10 +67,10 @@ export default function PromptsFilterSidebar({
 			<PromptsFilterSection title="Category">
 				<PromptsFilterCategory
 					categoryList={categoryList}
-					topCategoryUUID={topCategoryUUID}
-					selectedValue={selectedValue}
-					setTopCategoryUUID={setTopCategoryUUID}
-					setSelectedValue={setSelectedValue}
+					topCategoryUUID={searchParams.topCategoryUuid || ""}
+					topCategoryName={searchParams.topCategoryName || ""}
+					subCategoryUUID={searchParams.subCategoryUuid || ""}
+					subCategoryName={searchParams.subCategoryName || ""}
 				/>
 			</PromptsFilterSection>
 
