@@ -6,16 +6,17 @@ import {
 	Area,
 	XAxis,
 	YAxis,
-	CartesianGrid,
 	Tooltip,
 	ResponsiveContainer,
 	Legend,
 } from "recharts"
-import { fetchStatisticHistory } from "@/action/dashboard/dashboardAction"
+import { fetchSettlementHistory } from "@/action/dashboard/dashboardAction"
+import PcTitle from "@/components/product-create/atom/PcTitle"
 
 interface ChartData {
 	name: string
-	salesAmount: number
+	dailysold: number
+	dailyearned: number
 }
 
 export function ViewDashboard({
@@ -32,7 +33,7 @@ export function ViewDashboard({
 	useEffect(() => {
 		const fetchData = async () => {
 			if (!beginDate || !endDate) return
-			const results = await fetchStatisticHistory(beginDate, endDate)
+			const results = await fetchSettlementHistory(beginDate, endDate)
 
 			const generateDefaultData = (startDate: string, finishDate: string) => {
 				const start = new Date(startDate)
@@ -40,7 +41,7 @@ export function ViewDashboard({
 				const dates = []
 				while (start <= end) {
 					const formattedDate = start.toISOString().split("T")[0]
-					dates.push({ name: formattedDate, salesAmount: 0 })
+					dates.push({ name: formattedDate, dailysold: 0, dailyearned: 0 })
 					start.setDate(start.getDate() + 1)
 				}
 				return dates
@@ -54,9 +55,12 @@ export function ViewDashboard({
 				)
 				return {
 					name: defaultItem.name,
-					salesAmount: matchingResult
-						? matchingResult.sales
-						: defaultItem.salesAmount,
+					dailysold: matchingResult
+						? matchingResult.dailySold
+						: defaultItem.dailysold,
+					dailyearned: matchingResult
+						? matchingResult.dailyEarned
+						: defaultItem.dailyearned,
 				}
 			})
 
@@ -91,40 +95,71 @@ export function ViewDashboard({
 		}
 	}
 
+	const formatYAxisLabel = (value: number) => {
+		if (value >= 1000000) {
+			return `${(value / 1000000).toFixed(1)}M`
+		} else if (value >= 1000) {
+			return `${Math.round(value / 1000)}K`
+		}
+		return value.toString()
+	}
+
 	return (
-		<div className="flex h-screen max-h-[900px] w-screen items-center justify-center bg-white">
-			<ResponsiveContainer width="100%" height="100%">
-				<AreaChart data={data}>
-					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis
-						dataKey="name"
-						tickFormatter={formatXAxisLabel} // Apply custom label formatting
-						label={{
-							value: "Date",
-							position: "insideBottomRight",
-							offset: -5,
-						}}
-						minTickGap={1}
-					/>
-					<YAxis
-						label={{
-							value: "salesAmount",
-							position: "insideTopLeft",
-							offset: 0,
-							dy: -20,
-						}}
-					/>
-					<Tooltip />
-					<Legend verticalAlign="top" height={36} />
-					<Area
-						type="monotone"
-						dataKey="salesAmount"
-						name="salesAmount Count"
-						stroke="#8884d8"
-						fill="rgba(136, 132, 216, 0.3)"
-					/>
-				</AreaChart>
-			</ResponsiveContainer>
+		<div className="w-full">
+			<div>
+				<PcTitle className="pb-3 pr-3">Sales Chart</PcTitle>
+			</div>
+			<div
+				className="h-screen max-h-[500px] w-full"
+				style={{
+					background: "#252525",
+					border: "2px solid #A100F8",
+					borderRadius: "16px",
+				}}>
+				<ResponsiveContainer width="100%" height="100%">
+					<AreaChart data={data}>
+						<XAxis
+							dataKey="name"
+							tickFormatter={formatXAxisLabel}
+							label={{
+								value: "Date",
+								position: "insideBottomRight",
+								offset: -5,
+								fill: "#8C91A2",
+							}}
+							stroke="#FFFFFF"
+							minTickGap={1}
+						/>
+						<YAxis
+							tickFormatter={formatYAxisLabel}
+							label={{
+								value: "salse",
+								position: "insideTopLeft",
+								offset: 0,
+								dy: -20,
+								fill: "#8C91A2",
+							}}
+							stroke="#FFFFFF"
+						/>
+						<Tooltip />
+						<Legend verticalAlign="top" height={36} />
+						<Area
+							type="monotone"
+							dataKey="dailysold"
+							name="Daily Sold"
+							stroke="#8884d8"
+							fill="rgba(136, 132, 216, 0.6)"
+						/>
+						<Area
+							type="monotone"
+							dataKey="dailyearned"
+							name="Daily Earned"
+							stroke="#ec35f2"
+							fill="rgba(217, 142, 224, 0.92)"
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			</div>
 		</div>
 	)
 }

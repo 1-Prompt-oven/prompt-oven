@@ -6,19 +6,19 @@ import {
 	Area,
 	XAxis,
 	YAxis,
-	CartesianGrid,
 	Tooltip,
 	ResponsiveContainer,
 	Legend,
 } from "recharts"
 import { fetchStatisticHistory } from "@/action/dashboard/dashboardAction"
+import PcTitle from "@/components/product-create/atom/PcTitle"
 
 interface ChartData {
 	name: string
-	follower: number
+	salesAmount: number
 }
 
-export function FollowDashboard({
+export function ViewDashboard({
 	selectedPeriod,
 	beginDate,
 	endDate,
@@ -40,7 +40,7 @@ export function FollowDashboard({
 				const dates = []
 				while (start <= end) {
 					const formattedDate = start.toISOString().split("T")[0]
-					dates.push({ name: formattedDate, follower: 0 })
+					dates.push({ name: formattedDate, salesAmount: 0 })
 					start.setDate(start.getDate() + 1)
 				}
 				return dates
@@ -54,9 +54,9 @@ export function FollowDashboard({
 				)
 				return {
 					name: defaultItem.name,
-					follower: matchingResult
-						? matchingResult.follower
-						: defaultItem.follower,
+					salesAmount: matchingResult
+						? matchingResult.sales
+						: defaultItem.salesAmount,
 				}
 			})
 
@@ -91,42 +91,66 @@ export function FollowDashboard({
 		}
 	}
 
+	const formatYAxisLabel = (value: number) => {
+		if (value >= 1000000) {
+			return `${(value / 1000000).toFixed(1)}M`
+		} else if (value >= 1000) {
+			return `${Math.round(value / 1000)}K`
+		}
+		return value.toString()
+	}
+
 	return (
-		<div className="flex h-screen max-h-[900px] w-screen items-center justify-center bg-white">
-			<ResponsiveContainer width="100%" height="100%">
-				<AreaChart data={data}>
-					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis
-						dataKey="name"
-						tickFormatter={formatXAxisLabel} // Apply custom label formatting
-						label={{
-							value: "Date",
-							position: "insideBottomRight",
-							offset: -5,
-						}}
-						minTickGap={1}
-					/>
-					<YAxis
-						label={{
-							value: "follower",
-							position: "insideTopLeft",
-							offset: 0,
-							dy: -20,
-						}}
-					/>
-					<Tooltip />
-					<Legend verticalAlign="top" height={36} />
-					<Area
-						type="monotone"
-						dataKey="follower"
-						name="Follower Count"
-						stroke="#8884d8"
-						fill="rgba(136, 132, 216, 0.3)"
-					/>
-				</AreaChart>
-			</ResponsiveContainer>
+		<div className="w-full">
+			<div>
+				<PcTitle className="pb-3 pr-3">SalesAmount Chart</PcTitle>
+			</div>
+			<div
+				className="h-screen max-h-[500px] w-full"
+				style={{
+					background: "#252525",
+					border: "2px solid #A100F8",
+					borderRadius: "16px",
+				}}>
+				<ResponsiveContainer width="100%" height="100%">
+					<AreaChart data={data}>
+						<XAxis
+							dataKey="name"
+							tickFormatter={formatXAxisLabel} // Apply custom label formatting
+							label={{
+								value: "Date",
+								position: "insideBottomRight",
+								offset: -5,
+								fill: "#8C91A2",
+							}}
+							stroke="#FFFFFF"
+							minTickGap={1}
+						/>
+						<YAxis
+							tickFormatter={formatYAxisLabel}
+							label={{
+								value: "salesAmount",
+								position: "insideTopLeft",
+								offset: 0,
+								dy: -20,
+								fill: "#8C91A2",
+							}}
+							stroke="#FFFFFF"
+						/>
+						<Tooltip />
+						<Legend verticalAlign="top" height={36} />
+						<Area
+							type="monotone"
+							dataKey="salesAmount"
+							name="salesAmount Count"
+							stroke="#8884d8"
+							fill="rgba(136, 132, 216, 0.6)"
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			</div>
 		</div>
 	)
 }
 
-export default FollowDashboard
+export default ViewDashboard
