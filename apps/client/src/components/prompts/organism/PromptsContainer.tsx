@@ -73,18 +73,7 @@ export default function PromptsContainer({
 	}, [loading, hasNext, cursorId])
 
 	// useEffect(() => {
-	// 	const handleBeforeUnload = () => {
-	// 		// 새로고침 시에만 스크롤을 최상단으로 이동
-	// 		window.scrollTo(0, 0)
-	// 	}
-
-	// 	// beforeunload 이벤트 리스너 추가
-	// 	window.addEventListener("beforeunload", handleBeforeUnload)
-
-	// 	// 컴포넌트 언마운트 시 이벤트 리스너 제거
-	// 	return () => {
-	// 		window.removeEventListener("beforeunload", handleBeforeUnload)
-	// 	}
+	// 	window.scrollTo(0, 0)
 	// }, [])
 
 	const handleFilter = async (filterFormData: FormData) => {

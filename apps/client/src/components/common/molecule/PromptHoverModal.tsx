@@ -45,7 +45,9 @@ export default function PromptHoverModal({
 		fetchState()
 	}, [productUuid])
 
-	const likeHandler = async () => {
+	const likeHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault() //눌렀을 때, 새로고침 방지
+
 		const isSuccess = await changeFavoriteAction(productUuid)
 		if (isSuccess) setIsFavorite((prev) => ({ liked: !prev.liked }))
 		else {
@@ -54,7 +56,9 @@ export default function PromptHoverModal({
 		}
 	}
 
-	const cartHandler = async () => {
+	const cartHandler = async (event: React.MouseEvent<HTMLButtonElement>) => {
+		event.preventDefault() //눌렀을 때, 새로고침 방지
+
 		let response
 
 		if (isCart !== null) {
