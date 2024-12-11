@@ -1,69 +1,57 @@
 "use client"
 
-import React, { useEffect } from "react"
-import { PeriodDropdown } from "../atom/PeriodDropdown"
-import { PeriodUnitDropdown } from "../atom/PeriodUnitDropdown"
+import React from "react"
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger,
+} from "@repo/ui/dropdown-menu"
+import ChartSvg from "@/components/main/atom/icon/ChartSvg"
 
 interface DashboardHeaderProps {
 	selectedPeriod: string
 	setSelectedPeriod: (value: string) => void
-	selectedUnit: string
-	setSelectedUnit: (value: string) => void
 }
 
 function DashboardHeader({
 	selectedPeriod,
 	setSelectedPeriod,
-	selectedUnit,
-	setSelectedUnit,
 }: DashboardHeaderProps) {
-	// periods에 따라 units 결정
-	const getAvailableUnits = (period: string) => {
-		switch (period) {
-			case "week":
-				return ["day"]
-			case "month":
-				return ["day", "week"]
-			case "6-months":
-				return ["week", "month"]
-			case "year":
-				return ["month"]
-			case "10-years":
-				return ["year"]
-			default:
-				return []
-		}
-	}
-
-	const availableUnits = getAvailableUnits(selectedPeriod)
-	const isDropdownDisabled = availableUnits.length === 0
-
-	// selectedPeriod 변경 시 자동으로 selectedUnit 설정
-	useEffect(() => {
-		if (availableUnits.length === 1) {
-			setSelectedUnit(availableUnits[0]) // 단일 옵션 자동 설정
-		} else if (!availableUnits.includes(selectedUnit)) {
-			setSelectedUnit("") // 기존 선택이 유효하지 않으면 초기화
-		}
-	}, [selectedPeriod, availableUnits, selectedUnit, setSelectedUnit])
+	const periods = [
+		{ label: "지난 1년", value: "year" },
+		{ label: "지난 6개월", value: "6-months" },
+		{ label: "지난 1개월", value: "month" },
+		{ label: "지난 1주일", value: "week" },
+	]
 
 	return (
-		<div className="flex justify-between gap-4 px-4">
-			<div className="text-center text-4xl text-white">Summary</div>
+		<div className="flex items-center justify-between gap-4 px-4">
+			{/* 왼쪽: Summary와 ChartSvg */}
+			<div className="flex items-center gap-4">
+				<div className="text-center text-4xl font-bold text-white">
+					Dashboard
+				</div>
+				<ChartSvg />
+			</div>
+			{/* 오른쪽: DropdownMenu */}
 			<div className="flex flex-row">
-				<PeriodDropdown
-					selectedPeriod={selectedPeriod}
-					onSelect={(value) => {
-						setSelectedPeriod(value)
-						setSelectedUnit("")
-					}}
-				/>
-				<PeriodUnitDropdown
-					selectedUnit={selectedUnit}
-					onSelect={setSelectedUnit}
-					availableUnits={availableUnits}
-					disabled={isDropdownDisabled}
-				/>
+				<DropdownMenu>
+					<DropdownMenuTrigger
+						className="rounded-md border-[#A100F8] bg-[#A913F9] px-4 py-2 text-sm font-medium text-white"
+						style={{ width: "150px", textAlign: "center" }}>
+						{selectedPeriod || "Period"}
+					</DropdownMenuTrigger>
+					<DropdownMenuContent className="border-[#A100F8] bg-[#a600ff] px-4 py-2 text-sm font-medium text-white hover:bg-[#8913c9]">
+						{periods.map((period) => (
+							<DropdownMenuItem
+								key={period.value}
+								onClick={() => setSelectedPeriod(period.value)}>
+								{period.label}
+							</DropdownMenuItem>
+						))}
+					</DropdownMenuContent>
+				</DropdownMenu>
 			</div>
 		</div>
 	)

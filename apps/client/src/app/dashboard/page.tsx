@@ -3,7 +3,7 @@ import DashboardTemplete from "@/components/dashboard/templete/DashboardTemplete
 
 async function dashboard() {
 	return (
-		<section>
+		<section className="container mx-auto">
 			<DashboardTemplete />
 		</section>
 	)
