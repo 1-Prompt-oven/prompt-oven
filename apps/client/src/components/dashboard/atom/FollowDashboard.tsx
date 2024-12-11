@@ -11,6 +11,7 @@ import {
 	Legend,
 } from "recharts"
 import { fetchStatisticHistory } from "@/action/dashboard/dashboardAction"
+import PcTitle from "@/components/product-create/atom/PcTitle"
 
 interface ChartData {
 	name: string
@@ -100,48 +101,53 @@ export function FollowDashboard({
 	}
 
 	return (
-		<div
-			className="flex h-screen max-h-[500px] w-screen items-center justify-center"
-			style={{
-				background: "#252525",
-				border: "2px solid #A100F8",
-				borderRadius: "16px",
-			}}>
-			<ResponsiveContainer width="100%" height="100%">
-				<AreaChart data={data}>
-					<XAxis
-						dataKey="name"
-						tickFormatter={formatXAxisLabel} // Apply custom label formatting
-						label={{
-							value: "Date",
-							position: "insideBottomRight",
-							fill: "#8C91A2",
-						}}
-						stroke="#FFFFFF"
-						minTickGap={1}
-					/>
-					<YAxis
-						tickFormatter={formatYAxisLabel}
-						label={{
-							value: "follower",
-							position: "insideTopLeft",
-							offset: 0,
-							dy: -20,
-							fill: "#8C91A2",
-						}}
-						stroke="#FFFFFF"
-					/>
-					<Tooltip />
-					<Legend verticalAlign="top" height={36} />
-					<Area
-						type="monotone"
-						dataKey="follower"
-						name="Follower Count"
-						stroke="#8884d8"
-						fill="rgba(136, 132, 216, 0.6)"
-					/>
-				</AreaChart>
-			</ResponsiveContainer>
+		<div className="w-full">
+			<div>
+				<PcTitle className="pb-3 pr-3">Follower Chart</PcTitle>
+			</div>
+			<div
+				className="h-screen max-h-[500px] w-full"
+				style={{
+					background: "#252525",
+					border: "2px solid #A100F8",
+					borderRadius: "16px",
+				}}>
+				<ResponsiveContainer width="100%" height="100%">
+					<AreaChart data={data}>
+						<XAxis
+							dataKey="name"
+							tickFormatter={formatXAxisLabel} // Apply custom label formatting
+							label={{
+								value: "Date",
+								position: "insideBottomRight",
+								fill: "#8C91A2",
+							}}
+							stroke="#FFFFFF"
+							minTickGap={1}
+						/>
+						<YAxis
+							tickFormatter={formatYAxisLabel}
+							label={{
+								value: "follower",
+								position: "insideTopLeft",
+								offset: 0,
+								dy: -20,
+								fill: "#8C91A2",
+							}}
+							stroke="#FFFFFF"
+						/>
+						<Tooltip />
+						<Legend verticalAlign="top" height={36} />
+						<Area
+							type="monotone"
+							dataKey="follower"
+							name="Follower Count"
+							stroke="#8884d8"
+							fill="rgba(136, 132, 216, 0.6)"
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			</div>
 		</div>
 	)
 }

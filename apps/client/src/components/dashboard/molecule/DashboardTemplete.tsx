@@ -2,7 +2,6 @@
 
 import React, { useState, useEffect } from "react"
 import dayjs from "dayjs"
-import PcTitle from "@/components/product-create/atom/PcTitle"
 import DashboardHeader from "../atom/DashboardHeader"
 import SalesDashboard from "../atom/SalesDashboard"
 import { ViewDashboard } from "../atom/ViewDashboard"
@@ -58,10 +57,6 @@ function DashboardTemplete() {
 				/>
 			</div>
 			<div className="grid grid-cols-1 xl:grid-cols-2">
-				<PcTitle className="px-5">Sales Chart</PcTitle>
-				<PcTitle className="px-5">SalesAmount Chart</PcTitle>
-			</div>
-			<div className="grid grid-cols-1 xl:grid-cols-2">
 				<div className="flex p-5">
 					<SalesDashboard
 						selectedPeriod={selectedPeriod}
@@ -76,12 +71,7 @@ function DashboardTemplete() {
 						endDate={endDate}
 					/>
 				</div>
-			</div>
-			<div className="grid grid-cols-1 xl:grid-cols-2">
-				<PcTitle className="px-5">Follow Chart</PcTitle>
-				<PcTitle className="px-5">View Chart</PcTitle>
-			</div>
-			<div className="grid grid-cols-1 xl:grid-cols-2">
+
 				<div className="flex p-5">
 					<FollowDashboard
 						selectedPeriod={selectedPeriod}
