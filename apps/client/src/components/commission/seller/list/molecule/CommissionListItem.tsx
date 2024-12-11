@@ -29,11 +29,9 @@ function CommissionListItem({ commission }: CommissionListItemProps) {
 						<DateDisplay date={commission.deadline} label="Deadline" />
 					</div>
 				</div>
-				{commission.requester ? (
-					<div className="mt-2 text-sm text-gray-400">
-						Requester: {commission.requester}
-					</div>
-				) : null}
+				<div className="mt-2 text-sm text-gray-400">
+					Requester: {commission.requester.name}
+				</div>
 			</div>
 		</Link>
 	)

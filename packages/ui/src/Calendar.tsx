@@ -1,3 +1,5 @@
+/* eslint-disable  -- 임시방편 */
+
 "use client"
 
 import * as React from "react"

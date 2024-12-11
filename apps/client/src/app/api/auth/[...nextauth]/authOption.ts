@@ -114,11 +114,7 @@ export const authOptions: NextAuthOptions = {
 	callbacks: {
 		async signIn({ user, account, profile }) {
 			if (account?.provider === "credentials") {
-				if (user) {
-					return true
-				} else {
-					return false
-				}
+				return Boolean(user)
 			}
 			//소셜 로그인 공통 처리
 			if (account?.provider) {
