@@ -16,7 +16,6 @@ export function PeriodDropdown({
 	onSelect: (value: string) => void
 }) {
 	const periods = [
-		{ label: "지난 10년", value: "10-years" },
 		{ label: "지난 1년", value: "year" },
 		{ label: "지난 6개월", value: "6-months" },
 		{ label: "지난 1개월", value: "month" },
