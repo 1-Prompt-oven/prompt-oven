@@ -58,6 +58,9 @@ export {
 	PackageX,
 	Plus,
 	Hammer,
+	House,
+	SquareTerminal,
+	Sparkles,
+	TrophyIcon,
 	type LucideProps,
 } from "lucide-react"
-
