@@ -46,8 +46,8 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}>
 			<Link href={`/prompt-detail/${productInfo.productUuid}`}>
-				<Card className="relative flex w-[150px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md xs:w-[180px] sm:w-[220px]">
-					<div className="xs relative h-[170px] bg-white xs:h-[220px] sm:h-[260px]">
+				<Card className="xxs:w-[150px] relative flex w-[130px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md xs:w-[180px] sm:w-[220px]">
+					<div className="xxs:h-[190px] relative h-[160px] bg-white xs:h-[220px] sm:h-[260px]">
 						<Image
 							src={thumbnailImage}
 							sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
