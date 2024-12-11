@@ -1,5 +1,6 @@
 import React from "react"
 import MainFooter from "@/components/main/organism/MainFooter"
+import ToTopButton from "@/components/common/atom/ToTopButton"
 
 export default function layout({
 	children,
@@ -9,6 +10,7 @@ export default function layout({
 	return (
 		<>
 			{children}
+			<ToTopButton />
 			<MainFooter />
 		</>
 	)
