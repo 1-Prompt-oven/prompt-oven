@@ -2,11 +2,12 @@
 
 import React, { useState, useEffect } from "react"
 import dayjs from "dayjs"
-import DashboardHeader from "../molecule/DashboardHeader"
-import SalesDashboard from "../molecule/SalesDashboard"
-import { ViewDashboard } from "../molecule/ViewDashboard"
-import { FollowDashboard } from "../molecule/FollowDashboard"
-import SalesAmountDashboard from "../molecule/SalesAmountDashboard"
+import PcTitle from "@/components/product-create/atom/PcTitle"
+import DashboardHeader from "../atom/DashboardHeader"
+import SalesDashboard from "../atom/SalesDashboard"
+import { ViewDashboard } from "../atom/ViewDashboard"
+import { FollowDashboard } from "../atom/FollowDashboard"
+import SalesAmountDashboard from "../atom/SalesAmountDashboard"
 
 function DashboardTemplete() {
 	const [selectedPeriod, setSelectedPeriod] = useState<string>("week") // 기본값 "week"
@@ -56,29 +57,39 @@ function DashboardTemplete() {
 					setSelectedPeriod={setSelectedPeriod}
 				/>
 			</div>
-			<div className="grid grid-cols-1 items-center justify-center p-6 xl:grid-cols-2">
-				<div className="sm:h-500px flex items-center justify-center p-1">
+			<div className="grid grid-cols-1 xl:grid-cols-2">
+				<PcTitle className="px-5">Sales Chart</PcTitle>
+				<PcTitle className="px-5">SalesAmount Chart</PcTitle>
+			</div>
+			<div className="grid grid-cols-1 xl:grid-cols-2">
+				<div className="flex p-5">
 					<SalesDashboard
 						selectedPeriod={selectedPeriod}
 						beginDate={beginDate}
 						endDate={endDate}
 					/>
 				</div>
-				<div className="flex items-center justify-center p-1">
+				<div className="flex p-5">
 					<SalesAmountDashboard
 						selectedPeriod={selectedPeriod}
 						beginDate={beginDate}
 						endDate={endDate}
 					/>
 				</div>
-				<div className="flex items-center justify-center p-1">
+			</div>
+			<div className="grid grid-cols-1 xl:grid-cols-2">
+				<PcTitle className="px-5">Follow Chart</PcTitle>
+				<PcTitle className="px-5">View Chart</PcTitle>
+			</div>
+			<div className="grid grid-cols-1 xl:grid-cols-2">
+				<div className="flex p-5">
 					<FollowDashboard
 						selectedPeriod={selectedPeriod}
 						beginDate={beginDate}
 						endDate={endDate}
 					/>
 				</div>
-				<div className="flex items-center justify-center p-1">
+				<div className="flex p-5">
 					<ViewDashboard
 						selectedPeriod={selectedPeriod}
 						beginDate={beginDate}

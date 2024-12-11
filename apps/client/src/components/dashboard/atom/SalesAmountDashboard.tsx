@@ -6,7 +6,6 @@ import {
 	Area,
 	XAxis,
 	YAxis,
-	CartesianGrid,
 	Tooltip,
 	ResponsiveContainer,
 	Legend,
@@ -15,7 +14,7 @@ import { fetchStatisticHistory } from "@/action/dashboard/dashboardAction"
 
 interface ChartData {
 	name: string
-	view: number
+	salesAmount: number
 }
 
 export function ViewDashboard({
@@ -40,7 +39,7 @@ export function ViewDashboard({
 				const dates = []
 				while (start <= end) {
 					const formattedDate = start.toISOString().split("T")[0]
-					dates.push({ name: formattedDate, view: 0 })
+					dates.push({ name: formattedDate, salesAmount: 0 })
 					start.setDate(start.getDate() + 1)
 				}
 				return dates
@@ -54,7 +53,9 @@ export function ViewDashboard({
 				)
 				return {
 					name: defaultItem.name,
-					view: matchingResult ? matchingResult.viewer : defaultItem.view,
+					salesAmount: matchingResult
+						? matchingResult.sales
+						: defaultItem.salesAmount,
 				}
 			})
 
@@ -99,10 +100,15 @@ export function ViewDashboard({
 	}
 
 	return (
-		<div className="flex h-screen max-h-[900px] w-screen items-center justify-center bg-white">
+		<div
+			className="flex h-screen max-h-[500px] w-screen items-center justify-center"
+			style={{
+				background: "#252525",
+				border: "2px solid #A100F8",
+				borderRadius: "16px",
+			}}>
 			<ResponsiveContainer width="100%" height="100%">
 				<AreaChart data={data}>
-					<CartesianGrid strokeDasharray="3 3" />
 					<XAxis
 						dataKey="name"
 						tickFormatter={formatXAxisLabel} // Apply custom label formatting
@@ -110,26 +116,30 @@ export function ViewDashboard({
 							value: "Date",
 							position: "insideBottomRight",
 							offset: -5,
+							fill: "#8C91A2",
 						}}
+						stroke="#FFFFFF"
 						minTickGap={1}
 					/>
 					<YAxis
 						tickFormatter={formatYAxisLabel}
 						label={{
-							value: "Viewers",
+							value: "salesAmount",
 							position: "insideTopLeft",
 							offset: 0,
 							dy: -20,
+							fill: "#8C91A2",
 						}}
+						stroke="#FFFFFF"
 					/>
 					<Tooltip />
 					<Legend verticalAlign="top" height={36} />
 					<Area
 						type="monotone"
-						dataKey="view"
-						name="Viewer Count"
+						dataKey="salesAmount"
+						name="salesAmount Count"
 						stroke="#8884d8"
-						fill="rgba(136, 132, 216, 0.3)"
+						fill="rgba(136, 132, 216, 0.6)"
 					/>
 				</AreaChart>
 			</ResponsiveContainer>

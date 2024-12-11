@@ -6,17 +6,15 @@ import {
 	Area,
 	XAxis,
 	YAxis,
-	CartesianGrid,
 	Tooltip,
 	ResponsiveContainer,
 	Legend,
 } from "recharts"
-import { fetchSettlementHistory } from "@/action/dashboard/dashboardAction"
+import { fetchStatisticHistory } from "@/action/dashboard/dashboardAction"
 
 interface ChartData {
 	name: string
-	dailysold: number
-	dailyearned: number
+	view: number
 }
 
 export function ViewDashboard({
@@ -33,7 +31,7 @@ export function ViewDashboard({
 	useEffect(() => {
 		const fetchData = async () => {
 			if (!beginDate || !endDate) return
-			const results = await fetchSettlementHistory(beginDate, endDate)
+			const results = await fetchStatisticHistory(beginDate, endDate)
 
 			const generateDefaultData = (startDate: string, finishDate: string) => {
 				const start = new Date(startDate)
@@ -41,7 +39,7 @@ export function ViewDashboard({
 				const dates = []
 				while (start <= end) {
 					const formattedDate = start.toISOString().split("T")[0]
-					dates.push({ name: formattedDate, dailysold: 0, dailyearned: 0 })
+					dates.push({ name: formattedDate, view: 0 })
 					start.setDate(start.getDate() + 1)
 				}
 				return dates
@@ -55,12 +53,7 @@ export function ViewDashboard({
 				)
 				return {
 					name: defaultItem.name,
-					dailysold: matchingResult
-						? matchingResult.dailySold
-						: defaultItem.dailysold,
-					dailyearned: matchingResult
-						? matchingResult.dailyEarned
-						: defaultItem.dailyearned,
+					view: matchingResult ? matchingResult.viewer : defaultItem.view,
 				}
 			})
 
@@ -105,44 +98,46 @@ export function ViewDashboard({
 	}
 
 	return (
-		<div className="flex h-screen max-h-[900px] w-screen items-center justify-center bg-white">
+		<div
+			className="flex h-screen max-h-[500px] w-screen items-center justify-center"
+			style={{
+				background: "#252525",
+				border: "2px solid #A100F8",
+				borderRadius: "16px",
+			}}>
 			<ResponsiveContainer width="100%" height="100%">
 				<AreaChart data={data}>
-					<CartesianGrid strokeDasharray="3 3" />
 					<XAxis
 						dataKey="name"
-						tickFormatter={formatXAxisLabel}
+						tickFormatter={formatXAxisLabel} // Apply custom label formatting
 						label={{
 							value: "Date",
 							position: "insideBottomRight",
 							offset: -5,
+							fill: "#8C91A2",
 						}}
+						stroke="#FFFFFF"
 						minTickGap={1}
 					/>
 					<YAxis
 						tickFormatter={formatYAxisLabel}
 						label={{
-							value: "Values",
+							value: "Viewers",
 							position: "insideTopLeft",
 							offset: 0,
 							dy: -20,
+							fill: "#8C91A2",
 						}}
+						stroke="#FFFFFF"
 					/>
 					<Tooltip />
 					<Legend verticalAlign="top" height={36} />
 					<Area
 						type="monotone"
-						dataKey="dailysold"
-						name="Daily Sold"
+						dataKey="view"
+						name="Viewer Count"
 						stroke="#8884d8"
-						fill="rgba(136, 132, 216, 0.3)"
-					/>
-					<Area
-						type="monotone"
-						dataKey="dailyearned"
-						name="Daily Earned"
-						stroke="#ec35f2"
-						fill="rgba(217, 142, 224, 0.92)"
+						fill="rgba(136, 132, 216, 0.6)"
 					/>
 				</AreaChart>
 			</ResponsiveContainer>
