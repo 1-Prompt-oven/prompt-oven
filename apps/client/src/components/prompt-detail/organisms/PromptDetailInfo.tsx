@@ -16,7 +16,7 @@ export default async function PromptDetailInfo({
 	const followState = await getFollowingState(sellerData.memberNickname)
 
 	return (
-		<div className="flex flex-col justify-between gap-6 xl:h-[600px]">
+		<div className="flex flex-col justify-between gap-6 lg:h-[600px]">
 			<PromptDetailStandardInfo
 				productUUID={productDetail.productUuid}
 				productRegistDate={productDetail.updatedAt}
