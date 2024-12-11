@@ -176,6 +176,7 @@ export async function getCartStateAction(
 			(item) => item.productUuid === productUUID,
 		)
 		const cartId = foundItem ? foundItem.id : null // id 값을 찾거나 null 반환
+		revalidateTag("updateCarts")
 		return cartId
 	}
 	return null
@@ -234,6 +235,7 @@ export async function createCart(
 			(item) => item.productUuid === productUUID,
 		)
 		const newCartId = foundItem ? foundItem.id : null // id 값을 찾거나 null 반환
+		revalidateTag("updateCarts")
 		return { result: { res: true, state: "success", cartId: newCartId } }
 	}
 	//throw new Error("Failed to fetch Create Cart Data")
@@ -261,6 +263,7 @@ export async function changeCartState(
 	)
 
 	if (res.ok) {
+		revalidateTag("updateCarts")
 		return { result: { res: true, state: "success", cartId: null } }
 	}
 
