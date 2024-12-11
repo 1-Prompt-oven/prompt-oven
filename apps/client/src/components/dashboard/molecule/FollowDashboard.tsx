@@ -91,6 +91,15 @@ export function FollowDashboard({
 		}
 	}
 
+	const formatYAxisLabel = (value: number) => {
+		if (value >= 1000000) {
+			return `${(value / 1000000).toFixed(1)}M`
+		} else if (value >= 1000) {
+			return `${Math.round(value / 1000)}K`
+		}
+		return value.toString()
+	}
+
 	return (
 		<div className="flex h-screen max-h-[900px] w-screen items-center justify-center bg-white">
 			<ResponsiveContainer width="100%" height="100%">
@@ -107,6 +116,7 @@ export function FollowDashboard({
 						minTickGap={1}
 					/>
 					<YAxis
+						tickFormatter={formatYAxisLabel}
 						label={{
 							value: "follower",
 							position: "insideTopLeft",

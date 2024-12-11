@@ -11,11 +11,12 @@ import {
 	ResponsiveContainer,
 	Legend,
 } from "recharts"
-import { fetchStatisticHistory } from "@/action/dashboard/dashboardAction"
+import { fetchSettlementHistory } from "@/action/dashboard/dashboardAction"
 
 interface ChartData {
 	name: string
-	view: number
+	dailysold: number
+	dailyearned: number
 }
 
 export function ViewDashboard({
@@ -32,7 +33,7 @@ export function ViewDashboard({
 	useEffect(() => {
 		const fetchData = async () => {
 			if (!beginDate || !endDate) return
-			const results = await fetchStatisticHistory(beginDate, endDate)
+			const results = await fetchSettlementHistory(beginDate, endDate)
 
 			const generateDefaultData = (startDate: string, finishDate: string) => {
 				const start = new Date(startDate)
@@ -40,7 +41,7 @@ export function ViewDashboard({
 				const dates = []
 				while (start <= end) {
 					const formattedDate = start.toISOString().split("T")[0]
-					dates.push({ name: formattedDate, view: 0 })
+					dates.push({ name: formattedDate, dailysold: 0, dailyearned: 0 })
 					start.setDate(start.getDate() + 1)
 				}
 				return dates
@@ -54,7 +55,12 @@ export function ViewDashboard({
 				)
 				return {
 					name: defaultItem.name,
-					view: matchingResult ? matchingResult.viewer : defaultItem.view,
+					dailysold: matchingResult
+						? matchingResult.dailySold
+						: defaultItem.dailysold,
+					dailyearned: matchingResult
+						? matchingResult.dailyEarned
+						: defaultItem.dailyearned,
 				}
 			})
 
@@ -63,27 +69,39 @@ export function ViewDashboard({
 		fetchData()
 	}, [beginDate, endDate])
 
-	const formatXAxisLabel = (value: string) => {
+	const formatXAxisLabel = (value: string, index: number) => {
 		const date = new Date(value)
 		switch (selectedPeriod) {
-			case "week": {
+			case "week":
 				return date.toLocaleDateString("en-US", { weekday: "short" }) // "Mon", "Tue", ...
-			}
-			case "month": {
-				const weekNumber = Math.min(Math.ceil(date.getDate() / 7), 4)
-				return `${weekNumber}-week` // "1-week", "2-week", ...
-			}
+			case "month":
+				if (index % Math.ceil(data.length / 4) === 0) {
+					const weekNumber = Math.min(Math.ceil(date.getDate() / 7), 4)
+					return `${weekNumber}-week` // "1-week", "2-week", ...
+				}
+				return ""
 			case "6-months":
-			case "year": {
-				return date.toLocaleDateString("en-US", { month: "short" }) // "Jan", "Feb", ...
-			}
-			case "10-years": {
-				return date.getFullYear().toString() // "2023", "2024", ...
-			}
-			default: {
+				if (index % Math.ceil(data.length / 6) === 0) {
+					return date.toLocaleDateString("en-US", { month: "short" }) // "Jan", "Feb", ...
+				}
+				return ""
+			case "year":
+				if (index % Math.ceil(data.length / 12) === 0) {
+					return date.toLocaleDateString("en-US", { month: "short" }) // "Jan", "Feb", ...
+				}
+				return ""
+			default:
 				return value
-			}
 		}
+	}
+
+	const formatYAxisLabel = (value: number) => {
+		if (value >= 1000000) {
+			return `${(value / 1000000).toFixed(1)}M`
+		} else if (value >= 1000) {
+			return `${Math.round(value / 1000)}K`
+		}
+		return value.toString()
 	}
 
 	return (
@@ -99,10 +117,12 @@ export function ViewDashboard({
 							position: "insideBottomRight",
 							offset: -5,
 						}}
+						minTickGap={1}
 					/>
 					<YAxis
+						tickFormatter={formatYAxisLabel}
 						label={{
-							value: "Sales",
+							value: "Values",
 							position: "insideTopLeft",
 							offset: 0,
 							dy: -20,
@@ -112,10 +132,17 @@ export function ViewDashboard({
 					<Legend verticalAlign="top" height={36} />
 					<Area
 						type="monotone"
-						dataKey="Sales"
-						name="Sales Count"
+						dataKey="dailysold"
+						name="Daily Sold"
 						stroke="#8884d8"
 						fill="rgba(136, 132, 216, 0.3)"
+					/>
+					<Area
+						type="monotone"
+						dataKey="dailyearned"
+						name="Daily Earned"
+						stroke="#ec35f2"
+						fill="rgba(217, 142, 224, 0.92)"
 					/>
 				</AreaChart>
 			</ResponsiveContainer>
