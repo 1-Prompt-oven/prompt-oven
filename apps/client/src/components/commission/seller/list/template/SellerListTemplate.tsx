@@ -1,7 +1,6 @@
 "use client"
 
 import React, { useState } from "react"
-import CommissionList from "../organism/CommissionList"
 import { Input } from "@repo/ui/input"
 import {
 	Select,
@@ -11,6 +10,7 @@ import {
 	SelectValue,
 } from "@repo/ui/select"
 import type { Commission } from "@/types/commission/commissionType"
+import CommissionList from "../organism/CommissionList"
 
 interface SellerCommissionListTemplateProps {
 	commissions: Commission[]
