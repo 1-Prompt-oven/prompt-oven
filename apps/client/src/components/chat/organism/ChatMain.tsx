@@ -1,17 +1,19 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useInfiniteQuery } from "@tanstack/react-query"
+import dayjs from "dayjs"
+import { EventSourcePolyfill } from "event-source-polyfill"
 import { ChatHeader } from "@/components/chat/molecule/ChatHeader"
 import { ChatInput } from "@/components/chat/molecule/ChatInput.tsx"
 import { ChMessageBubble } from "@/components/chat/atom/ChMessageBubble.tsx"
 import { ChAvatar } from "@/components/chat/atom/ChAvatar.tsx"
-import useSSE from "@/hooks/chat/useSSE.ts"
 import {
 	getPreviousChatMessages,
 	sendChatMessage,
 } from "@/action/chat/chatAction.ts"
+import type { GetReactiveChatMessageResponseType } from "@/types/chat/chatTypes.ts"
 
 // interface Message {
 // 	id: string
@@ -42,41 +44,71 @@ export function ChatMain({
 	onOpenSidebar,
 }: ChatMainProps) {
 	const [error, setError] = useState<string | null>(null)
-	const { messages: sseMessages } = useSSE(roomId)
+	const [allMessages, setAllMessages] = useState<
+		GetReactiveChatMessageResponseType[]
+	>([])
+
+	useEffect(() => {
+		const eventSource = new EventSourcePolyfill(
+			`/api/chatting?roomId=${roomId}`,
+		)
+
+		eventSource.onmessage = (event) => {
+			// eslint-disable-next-line no-console -- This is a server-side only log
+			console.log("eventsource event: ", event)
+			// 'data:' 접두사 제거
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access -- ok
+			const cleanData = event.data.replace(/^data:/, "")
+			// eslint-disable-next-line no-console -- This is a server-side only log
+			console.log("eventsource cleanData: ", cleanData)
+			// 첫 번째 파싱 - GetReactiveChatMessageResponseType 타입으로 파싱
+			const newMessage = JSON.parse(
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- ok
+				cleanData,
+			) as GetReactiveChatMessageResponseType
+			// eslint-disable-next-line no-console -- This is a server-side only log
+			console.log("eventsource newMessage: ", newMessage)
+			setAllMessages((prevMessages) => [newMessage, ...prevMessages])
+		}
+
+		eventSource.onerror = (err) => {
+			// eslint-disable-next-line no-console -- error log
+			console.error("EventSource failed:", err)
+			eventSource.close()
+		}
+
+		return () => {
+			eventSource.close()
+		}
+	}, [roomId])
+
 	const { ref, inView } = useInView()
-	const messageContainerRef = useRef<HTMLDivElement>(null)
 
-	// console.log("in ChatMain: ", roomId, memberUuid, contact)
-
-	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, ...result } =
+	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
 		useInfiniteQuery({
 			queryKey: ["chatMsg", roomId],
-			queryFn: async ({ pageParam = 0 }) => {
+			queryFn: async (arg) => {
+				// console.log("pageParam in inf query: ", arg)
 				const response = await getPreviousChatMessages({
 					roomId,
-					lastObjectId: "", // 뭘 넣어줘야 하지??
+					lastObjectId: arg.pageParam,
 					pageSize: 20,
-					page: pageParam,
 				})
-				// eslint-disable-next-line no-console -- 결과 출력
-				console.log("response in inf query: ", response)
-				// eslint-disable-next-line no-console -- 결과 출력
-				console.log("result in inf query: ", result)
 				if (!response.isSuccess) {
 					throw new Error("메시지를 가져오는데 실패했습니다")
 				}
 				return response.result
 			},
+			initialPageParam: "",
 			getNextPageParam: (mpr) => {
-				// eslint-disable-next-line no-console -- 결과 출력
-				console.log("in getNextpageParam : ", mpr.page, "\n\n", mpr)
-				if (mpr.hasNext) {
-					return mpr.page + 1
+				// console.log("in getNextpageParam : ", mpr.page, "\n\n", mpr)
+				if (mpr.hasNext && mpr.lastObjectId) {
+					return mpr.lastObjectId
 				}
 				return undefined
 			},
-			initialPageParam: 0,
 			refetchOnWindowFocus: false,
+			enabled: Boolean(roomId),
 		})
 
 	useEffect(() => {
@@ -85,22 +117,18 @@ export function ChatMain({
 		}
 	}, [inView, hasNextPage, isFetchingNextPage])
 
-	const allMessages = [
-		...(data?.pages.flatMap((page) =>
-			page.content.map((msg) => ({
-				...msg,
-				createdAt: new Date(msg.createdAt),
-			})),
-		) || []),
-		...sseMessages,
-	]
-
 	useEffect(() => {
-		if (messageContainerRef.current) {
-			const { scrollHeight, clientHeight } = messageContainerRef.current
-			messageContainerRef.current.scrollTop = scrollHeight - clientHeight
-		}
-	}, [allMessages])
+		const newMessages = [
+			...(data?.pages.flatMap((page) =>
+				page.content.map((msg) => ({
+					...msg,
+					createdAt: dayjs(msg.createdAt).format("hh:mm A"),
+				})),
+			) || []),
+			...allMessages,
+		]
+		setAllMessages(newMessages)
+	}, [data])
 
 	const handleSendMessage = async (message: string) => {
 		try {
@@ -110,7 +138,6 @@ export function ChatMain({
 				message,
 				senderUuid: memberUuid,
 			})
-			// console.log("handleSendMessage after api call: ", message)
 		} catch (err) {
 			// eslint-disable-next-line no-console -- 오류 출력
 			console.error("메시지 전송 중 오류 발생:", err)
@@ -137,9 +164,17 @@ export function ChatMain({
 				onOpenSidebar={onOpenSidebar}
 			/>
 
-			<div
-				ref={messageContainerRef}
-				className="flex flex-1 flex-col-reverse space-y-4 overflow-y-auto p-4 md:space-y-6 md:p-8">
+			<div className="flex flex-1 flex-col-reverse space-y-4 overflow-y-auto p-4 md:space-y-6 md:p-8">
+				{hasNextPage ? (
+					<button
+						type="button"
+						ref={ref}
+						onClick={() => fetchNextPage()}
+						disabled={isFetchingNextPage}
+						className="mb-4 w-full rounded bg-blue-500 p-2 text-white hover:bg-blue-600 disabled:bg-blue-300">
+						{isFetchingNextPage ? "로딩 중..." : "이전 메시지 불러오기"}
+					</button>
+				) : null}
 				{allMessages.map((message) => (
 					<div
 						key={message.id}
@@ -149,20 +184,11 @@ export function ChatMain({
 						)}
 						<ChMessageBubble
 							content={message.message}
-							timestamp={new Date(message.createdAt).toLocaleTimeString()}
+							timestamp={message.createdAt}
 							isOwn={message.senderUuid === memberUuid}
 						/>
 					</div>
 				))}
-				{hasNextPage ? (
-					<button
-						ref={ref}
-						onClick={() => fetchNextPage()}
-						disabled={isFetchingNextPage}
-						className="mb-4 w-full rounded bg-blue-500 p-2 text-white hover:bg-blue-600 disabled:bg-blue-300">
-						{isFetchingNextPage ? "로딩 중..." : "이전 메시지 불러오기"}
-					</button>
-				) : null}
 			</div>
 
 			<ChatInput onSendMessage={handleSendMessage} error={error} />

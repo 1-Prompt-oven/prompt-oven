@@ -57,8 +57,8 @@ export default function ChatPage({ roomId, memberUuid }: ChatPageProps) {
 			<div className="flex flex-1 flex-col overflow-hidden md:!flex-row">
 				<div className="flex flex-1 flex-col">
 					<ChatMain
-						roomId={roomId}
 						memberUuid={memberUuid}
+						roomId={roomId}
 						contact={{
 							id: selectedContact.id,
 							name: selectedContact.name,

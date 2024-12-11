@@ -12,8 +12,6 @@ export function ChatInput({ onSendMessage, error }: ChatInputProps) {
 	const [inputMessage, setInputMessage] = useState("")
 
 	const handleSubmit = (e: FormEvent) => {
-		// eslint-disable-next-line no-console -- This is a client-side only log
-		console.log("handleSubmit: ", e, inputMessage)
 		e.preventDefault()
 		if (inputMessage.trim()) {
 			onSendMessage(inputMessage.trim())

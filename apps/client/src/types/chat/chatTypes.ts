@@ -16,7 +16,7 @@ export interface GetPreviousMessagesRequestType {
 	roomId: string // chat room id {path}
 	lastObjectId: string // last message id {query}
 	pageSize: number // number of messages to fetch {query}
-	page: number // page number {query}
+	page?: number // page number {query}
 }
 
 export interface Message {
