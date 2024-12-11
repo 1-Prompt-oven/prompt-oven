@@ -8,6 +8,7 @@ interface StarProps {
 	noAnimation?: boolean
 	color?: string
 	size?: string
+	className?: string
 }
 
 export default function StarAnimation({
@@ -16,6 +17,7 @@ export default function StarAnimation({
 	noAnimation = true,
 	color = "#ffff00",
 	size = "1.2rem", // 기본 크기를 설정
+	className = "inline-block",
 }: StarProps) {
 	const [ratingPercentage, setRatingPercentage] = useState(0)
 
@@ -30,7 +32,7 @@ export default function StarAnimation({
 
 	return (
 		<div
-			className="relative inline-block w-fit"
+			className={`relative inline-block w-fit ${className}`}
 			style={{
 				fontSize: size, // size prop을 사용하여 폰트 크기 설정
 			}}>

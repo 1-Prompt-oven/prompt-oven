@@ -76,18 +76,27 @@ export default function PromptDetailReviewMore({
 					</div>
 				</DialogTrigger>
 				<DialogContent className="h-[600px] min-w-[400px] max-w-[500px] rounded border-none bg-[#252525] lg:h-[700px] lg:min-w-[600px] lg:max-w-[900px]">
-					<DialogHeader className="mb-4 ml-4 flex flex-row items-center gap-4 lg:mb-0">
-						<DialogTitle className="font-bold text-white">
-							<PromptDetailHoverMouse
-								sellorInfo={sellorInfo}
-								productDetail={productDetail}
-								reviewSimpleData={reviewSimpleData}
-							/>
-						</DialogTitle>
+					<DialogHeader className="mb-4 ml-4 flex flex-row justify-between lg:mb-0">
+						<div className="flex items-center gap-4">
+							<DialogTitle className="font-bold text-white">
+								<PromptDetailHoverMouse
+									sellorInfo={sellorInfo}
+									productDetail={productDetail}
+									reviewSimpleData={reviewSimpleData}
+								/>
+							</DialogTitle>
 
-						<DialogDescription className="!mt-0 text-sm text-[#C1C1C1]">
-							<span>All Reviews</span>
-						</DialogDescription>
+							<DialogDescription className="!mt-0 text-sm text-[#C1C1C1]">
+								<span>All Reviews</span>
+							</DialogDescription>
+						</div>
+
+						<Button
+							type="button"
+							onClick={() => setIsOpen(!isOpen)}
+							className="bg-[#1b1b1b]">
+							x
+						</Button>
 					</DialogHeader>
 					<ul className="grid max-h-[550px] grid-cols-1 gap-2 overflow-auto">
 						{reviewList.content.map((review, index) => (
