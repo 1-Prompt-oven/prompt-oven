@@ -69,7 +69,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 						</Button> */}
 					</div>
 
-					<div className="relative flex h-[100px] flex-col justify-between bg-[#3d2d50] px-3 pt-1 xs:h-[120px]">
+					<div className="xxs:h-[100px] relative flex h-[90px] flex-col justify-between bg-[#3d2d50] px-3 pt-1 xs:h-[120px]">
 						<div className="flex flex-col gap-2">
 							<StarAnimation
 								rateData={productInfo.avgStar}
