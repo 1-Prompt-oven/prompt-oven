@@ -57,7 +57,6 @@ export async function getPromptList(
 		{
 			method: "GET",
 			headers: initializeHeaders(),
-			cache: "no-cache",
 		},
 	)
 
