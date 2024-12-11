@@ -76,7 +76,7 @@ export async function getSellorShort(
 	)
 
 	if (!res.ok) {
-		throw new Error("Failed to fetch memberShort Data")
+		throw new Error("Failed to fetch sellorShort Data")
 	}
 
 	const rawData: SellorShortData = await res.json() // RawData 타입으로 지정
