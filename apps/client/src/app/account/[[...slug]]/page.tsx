@@ -59,3 +59,4 @@ export default async function page({ searchParams }: AccountSearchParams) {
 		</ContentWrapper>
 	)
 }
+
