@@ -1,98 +1,128 @@
 "use client"
 
-import React, { useEffect, useRef } from "react"
-import { Chart } from "chart.js/auto"
-import type { PeriodUnitType } from "@/types/dashboard/PeriodUnitType"
-import { getLabels } from "../atom/PeriodLabel"
+import React, { useEffect, useState } from "react"
+import {
+	AreaChart,
+	Area,
+	XAxis,
+	YAxis,
+	CartesianGrid,
+	Tooltip,
+	ResponsiveContainer,
+	Legend,
+} from "recharts"
+import { fetchStatisticHistory } from "@/action/dashboard/dashboardAction"
 
-function ViewDashboard({ selectedPeriod, selectedUnit }: PeriodUnitType) {
-	const chartRef = useRef<HTMLCanvasElement | null>(null)
-	const chartInstanceRef = useRef<Chart | null>(null)
+interface ChartData {
+	name: string
+	view: number
+}
+
+export function ViewDashboard({
+	selectedPeriod,
+	beginDate,
+	endDate,
+}: {
+	selectedPeriod: string
+	beginDate: string
+	endDate: string
+}) {
+	const [data, setData] = useState<ChartData[]>([])
 
 	useEffect(() => {
-		if (!chartRef.current) {
-			return
-		}
+		const fetchData = async () => {
+			if (!beginDate || !endDate) return
+			const results = await fetchStatisticHistory(beginDate, endDate)
 
-		const ctx = chartRef.current.getContext("2d")
-		if (!ctx) {
-			return
-		}
-
-		if (chartInstanceRef.current) {
-			chartInstanceRef.current.destroy()
-		}
-
-		chartInstanceRef.current = new Chart(ctx, {
-			type: "line",
-			data: {
-				labels: getLabels(selectedPeriod, selectedUnit), // X축 라벨 동적으로 설정
-				datasets: [
-					{
-						label: "Sales Data",
-						data: getData(selectedPeriod, selectedUnit), // 데이터 동적으로 설정
-						fill: false,
-						borderColor: "rgba(75, 192, 192, 1)",
-						tension: 0.1,
-					},
-				],
-			},
-			options: {
-				maintainAspectRatio: false,
-				responsive: true,
-				plugins: {
-					title: {
-						display: true,
-						text: "View",
-						padding: {
-							top: 10,
-							bottom: 30,
-						},
-					},
-					legend: {
-						display: true,
-					},
-					tooltip: {
-						enabled: true,
-					},
-				},
-				scales: {
-					x: {
-						title: {
-							display: true,
-							text: "Time",
-						},
-					},
-					y: {
-						title: {
-							display: true,
-							text: "Values",
-						},
-						beginAtZero: true,
-					},
-				},
-			},
-		})
-
-		return () => {
-			if (chartInstanceRef.current) {
-				chartInstanceRef.current.destroy()
+			const generateDefaultData = (startDate: string, finishDate: string) => {
+				const start = new Date(startDate)
+				const end = new Date(finishDate)
+				const dates = []
+				while (start <= end) {
+					const formattedDate = start.toISOString().split("T")[0]
+					dates.push({ name: formattedDate, view: 0 })
+					start.setDate(start.getDate() + 1)
+				}
+				return dates
 			}
-		}
-	}, [selectedPeriod, selectedUnit])
 
-	const getData = (period: string, unit: string) => {
-		if (unit === "day") {
-			return [10, 20, 30, 40, 50, 60, 70]
-		} else if (unit === "month") {
-			return [200, 400, 600, 800]
+			const defaultData = generateDefaultData(beginDate, endDate)
+
+			const mappedData = defaultData.map((defaultItem) => {
+				const matchingResult = results.find(
+					(item) => item.targetDate === defaultItem.name,
+				)
+				return {
+					name: defaultItem.name,
+					view: matchingResult ? matchingResult.viewer : defaultItem.view,
+				}
+			})
+
+			setData(mappedData)
 		}
-		return [1000, 1200, 1400, 1600, 1800, 2000, 2200]
+		fetchData()
+	}, [beginDate, endDate])
+
+	const formatXAxisLabel = (value: string, index: number) => {
+		const date = new Date(value)
+		switch (selectedPeriod) {
+			case "week":
+				return date.toLocaleDateString("en-US", { weekday: "short" }) // "Mon", "Tue", ...
+			case "month":
+				if (index % Math.ceil(data.length / 4) === 0) {
+					const weekNumber = Math.min(Math.ceil(date.getDate() / 7), 4)
+					return `${weekNumber}-week` // "1-week", "2-week", ...
+				}
+				return ""
+			case "6-months":
+				if (index % Math.ceil(data.length / 6) === 0) {
+					return date.toLocaleDateString("en-US", { month: "short" }) // "Jan", "Feb", ...
+				}
+				return ""
+			case "year":
+				if (index % Math.ceil(data.length / 12) === 0) {
+					return date.toLocaleDateString("en-US", { month: "short" }) // "Jan", "Feb", ...
+				}
+				return ""
+			default:
+				return value
+		}
 	}
 
 	return (
-		<div className="flex h-full w-full items-center justify-center">
-			<canvas ref={chartRef} className="h-full w-full bg-white" />
+		<div className="flex h-screen max-h-[900px] w-screen items-center justify-center bg-white">
+			<ResponsiveContainer width="100%" height="100%">
+				<AreaChart data={data}>
+					<CartesianGrid strokeDasharray="3 3" />
+					<XAxis
+						dataKey="name"
+						tickFormatter={formatXAxisLabel} // Apply custom label formatting
+						label={{
+							value: "Date",
+							position: "insideBottomRight",
+							offset: -5,
+						}}
+						minTickGap={1}
+					/>
+					<YAxis
+						label={{
+							value: "Viewers",
+							position: "insideTopLeft",
+							offset: 0,
+							dy: -20,
+						}}
+					/>
+					<Tooltip />
+					<Legend verticalAlign="top" height={36} />
+					<Area
+						type="monotone"
+						dataKey="view"
+						name="Viewer Count"
+						stroke="#8884d8"
+						fill="rgba(136, 132, 216, 0.3)"
+					/>
+				</AreaChart>
+			</ResponsiveContainer>
 		</div>
 	)
 }
