@@ -2,12 +2,17 @@ import type { ForwardRefExoticComponent, RefAttributes } from "react"
 import type { LucideProps } from "@repo/ui/lucide"
 import {
 	Heart,
+	House,
 	LayoutDashboard,
 	LogIn,
 	Package,
 	Settings,
 	ShoppingBag,
+	ShoppingCart,
+	Sparkles,
+	SquareTerminal,
 	Store,
+	TrophyIcon,
 	User,
 	UserPlus,
 } from "@repo/ui/lucide"
@@ -39,27 +44,34 @@ export interface HeaderNavType
 	icon?: MenuIconType
 }
 
-// todo : href를 고정 문자열이 아니라 route 파일에서 값을 받아오게 수정하기
-export const mainNavs: HeaderNavType[] = [
+// ----------------- Avatar Navs -----------------
+
+export const commonNavs: MenuNavItemType[] = [
 	{
-		label: "HOME",
+		icon: House,
+		label: "Home",
 		href: "/",
+		query: {},
 	},
 	{
-		label: "PROMPTS",
+		icon: SquareTerminal,
+		label: "Prompts",
 		href: "/prompts",
+		query: {},
 	},
 	{
-		label: "SPECIAL EXHIBITION",
+		icon: Sparkles,
+		label: "Special exhibition",
 		href: "/special-exhibition",
+		query: {},
 	},
 	{
-		label: "BEST",
+		icon: TrophyIcon,
+		label: "Best",
 		href: "/best",
+		query: {},
 	},
 ]
-
-// ----------------- Avatar Navs -----------------
 
 export const sellerNavs: MenuNavItemType[] = [
 	{
@@ -92,29 +104,17 @@ export const sellerNavs: MenuNavItemType[] = [
 		href: "/account",
 		query: { view: "profile" },
 	},
-	// {
-	// 	icon: FileText,
-	// 	label: "Prompts",
-	// 	href: "/account",
-	// 	query: { view: "prompts" },
-	// },
-	// {
-	// 	icon: TagsIcon,
-	// 	label: "Sales",
-	// 	href: "/account",
-	// 	query: { view: "sales" },
-	// },
-	// {
-	// 	icon: Wallet,
-	// 	label: "Payouts",
-	// 	href: "/account",
-	// 	query: { view: "payouts" },
-	// },
 	{
 		icon: Heart,
 		label: "Favorites",
 		href: "/account",
 		query: { view: "favorites" },
+	},
+	{
+		icon: ShoppingCart,
+		label: "Cart",
+		href: "/account",
+		query: { view: "cart" },
 	},
 	{
 		icon: ShoppingBag,
@@ -134,6 +134,7 @@ export const sellerNavs: MenuNavItemType[] = [
 			},
 		],
 	},
+	...commonNavs,
 	{
 		icon: Settings,
 		label: "Settings",
@@ -162,6 +163,12 @@ export const userNavs: MenuNavItemType[] = [
 		query: { view: "favorites" },
 	},
 	{
+		icon: ShoppingCart,
+		label: "Cart",
+		href: "/account",
+		query: { view: "cart" },
+	},
+	{
 		icon: ShoppingBag,
 		label: "Purchases",
 		href: "/account",
@@ -179,6 +186,7 @@ export const userNavs: MenuNavItemType[] = [
 			},
 		],
 	},
+	...commonNavs,
 	{
 		icon: Settings,
 		label: "Settings",
@@ -200,6 +208,7 @@ export const guestNavs: MenuNavItemType[] = [
 		href: "/sign-up",
 		query: {},
 	},
+	...commonNavs,
 ]
 
 // ----------------- SideBar Menu Navs -----------------

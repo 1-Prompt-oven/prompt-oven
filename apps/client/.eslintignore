@@ -1,3 +1,4 @@
 **/authOption.ts
 **/logout.ts
 **/DHKeyExchange.ts
+**/refreshAfterRoleChangeAction.ts
