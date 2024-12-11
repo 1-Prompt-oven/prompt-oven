@@ -46,8 +46,8 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}>
 			<Link href={`/prompt-detail/${productInfo.productUuid}`}>
-				<Card className="relative flex w-[220px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
-					<div className="relative h-[260px] bg-white">
+				<Card className="relative flex w-[150px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md xs:w-[180px] sm:w-[220px]">
+					<div className="xs relative h-[170px] bg-white xs:h-[220px] sm:h-[260px]">
 						<Image
 							src={thumbnailImage}
 							sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -69,7 +69,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 						</Button> */}
 					</div>
 
-					<div className="relative flex h-[130px] flex-col justify-between bg-[#3d2d50] px-3 pt-1">
+					<div className="relative flex h-[100px] flex-col justify-between bg-[#3d2d50] px-3 pt-1 xs:h-[120px]">
 						<div className="flex flex-col gap-2">
 							<StarAnimation
 								rateData={productInfo.avgStar}
