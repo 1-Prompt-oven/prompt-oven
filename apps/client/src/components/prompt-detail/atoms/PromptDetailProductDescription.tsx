@@ -44,7 +44,9 @@ export default function PromptDetailContent({
 				<CardContent className="p-6">
 					<div className="flex justify-between">
 						<div className="flex items-center gap-8">
-							<p className="text-xl font-bold text-white">Execution Code</p>
+							<p className="text-base font-bold text-white xs:!text-xl">
+								Execution Code
+							</p>
 							<PromptGenerate
 								keyWord={
 									isExpanded

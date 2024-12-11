@@ -94,7 +94,7 @@ export default function PromptDetailReviewMore({
 						<Button
 							type="button"
 							onClick={() => setIsOpen(!isOpen)}
-							className="bg-[#1b1b1b]">
+							className="mr-3 bg-[#1b1b1b]">
 							x
 						</Button>
 					</DialogHeader>
