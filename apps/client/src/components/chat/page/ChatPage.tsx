@@ -27,9 +27,10 @@ const CONTACTS = [
 
 export interface ChatPageProps {
 	roomId: string
+	memberUuid: string
 }
 
-export default function ChatPage({ roomId }: ChatPageProps) {
+export default function ChatPage({ roomId, memberUuid }: ChatPageProps) {
 	const [showProfile, setShowProfile] = useState(false)
 	const [showSidebar, setShowSidebar] = useState(false)
 	const [selectedContact, setSelectedContact] = useState(
@@ -57,6 +58,7 @@ export default function ChatPage({ roomId }: ChatPageProps) {
 				<div className="flex flex-1 flex-col">
 					<ChatMain
 						roomId={roomId}
+						memberUuid={memberUuid}
 						contact={{
 							id: selectedContact.id,
 							name: selectedContact.name,

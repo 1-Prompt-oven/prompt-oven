@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import { ChatHeader } from "@/components/chat/molecule/ChatHeader"
@@ -23,6 +23,7 @@ import {
 
 interface ChatMainProps {
 	roomId: string
+	memberUuid: string
 	contact: {
 		id: string
 		name: string
@@ -35,6 +36,7 @@ interface ChatMainProps {
 
 export function ChatMain({
 	roomId,
+	memberUuid,
 	contact,
 	onProfileClick,
 	onOpenSidebar,
@@ -42,10 +44,13 @@ export function ChatMain({
 	const [error, setError] = useState<string | null>(null)
 	const { messages: sseMessages } = useSSE(roomId)
 	const { ref, inView } = useInView()
+	const messageContainerRef = useRef<HTMLDivElement>(null)
+
+	// console.log("in ChatMain: ", roomId, memberUuid, contact)
 
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage, ...result } =
 		useInfiniteQuery({
-			queryKey: ["chatMessages", roomId],
+			queryKey: ["chatMsg", roomId],
 			queryFn: async ({ pageParam = 0 }) => {
 				const response = await getPreviousChatMessages({
 					roomId,
@@ -90,16 +95,22 @@ export function ChatMain({
 		...sseMessages,
 	]
 
+	useEffect(() => {
+		if (messageContainerRef.current) {
+			const { scrollHeight, clientHeight } = messageContainerRef.current
+			messageContainerRef.current.scrollTop = scrollHeight - clientHeight
+		}
+	}, [allMessages])
+
 	const handleSendMessage = async (message: string) => {
-		// eslint-disable-next-line no-console -- test console
-		console.log("handleSendMessage: ", message)
 		try {
 			await sendChatMessage({
 				roomId,
-				messageType: "TEXT",
+				messageType: "text",
 				message,
-				senderUuid: "current-user-uuid", // 실제 사용자 UUID로 교체해야 합니다
+				senderUuid: memberUuid,
 			})
+			// console.log("handleSendMessage after api call: ", message)
 		} catch (err) {
 			// eslint-disable-next-line no-console -- 오류 출력
 			console.error("메시지 전송 중 오류 발생:", err)
@@ -126,10 +137,25 @@ export function ChatMain({
 				onOpenSidebar={onOpenSidebar}
 			/>
 
-			<div className="flex-1 space-y-4 overflow-y-auto p-4 md:space-y-6 md:p-8">
+			<div
+				ref={messageContainerRef}
+				className="flex flex-1 flex-col-reverse space-y-4 overflow-y-auto p-4 md:space-y-6 md:p-8">
+				{allMessages.map((message) => (
+					<div
+						key={message.id}
+						className={`flex items-end gap-4 ${message.senderUuid === memberUuid ? "flex-row-reverse" : ""}`}>
+						{message.senderUuid !== memberUuid && (
+							<ChAvatar src={contact.avatarSrc} alt={contact.name} size="sm" />
+						)}
+						<ChMessageBubble
+							content={message.message}
+							timestamp={new Date(message.createdAt).toLocaleTimeString()}
+							isOwn={message.senderUuid === memberUuid}
+						/>
+					</div>
+				))}
 				{hasNextPage ? (
 					<button
-						type="button"
 						ref={ref}
 						onClick={() => fetchNextPage()}
 						disabled={isFetchingNextPage}
@@ -137,20 +163,6 @@ export function ChatMain({
 						{isFetchingNextPage ? "로딩 중..." : "이전 메시지 불러오기"}
 					</button>
 				) : null}
-				{allMessages.map((message) => (
-					<div
-						key={message.id}
-						className={`flex items-end gap-4 ${message.senderUuid === "current-user-uuid" ? "flex-row-reverse" : ""}`}>
-						{message.senderUuid !== "current-user-uuid" && (
-							<ChAvatar src={contact.avatarSrc} alt={contact.name} size="sm" />
-						)}
-						<ChMessageBubble
-							content={message.message}
-							timestamp={new Date(message.createdAt).toLocaleTimeString()}
-							isOwn={message.senderUuid === "current-user-uuid"}
-						/>
-					</div>
-				))}
 			</div>
 
 			<ChatInput onSendMessage={handleSendMessage} error={error} />

@@ -12,10 +12,76 @@ This custom hook, `useSSE`, does the following:
 - The hook cleans up the connection when the component unmounts.
 
  */
-"use client"
 
-import { useEffect, useState } from "react"
-import type { GetReactiveChatMessageResponseType } from "@/types/chat/chatTypes"
+import { useCallback, useEffect, useRef, useState } from "react"
+import type { GetReactiveChatMessageResponseType } from "@/types/chat/chatTypes.ts"
+import { getReactiveChatMessages } from "@/action/chat/chatAction.ts"
+
+const useSSE = (roomId: string) => {
+	// console.log("start useSSE: ", roomId)
+	const [messages, setMessages] = useState<
+		GetReactiveChatMessageResponseType[]
+	>([])
+	const [error, setError] = useState<string | null>(null)
+	const readerRef =
+		useRef<ReadableStreamDefaultReader<GetReactiveChatMessageResponseType> | null>(
+			null,
+		)
+
+	const cancelStream = useCallback(() => {
+		if (readerRef.current) {
+			readerRef.current.cancel().then()
+			readerRef.current = null
+		}
+	}, [])
+
+	useEffect(() => {
+		let isMounted = true
+
+		const fetchSSE = async () => {
+			try {
+				const stream = await getReactiveChatMessages({ roomId })
+				// eslint-disable-next-line no-console -- This is a server-side only log
+				console.log("processStream in useSSE: ", stream)
+				readerRef.current = stream.getReader()
+
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,no-constant-condition -- It is necessary to keep the loop running
+				while (true) {
+					// eslint-disable-next-line no-await-in-loop -- This is a server-side only code
+					const { done, value } = await readerRef.current.read()
+					if (done) break
+					// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- It is necessary to check if the value is truthy
+					if (isMounted && value) {
+						setMessages((prevMessages) => [...prevMessages, value])
+					}
+				}
+			} catch (err) {
+				if (isMounted) {
+					// eslint-disable-next-line no-console -- This is a server-side only log
+					console.error("SSE error:", err)
+					setError("채팅 서버 연결에 실패했습니다")
+				}
+			} finally {
+				if (readerRef.current) {
+					readerRef.current.releaseLock()
+				}
+			}
+		}
+
+		fetchSSE().then()
+
+		return () => {
+			isMounted = false
+			cancelStream()
+		}
+	}, [roomId])
+
+	return { messages, error }
+}
+
+export default useSSE
+
+/*
 
 const useSSE = (roomId: string) => {
 	const [messages, setMessages] = useState<
@@ -24,6 +90,7 @@ const useSSE = (roomId: string) => {
 	const [error, setError] = useState<string | null>(null)
 
 	useEffect(() => {
+
 		const eventSource = new EventSource(`/api/chat/sse?roomId=${roomId}`)
 
 		eventSource.onmessage = (event) => {
@@ -60,4 +127,4 @@ const useSSE = (roomId: string) => {
 	return { messages, error }
 }
 
-export default useSSE
+ */
