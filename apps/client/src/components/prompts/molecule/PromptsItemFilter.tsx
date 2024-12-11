@@ -22,8 +22,9 @@ export default function PromptsItemFilter({
 		handleFilter(allForm) // 선택이 변경될 때마다 handleFilter 호출
 	}
 
-	const isSortOptionCreateAt = allForm.get("sortOption") === "createdAt"
-	const isSortOptionNull = allForm.get("sortOption") === null
+	const sortOption = allForm.get("sortOption")
+	const isSortOptionValid =
+		sortOption === "createdAt" || sortOption === null || sortOption === ""
 
 	return (
 		<div className="gradient-filter flex h-[3.75rem] max-w-[80rem] items-center justify-between rounded-lg border border-white/20 px-4">
@@ -34,7 +35,7 @@ export default function PromptsItemFilter({
 				</span> */}
 
 			<div className="flex items-center gap-4">
-				{isSortOptionCreateAt || isSortOptionNull ? (
+				{isSortOptionValid ? (
 					<Select
 						name="sortBy"
 						onValueChange={(value) => {
