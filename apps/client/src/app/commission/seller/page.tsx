@@ -12,7 +12,7 @@ const dummyCommissions: Commission[] = [
 		deadline: "2024-02-15",
 		description:
 			"Create an AI model to generate compelling product descriptions for our e-commerce platform.",
-		requester: "John Doe",
+		requester: { id: "1", name: "John Doe" },
 	},
 	{
 		id: "2",
@@ -23,7 +23,7 @@ const dummyCommissions: Commission[] = [
 		deadline: "2024-03-01",
 		description:
 			"Develop a chatbot that can handle basic customer inquiries and route complex issues to human agents.",
-		requester: "Jane Smith",
+		requester: { id: "2", name: "Jane Smith" },
 	},
 	{
 		id: "3",
@@ -34,7 +34,7 @@ const dummyCommissions: Commission[] = [
 		deadline: "2024-01-25",
 		description:
 			"Build a sentiment analysis tool to analyze customer feedback from various social media platforms.",
-		requester: "Alex Johnson",
+		requester: { id: "3", name: "Alex Johnson" },
 	},
 	{
 		id: "4",
@@ -45,7 +45,7 @@ const dummyCommissions: Commission[] = [
 		deadline: "2024-02-20",
 		description:
 			"Create an AI model that can summarize long-form content into concise, readable summaries.",
-		requester: "Emily Brown",
+		requester: { id: "4", name: "Emily Brown" },
 	},
 	{
 		id: "5",
@@ -56,7 +56,7 @@ const dummyCommissions: Commission[] = [
 		deadline: "2024-02-28",
 		description:
 			"Develop an AI-driven recommendation engine to suggest products based on user behavior and preferences.",
-		requester: "Michael Wilson",
+		requester: { id: "5", name: "Michael Wilson" },
 	},
 ]
 
