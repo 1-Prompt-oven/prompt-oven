@@ -20,11 +20,6 @@ export async function GET(request: NextRequest) {
 					headers: {
 						Authorization: accessToken || "",
 						Accept: "text/event-stream",
-						// vary: "Origin, Access-Control-Request-Method, Access-Control-Request-Headers",
-						// "access-control-allow-headers":
-						// 	"Authorization, Refreshtoken, Content-Type, X-Requested-With, X-XSRF-TOKEN, X-Session-ID",
-						// "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-						// "access-control-allow-origin": "*",
 					},
 				},
 			)
@@ -37,13 +32,21 @@ export async function GET(request: NextRequest) {
 				return
 			}
 
+			// let keepAliveInterval: NodeJS.Timeout;
+			//
+			// const sendKeepAlive = () => {
+			// 	controller.enqueue(encoder.encode("data: :keep-alive\n\n"));
+			// };
+			// 30초마다 keep-alive 메시지 전송
+			// keepAliveInterval = setInterval(sendKeepAlive, 30000);
+
 			// 연결이 끊겼을 때, 재연결 로직 필요
 			try {
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition,no-constant-condition -- ok
 				while (true) {
 					// eslint-disable-next-line no-await-in-loop -- ok
 					const { done, value } = await reader.read()
-					// console.log("room route ---- value: ", value)
+					// console.log("room route in room ---- value: ", value)
 					if (done) break
 
 					// 여기서 encoder를 사용하여 SSE 형식으로 데이터를 변환합니다
@@ -58,6 +61,7 @@ export async function GET(request: NextRequest) {
 					encoder.encode(`event: error\ndata: ${JSON.stringify(error)}\n\n`),
 				)
 			} finally {
+				// clearInterval(keepAliveInterval);
 				reader.releaseLock()
 				controller.close()
 			}

@@ -19,17 +19,19 @@ export interface GetPreviousMessagesRequestType {
 	page?: number // page number {query}
 }
 
-export interface Message {
+export interface  ChatMessage {
 	id: string
 	roomId: string
 	messageType: string
 	message: string
 	senderUuid: string
+	isRead: boolean
 	createdAt: string // ISO date string
 	updatedAt: string // ISO date string
 }
+
 export interface MessagePaginationResponse {
-	content: Message[]
+	content: ChatMessage[]
 	lastObjectId: string
 	hasNext: boolean
 	pageSize: number
@@ -44,37 +46,7 @@ export interface SendChatMessageRequestType {
 	message: string
 	senderUuid: string
 }
-// note: 실제로 받는지 확인해보기  -- 배열 타입으로 받음
 export interface SendChatMessageResponseType {
-	id: string
-	roomId: string
-	messageType: string
-	message: string
-	senderUuid: string
-	createdAt: string // ISO date string
-	updatedAt: string // ISO date string
-}
-
-// chat reactive API Types
-export interface GetReactiveChatRoomListRequestType {
-	userUuid: string
-}
-
-export interface GetReactiveChatRoomListResponseType {
-	chatRoomId: string
-	chatRoomName: string
-	partnerUuid: string
-	partnerIsActive: boolean
-	recentMessage: string
-	recentMessageTime: string // ISO date string
-	unreadCount: number
-}
-
-export interface GetReactiveChatMessageRequestType {
-	roomId: string
-}
-
-export interface GetReactiveChatMessageResponseType {
 	id: string
 	roomId: string
 	messageType: string
@@ -93,3 +65,16 @@ export interface LeaveRoomRequestType {
 	roomId: string // chat room id {path}
 	userUuid: string // user uuid {query}
 }
+
+// chat reactive API Types
+export interface GetReactiveChatRoomListResponseType {
+	chatRoomId: string
+	chatRoomName: string
+	partnerUuid: string
+	partnerIsActive: boolean
+	recentMessage: string
+	recentMessageTime: string // ISO date string
+	unreadCount: number
+}
+
+

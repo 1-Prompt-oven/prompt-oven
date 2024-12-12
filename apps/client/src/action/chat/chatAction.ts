@@ -77,12 +77,11 @@ export const UpdateRoomRead = async (req: UpdateRoomReadRequestType) => {
 	const headers = initializeHeaders(accessToken ?? undefined)
 	const query = createQueryParamString(_.omit(req, ["roomId"]))
 
-	return actionHandler<SendChatMessageResponseType>({
-		name: "sendChatMessage",
+	return actionHandler<CommonResType<object>>({
+		name: "UpdateRoomRead",
 		url: `/v1/member/chat/updateRead/${req.roomId}?${query}`,
 		options: {
 			method: "PUT",
-			body: JSON.stringify(req),
 			headers,
 			cache: "no-cache",
 		},

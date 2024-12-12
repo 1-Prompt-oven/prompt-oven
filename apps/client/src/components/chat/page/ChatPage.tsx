@@ -5,6 +5,7 @@ import { ChatSidebar } from "@/components/chat/organism/ChatSidebar.tsx"
 import { ChatMain } from "@/components/chat/organism/ChatMain.tsx"
 import type { GetReactiveChatRoomListResponseType } from "@/types/chat/chatTypes.ts"
 import { ChatPlaceholder } from "@/components/chat/molecule/ChatMainPlaceholder.tsx"
+// import { UpdateRoomRead } from '@/action/chat/chatAction.ts';
 
 export interface ChatPageProps {
 	roomId: string
@@ -16,9 +17,9 @@ export default function ChatPage({ roomId, memberUuid }: ChatPageProps) {
 	const [showSidebar, setShowSidebar] = useState(false)
 
 	const [selectedRoom, setSelectedRoom] =
-		useState<GetReactiveChatRoomListResponseType>(
-			{} as GetReactiveChatRoomListResponseType,
-		)
+		useState<GetReactiveChatRoomListResponseType>({
+			chatRoomId: roomId,
+		} as GetReactiveChatRoomListResponseType)
 
 	return (
 		<div className="flex h-[calc(100vh-80px)] overflow-hidden bg-[#111111]">
@@ -26,8 +27,11 @@ export default function ChatPage({ roomId, memberUuid }: ChatPageProps) {
 				className={`absolute inset-y-0 left-0 z-30 transition-transform duration-300 ease-in-out md:!static md:!w-[424px] ${showSidebar ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
 				<ChatSidebar
 					memberUuid={memberUuid}
-					selectedChatRoomId={selectedRoom.chatRoomId}
 					onSelectChatRoom={(room) => {
+						// UpdateRoomRead({
+						// 	roomId: room.chatRoomId,
+						// 	userUuid: memberUuid,
+						// }).then()
 						setSelectedRoom(room)
 						setShowSidebar(false)
 					}}
@@ -39,7 +43,6 @@ export default function ChatPage({ roomId, memberUuid }: ChatPageProps) {
 					{selectedRoom.chatRoomId ? (
 						<ChatMain
 							memberUuid={memberUuid}
-							roomId={roomId}
 							chatRoom={selectedRoom}
 							onProfileClick={() => setShowProfile(!showProfile)}
 							onOpenSidebar={() => setShowSidebar(!showSidebar)}

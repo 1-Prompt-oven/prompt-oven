@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import dayjs from "dayjs"
 import { EventSource } from "event-source-polyfill"
 import { ThreeDots } from "react-loader-spinner"
 import { ChatHeader } from "@/components/chat/molecule/ChatHeader"
@@ -15,12 +14,14 @@ import {
 	sendChatMessage,
 } from "@/action/chat/chatAction.ts"
 import type {
-	GetReactiveChatMessageResponseType,
+	ChatMessage,
 	GetReactiveChatRoomListResponseType,
 } from "@/types/chat/chatTypes.ts"
+import { getKstTime } from '@/lib/time.ts';
+import { ProfileDetailSellorShortType } from '@/types/prompt-detail/promptDetailType.ts';
+import { getSellorShort } from '@/action/prompt-detail/getProductDetailData.ts';
 
 interface ChatMainProps {
-	roomId: string
 	memberUuid: string
 	chatRoom: GetReactiveChatRoomListResponseType
 	onProfileClick?: () => void
@@ -28,7 +29,6 @@ interface ChatMainProps {
 }
 
 export function ChatMain({
-	roomId,
 	memberUuid,
 	chatRoom,
 	onProfileClick,
@@ -36,19 +36,28 @@ export function ChatMain({
 }: ChatMainProps) {
 	const [error, setError] = useState<string | null>(null)
 	const [allMessages, setAllMessages] = useState<
-		GetReactiveChatMessageResponseType[]
+		ChatMessage[]
 	>([])
 	const messagesEndRef = useRef<HTMLDivElement>(null)
 
+	const [chatUserProfile, setChatUserProfile] = useState<ProfileDetailSellorShortType | null>(null)
+	useEffect(() => {
+		const getChatUserProfile = async () => {
+			const response = await getSellorShort(chatRoom.partnerUuid)
+			setChatUserProfile(response)
+		}
+		getChatUserProfile().then()
+	}, [chatRoom.partnerUuid])
+
 	// SSE event source
 	useEffect(() => {
-		const eventSource = new EventSource(`/api/chat/message?roomId=${roomId}`)
+		const eventSource = new EventSource(`/api/chat/message?roomId=${chatRoom.chatRoomId}`)
 
 		eventSource.onmessage = (event: MessageEvent<string>) => {
-			// string으로 인코딩된 데이터를 GetReactiveChatMessageResponseType 타입으로 파싱
+			// string으로 인코딩된 데이터를 ChatMessage 타입으로 파싱
 			const newMessage = JSON.parse(
 				event.data,
-			) as GetReactiveChatMessageResponseType
+			) as ChatMessage
 			setAllMessages((prevMessages) => [newMessage, ...prevMessages])
 		}
 
@@ -61,7 +70,7 @@ export function ChatMain({
 		return () => {
 			eventSource.close()
 		}
-	}, [roomId])
+	}, [chatRoom.chatRoomId])
 
 	// 무한 스크롤을 위한 Intersection Observer
 	const { ref, inView } = useInView({ delay: 1500 })
@@ -72,14 +81,14 @@ export function ChatMain({
 			queryKey: [
 				`ChatMessages`,
 				{
-					roomId,
+					roomId: chatRoom.chatRoomId,
 					memberUuid,
 				},
 			],
 			queryFn: async (arg) => {
 				// console.log("pageParam in inf query: ", arg)
 				const response = await getPreviousChatMessages({
-					roomId,
+					roomId: chatRoom.chatRoomId,
 					lastObjectId: arg.pageParam,
 					pageSize: 20,
 				})
@@ -97,7 +106,7 @@ export function ChatMain({
 			},
 			refetchInterval: false,
 			refetchOnWindowFocus: false,
-			enabled: Boolean(roomId),
+			enabled: Boolean(chatRoom.chatRoomId),
 		})
 
 	useEffect(() => {
@@ -110,8 +119,7 @@ export function ChatMain({
 		const newMessages = [
 			...(data?.pages.flatMap((page) =>
 				page.content.map((msg) => ({
-					...msg,
-					createdAt: msg.createdAt,
+					...msg
 				})),
 			) || []),
 		]
@@ -121,7 +129,7 @@ export function ChatMain({
 	const handleSendMessage = async (message: string) => {
 		try {
 			await sendChatMessage({
-				roomId,
+				roomId: chatRoom.chatRoomId,
 				messageType: "text",
 				message,
 				senderUuid: memberUuid,
@@ -146,9 +154,9 @@ export function ChatMain({
 	return (
 		<div className="relative flex flex-1 flex-col overflow-hidden bg-[#424242]">
 			<ChatHeader
-				name={chatRoom.chatRoomName}
+				name={chatUserProfile?.memberNickname ?? ""}
 				isActive={chatRoom.partnerIsActive}
-				avatarSrc=""
+				avatarSrc={chatUserProfile?.memberProfileImage ?? ""}
 				onProfileClick={onProfileClick}
 				onOpenSidebar={onOpenSidebar}
 			/>
@@ -165,11 +173,12 @@ export function ChatMain({
 						)}
 						<ChMessageBubble
 							content={message.message}
-							timestamp={dayjs(message.createdAt).format("hh:mm A")}
+							timestamp={getKstTime(message.createdAt).format("hh:mm A")}
 							isOwn={message.senderUuid === memberUuid}
 						/>
 					</div>
 				))}
+				<div ref={ref} className="h-1 w-full" />{" "}
 				{/* Intersection Observer 참조 요소 */}
 				{isFetchingNextPage ? (
 					<div className="flex justify-center bg-[#424242] p-2">
@@ -182,7 +191,7 @@ export function ChatMain({
 						/>
 					</div>
 				) : null}
-				<div ref={ref} className="h-1 w-full" />{" "}
+
 			</div>
 
 			<ChatInput onSendMessage={handleSendMessage} error={error} />
