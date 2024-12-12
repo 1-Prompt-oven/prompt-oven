@@ -31,13 +31,25 @@ export default function PromptDetailReviewContent({
 						<p className="mt-1 text-base font-bold lg:text-xl">
 							{content.authorNickname}
 						</p>
-						<p className="mx-3 mt-2 flex gap-4 text-xs text-[#848898] lg:mx-6 lg:mt-3 lg:text-sm">
-							<span>{isNotToday !== null ? isNotToday : ""}</span>
-							<span>{formDate}</span>
-						</p>
+
+						<div className="mx-3">
+							<p className="mt-2 flex gap-4 text-xs text-[#848898] lg:mx-6 lg:mt-3 lg:text-sm">
+								<span>{isNotToday !== null ? isNotToday : ""}</span>
+								<span>{formDate}</span>
+							</p>
+							<StarAnimation
+								rateData={content.star}
+								noAnimation={false}
+								className="inline-block xs:!hidden"
+							/>
+						</div>
 					</Link>
 
-					<StarAnimation rateData={content.star} noAnimation={false} />
+					<StarAnimation
+						rateData={content.star}
+						noAnimation={false}
+						className="hidden xs:!inline-block"
+					/>
 				</div>
 
 				<PromptDetailReviewLine content={content.contents} />

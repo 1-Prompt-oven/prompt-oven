@@ -26,3 +26,15 @@ export interface PromptItemType {
 export interface LLMNameType {
 	llmName: string
 }
+
+export interface PropmtsSearchParamsProps {
+	searchBar?: string // 검색어
+	topCategoryUuid?: string // 상위 카테고리 UUID
+	topCategoryName?: string
+	subCategoryUuid?: string // 하위 카테고리 UUID
+	subCategoryName?: string
+	minPrice?: string // 최소 가격
+	maxPrice?: string // 최대 가격
+	sortBy?: string // 정렬 기준
+	sortOption?: string // 정렬 옵션 (예: ASC, DESC)
+}

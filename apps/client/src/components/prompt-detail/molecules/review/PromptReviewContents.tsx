@@ -22,7 +22,7 @@ export default async function PromptReviewContents({
 		<div>
 			{productReview.content.length > 0 ? (
 				<div>
-					<ul className="mr-6 grid grid-cols-1 gap-4">
+					<ul className="grid grid-cols-1 gap-4">
 						{productReview.content.slice(0, 2).map((content) => (
 							<PromptDetailReviewContent key={content.id} content={content} />
 						))}

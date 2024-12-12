@@ -46,8 +46,8 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}>
 			<Link href={`/prompt-detail/${productInfo.productUuid}`}>
-				<Card className="relative flex w-[220px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md">
-					<div className="relative h-[260px] bg-white">
+				<Card className="relative flex w-[130px] flex-col overflow-hidden rounded-md border-0 bg-[#111111] shadow-md xxs:w-[150px] xs:w-[180px] sm:w-[220px]">
+					<div className="relative h-[160px] bg-white xxs:h-[190px] xs:h-[220px] sm:h-[260px]">
 						<Image
 							src={thumbnailImage}
 							sizes="(max-width: 600px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -69,7 +69,7 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 						</Button> */}
 					</div>
 
-					<div className="relative flex h-[130px] flex-col justify-between bg-[#3d2d50] px-3 pt-1">
+					<div className="relative flex h-[90px] flex-col justify-between bg-[#3d2d50] px-3 pt-1 xxs:h-[100px] xs:h-[120px]">
 						<div className="flex flex-col gap-2">
 							<StarAnimation
 								rateData={productInfo.avgStar}
@@ -94,7 +94,6 @@ export default function PromptCard({ productInfo }: PromptCardProps) {
 			{isHovered ? (
 				<PromptHoverModal
 					productInfo={productInfo}
-					// allImage={allImage}
 					defaultImage={thumbnailImage}
 				/>
 			) : null}

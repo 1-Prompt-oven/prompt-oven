@@ -25,6 +25,7 @@ interface PromptGenerateProps {
 }
 
 export default function PromptGenerate({ keyWord }: PromptGenerateProps) {
+	const [isOpen, setIsOpen] = useState<boolean>(false)
 	const [image, setImage] = useState<string>("")
 	// const sampleImage =
 	// 	"https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/generate/sample-generate.png" //테스트용
@@ -63,7 +64,7 @@ export default function PromptGenerate({ keyWord }: PromptGenerateProps) {
 
 	return (
 		<div className="flex gap-3">
-			{/* <Dialog>
+			{/* <Dialog open={isOpen} onOpenChange={setIsOpen}>
 				<DialogTrigger asChild>
 					<Button className="rounded-md bg-[#414141] px-4 py-1 font-semibold text-white">
 						테스트용
@@ -75,23 +76,25 @@ export default function PromptGenerate({ keyWord }: PromptGenerateProps) {
 						This is sample prompt
 					</DialogDescription>
 				</DialogHeader>
-				<DialogContent className="mx-2 max-h-[760px] max-w-[700px] rounded border-none bg-[#252525]">
+				<DialogContent className="mx-auto max-h-[760px] max-w-[500px] rounded border-none bg-[#252525]">
 					{(() => {
 						return (
 							<PromptGenerateSuccess
 								sampleImage={sampleImage}
 								handleDownload={handleDownload}
+								isOpen={isOpen}
+								setIsOpen={setIsOpen}
 							/>
 						)
 					})()}
 				</DialogContent>
 			</Dialog> */}
 
-			<Dialog>
+			<Dialog open={isOpen} onOpenChange={setIsOpen}>
 				<DialogTrigger asChild>
 					<Button
 						onClick={handleSubmit}
-						className="rounded-md bg-[#414141] px-4 py-1 font-semibold text-white">
+						className="rounded-md bg-[#414141] px-4 py-1 font-semibold text-white hover:scale-105">
 						샘플
 					</Button>
 				</DialogTrigger>
@@ -101,7 +104,7 @@ export default function PromptGenerate({ keyWord }: PromptGenerateProps) {
 						This is sample prompt
 					</DialogDescription>
 				</DialogHeader>
-				<DialogContent className="mx-2 max-h-[760px] max-w-[700px] rounded border-none bg-[#252525]">
+				<DialogContent className="mx-auto max-h-[760px] max-w-[500px] rounded border-none bg-[#252525]">
 					{(() => {
 						if (loading) {
 							return <Generating />
@@ -112,6 +115,8 @@ export default function PromptGenerate({ keyWord }: PromptGenerateProps) {
 								<PromptGenerateSuccess
 									sampleImage={image}
 									handleDownload={handleDownload}
+									isOpen={isOpen}
+									setIsOpen={setIsOpen}
 								/>
 							)
 						}

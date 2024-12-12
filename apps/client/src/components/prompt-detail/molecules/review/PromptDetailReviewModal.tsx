@@ -31,12 +31,23 @@ export default function PromptDetailReviewModal({
 						<p className="mt-1 text-sm font-bold lg:text-lg">
 							{review.authorNickname}
 						</p>
-						<p className="mx-3 mt-1 flex gap-4 text-xs text-[#848898] lg:mx-6">
-							<span>{isNotToday !== null ? isNotToday : ""}</span>
-							<span>{formDate}</span>
-						</p>
+						<div className="mx-3">
+							<p className="mt-1 flex gap-4 text-xs text-[#848898] lg:mx-6">
+								<span>{isNotToday !== null ? isNotToday : ""}</span>
+								<span>{formDate}</span>
+							</p>
+							<StarAnimation
+								rateData={review.star}
+								noAnimation={false}
+								className="inline-block xs:!hidden"
+							/>
+						</div>
 					</Link>
-					<StarAnimation rateData={review.star} noAnimation={false} />
+					<StarAnimation
+						rateData={review.star}
+						noAnimation={false}
+						className="hidden xs:!inline-block"
+					/>
 				</div>
 
 				<PromptDetailReviewModalLine content={review.contents} />
