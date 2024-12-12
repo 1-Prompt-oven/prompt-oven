@@ -63,5 +63,5 @@ export async function GET(request: NextRequest) {
 
 function formatSSEMessage(data: Uint8Array): string {
 	const message = new TextDecoder().decode(data)
-	return `data: ${message}\n\n`
+	return message
 }

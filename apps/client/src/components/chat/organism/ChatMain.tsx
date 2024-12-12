@@ -4,7 +4,7 @@ import { useEffect, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useInfiniteQuery } from "@tanstack/react-query"
 import dayjs from "dayjs"
-import { EventSourcePolyfill } from "event-source-polyfill"
+import { EventSource } from "event-source-polyfill"
 import { ChatHeader } from "@/components/chat/molecule/ChatHeader"
 import { ChatInput } from "@/components/chat/molecule/ChatInput.tsx"
 import { ChMessageBubble } from "@/components/chat/atom/ChMessageBubble.tsx"
@@ -49,25 +49,13 @@ export function ChatMain({
 	>([])
 
 	useEffect(() => {
-		const eventSource = new EventSourcePolyfill(
-			`/api/chatting?roomId=${roomId}`,
-		)
+		const eventSource = new EventSource(`/api/chatting?roomId=${roomId}`)
 
-		eventSource.onmessage = (event) => {
-			// eslint-disable-next-line no-console -- This is a server-side only log
-			console.log("eventsource event: ", event)
-			// 'data:' 접두사 제거
-			// eslint-disable-next-line @typescript-eslint/no-unsafe-call,@typescript-eslint/no-unsafe-member-access -- ok
-			const cleanData = event.data.replace(/^data:/, "")
-			// eslint-disable-next-line no-console -- This is a server-side only log
-			console.log("eventsource cleanData: ", cleanData)
-			// 첫 번째 파싱 - GetReactiveChatMessageResponseType 타입으로 파싱
+		eventSource.onmessage = (event: MessageEvent<string>) => {
+			// string으로 인코딩된 데이터를 GetReactiveChatMessageResponseType 타입으로 파싱
 			const newMessage = JSON.parse(
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-argument -- ok
-				cleanData,
+				event.data,
 			) as GetReactiveChatMessageResponseType
-			// eslint-disable-next-line no-console -- This is a server-side only log
-			console.log("eventsource newMessage: ", newMessage)
 			setAllMessages((prevMessages) => [newMessage, ...prevMessages])
 		}
 
@@ -86,7 +74,13 @@ export function ChatMain({
 
 	const { data, fetchNextPage, hasNextPage, isFetchingNextPage } =
 		useInfiniteQuery({
-			queryKey: ["chatMsg", roomId],
+			queryKey: [
+				`ChatMessages`,
+				{
+					roomId,
+					memberUuid,
+				},
+			],
 			queryFn: async (arg) => {
 				// console.log("pageParam in inf query: ", arg)
 				const response = await getPreviousChatMessages({
@@ -125,7 +119,6 @@ export function ChatMain({
 					createdAt: dayjs(msg.createdAt).format("hh:mm A"),
 				})),
 			) || []),
-			...allMessages,
 		]
 		setAllMessages(newMessages)
 	}, [data])
