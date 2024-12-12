@@ -81,7 +81,7 @@ export default function PromptDetailChoice({
 				<div className="flex gap-6">
 					<Button
 						variant="outline"
-						className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-none bg-white p-0 xs:h-[60px] xs:w-[60px]"
+						className="flex h-[40px] w-[40px] items-center justify-center rounded-full border-none bg-white p-0 hover:scale-105 xs:h-[60px] xs:w-[60px]"
 						onClick={likeHandler}>
 						{isFavorite.liked ? (
 							<Heart className="scale-150 transform fill-[#ef4444] text-[#ef4444] transition-transform duration-300 ease-in-out" />
@@ -92,7 +92,7 @@ export default function PromptDetailChoice({
 
 					<Button
 						variant="outline"
-						className="h-[40px] w-[40px] rounded-full border-none bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] p-0 xs:h-[60px] xs:w-[60px]"
+						className="h-[40px] w-[40px] rounded-full border-none bg-gradient-to-r from-[#A913F9] to-[#3F5EFB] p-0 hover:scale-105 xs:h-[60px] xs:w-[60px]"
 						onClick={cartHandler}>
 						{isCart !== null ? (
 							<ShoppingCartIcon className="scale-150 fill-white text-white transition-transform duration-300 ease-in-out hover:opacity-90" />
@@ -102,7 +102,7 @@ export default function PromptDetailChoice({
 					</Button>
 				</div>
 
-				<PromptDetailGet />
+				<PromptDetailGet productUuid={productUuid} />
 			</div>
 
 			<ResultModal content={modalContent} setContent={setModalContent} />

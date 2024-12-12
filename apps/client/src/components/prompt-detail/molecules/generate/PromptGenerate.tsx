@@ -94,7 +94,7 @@ export default function PromptGenerate({ keyWord }: PromptGenerateProps) {
 				<DialogTrigger asChild>
 					<Button
 						onClick={handleSubmit}
-						className="rounded-md bg-[#414141] px-4 py-1 font-semibold text-white">
+						className="rounded-md bg-[#414141] px-4 py-1 font-semibold text-white hover:scale-105">
 						샘플
 					</Button>
 				</DialogTrigger>
