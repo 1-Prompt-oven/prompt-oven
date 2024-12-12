@@ -1,21 +1,17 @@
-import { Copy, Image, MoreVertical, X } from "@repo/ui/lucide"
+import { Calendar, Copy, Image, MoreVertical, Users, X } from "@repo/ui/lucide"
 import { ChAvatar } from "@/components/chat/atom/ChAvatar.tsx"
-import { ChFileItem } from "@/components/chat/atom/ChFileItem.tsx"
 import { ChProfileSection } from "@/components/chat/molecule/ChProfileSection.tsx"
+import type { ProfileMemberInfoType } from "@/types/profile/profileTypes.ts"
+import { getKstTime } from "@/lib/time.ts"
 
 interface ChatProfileSidebarProps {
-	contact: {
-		id: string
-		name: string
-		phone: string
-		avatarSrc?: string
-	}
+	partner: ProfileMemberInfoType
 	onClose: () => void
 	isOpen: boolean
 }
 
 export function ChatProfileSidebar({
-	contact,
+	partner,
 	onClose,
 	isOpen,
 }: ChatProfileSidebarProps) {
@@ -39,37 +35,65 @@ export function ChatProfileSidebar({
 				</div>
 
 				{/* Profile Info */}
-				<div className="mt-8 flex flex-col items-center gap-4 md:mt-20">
+				<div className="mt-4 flex flex-col items-center gap-4 md:mt-20">
 					<div className="relative">
-						<ChAvatar src={contact.avatarSrc} alt={contact.name} size="lg" />
+						<ChAvatar
+							src={partner.avatarImageUrl}
+							alt={partner.nickname}
+							size="lg"
+						/>
 						<div className="absolute inset-0 flex items-center justify-center">
 							<Image className="h-[30px] w-[30px] text-white" />
 						</div>
 					</div>
 					<div className="text-center">
 						<h2 className="mb-2.5 text-xl font-semibold text-white">
-							{contact.name}
+							{partner.nickname}
 						</h2>
-						<div className="flex items-center gap-3 text-white">
-							<span>{contact.phone}</span>
-							<button type="button" className="hover:opacity-80">
-								<Copy className="h-5 w-5" />
-							</button>
-						</div>
+						{partner.email ? (
+							<div className="flex items-center gap-3 text-white">
+								<span>{partner.email}</span>
+								<button type="button" className="hover:opacity-80">
+									<Copy className="h-5 w-5" />
+								</button>
+							</div>
+						) : null}
+					</div>
+				</div>
+
+				{/* User Stats */}
+				<div className="mt-6 flex justify-center space-x-6 text-center">
+					<div>
+						<p className="text-lg font-semibold text-white">
+							{partner.following}
+						</p>
+						<p className="text-sm text-[#B1B1B1]">Following</p>
+					</div>
+					<div>
+						<p className="text-lg font-semibold text-white">
+							{partner.follower}
+						</p>
+						<p className="text-sm text-[#B1B1B1]">Followers</p>
 					</div>
 				</div>
 
 				{/* Sections */}
 				<div className="mt-8 overflow-y-auto px-4 md:px-5">
-					<ChProfileSection title="Recent Files" subtitle="5 Files">
-						<div className="space-y-3.5">
-							<ChFileItem name="Content.pdf" size="20Mb" />
-							<ChFileItem name="Branding.pdf" size="45Mb" />
-							<ChFileItem name="Design changes.pdf" size="15Mb" />
+					<ChProfileSection title="User Info" subtitle="">
+						<div className="space-y-3">
+							<div className="flex items-center text-white">
+								<Calendar className="mr-2 h-4 w-4 text-[#E2ADFF]" />
+								<span className="text-sm">
+									Joined {getKstTime(partner.joined).format("YYYY-MM-DD")}
+								</span>
+							</div>
+							<div className="flex items-center text-white">
+								<Users className="mr-2 h-4 w-4 text-[#E2ADFF]" />
+								<span className="text-sm">
+									{partner.following} Following • {partner.follower} Followers
+								</span>
+							</div>
 						</div>
-						<button type="button" className="mt-3.5 text-sm text-[#75C1D9]">
-							Show more
-						</button>
 					</ChProfileSection>
 				</div>
 
@@ -78,7 +102,7 @@ export function ChatProfileSidebar({
 					<button
 						type="button"
 						className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
-						Block Lincoln
+						커미션 신청하기
 					</button>
 				</div>
 			</div>

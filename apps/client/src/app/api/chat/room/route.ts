@@ -25,8 +25,6 @@ export async function GET(request: NextRequest) {
 			)
 
 			const reader = response.body?.getReader()
-			// console.log("room route ---- reader: ", reader)
-			// console.log("room route ---- response: ", response)
 			if (!reader) {
 				controller.close()
 				return

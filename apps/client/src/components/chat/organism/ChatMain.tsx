@@ -17,12 +17,12 @@ import type {
 	ChatMessage,
 	GetReactiveChatRoomListResponseType,
 } from "@/types/chat/chatTypes.ts"
-import { getKstTime } from '@/lib/time.ts';
-import { ProfileDetailSellorShortType } from '@/types/prompt-detail/promptDetailType.ts';
-import { getSellorShort } from '@/action/prompt-detail/getProductDetailData.ts';
+import { getKstTime } from "@/lib/time.ts"
+import type { ProfileMemberInfoType } from "@/types/profile/profileTypes.ts"
 
 interface ChatMainProps {
 	memberUuid: string
+	partner: ProfileMemberInfoType
 	chatRoom: GetReactiveChatRoomListResponseType
 	onProfileClick?: () => void
 	onOpenSidebar?: () => void
@@ -30,34 +30,24 @@ interface ChatMainProps {
 
 export function ChatMain({
 	memberUuid,
+	partner,
 	chatRoom,
 	onProfileClick,
 	onOpenSidebar,
 }: ChatMainProps) {
 	const [error, setError] = useState<string | null>(null)
-	const [allMessages, setAllMessages] = useState<
-		ChatMessage[]
-	>([])
+	const [allMessages, setAllMessages] = useState<ChatMessage[]>([])
 	const messagesEndRef = useRef<HTMLDivElement>(null)
-
-	const [chatUserProfile, setChatUserProfile] = useState<ProfileDetailSellorShortType | null>(null)
-	useEffect(() => {
-		const getChatUserProfile = async () => {
-			const response = await getSellorShort(chatRoom.partnerUuid)
-			setChatUserProfile(response)
-		}
-		getChatUserProfile().then()
-	}, [chatRoom.partnerUuid])
 
 	// SSE event source
 	useEffect(() => {
-		const eventSource = new EventSource(`/api/chat/message?roomId=${chatRoom.chatRoomId}`)
+		const eventSource = new EventSource(
+			`/api/chat/message?roomId=${chatRoom.chatRoomId}`,
+		)
 
 		eventSource.onmessage = (event: MessageEvent<string>) => {
 			// string으로 인코딩된 데이터를 ChatMessage 타입으로 파싱
-			const newMessage = JSON.parse(
-				event.data,
-			) as ChatMessage
+			const newMessage = JSON.parse(event.data) as ChatMessage
 			setAllMessages((prevMessages) => [newMessage, ...prevMessages])
 		}
 
@@ -119,7 +109,7 @@ export function ChatMain({
 		const newMessages = [
 			...(data?.pages.flatMap((page) =>
 				page.content.map((msg) => ({
-					...msg
+					...msg,
 				})),
 			) || []),
 		]
@@ -154,9 +144,9 @@ export function ChatMain({
 	return (
 		<div className="relative flex flex-1 flex-col overflow-hidden bg-[#424242]">
 			<ChatHeader
-				name={chatUserProfile?.memberNickname ?? ""}
+				name={partner.nickname}
 				isActive={chatRoom.partnerIsActive}
-				avatarSrc={chatUserProfile?.memberProfileImage ?? ""}
+				avatarSrc={partner.avatarImageUrl}
 				onProfileClick={onProfileClick}
 				onOpenSidebar={onOpenSidebar}
 			/>
@@ -191,7 +181,6 @@ export function ChatMain({
 						/>
 					</div>
 				) : null}
-
 			</div>
 
 			<ChatInput onSendMessage={handleSendMessage} error={error} />
