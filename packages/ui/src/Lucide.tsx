@@ -67,5 +67,10 @@ export {
 	Image,
 	MessageSquarePlus,
 	MessageSquare,
+	Hammer,
+	House,
+	SquareTerminal,
+	Sparkles,
+	TrophyIcon,
 	type LucideProps,
 } from "lucide-react"

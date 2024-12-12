@@ -1,37 +1,46 @@
-import { useEffect, useState } from "react"
-import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group"
+import { useState } from "react"
 import { Label } from "@repo/ui/label"
+import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group"
+import { Button } from "@repo/ui/button"
 import { getSubCategory } from "@/action/prompts/getCategoryData"
 import type { CategoryType } from "@/types/prompts/categoryType"
 
 interface SelectCategoryValue {
-	top: string | null
-	sub: string | null
+	top: {
+		uuid: string | null
+		name: string | null
+	}
+	sub: {
+		uuid: string | null
+		name: string | null
+	}
 }
 
 export function PromptsFilterCategory({
 	categoryList,
 	topCategoryUUID,
-	selectedValue,
-	setTopCategoryUUID,
-	setSelectedValue,
+	topCategoryName,
+	subCategoryUUID,
+	subCategoryName,
 }: {
 	categoryList: CategoryType[]
 	topCategoryUUID: string
-	selectedValue: string
-	setTopCategoryUUID: (uuid: string) => void
-	setSelectedValue: (value: string) => void
+	topCategoryName: string
+	subCategoryUUID: string
+	subCategoryName: string
 }) {
 	const [subCategories, setSubCategories] = useState<
 		Record<string, CategoryType[]>
 	>({})
 	const [openCategory, setOpenCategory] = useState<string | null>(null)
-
 	const [selectedCategory, setSelectedCategory] = useState<SelectCategoryValue>(
-		{ top: null, sub: null },
+		{
+			top: { uuid: topCategoryUUID, name: topCategoryName },
+			sub: { uuid: subCategoryUUID, name: subCategoryName },
+		},
 	)
 
-	const handleChange = async (selected: string) => {
+	const subCategoryUpdate = async (selected: string) => {
 		if (!(selected in subCategories)) {
 			const res = await getSubCategory(selected)
 			setSubCategories((prev) => ({
@@ -39,68 +48,99 @@ export function PromptsFilterCategory({
 				[selected]: res,
 			}))
 		}
-		setSelectedValue(selected) // 선택된 값 업데이트
 	}
 
 	const toggleCategory = (categoryUuid: string) => {
 		setOpenCategory((prev) => (prev === categoryUuid ? null : categoryUuid))
 	}
 
-	const handleCategoryClick = (categoryUuid: string, categoryName: string) => {
-		if (topCategoryUUID !== categoryUuid) {
-			setTopCategoryUUID(categoryUuid) // topCategoryUUID 업데이트
-			handleChange(categoryUuid) // 선택된 값 업데이트
-		}
-		toggleCategory(categoryUuid) // 카테고리 열기/닫기
+	const handleCategoryClick = (
+		categoryClass: string,
+		categoryUuid: string,
+		categoryName: string,
+	) => {
+		setSelectedCategory((prevSelectedCategory) => {
+			if (categoryClass === "top") {
+				// 이전 top 값과 새로 설정할 top 값 비교
+				if (prevSelectedCategory.top.uuid === categoryUuid) {
+					return prevSelectedCategory // 같은 경우 이전 상태 반환
+				}
 
-		setSelectedCategory((prevState) => {
-			if (prevState.top !== categoryName) {
 				return {
-					...prevState,
-					top: categoryName,
-					sub: "ALL",
+					top: { uuid: categoryUuid, name: categoryName },
+					sub: { uuid: "", name: "ALL" },
+				}
+			} else if (categoryClass === "sub") {
+				return {
+					top: prevSelectedCategory.top, // 기존 top 값 유지
+					sub: { uuid: categoryUuid, name: categoryName },
 				}
 			}
-			return prevState
+			return prevSelectedCategory // 기본적으로 이전 상태 반환
+		})
+
+		toggleCategory(categoryUuid)
+
+		// 선택된 값 업데이트 (top 카테고리의 경우에만)
+		if (categoryClass === "top") {
+			subCategoryUpdate(categoryUuid)
+		}
+	}
+
+	const handletest = () => {
+		setSelectedCategory({
+			top: { uuid: null, name: null },
+			sub: { uuid: null, name: null },
 		})
 	}
 
-	const changeName = (categoryName: string) => {
-		setSelectedCategory((prevState) => ({
-			...prevState,
-			sub: categoryName,
-		}))
-	}
-
-	useEffect(() => {
-		if (topCategoryUUID === "") {
-			setOpenCategory(null)
-
-			setSelectedCategory((prevState) => ({
-				...prevState,
-				top: null,
-				sub: null,
-			}))
-		}
-	}, [topCategoryUUID])
 	return (
-		<RadioGroup value={selectedValue} onValueChange={handleChange}>
-			<input type="hidden" name="topCategoryUuid" value={topCategoryUUID} />
+		<RadioGroup>
+			<input
+				type="hidden"
+				name="topCategoryUuid"
+				value={selectedCategory.top.uuid || ""}
+			/>
+			<input
+				type="hidden"
+				name="topCategoryName"
+				value={selectedCategory.top.name || ""}
+			/>
 			<input
 				type="hidden"
 				name="subCategoryUuid"
-				value={topCategoryUUID === selectedValue ? "" : selectedValue}
+				value={selectedCategory.sub.uuid || ""}
+			/>
+			<input
+				type="hidden"
+				name="subCategoryName"
+				value={selectedCategory.sub.name || ""}
 			/>
 
-			{selectedCategory.top ? (
-				<div className="flex items-center gap-2 text-xs text-white">
-					<p className="rounded-lg bg-[#524f4f] px-3 py-[2px]">
-						{selectedCategory.top}
-					</p>
+			{selectedCategory.top.name ? (
+				<div className="flex flex-col text-xs text-white">
+					<div className="flex items-center justify-between gap-2">
+						<p>
+							<span className="rounded-lg bg-[#524f4f] px-3 py-[2px]">
+								{selectedCategory.top.name}
+							</span>
+						</p>
 
-					{selectedCategory.sub !== "ALL" ? (
-						<p className="rounded-lg bg-[#524f4f] px-3 py-[2px]">
-							{selectedCategory.sub}
+						<Button
+							type="button"
+							onClick={handletest}
+							className="h-full bg-[#281f36] p-1">
+							<span className="text-[10px] font-semibold text-white">
+								reset
+							</span>
+						</Button>
+					</div>
+
+					{selectedCategory.sub.name !== "ALL" ? (
+						<p>
+							<span className="rounded-lg bg-[#524f4f] px-3 py-[2px]">
+								{selectedCategory.sub.name}
+							</span>
 						</p>
 					) : null}
 				</div>
@@ -114,6 +154,7 @@ export function PromptsFilterCategory({
 							className="flex w-full cursor-pointer items-center justify-between rounded bg-gray-700 p-2 text-left"
 							onClick={() =>
 								handleCategoryClick(
+									"top",
 									category.categoryUuid,
 									category.categoryName,
 								)
@@ -121,6 +162,7 @@ export function PromptsFilterCategory({
 							onKeyDown={(e) => {
 								if (e.key === "Enter" || e.key === " ") {
 									handleCategoryClick(
+										"top",
 										category.categoryUuid,
 										category.categoryName,
 									)
@@ -145,10 +187,11 @@ export function PromptsFilterCategory({
 									<li className="flex items-center space-x-2">
 										<RadioGroupItem
 											value={category.categoryUuid} // ALL의 value 설정
+											checked={!selectedCategory.sub.uuid}
 											id="ALL"
 											className="rounded-sm border-white/70 text-white"
 											isRectangle
-											onClick={() => changeName("ALL")}
+											onClick={() => handleCategoryClick("sub", "ALL", "")}
 										/>
 										<Label htmlFor="ALL" className="text-sm text-white">
 											ALL
@@ -161,12 +204,18 @@ export function PromptsFilterCategory({
 											<RadioGroupItem
 												value={subCategory.categoryUuid}
 												checked={
-													selectedCategory.sub === subCategory.categoryName
+													selectedCategory.sub.uuid === subCategory.categoryUuid
 												}
 												id={subCategory.categoryUuid}
 												className="rounded-sm border-white/70 text-white"
 												isRectangle
-												onClick={() => changeName(subCategory.categoryName)}
+												onClick={() =>
+													handleCategoryClick(
+														"sub",
+														subCategory.categoryUuid,
+														subCategory.categoryName,
+													)
+												}
 											/>
 											<Label
 												htmlFor={subCategory.categoryUuid}

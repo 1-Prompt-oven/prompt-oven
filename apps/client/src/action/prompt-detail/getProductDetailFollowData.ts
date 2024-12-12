@@ -8,6 +8,19 @@ interface FollowingStateData {
 	result: boolean
 }
 
+interface ResponseFollwingData {
+	result: { res: boolean; state: string }
+}
+
+export async function checkIsMember(): Promise<boolean> {
+	"use server"
+
+	const memberUUID = await getMemberUUID()
+
+	if (!memberUUID) return false
+	return true
+}
+
 export async function getFollowingState(
 	sellerNickname: string,
 ): Promise<boolean> {
@@ -39,13 +52,13 @@ export async function getFollowingState(
 
 export async function sellorFollowAction(
 	sellerNickname: string,
-): Promise<boolean> {
+): Promise<ResponseFollwingData> {
 	"use server"
 
 	const headers = await getAuthHeaders()
 	const memberUUID = await getMemberUUID()
 
-	if (!memberUUID) return false
+	if (!memberUUID) return { result: { res: false, state: "NoUser" } }
 
 	const payload = {
 		followerId: memberUUID,
@@ -62,21 +75,21 @@ export async function sellorFollowAction(
 
 	if (!res.ok) {
 		//throw new Error("Failed to fetch Following State Data")
-		return false
+		return { result: { res: false, state: "resError" } }
 	}
 	revalidateTag("chageFollowing")
-	return true
+	return { result: { res: true, state: "success" } }
 }
 
 export async function sellorUnFollowAction(
 	sellerNickname: string,
-): Promise<boolean> {
+): Promise<ResponseFollwingData> {
 	"use server"
 
 	const headers = await getAuthHeaders()
 	const memberUUID = await getMemberUUID()
 
-	if (!memberUUID) return false
+	if (!memberUUID) return { result: { res: false, state: "NoUser" } }
 
 	const payload = {
 		followerId: memberUUID,
@@ -93,8 +106,8 @@ export async function sellorUnFollowAction(
 
 	if (!res.ok) {
 		//throw new Error("Failed to fetch Following State Data")
-		return false
+		return { result: { res: false, state: "resError" } }
 	}
 	revalidateTag("chageFollowing")
-	return true
+	return { result: { res: true, state: "success" } }
 }

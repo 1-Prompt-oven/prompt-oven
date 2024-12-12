@@ -26,7 +26,7 @@ export default function PaymentDetail({
 						<p className="text-sm">Item List</p>
 						<PaymentList paymentList={paymentList} />
 
-						<PaymentDetailLine name="Shipping" price="0" />
+						<PaymentDetailLine name="Discount" price="0" />
 						<PaymentDetailTotalItem count={paymentList.length} />
 					</div>
 

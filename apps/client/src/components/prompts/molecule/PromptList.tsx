@@ -9,7 +9,7 @@ export default function PromptList({ promptList }: PromptsListProps) {
 	return (
 		<div>
 			{promptList.length > 0 ? (
-				<ul className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+				<ul className="grid grid-cols-2 gap-8 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 					{promptList.map((item, index) => (
 						// eslint-disable-next-line react/no-array-index-key -- index is unique
 						<PromptCard productInfo={item} key={item.productUuid + index} />

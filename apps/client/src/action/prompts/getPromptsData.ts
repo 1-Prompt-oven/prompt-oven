@@ -13,14 +13,84 @@ interface RawData {
 	}
 }
 
+interface SearchParamsProps {
+	searchParams: {
+		searchBar?: string // 검색어
+		topCategoryUuid?: string // 상위 카테고리 UUID
+		subCategoryUuid?: string // 하위 카테고리 UUID
+		minPrice?: string // 최소 가격
+		maxPrice?: string // 최대 가격
+		sortBy?: string // 정렬 기준
+		sortOption?: string // 정렬 옵션 (예: ASC, DESC)
+	}
+}
+
 interface LlmData {
 	result: {
 		llmName: string
 	}
 }
 
-// 카테고리 통합 API
 export async function getPromptList(
+	searchParams: SearchParamsProps,
+): Promise<PromptsType> {
+	"use server"
+
+	const payload = {
+		searchBar: searchParams.searchParams.searchBar || "",
+		topCategoryUuid: searchParams.searchParams.topCategoryUuid || "",
+		subCategoryUuid: searchParams.searchParams.subCategoryUuid || "",
+		enable: true,
+		minPrice: searchParams.searchParams.minPrice
+			? parseInt(searchParams.searchParams.minPrice)
+			: 0,
+		maxPrice: searchParams.searchParams.maxPrice || "",
+		sortOption: searchParams.searchParams.sortOption || "createdAt",
+		sortBy: searchParams.searchParams.sortBy || "DESC",
+		cursorId: "",
+	}
+
+	const query = createQueryParamString(payload)
+
+	const res = await fetch(
+		`${process.env.API_BASE_URL}/v1/product/list?${query}`,
+		{
+			method: "GET",
+			headers: initializeHeaders(),
+		},
+	)
+
+	if (!res.ok) {
+		throw new Error("Failed to fetch product list data")
+	}
+
+	const rawData: RawData = await res.json() // RawData 타입으로 지정
+
+	if (!isValidResponse<RawData>(rawData)) {
+		throw new Error("Invalid response format")
+	}
+
+	// LLM 이름을 가져오기 위한 비동기 요청
+	const productListWithLLMNames = await Promise.all(
+		rawData.result.productList.map(async (product) => {
+			const llmName = await getLLMName(product.llmId) // LLM 이름 가져오기
+			return { ...product, llmName } // 기존 product에 llmName 추가
+		}),
+	)
+
+	// LLM 이름이 추가된 productList로 업데이트
+	const updatedRawData = {
+		...rawData,
+		result: {
+			...rawData.result,
+			productList: productListWithLLMNames,
+		},
+	}
+
+	return updatedRawData.result
+}
+
+export async function getUpdatePromptList(
 	categoryFormData?: FormData,
 	cursorId?: string | null,
 ): Promise<PromptsType> {

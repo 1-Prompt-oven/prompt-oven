@@ -20,7 +20,7 @@ function CartItemContainer({
 	handleDeleteSelectedItems,
 }: CartItemContainerProps) {
 	return (
-		<div className="space-y-4">
+		<div className="mb-4 w-full space-y-4">
 			<CartItemAllCheck
 				allSelected={
 					cartItems.length > 0 && cartItems.every((item) => item.selected)
@@ -43,4 +43,3 @@ function CartItemContainer({
 }
 
 export default CartItemContainer
-
