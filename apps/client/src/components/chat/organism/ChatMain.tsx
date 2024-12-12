@@ -14,17 +14,15 @@ import {
 	getPreviousChatMessages,
 	sendChatMessage,
 } from "@/action/chat/chatAction.ts"
-import type { GetReactiveChatMessageResponseType } from "@/types/chat/chatTypes.ts"
+import type {
+	GetReactiveChatMessageResponseType,
+	GetReactiveChatRoomListResponseType,
+} from "@/types/chat/chatTypes.ts"
 
 interface ChatMainProps {
 	roomId: string
 	memberUuid: string
-	contact: {
-		id: string
-		name: string
-		isActive?: boolean
-		avatarSrc?: string
-	}
+	chatRoom: GetReactiveChatRoomListResponseType
 	onProfileClick?: () => void
 	onOpenSidebar?: () => void
 }
@@ -32,7 +30,7 @@ interface ChatMainProps {
 export function ChatMain({
 	roomId,
 	memberUuid,
-	contact,
+	chatRoom,
 	onProfileClick,
 	onOpenSidebar,
 }: ChatMainProps) {
@@ -44,7 +42,7 @@ export function ChatMain({
 
 	// SSE event source
 	useEffect(() => {
-		const eventSource = new EventSource(`/api/chatting?roomId=${roomId}`)
+		const eventSource = new EventSource(`/api/chat/message?roomId=${roomId}`)
 
 		eventSource.onmessage = (event: MessageEvent<string>) => {
 			// string으로 인코딩된 데이터를 GetReactiveChatMessageResponseType 타입으로 파싱
@@ -148,9 +146,9 @@ export function ChatMain({
 	return (
 		<div className="relative flex flex-1 flex-col overflow-hidden bg-[#424242]">
 			<ChatHeader
-				name={contact.name}
-				isActive={contact.isActive}
-				avatarSrc={contact.avatarSrc}
+				name={chatRoom.chatRoomName}
+				isActive={chatRoom.partnerIsActive}
+				avatarSrc=""
 				onProfileClick={onProfileClick}
 				onOpenSidebar={onOpenSidebar}
 			/>
@@ -163,7 +161,7 @@ export function ChatMain({
 						key={message.id}
 						className={`flex items-end gap-4 ${message.senderUuid === memberUuid ? "flex-row-reverse" : ""}`}>
 						{message.senderUuid !== memberUuid && (
-							<ChAvatar src={contact.avatarSrc} alt={contact.name} size="sm" />
+							<ChAvatar src="" alt={chatRoom.chatRoomName} size="sm" />
 						)}
 						<ChMessageBubble
 							content={message.message}
