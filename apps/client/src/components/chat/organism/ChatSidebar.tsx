@@ -52,34 +52,61 @@ export function ChatSidebar({
 
 	// SSE event source
 	useEffect(() => {
-		setIsLoading(true)
-		const eventSource = new EventSource(`/api/chat/room?userUuid=${memberUuid}`)
+		let eventSource: EventSource | null = null
+		let retryCount = 0
+		const maxRetries = 5
+		const retryDelay = 3000 // 3초
 
-		eventSource.onopen = () => {
-			setIsLoading(false)
+		const connectSSE = () => {
+			setIsLoading(true)
+			eventSource = new EventSource(`/api/chat/room?userUuid=${memberUuid}`)
+
+			eventSource.onopen = () => {
+				setIsLoading(false)
+				retryCount = 0 // 연결 성공 시 재시도 횟수 초기화
+			}
+
+			eventSource.onmessage = (event: MessageEvent<string>) => {
+				if (event.data === ":keep-alive") {
+					// keep-alive 메시지 처리
+					// eslint-disable-next-line no-console -- log
+					console.log("Received keep-alive message in ChatSidebar")
+					return
+				}
+
+				// string으로 인코딩된 데이터를 ChatMessage 타입으로 파싱
+				const newRooms = JSON.parse(
+					event.data,
+				) as GetReactiveChatRoomListResponseType
+				setChatRoomMap((prevMap) => {
+					const newMap = new Map(prevMap)
+					newMap.set(newRooms.chatRoomId, newRooms)
+					return newMap
+				})
+			}
+
+			eventSource.onerror = (err) => {
+				// eslint-disable-next-line no-console -- error log
+				console.error("EventSource failed:", err)
+				eventSource?.close()
+
+				if (retryCount < maxRetries) {
+					retryCount++
+					// eslint-disable-next-line no-console -- error log
+					console.log(`Retrying connection (${retryCount}/${maxRetries})...`)
+					setTimeout(connectSSE, retryDelay)
+				} else {
+					setError("채팅방 목록을 불러오는데 실패했습니다.")
+				}
+			}
 		}
 
-		eventSource.onmessage = (event: MessageEvent<string>) => {
-			// console.log("event.data: ", event.data)
-			// string으로 인코딩된 데이터를 GetReactiveChatMessageResponseType 타입으로 파싱
-			const newRooms = JSON.parse(
-				event.data,
-			) as GetReactiveChatRoomListResponseType
-
-			updateChatRoomList(newRooms)
-		}
-
-		eventSource.onerror = (err) => {
-			// eslint-disable-next-line no-console -- error log
-			console.error("EventSource failed:", err)
-			setError("채팅방 목록을 불러오는데 실패했습니다.")
-			eventSource.close()
-		}
+		connectSSE()
 
 		return () => {
-			eventSource.close()
+			eventSource?.close()
 		}
-	}, [memberUuid])
+	}, [memberUuid, updateChatRoomList])
 
 	return (
 		<div className="flex h-full w-full flex-col border-r border-r-[#E3E8E7]/50 bg-[#111111] md:!w-[424px]">
@@ -155,61 +182,39 @@ export function ChatSidebar({
 
  */
 
-// // SSE event source
-// useEffect(() => {
-//
-// 	let eventSource: EventSource | null = null;
-// 	let retryCount = 0;
-// 	const maxRetries = 5;
-// 	const retryDelay = 3000; // 3초
-//
-// 	const connectSSE = () => {
-// 		setIsLoading(true)
-// 		eventSource = new EventSource(`/api/chat/room?userUuid=${memberUuid}`)
-//
-// 		eventSource.onopen = () => {
-// 			setIsLoading(false)
-// 			retryCount = 0; // 연결 성공 시 재시도 횟수 초기화
-// 		}
-//
-// 		eventSource.onmessage = (event: MessageEvent<string>) => {
-// 			if (event.data === ':keep-alive') {
-// 				// keep-alive 메시지 처리
-// 				console.log('Received keep-alive message');
-// 				return;
-// 			}
-//
-// 			// string으로 인코딩된 데이터를 ChatMessage 타입으로 파싱
-// 			const newRooms = JSON.parse(
-// 				event.data,
-// 			) as GetReactiveChatRoomListResponseType
-// 			setChatRoomMap((prevMap) => {
-// 				const newMap = new Map(prevMap)
-// 				newMap.set(newRooms.chatRoomId, newRooms)
-// 				return newMap
-// 			})
-// 		}
-//
-// 		eventSource.onerror = (err) => {
-// 			// eslint-disable-next-line no-console -- error log
-// 			console.error("EventSource failed:", err)
-// 			eventSource?.close()
-//
-// 			if (retryCount < maxRetries) {
-// 				retryCount++;
-// 				// eslint-disable-next-line no-console -- error log
-// 				console.log(`Retrying connection (${retryCount}/${maxRetries})...`);
-// 				setTimeout(connectSSE, retryDelay);
-// 			} else {
-// 				setError("채팅방 목록을 불러오는데 실패했습니다.")
-// 			}
-// 		}
-// 	}
-//
-// 	connectSSE();
-//
-// 	return () => {
-// 		console.log("Closing event source")
-// 		eventSource?.close()
-// 	}
-// }, [memberUuid, updateChatRoomList])
+/*
+
+
+// SSE event source
+	useEffect(() => {
+		setIsLoading(true)
+		const eventSource = new EventSource(`/api/chat/room?userUuid=${memberUuid}`)
+
+		eventSource.onopen = () => {
+			setIsLoading(false)
+		}
+
+		eventSource.onmessage = (event: MessageEvent<string>) => {
+			// console.log("event.data: ", event.data)
+			// string으로 인코딩된 데이터를 GetReactiveChatMessageResponseType 타입으로 파싱
+			const newRooms = JSON.parse(
+				event.data,
+			) as GetReactiveChatRoomListResponseType
+
+			updateChatRoomList(newRooms)
+		}
+
+		eventSource.onerror = (err) => {
+			// eslint-disable-next-line no-console -- error log
+			console.error("EventSource failed:", err)
+			setError("채팅방 목록을 불러오는데 실패했습니다.")
+			eventSource.close()
+		}
+
+		return () => {
+			eventSource.close()
+		}
+	}, [memberUuid])
+
+
+ */

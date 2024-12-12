@@ -41,24 +41,52 @@ export function ChatMain({
 
 	// SSE event source
 	useEffect(() => {
-		const eventSource = new EventSource(
-			`/api/chat/message?roomId=${chatRoom.chatRoomId}`,
-		)
+		let eventSource: EventSource | null = null
+		let retryCount = 0
+		const maxRetries = 5
+		const retryDelay = 3000 // 3초
 
-		eventSource.onmessage = (event: MessageEvent<string>) => {
-			// string으로 인코딩된 데이터를 ChatMessage 타입으로 파싱
-			const newMessage = JSON.parse(event.data) as ChatMessage
-			setAllMessages((prevMessages) => [newMessage, ...prevMessages])
+		const connectSSE = () => {
+			eventSource = new EventSource(
+				`/api/chat/message?roomId=${chatRoom.chatRoomId}`,
+			)
+
+			eventSource.onopen = () => {
+				retryCount = 0 // 연결 성공 시 재시도 횟수 초기화
+			}
+
+			eventSource.onmessage = (event: MessageEvent<string>) => {
+				if (event.data === ":keep-alive") {
+					// keep-alive 메시지 처리
+					// eslint-disable-next-line no-console -- log
+					console.log("Received keep-alive message in ChatSidebar")
+					return
+				}
+				// string으로 인코딩된 데이터를 ChatMessage 타입으로 파싱
+				const newMessage = JSON.parse(event.data) as ChatMessage
+				setAllMessages((prevMessages) => [newMessage, ...prevMessages])
+			}
+
+			eventSource.onerror = (err) => {
+				// eslint-disable-next-line no-console -- error log
+				console.error("EventSource failed:", err)
+				eventSource?.close()
+
+				if (retryCount < maxRetries) {
+					retryCount++
+					// eslint-disable-next-line no-console -- error log
+					console.log(`Retrying connection (${retryCount}/${maxRetries})...`)
+					setTimeout(connectSSE, retryDelay)
+				} else {
+					setError("채팅방 목록을 불러오는데 실패했습니다.")
+				}
+			}
 		}
 
-		eventSource.onerror = (err) => {
-			// eslint-disable-next-line no-console -- error log
-			console.error("EventSource failed:", err)
-			eventSource.close()
-		}
+		connectSSE()
 
 		return () => {
-			eventSource.close()
+			eventSource?.close()
 		}
 	}, [chatRoom.chatRoomId])
 

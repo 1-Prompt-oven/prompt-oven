@@ -30,13 +30,14 @@ export async function GET(request: NextRequest) {
 				return
 			}
 
-			// let keepAliveInterval: NodeJS.Timeout;
-			//
-			// const sendKeepAlive = () => {
-			// 	controller.enqueue(encoder.encode("data: :keep-alive\n\n"));
-			// };
+			// eslint-disable-next-line no-undef -- ok
+			let keepAliveInterval: NodeJS.Timeout
+
+			const sendKeepAlive = () => {
+				controller.enqueue(encoder.encode("data: :keep-alive\n\n"))
+			}
 			// 30초마다 keep-alive 메시지 전송
-			// keepAliveInterval = setInterval(sendKeepAlive, 30000);
+			keepAliveInterval = setInterval(sendKeepAlive, 30000)
 
 			// 연결이 끊겼을 때, 재연결 로직 필요
 			try {
@@ -53,13 +54,13 @@ export async function GET(request: NextRequest) {
 				}
 			} catch (error) {
 				// eslint-disable-next-line no-console -- This is a server-side only log
-				console.error("Stream reading error:", error)
+				console.error("Stream reading error in chat room list:", error)
 				// 에러 메시지를 클라이언트에 전송
 				controller.enqueue(
 					encoder.encode(`event: error\ndata: ${JSON.stringify(error)}\n\n`),
 				)
 			} finally {
-				// clearInterval(keepAliveInterval);
+				clearInterval(keepAliveInterval)
 				reader.releaseLock()
 				controller.close()
 			}
