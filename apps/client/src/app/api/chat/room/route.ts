@@ -30,14 +30,11 @@ export async function GET(request: NextRequest) {
 				return
 			}
 
-			// eslint-disable-next-line no-undef -- ok
-			let keepAliveInterval: NodeJS.Timeout
-
 			const sendKeepAlive = () => {
 				controller.enqueue(encoder.encode("data: :keep-alive\n\n"))
 			}
 			// 30초마다 keep-alive 메시지 전송
-			keepAliveInterval = setInterval(sendKeepAlive, 30000)
+			const keepAliveInterval = setInterval(sendKeepAlive, 30000)
 
 			// 연결이 끊겼을 때, 재연결 로직 필요
 			try {
@@ -77,6 +74,5 @@ export async function GET(request: NextRequest) {
 }
 
 function formatSSERoom(data: Uint8Array): string {
-	const room = new TextDecoder().decode(data)
-	return room
+	return new TextDecoder().decode(data)
 }
