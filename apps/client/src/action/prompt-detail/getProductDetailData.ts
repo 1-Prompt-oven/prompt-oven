@@ -28,6 +28,10 @@ interface AllCartNumberData {
 	result: PromptDetailCartAllNumberType[]
 }
 
+interface ResponseLikeData {
+	result: { res: boolean; state: string }
+}
+
 interface ResponseCartData {
 	result: { res: boolean; state: string; cartId: number | null }
 }
@@ -120,12 +124,12 @@ export async function getFavoriteState(
 
 export async function changeFavoriteAction(
 	productUUID: string,
-): Promise<boolean> {
+): Promise<ResponseLikeData> {
 	"use server"
 	const headers = await getAuthHeaders()
 	const memberUUID = await getMemberUUID()
 
-	if (!memberUUID) return false
+	if (!memberUUID) return { result: { res: false, state: "NoUser" } }
 
 	const res = await fetch(
 		`${process.env.API_BASE_URL}/v1/member/product/like`,
@@ -141,10 +145,10 @@ export async function changeFavoriteAction(
 
 	if (!res.ok) {
 		// throw new Error("Failed to fetch FavoriteState Data")
-		return false
+		return { result: { res: false, state: "resError" } }
 	}
 	revalidateTag("updateFavorite")
-	return true
+	return { result: { res: true, state: "success" } }
 }
 
 export async function getCartStateAction(
