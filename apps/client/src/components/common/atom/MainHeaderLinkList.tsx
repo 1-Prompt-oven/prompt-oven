@@ -1,5 +1,5 @@
 import type { HTMLAttributes } from "react"
-import { mainNavs } from "@/lib/navigation.ts"
+import { commonNavs } from "@/lib/navigation.ts"
 import NavLink from "@/components/common/atom/NavLink.tsx"
 import { cn } from "@/lib/utils.ts"
 
@@ -13,7 +13,7 @@ function MainHeaderLinkList({ ...props }: MainHeaderLinkListProps) {
 				"mx-4 hidden items-center gap-6 xl:!flex",
 				props.className,
 			)}>
-			{mainNavs.map((nav, index) => (
+			{commonNavs.map((nav, index) => (
 				// eslint-disable-next-line react/no-array-index-key -- index is unique
 				<li key={index}>
 					<NavLink href={nav.href} color="#969696" activeColor="#A913F9">

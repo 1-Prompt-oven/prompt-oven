@@ -6,12 +6,12 @@ import {
 	Area,
 	XAxis,
 	YAxis,
-	CartesianGrid,
 	Tooltip,
 	ResponsiveContainer,
 	Legend,
 } from "recharts"
 import { fetchStatisticHistory } from "@/action/dashboard/dashboardAction"
+import PcTitle from "@/components/product-create/atom/PcTitle"
 
 interface ChartData {
 	name: string
@@ -89,40 +89,64 @@ export function ViewDashboard({
 		}
 	}
 
+	const formatYAxisLabel = (value: number) => {
+		if (value >= 1000000) {
+			return `${(value / 1000000).toFixed(1)}M`
+		} else if (value >= 1000) {
+			return `${Math.round(value / 1000)}K`
+		}
+		return value.toString()
+	}
+
 	return (
-		<div className="flex h-screen max-h-[900px] w-screen items-center justify-center bg-white">
-			<ResponsiveContainer width="100%" height="100%">
-				<AreaChart data={data}>
-					<CartesianGrid strokeDasharray="3 3" />
-					<XAxis
-						dataKey="name"
-						tickFormatter={formatXAxisLabel} // Apply custom label formatting
-						label={{
-							value: "Date",
-							position: "insideBottomRight",
-							offset: -5,
-						}}
-						minTickGap={1}
-					/>
-					<YAxis
-						label={{
-							value: "Viewers",
-							position: "insideTopLeft",
-							offset: 0,
-							dy: -20,
-						}}
-					/>
-					<Tooltip />
-					<Legend verticalAlign="top" height={36} />
-					<Area
-						type="monotone"
-						dataKey="view"
-						name="Viewer Count"
-						stroke="#8884d8"
-						fill="rgba(136, 132, 216, 0.3)"
-					/>
-				</AreaChart>
-			</ResponsiveContainer>
+		<div className="w-full">
+			<div>
+				<PcTitle className="pb-3 pr-3">Viewer Chart</PcTitle>
+			</div>
+			<div
+				className="h-screen max-h-[500px] w-full"
+				style={{
+					background: "#252525",
+					border: "2px solid #A100F8",
+					borderRadius: "16px",
+				}}>
+				<ResponsiveContainer width="100%" height="100%">
+					<AreaChart data={data}>
+						<XAxis
+							dataKey="name"
+							tickFormatter={formatXAxisLabel} // Apply custom label formatting
+							label={{
+								value: "Date",
+								position: "insideBottomRight",
+								offset: -5,
+								fill: "#8C91A2",
+							}}
+							stroke="#FFFFFF"
+							minTickGap={1}
+						/>
+						<YAxis
+							tickFormatter={formatYAxisLabel}
+							label={{
+								value: "Viewers",
+								position: "insideTopLeft",
+								offset: 0,
+								dy: -20,
+								fill: "#8C91A2",
+							}}
+							stroke="#FFFFFF"
+						/>
+						<Tooltip />
+						<Legend verticalAlign="top" height={36} />
+						<Area
+							type="monotone"
+							dataKey="view"
+							name="Viewer Count"
+							stroke="#8884d8"
+							fill="rgba(136, 132, 216, 0.6)"
+						/>
+					</AreaChart>
+				</ResponsiveContainer>
+			</div>
 		</div>
 	)
 }

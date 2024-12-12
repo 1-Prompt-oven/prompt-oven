@@ -19,12 +19,30 @@ export interface Commission {
 	price: number
 	deadline: string
 	status: CommissionStatus
-	result?: string
 	createdAt: string
-	requester?: string
+	requester: Requester
+	result?: string
+	revisionNote?: string
 }
 
 export interface RevisionRequest {
 	commissionId: string
 	revisionNote: string
+}
+
+export interface Requester {
+	id: string
+	name: string
+}
+
+export interface CreateCommissionRequestType {
+	commissionTitle: string
+	clientUuid: string
+	creatorUuid: string
+	commissionDescription: string
+	commissionPrice: number
+	commissionDeadline: string
+	commissionModel: string
+	commissionRequest: string
+	commissionModifyRequest?: string
 }

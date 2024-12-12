@@ -13,6 +13,10 @@ const dummyCommission: Commission = {
 	result:
 		"Here are the optimized prompts for your e-commerce product descriptions:\n\n1. Base Template:\n[Product Name] is a [key feature] that [main benefit]. Perfect for [target audience], it [unique selling point].\n\n2. Feature Expansion:\nDesigned with [specific feature], [Product Name] offers [benefit 1] and [benefit 2]. Experience [emotional benefit] while [functional benefit].",
 	createdAt: "",
+	requester: {
+		id: "1",
+		name: "John Doe",
+	},
 }
 
 function page() {
