@@ -6,23 +6,36 @@ export interface CommissionFormDataType {
 }
 
 export type CommissionStatus =
-	| "requested"
-	| "in_progress"
-	| "completed"
-	| "revision_requested"
-	| "rejected"
+	| "REQUESTED"
+	| "IN_PROGRESS"
+	| "COMPLETED"
+	| "REVISION_REQUESTED"
+	| "REJECTED"
 
-export interface Commission {
-	id: string
+export interface CommissionListType {
+	commissionUuid: string
 	title: string
-	description: string
+	clientUuid: string
 	price: number
 	deadline: string
 	status: CommissionStatus
-	createdAt: string
-	requester: Requester
-	result?: string
-	revisionNote?: string
+	requestedDate: string
+}
+
+export interface CommissionDetailType {
+	commissionUuid: string
+	clientUuid: string
+	creatorUuid: string
+	commissionTitle: string
+	commissionDescription: string
+	commissionPrice: number
+	commissionDeadline: string
+	commissionModel: string
+	commissionRequest: string
+	commissionModifyRequest: string
+	commissionStatus: CommissionStatus
+	commissionResult: string
+	role: string
 }
 
 export interface RevisionRequest {

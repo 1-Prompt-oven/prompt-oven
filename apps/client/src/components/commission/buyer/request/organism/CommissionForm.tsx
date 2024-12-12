@@ -14,8 +14,8 @@ import {
 } from "@repo/ui/select"
 import { Calendar as CalendarComponent } from "@repo/ui/calendar"
 import { Popover, PopoverTrigger, PopoverContent } from "@repo/ui/popover"
-import { commissionSchema } from "@/schema/commissionRequest"
 import { useRouter } from "next/navigation"
+import { commissionSchema } from "@/schema/commissionRequest"
 import { FormField } from "../molecule/FormField"
 
 export function CommissionForm() {
@@ -124,7 +124,7 @@ export function CommissionForm() {
 				<Input
 					id="title"
 					placeholder="Enter commission title"
-					className="border-gray-700 bg-gray-900"
+					className="border-gray-700 bg-gray-900 text-white placeholder-white"
 					onChange={(e) => handleChange("title", e.target.value)}
 				/>
 			</FormField>
@@ -139,7 +139,7 @@ export function CommissionForm() {
 					id="price"
 					type="number"
 					placeholder="Enter price"
-					className="border-gray-700 bg-gray-900"
+					className="border-gray-700 bg-gray-900 text-white placeholder-white"
 					onChange={(e) => handleChange("price", parseFloat(e.target.value))}
 				/>
 			</FormField>
@@ -153,7 +153,7 @@ export function CommissionForm() {
 				<Textarea
 					id="description"
 					placeholder="Enter commission details"
-					className="min-h-[120px] border-gray-700 bg-gray-900"
+					className="min-h-[120px] border-gray-700 bg-gray-900 text-white placeholder-white"
 					onChange={(e) => handleChange("description", e.target.value)}
 				/>
 			</FormField>
@@ -168,13 +168,18 @@ export function CommissionForm() {
 					<PopoverTrigger asChild>
 						<Button
 							variant="outline"
-							className="w-full justify-start border-gray-700 bg-gray-900 text-left font-normal">
-							<Calendar className="mr-2 h-4 w-4" />
-							{date ? date.toLocaleDateString() : "Select a date"}
+							className="w-full justify-start border-gray-700 bg-gray-900 text-left font-normal text-white">
+							<Calendar className="mr-2 h-4 w-4 text-gray-400" />
+							{date ? (
+								date.toLocaleDateString()
+							) : (
+								<span className="text-gray-400">Select a date</span>
+							)}
 						</Button>
 					</PopoverTrigger>
 					<PopoverContent className="w-auto bg-gray-900 p-0">
 						<CalendarComponent
+							className="text-gray-400"
 							mode="single"
 							selected={date}
 							onSelect={(selectedDate) => {
@@ -196,10 +201,10 @@ export function CommissionForm() {
 				description="Select the AI model for your commission"
 				error={errors.model}>
 				<Select onValueChange={(value) => handleChange("model", value)}>
-					<SelectTrigger className="border-gray-700 bg-gray-900">
+					<SelectTrigger className="border-gray-700 bg-gray-900 text-gray-400">
 						<SelectValue placeholder="Select a model" />
 					</SelectTrigger>
-					<SelectContent className="border-gray-700 bg-gray-900">
+					<SelectContent className="border-gray-700 bg-gray-900 text-white">
 						<SelectItem value="gpt4">GPT-4</SelectItem>
 						<SelectItem value="DALL-E">DALL-E</SelectItem>
 					</SelectContent>
@@ -212,10 +217,10 @@ export function CommissionForm() {
 				description="Select the category that best fits your commission"
 				error={errors.category}>
 				<Select onValueChange={(value) => handleChange("category", value)}>
-					<SelectTrigger className="border-gray-700 bg-gray-900">
+					<SelectTrigger className="border-gray-700 bg-gray-900 text-gray-400">
 						<SelectValue placeholder="Select a category" />
 					</SelectTrigger>
-					<SelectContent className="border-gray-700 bg-gray-900">
+					<SelectContent className="border-gray-700 bg-gray-900 text-white">
 						<SelectItem value="코딩">코딩</SelectItem>
 						<SelectItem value="문서">문서</SelectItem>
 						<SelectItem value="그림">그림</SelectItem>
@@ -232,7 +237,7 @@ export function CommissionForm() {
 				<Textarea
 					id="additional"
 					placeholder="Enter additional requirements"
-					className="min-h-[100px] border-gray-700 bg-gray-900"
+					className="min-h-[100px] border-gray-700 bg-gray-900 text-white placeholder-white"
 					onChange={(e) => handleChange("additional", e.target.value)}
 				/>
 			</FormField>
@@ -245,8 +250,3 @@ export function CommissionForm() {
 		</form>
 	)
 }
-
-// zod 유효성 검사
-// FormData POST 로 서버에 전송
-// 성공 시 결제 페이지로 리다이렉트
-// 실패 시 에러 메시지 표시
