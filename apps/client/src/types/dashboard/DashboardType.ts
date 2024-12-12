@@ -19,3 +19,17 @@ export interface StatisticHistoryAPIResponse {
   message: string;
   result: StatisticHistoryResponse[];
 }
+
+export interface SalesStatisticHistoryResonpnse{
+  sellerUUID : string
+  targetDate : string
+  dailySold : number
+  dailyEarned : number
+}
+
+export interface SalesStatisticHistoryAPIResponse {
+  httpStatus: string;
+  isSuccess: boolean;
+  message: string;
+  result: SalesStatisticHistoryResonpnse[];
+}

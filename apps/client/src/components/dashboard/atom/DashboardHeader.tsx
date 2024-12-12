@@ -7,6 +7,8 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu"
+import { Button } from "@repo/ui/button"
+import { ChevronDown } from "@repo/ui/lucide"
 import ChartSvg from "@/components/main/atom/icon/ChartSvg"
 
 interface DashboardHeaderProps {
@@ -26,10 +28,10 @@ function DashboardHeader({
 	]
 
 	return (
-		<div className="flex items-center justify-between gap-4 px-4">
+		<div className="flex items-center justify-between gap-4 bg-[#1B1818] px-4">
 			{/* 왼쪽: Summary와 ChartSvg */}
 			<div className="flex items-center gap-4">
-				<div className="text-center text-4xl font-bold text-white">
+				<div className="text-center text-2xl font-bold text-white">
 					Dashboard
 				</div>
 				<ChartSvg />
@@ -37,12 +39,16 @@ function DashboardHeader({
 			{/* 오른쪽: DropdownMenu */}
 			<div className="flex flex-row">
 				<DropdownMenu>
-					<DropdownMenuTrigger
-						className="rounded-md border-[#A100F8] bg-[#A913F9] px-4 py-2 text-sm font-medium text-white"
-						style={{ width: "150px", textAlign: "center" }}>
-						{selectedPeriod || "Period"}
+					<DropdownMenuTrigger asChild>
+						<Button
+							variant="ghost"
+							className="flex h-11 items-center px-4 capitalize text-po-purple-50"
+							style={{ width: "150px", textAlign: "center" }}>
+							{selectedPeriod || "Period"}
+							<ChevronDown className="ml-2 h-4 w-4" />
+						</Button>
 					</DropdownMenuTrigger>
-					<DropdownMenuContent className="border-[#A100F8] bg-[#a600ff] px-4 py-2 text-sm font-medium text-white hover:bg-[#8913c9]">
+					<DropdownMenuContent className="w-56 border-po-purple-50/25 bg-[#120F1E] px-4 py-2 text-sm font-medium text-white">
 						{periods.map((period) => (
 							<DropdownMenuItem
 								key={period.value}

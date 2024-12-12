@@ -4,7 +4,7 @@ function ChartSvg() {
 	return (
 		<div
 			style={{
-				backgroundColor: "rgba(17, 17, 17, var(--tw-bg-opacity, 1))", // 배경색
+				backgroundColor: "rgba(27, 24, 24, var(--tw-bg-opacity, 1))", // 배경색
 				display: "inline-block", // 인라인 요소로 표시
 				padding: "4px",
 				borderRadius: "4px",
@@ -12,8 +12,8 @@ function ChartSvg() {
 			}}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
-				width="36"
-				height="36"
+				width="24"
+				height="24"
 				viewBox="0 0 24 24"
 				fill="none"
 				stroke="currentColor"
