@@ -1,6 +1,5 @@
 import { Copy, Image, MoreVertical, X } from "@repo/ui/lucide"
 import { ChAvatar } from "@/components/chat/atom/ChAvatar.tsx"
-import { ChToggleSwitch } from "@/components/chat/atom/ChToggleSwitch.tsx"
 import { ChFileItem } from "@/components/chat/atom/ChFileItem.tsx"
 import { ChProfileSection } from "@/components/chat/molecule/ChProfileSection.tsx"
 
@@ -22,8 +21,8 @@ export function ChatProfileSidebar({
 }: ChatProfileSidebarProps) {
 	return (
 		<div
-			className={`h-full overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "w-full md:!w-80" : "w-0"}`}>
-			<div className="flex h-full w-full flex-col border-l border-[#424242] bg-[#111111] transition-all duration-300 ease-in-out md:!w-80">
+			className={`h-full overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? "w-full md:!w-80" : "!w-0"}`}>
+			<div className="flex h-full w-full min-w-80 flex-col border-l border-[#424242] bg-[#111111] transition-all duration-300 ease-in-out">
 				{/* Header */}
 				<div className="flex justify-between p-4 md:p-6">
 					<button
@@ -62,15 +61,6 @@ export function ChatProfileSidebar({
 
 				{/* Sections */}
 				<div className="mt-8 overflow-y-auto px-4 md:px-5">
-					<ChProfileSection title="Notifications">
-						<div className="flex items-center justify-between">
-							<span className="text-white">Enable notifications</span>
-							<ChToggleSwitch checked />
-						</div>
-					</ChProfileSection>
-
-					<ChProfileSection title="Group" subtitle="1 Group in common" />
-
 					<ChProfileSection title="Recent Files" subtitle="5 Files">
 						<div className="space-y-3.5">
 							<ChFileItem name="Content.pdf" size="20Mb" />
@@ -81,8 +71,6 @@ export function ChatProfileSidebar({
 							Show more
 						</button>
 					</ChProfileSection>
-
-					<ChProfileSection title="Images" subtitle="10 Files" />
 				</div>
 
 				{/* Actions */}
@@ -92,13 +80,22 @@ export function ChatProfileSidebar({
 						className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
 						Block Lincoln
 					</button>
-					<button
-						type="button"
-						className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
-						Delete History
-					</button>
 				</div>
 			</div>
 		</div>
 	)
 }
+
+/*
+
+<ChProfileSection title="Notifications">
+						<div className="flex items-center justify-between">
+							<span className="text-white">Enable notifications</span>
+							<ChToggleSwitch checked />
+						</div>
+					</ChProfileSection>
+
+<ChProfileSection title="Images" subtitle="10 Files" />
+
+
+ */

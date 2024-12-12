@@ -1,6 +1,6 @@
 "use client"
 
-import { Link2, Mic, Send, Smile } from "@repo/ui/lucide"
+import { Mic, Send } from "@repo/ui/lucide"
 import type { FormEvent } from "react"
 import { useState } from "react"
 
@@ -20,7 +20,7 @@ export function ChatInput({ onSendMessage, error }: ChatInputProps) {
 	}
 
 	return (
-		<div className="border-t border-[#E3E8E7]/20 bg-[#111111] px-6 py-4">
+		<div className="h-[5.25rem] border-t border-[#E3E8E7]/20 bg-[#111111] px-6 py-4">
 			<form
 				onSubmit={handleSubmit}
 				className="flex items-center justify-between rounded-[25px] border border-[#E5EAEF] bg-[#404040] px-6 py-1.5">
@@ -38,12 +38,6 @@ export function ChatInput({ onSendMessage, error }: ChatInputProps) {
 				</div>
 
 				<div className="flex items-center gap-4">
-					<button type="button" className="hover:opacity-80">
-						<Smile className="h-6 w-6 text-[#A3A3A3]" />
-					</button>
-					<button type="button" className="hover:opacity-80">
-						<Link2 className="h-6 w-6 text-[#A3A3A3]" />
-					</button>
 					<button
 						type="submit"
 						className="flex h-9 w-9 items-center justify-center rounded-full bg-[#75C1D9] hover:opacity-90">
@@ -55,3 +49,14 @@ export function ChatInput({ onSendMessage, error }: ChatInputProps) {
 		</div>
 	)
 }
+
+/*
+
+<button type="button" className="hover:opacity-80">
+						<Smile className="h-6 w-6 text-[#A3A3A3]" />
+					</button>
+					<button type="button" className="hover:opacity-80">
+						<Link2 className="h-6 w-6 text-[#A3A3A3]" />
+					</button>
+
+ */

@@ -65,12 +65,12 @@ export default function ChatPage({ roomId, memberUuid }: ChatPageProps) {
 							isActive: true,
 							avatarSrc: selectedContact.avatarSrc,
 						}}
-						onProfileClick={() => setShowProfile(true)}
-						onOpenSidebar={() => setShowSidebar(true)}
+						onProfileClick={() => setShowProfile(!showProfile)}
+						onOpenSidebar={() => setShowSidebar(!showSidebar)}
 					/>
 				</div>
 				<div
-					className={`absolute inset-y-0 right-0 z-30 transition-transform duration-300 ease-in-out md:!static ${showProfile ? "translate-x-0" : "translate-x-full"} md:!translate-x-0`}>
+					className={`absolute inset-y-0 right-0 z-30 transition-transform duration-300 ease-in-out md:!static ${showProfile ? "translate-x-0" : "translate-x-full"} md:translate-x-0`}>
 					<ChatProfileSidebar
 						contact={{
 							id: selectedContact.id,

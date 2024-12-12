@@ -1,4 +1,4 @@
-import { MessageSquare, MoreVertical, Video } from "@repo/ui/lucide"
+import { MessageSquare, MoreVertical } from "@repo/ui/lucide"
 import { ChAvatar } from "@/components/chat/atom/ChAvatar.tsx"
 
 interface ChatHeaderProps {
@@ -43,14 +43,9 @@ export function ChatHeader({
 			<div className="flex items-center gap-3.5">
 				<button
 					type="button"
-					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10"
+					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10 md:!hidden"
 					onClick={onOpenSidebar}>
 					<MessageSquare className="h-5 w-5 text-[#E2ADFF]" />
-				</button>
-				<button
-					type="button"
-					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
-					<Video className="h-5 w-5 text-[#E2ADFF]" />
 				</button>
 				<button
 					type="button"
