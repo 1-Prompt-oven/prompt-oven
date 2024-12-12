@@ -3,10 +3,14 @@ import { NextResponse } from "next/server"
 import { getAccessToken } from "@/lib/api/sessionExtractor.ts"
 
 export async function GET(request: NextRequest) {
+	// query parameter로부터 roomId을 추출합니다
 	const roomId = request.nextUrl.searchParams.get("roomId")
+	// accessToken을 가져옵니다
 	const accessToken = await getAccessToken()
 
+	// encoder를 생성합니다
 	const encoder = new TextEncoder()
+	// ReadableStream을 생성합니다
 	const stream = new ReadableStream({
 		async start(controller) {
 			const response = await fetch(

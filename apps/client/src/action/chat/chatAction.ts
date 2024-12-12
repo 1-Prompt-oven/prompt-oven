@@ -6,6 +6,7 @@ import type {
 	CreateChatRoomResponseType,
 	GetPreviousMessagesRequestType,
 	GetPreviousMessagesResponseType,
+	LeaveRoomRequestType,
 	SendChatMessageRequestType,
 	SendChatMessageResponseType,
 	UpdateRoomReadRequestType,
@@ -82,6 +83,23 @@ export const UpdateRoomRead = async (req: UpdateRoomReadRequestType) => {
 		options: {
 			method: "PUT",
 			body: JSON.stringify(req),
+			headers,
+			cache: "no-cache",
+		},
+	})
+}
+
+export const leaveChatRoom = async (req: LeaveRoomRequestType) => {
+	"use server"
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+	const query = createQueryParamString(_.omit(req, ["roomId"]))
+
+	return actionHandler<CommonResType<object>>({
+		name: "leaveChatRoom",
+		url: `/v1/member/chat/${req.roomId}?${query}`,
+		options: {
+			method: "DELETE",
 			headers,
 			cache: "no-cache",
 		},

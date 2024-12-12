@@ -59,19 +59,21 @@ export interface SendChatMessageResponseType {
 export interface GetReactiveChatRoomListRequestType {
 	userUuid: string
 }
-// note: 실제로 받는지 확인해보기 -- 배열 타입으로 받음
+
 export interface GetReactiveChatRoomListResponseType {
 	chatRoomId: string
 	chatRoomName: string
 	partnerUuid: string
+	partnerIsActive: boolean
 	recentMessage: string
 	recentMessageTime: string // ISO date string
+	unreadCount: number
 }
 
 export interface GetReactiveChatMessageRequestType {
 	roomId: string
 }
-// note: 실제로 받는지 확인해보기  -- 배열 타입으로 받음
+
 export interface GetReactiveChatMessageResponseType {
 	id: string
 	roomId: string
@@ -83,6 +85,11 @@ export interface GetReactiveChatMessageResponseType {
 }
 
 export interface UpdateRoomReadRequestType {
+	roomId: string // chat room id {path}
+	userUuid: string // user uuid {query}
+}
+
+export interface LeaveRoomRequestType {
 	roomId: string // chat room id {path}
 	userUuid: string // user uuid {query}
 }
