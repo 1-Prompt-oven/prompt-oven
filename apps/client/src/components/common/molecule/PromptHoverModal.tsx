@@ -101,68 +101,66 @@ export default function PromptHoverModal({
 
 	return (
 		<>
-			<div className="gradient-filter absolute top-10 z-30 w-[300px] rounded-md border border-white/20 p-4 shadow-lg">
-				<div className="flex flex-col items-center gap-2">
-					<div className="rounded-md bg-[#3d2d50]">
-						<Link href={`/prompt-detail/${productInfo.productUuid}`}>
-							{allImage.length > 1 && allImage[0].contentUrl ? (
-								<ul className="grid grid-cols-2">
-									{allImage.map((item, index) => (
-										<li key={item.contentUrl}>
-											<Image
-												src={item.contentUrl}
-												width={300}
-												height={300}
-												className={getImageClassName(index)}
-												alt={productInfo.productName}
-												priority
-												unoptimized
-											/>
-										</li>
-									))}
-								</ul>
-							) : (
-								<Image
-									src={defaultImage}
-									width={300}
-									height={300}
-									className="rounded-t-md"
-									alt={productInfo.productName}
-									priority
-									unoptimized
-								/>
-							)}
-						</Link>
-
-						<div className="flex items-center justify-end rounded-b-md border-none bg-white p-0">
-							<Button
-								className="h-[30px] w-[30px] border border-white bg-white hover:bg-[#ffeaea]"
-								onClick={likeHandler}>
-								{isFavorite.liked ? (
-									<Heart className="scale-125 transform fill-[#ef4444] text-[#ef4444] transition-transform duration-300 ease-in-out" />
-								) : (
-									<Heart className="scale-100 transform text-[#ef4444] transition-transform duration-300 ease-in-out" />
-								)}
-							</Button>
-
-							<Button
-								className="h-[30px] w-[30px] border border-white bg-white hover:bg-[#ffeaea]"
-								onClick={cartHandler}>
-								{isCart !== null ? (
-									<ShoppingCartIcon className="scale-125 fill-[#3F5EFB] text-[#3F5EFB] transition-transform duration-300 ease-in-out hover:opacity-90" />
-								) : (
-									<ShoppingCartIcon className="scale-100 text-[#3F5EFB] transition-transform duration-300 ease-in-out hover:opacity-90" />
-								)}
-							</Button>
-						</div>
-					</div>
-
+			<div className="gradient-filter absolute top-10 !z-30 flex w-[300px] flex-col items-center gap-2 rounded-md border border-white/20 p-4 shadow-lg">
+				<div className="rounded-md bg-[#3d2d50]">
 					<Link href={`/prompt-detail/${productInfo.productUuid}`}>
-						<p className="text-xs font-semibold text-white">
-							{productInfo.productName}
-						</p>
+						{allImage.length > 1 && allImage[0].contentUrl ? (
+							<ul className="grid grid-cols-2">
+								{allImage.map((item, index) => (
+									<li key={item.contentUrl}>
+										<Image
+											src={item.contentUrl}
+											width={300}
+											height={300}
+											className={getImageClassName(index)}
+											alt={productInfo.productName}
+											priority
+											unoptimized
+										/>
+									</li>
+								))}
+							</ul>
+						) : (
+							<Image
+								src={defaultImage}
+								width={300}
+								height={300}
+								className="rounded-t-md"
+								alt={productInfo.productName}
+								priority
+								unoptimized
+							/>
+						)}
 					</Link>
+
+					<div className="flex items-center justify-end rounded-b-md border-none bg-white p-0">
+						<Button
+							className="h-[30px] w-[30px] border border-white bg-white hover:bg-[#ffeaea]"
+							onClick={likeHandler}>
+							{isFavorite.liked ? (
+								<Heart className="scale-125 transform fill-[#ef4444] text-[#ef4444] transition-transform duration-300 ease-in-out" />
+							) : (
+								<Heart className="scale-100 transform text-[#ef4444] transition-transform duration-300 ease-in-out" />
+							)}
+						</Button>
+
+						<Button
+							className="h-[30px] w-[30px] border border-white bg-white hover:bg-[#ffeaea]"
+							onClick={cartHandler}>
+							{isCart !== null ? (
+								<ShoppingCartIcon className="scale-125 fill-[#3F5EFB] text-[#3F5EFB] transition-transform duration-300 ease-in-out hover:opacity-90" />
+							) : (
+								<ShoppingCartIcon className="scale-100 text-[#3F5EFB] transition-transform duration-300 ease-in-out hover:opacity-90" />
+							)}
+						</Button>
+					</div>
 				</div>
+
+				<Link href={`/prompt-detail/${productInfo.productUuid}`}>
+					<p className="text-xs font-semibold text-white">
+						{productInfo.productName}
+					</p>
+				</Link>
 			</div>
 
 			<ResultModal content={modalContent} setContent={setModalContent} />
