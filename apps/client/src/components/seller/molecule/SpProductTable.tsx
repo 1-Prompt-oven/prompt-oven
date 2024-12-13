@@ -13,6 +13,7 @@ import {
 	DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu"
 import { useRouter } from "next/navigation"
+import Link from "next/link"
 import { cn } from "@/lib/utils"
 import type { GetSellerProductResultType } from "@/types/product/productUpsertType"
 import { extractProductStatusOptionReverse } from "@/lib/sellerProduct.ts"
@@ -93,15 +94,19 @@ export default function ProductTable({ products }: ProductTableProps) {
 										key={product.productUuid}
 										className="border-b border-white/15 bg-po-black-200">
 										<td className="p-4 text-left">
-											<div className="flex items-center">
-												<SpProductThumbnail
-													thumbnail={product.thumbnailUrl}
-													productName={product.productName}
-												/>
-												<span className="max-w-[200px] truncate text-sm text-white">
-													{product.productName}
-												</span>
-											</div>
+											<Link
+												className="cursor-pointer"
+												href={`/prompt-detail/${product.productUuid}`}>
+												<div className="flex items-center">
+													<SpProductThumbnail
+														thumbnail={product.thumbnailUrl}
+														productName={product.productName}
+													/>
+													<span className="max-w-[200px] truncate text-sm text-white">
+														{product.productName}
+													</span>
+												</div>
+											</Link>
 										</td>
 										<td className="w-[15%] p-4 text-sm text-white">
 											${product.price.toFixed(2)}
