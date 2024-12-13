@@ -3,7 +3,8 @@
 import { Button } from "@repo/ui/button"
 import { Card, CardContent } from "@repo/ui/card"
 import { ArrowLeft, CheckCircle2, ExternalLink } from "@repo/ui/lucide"
-import { useRouter } from "next/navigation"
+import Link from "next/link"
+import dayjs from "dayjs"
 import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
 
 interface CreateProductSuccessPageProps {
@@ -12,8 +13,6 @@ interface CreateProductSuccessPageProps {
 export default function CreateProductSuccessPage({
 	searchParams,
 }: CreateProductSuccessPageProps) {
-	const router = useRouter()
-
 	return (
 		<div className="flex min-h-screen items-center justify-center p-4">
 			<Card className="w-full max-w-2xl border-po-purple-100/50 bg-po-black-200">
@@ -49,7 +48,7 @@ export default function CreateProductSuccessPage({
 								<div className="flex justify-between">
 									<dt className="text-[#94A3B8]">Submission Date</dt>
 									<dd className="text-white">
-										{new Date().toLocaleDateString()}
+										{dayjs().format("YYYY-MM-DD HH:mm")}
 									</dd>
 								</div>
 							</dl>
@@ -58,21 +57,22 @@ export default function CreateProductSuccessPage({
 
 					<div className="flex flex-col gap-4 sm:flex-row">
 						<Button
-							onClick={() => router.push("/account?view=product-list")}
 							variant="outline"
 							className="flex-1 border-po-purple-100 text-po-purple-50 hover:bg-po-purple-100 hover:text-white"
 							asChild>
-							<ArrowLeft className="mr-2 h-4 w-4" />
-							Back to Products
+							<Link href="/account?view=product-list">
+								<ArrowLeft className="mr-2 h-4 w-4" />
+								Back to Products
+							</Link>
 						</Button>
 						<Button
-							onClick={() =>
-								router.push(`/prompt-detail/${searchParams.productUuid}`)
-							}
 							className="flex-1 bg-po-purple-100 text-white hover:bg-po-purple-100/90"
 							asChild>
-							View Product
-							<ExternalLink className="ml-2 h-4 w-4" />
+							{/* todo: 판매자 상품 상세 페이지로 이동시키기 */}
+							<Link href={`/prompt-detail/${searchParams.productUuid}`}>
+								View Product
+								<ExternalLink className="ml-2 h-4 w-4" />
+							</Link>
 						</Button>
 					</div>
 				</CardContent>
