@@ -1,3 +1,5 @@
+import type { PromptDetailInfoType } from "../prompt-detail/promptDetailType"
+
 export interface PaymentItemType {
 	productUUID: string
 	productName: string
@@ -63,4 +65,21 @@ export interface PromptPurchaseFinalInfoProps {
 	hasNext: true
 	pageSize: number
 	page: number
+}
+
+export interface PurchaseSearchByPurchaseUuidProps {
+	id: number
+	purchaseUuid: string
+	productUuid: string
+	memberUuid: string
+	writtenReview: true
+}
+
+export interface PurchaseSearchWithDetailProps {
+	id: number
+	purchaseUuid: string
+	productUuid: string
+	memberUuid: string
+	writtenReview: true
+	productDetail: PromptDetailInfoType
 }

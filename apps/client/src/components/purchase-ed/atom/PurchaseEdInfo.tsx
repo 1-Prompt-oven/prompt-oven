@@ -1,5 +1,11 @@
+import { useState } from "react"
 import { PromptCardDateFormatted, ReviewDateFormatted } from "@/lib/utils"
-import type { PromptPurchaseAllInfoProps } from "@/types/purchase.ts/purchase-ongoing"
+import { getSearchPurchase } from "@/action/purchase/purchase-ed"
+import type {
+	PromptPurchaseAllInfoProps,
+	PurchaseSearchWithDetailProps,
+} from "@/types/purchase.ts/purchase-ongoing"
+import PurchaseEdPromptsList from "./PurchaseEdPromptsList"
 
 interface PurchaseEdInfoProps {
 	item: PromptPurchaseAllInfoProps
@@ -8,10 +14,23 @@ interface PurchaseEdInfoProps {
 //hover:scale-105
 
 export default function PurchaseEdInfo({ item }: PurchaseEdInfoProps) {
+	const [isOpen, setIsOpen] = useState<boolean>(false)
+	const [purchaseItem, setPurchaseItem] =
+		useState<PurchaseSearchWithDetailProps[]>()
+
+	const showPromptHandler = async (purchaseUuid: string) => {
+		if (!isOpen) {
+			const searchPurchase = await getSearchPurchase(purchaseUuid)
+			setPurchaseItem(searchPurchase)
+		}
+
+		setIsOpen(!isOpen)
+	}
+
 	return (
 		<li
 			key={item.purchaseUuid}
-			className="flex flex-col items-center rounded-lg border border-[#666666] bg-gradient-filter text-white">
+			className="flex flex-col items-center rounded-lg border border-[#666666] bg-gradient-filter text-white hover:scale-105">
 			<div className="flex w-full items-center justify-between gap-2 border-b border-b-[#666666]">
 				<p className="p-4 text-[10px] font-semibold sm:text-sm">
 					{item.shortData.orderName}
@@ -27,16 +46,19 @@ export default function PurchaseEdInfo({ item }: PurchaseEdInfoProps) {
 						<span>주문번호</span>
 						<span className="font-semibold">{item.purchaseUuid}</span>
 					</p>
+
 					<p className="flex gap-3">
 						<span>결제 수단</span>
 						<span className="font-semibold">
 							{item.shortData.paymentMethod}
 						</span>
 					</p>
+
 					<p className="flex gap-3">
 						<span>결제 방식</span>
 						<span className="font-semibold">{item.shortData.paymentWay}</span>
 					</p>
+
 					<p className="flex flex-col gap-1 sm:!flex-row sm:gap-3">
 						<span>요청 사항</span>
 						<span
@@ -48,6 +70,22 @@ export default function PurchaseEdInfo({ item }: PurchaseEdInfoProps) {
 							{item.shortData.message}
 						</span>
 					</p>
+
+					<button
+						type="button"
+						className="mt-4 w-[60px]"
+						onClick={() => showPromptHandler(item.purchaseUuid)}>
+						<span className="text-xs text-[#666666]">
+							{isOpen ? "...닫기" : "... 더보기"}
+						</span>
+					</button>
+
+					<div className={isOpen ? "block" : "hidden"}>
+						<PurchaseEdPromptsList
+							purchaseUuid={item.purchaseUuid}
+							purchaseItem={purchaseItem}
+						/>
+					</div>
 				</div>
 				<div className="flex w-full items-center justify-between gap-4 px-4 py-2 sm:max-w-[100px] sm:flex-col sm:justify-center">
 					<p className="flex flex-row items-center justify-center gap-2 sm:!flex-col sm:!gap-0">
