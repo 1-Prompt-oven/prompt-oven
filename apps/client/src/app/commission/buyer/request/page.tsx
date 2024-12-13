@@ -6,7 +6,9 @@ interface CommissionSearchParams {
 	sellerUuid: string
 }
 
-function page({ buyerUuid, sellerUuid }: CommissionSearchParams) {
+function page({ searchParams }: { searchParams: CommissionSearchParams }) {
+	const { buyerUuid, sellerUuid } = searchParams
+
 	return <BuyerRequestTemplate buyerUuid={buyerUuid} sellerUuid={sellerUuid} />
 }
 
