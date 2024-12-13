@@ -4,6 +4,8 @@ import _ from "lodash"
 import type {
 	CreateChatRoomRequestType,
 	CreateChatRoomResponseType,
+	GetChatRoomRequestType,
+	GetChatRoomResponseType,
 	GetPreviousMessagesRequestType,
 	GetPreviousMessagesResponseType,
 	LeaveRoomRequestType,
@@ -28,6 +30,22 @@ export const createChatRoom = async (req: CreateChatRoomRequestType) => {
 		options: {
 			method: "POST",
 			body: JSON.stringify(req),
+			headers,
+			cache: "no-cache",
+		},
+	})
+}
+
+export const getChatRoom = async (erq: GetChatRoomRequestType) => {
+	"use server"
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+	const query = createQueryParamString(_.omit(erq, ["roomId"]))
+	return actionHandler<CommonResType<GetChatRoomResponseType>>({
+		name: "getChatRoom",
+		url: `/v1/member/chat/${erq.roomId}?${query}`,
+		options: {
+			method: "GET",
 			headers,
 			cache: "no-cache",
 		},
@@ -103,4 +121,21 @@ export const leaveChatRoom = async (req: LeaveRoomRequestType) => {
 			cache: "no-cache",
 		},
 	})
+}
+
+// custom action
+export const startTalkWith = async (
+	host: string,
+	partner: string,
+	roomName: string,
+) => {
+	"use server"
+	const chatRoom = (
+		await createChatRoom({
+			hostUserUuid: host,
+			inviteUserUuid: partner,
+			roomName,
+		})
+	).result
+	return chatRoom
 }

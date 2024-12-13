@@ -1,16 +1,19 @@
 import { Calendar, Copy, Image, MoreVertical, Users, X } from "@repo/ui/lucide"
+import Link from "next/link"
 import { ChAvatar } from "@/components/chat/atom/ChAvatar.tsx"
 import { ChProfileSection } from "@/components/chat/molecule/ChProfileSection.tsx"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes.ts"
 import { getKstTime } from "@/lib/time.ts"
 
 interface ChatProfileSidebarProps {
+	memberUuid: string
 	partner: ProfileMemberInfoType
 	onClose: () => void
 	isOpen: boolean
 }
 
 export function ChatProfileSidebar({
+	memberUuid,
 	partner,
 	onClose,
 	isOpen,
@@ -99,27 +102,16 @@ export function ChatProfileSidebar({
 
 				{/* Actions */}
 				<div className="mt-auto space-y-4 px-5 pb-5">
-					<button
-						type="button"
-						className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
-						커미션 신청하기
-					</button>
+					<Link
+						href={`/commission/buyer/request?buyerUuid=${memberUuid}&sellerUuid=${partner.memberUUID}`}>
+						<button
+							type="button"
+							className="h-[46px] w-full rounded-[52px] border border-[#E2ADFF] font-medium text-[#E2ADFF]">
+							커미션 신청하기
+						</button>
+					</Link>
 				</div>
 			</div>
 		</div>
 	)
 }
-
-/*
-
-<ChProfileSection title="Notifications">
-						<div className="flex items-center justify-between">
-							<span className="text-white">Enable notifications</span>
-							<ChToggleSwitch checked />
-						</div>
-					</ChProfileSection>
-
-<ChProfileSection title="Images" subtitle="10 Files" />
-
-
- */
