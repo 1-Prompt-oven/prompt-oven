@@ -66,3 +66,10 @@ export const setProductUuid = (productUuid: string): string => {
 	}
 	return _productUuid
 }
+
+export const resetLocalStorage = () => {
+	const keys = Object.values(localStorageKeys)
+	keys.forEach((key) => {
+		removeStorageItem(key)
+	})
+}

@@ -13,7 +13,7 @@ function ActionButtons({
 	onAccept,
 	onRequestRevision,
 }: ActionButtonsProps) {
-	if (status !== "completed") return null
+	if (status !== "COMPLETED") return null
 
 	return (
 		<div className="flex gap-4">

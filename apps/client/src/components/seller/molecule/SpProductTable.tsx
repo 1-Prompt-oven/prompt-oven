@@ -147,7 +147,7 @@ export default function ProductTable({ products }: ProductTableProps) {
 													</DropdownMenuLabel>
 													<DropdownMenuSeparator className="bg-white/15" />
 													<DropdownMenuItem
-														className="cursor-pointer hover:bg-opacity-75"
+														className="cursor-pointer text-white hover:bg-opacity-75"
 														onClick={() =>
 															handleEditClick(product.productUuid)
 														}>

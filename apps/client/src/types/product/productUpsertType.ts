@@ -135,7 +135,7 @@ export interface ModifyProductRequestType {
 	contents?: PromptContentType[]
 	discountRate?: number
 	enabled?: boolean
-	approved?: boolean
+	temporary?: boolean
 	seed?: string
 	llmVersionId?: number
 }

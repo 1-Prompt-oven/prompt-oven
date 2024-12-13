@@ -68,7 +68,7 @@ export default function CreateProductSuccessPage({
 							className="flex-1 bg-po-purple-100 text-white hover:bg-po-purple-100/90"
 							asChild>
 							{/* todo: 판매자 상품 상세 페이지로 이동시키기 */}
-							<Link href="/account?view=product-list">
+							<Link href={`/prompt-detail/${searchParams.productUuid}`}>
 								View Product
 								<ExternalLink className="ml-2 h-4 w-4" />
 							</Link>
