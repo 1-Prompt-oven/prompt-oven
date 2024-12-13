@@ -1,3 +1,5 @@
+"use client"
+
 import { MessageSquare } from "@repo/ui/lucide"
 import { ChatHeaderPlaceholder } from "@/components/chat/molecule/ChatHeaderPlaceholder.tsx"
 import { ChatInput } from "@/components/chat/molecule/ChatInput.tsx"

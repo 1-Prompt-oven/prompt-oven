@@ -19,7 +19,7 @@ export interface GetPreviousMessagesRequestType {
 	page?: number // page number {query}
 }
 
-export interface  ChatMessage {
+export interface ChatMessage {
 	id: string
 	roomId: string
 	messageType: string
@@ -28,6 +28,15 @@ export interface  ChatMessage {
 	isRead: boolean
 	createdAt: string // ISO date string
 	updatedAt: string // ISO date string
+}
+export interface ChatRoom {
+	chatRoomId: string
+	chatRoomName: string
+	partnerUuid: string
+	partnerIsActive: boolean
+	recentMessage: string
+	recentMessageTime: string // ISO date string
+	unreadCount: number
 }
 
 export interface MessagePaginationResponse {
@@ -66,15 +75,11 @@ export interface LeaveRoomRequestType {
 	userUuid: string // user uuid {query}
 }
 
-// chat reactive API Types
-export interface GetReactiveChatRoomListResponseType {
-	chatRoomId: string
-	chatRoomName: string
-	partnerUuid: string
-	partnerIsActive: boolean
-	recentMessage: string
-	recentMessageTime: string // ISO date string
-	unreadCount: number
+export interface GetChatRoomRequestType {
+	roomId: string // chat room id {path}
+	userUuid: string // user uuid {query}
 }
+export type GetChatRoomResponseType = ChatRoom
 
-
+// chat reactive API Types
+export type GetReactiveChatRoomListResponseType = ChatRoom

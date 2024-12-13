@@ -41,12 +41,14 @@ export default async function MainHeader() {
 							<BadgeContainer count={2}>
 								<Bell className="!h-7 !w-7 text-po-gray-150" strokeWidth={2} />
 							</BadgeContainer>
-							<BadgeContainer count={10}>
-								<MessageSquareText
-									className="!h-7 !w-7 text-po-gray-150"
-									strokeWidth={2}
-								/>
-							</BadgeContainer>
+							<Link href="/chat">
+								<BadgeContainer count={0}>
+									<MessageSquareText
+										className="!h-7 !w-7 text-po-gray-150"
+										strokeWidth={2}
+									/>
+								</BadgeContainer>
+							</Link>
 							{/* <Link href="/cart"> */}
 							<Link href="/account?view=cart">
 								<CartCountBadge userAuth={userAuth} />

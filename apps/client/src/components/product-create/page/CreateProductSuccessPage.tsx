@@ -3,7 +3,7 @@
 import { Button } from "@repo/ui/button"
 import { Card, CardContent } from "@repo/ui/card"
 import { ArrowLeft, CheckCircle2, ExternalLink } from "@repo/ui/lucide"
-import Link from "next/link"
+import { useRouter } from "next/navigation"
 import type { CreateProductQueryParams } from "@/types/account/searchParams.ts"
 
 interface CreateProductSuccessPageProps {
@@ -12,6 +12,8 @@ interface CreateProductSuccessPageProps {
 export default function CreateProductSuccessPage({
 	searchParams,
 }: CreateProductSuccessPageProps) {
+	const router = useRouter()
+
 	return (
 		<div className="flex min-h-screen items-center justify-center p-4">
 			<Card className="w-full max-w-2xl border-po-purple-100/50 bg-po-black-200">
@@ -56,22 +58,21 @@ export default function CreateProductSuccessPage({
 
 					<div className="flex flex-col gap-4 sm:flex-row">
 						<Button
+							onClick={() => router.push("/account?view=product-list")}
 							variant="outline"
 							className="flex-1 border-po-purple-100 text-po-purple-50 hover:bg-po-purple-100 hover:text-white"
 							asChild>
-							<Link href="/account?view=product-list">
-								<ArrowLeft className="mr-2 h-4 w-4" />
-								Back to Products
-							</Link>
+							<ArrowLeft className="mr-2 h-4 w-4" />
+							Back to Products
 						</Button>
 						<Button
+							onClick={() =>
+								router.push(`/prompt-detail/${searchParams.productUuid}`)
+							}
 							className="flex-1 bg-po-purple-100 text-white hover:bg-po-purple-100/90"
 							asChild>
-							{/* todo: 판매자 상품 상세 페이지로 이동시키기 */}
-							<Link href={`/prompt-detail/${searchParams.productUuid}`}>
-								View Product
-								<ExternalLink className="ml-2 h-4 w-4" />
-							</Link>
+							View Product
+							<ExternalLink className="ml-2 h-4 w-4" />
 						</Button>
 					</div>
 				</CardContent>
