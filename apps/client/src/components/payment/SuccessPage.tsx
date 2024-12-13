@@ -3,7 +3,10 @@
 import { useEffect, useState } from "react"
 import { useSearchParams } from "next/navigation"
 import { appendLedger } from "@/action/settlement/ledgerAppendAction"
-import { allDeleteNoCheckCart } from "@/action/purchase/purchase-ing"
+import {
+	allDeleteNoCheckCart,
+	appendPurchased,
+} from "@/action/purchase/purchase-ing"
 import type {
 	PaymentItemType,
 	RequestPaymentType,
@@ -97,7 +100,8 @@ export function SuccessPage() {
 				const purchaseList = JSON.parse(
 					json.metadata.paymentList,
 				) as PaymentItemType[]
-				await appendLedger(purchaseList, json.orderId)
+				const appendLegerRes = await appendLedger(purchaseList, json.orderId)
+				if (appendLegerRes) await appendPurchased(payload)
 
 				// eslint-disable-next-line no-console -- This is a  payload
 				console.log("payload --> ", payload)
