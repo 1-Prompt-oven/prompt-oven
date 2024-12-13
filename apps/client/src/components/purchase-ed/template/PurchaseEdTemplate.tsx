@@ -1,18 +1,17 @@
-import type { PromptItemType } from "@/types/prompts/promptsType"
-import PurchaseEdTitle from "../atom/PurchaseEdTitle"
+import type { PromptPurchaseFinalInfoProps } from "@/types/purchase.ts/purchase-ongoing"
 import PurchaseEdContainer from "../organism/PurchaseEdContainer"
 
 interface PurchaseEdTemplateProps {
-	purchaseEdList: PromptItemType[]
+	purchaseEdData: PromptPurchaseFinalInfoProps
 }
 
 export default function PurchaseEdTemplate({
-	purchaseEdList,
+	purchaseEdData,
 }: PurchaseEdTemplateProps) {
 	return (
 		<div className="mx-auto mt-4 max-w-screen-xl">
-			<PurchaseEdTitle />
-			<PurchaseEdContainer purchaseEdList={purchaseEdList} />
+			{/* <PurchaseEdTitle /> */}
+			<PurchaseEdContainer purchaseEdData={purchaseEdData} />
 		</div>
 	)
 }

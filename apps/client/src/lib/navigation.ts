@@ -120,7 +120,7 @@ export const sellerNavs: MenuNavItemType[] = [
 		icon: ShoppingBag,
 		label: "Purchases",
 		href: "/account",
-		query: { view: "purchases" },
+		query: { view: "purchase-completed" },
 		subMenu: [
 			{
 				label: "Ongoing",
@@ -172,7 +172,7 @@ export const userNavs: MenuNavItemType[] = [
 		icon: ShoppingBag,
 		label: "Purchases",
 		href: "/account",
-		query: { view: "purchases" },
+		query: { view: "purchase-completed" },
 		subMenu: [
 			{
 				label: "Ongoing",

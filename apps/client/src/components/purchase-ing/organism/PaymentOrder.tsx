@@ -33,7 +33,9 @@ export default function PaymentOrder({
 
 	let content
 	if (method.payment) {
-		if (paymentList.length > 0) {
+		if (paymentList.length > 4) {
+			content = <PaymentOrderNone state={3} />
+		} else if (paymentList.length > 0) {
 			content = (
 				<PaymentProceed
 					method={method.payment}
