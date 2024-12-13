@@ -32,7 +32,7 @@ function setSort(sort: Sort, sortDirection: SortDirection) {
 		return sortDirection === "ASC" ? "price_low_high" : "price_high_low"
 	if (sort === "sells")
 		return sortDirection === "ASC" ? "sells_low_high" : "sells_high_low"
-	return sortDirection === "ASC" ? "created_old_new" : "created_new_old"
+	return sortDirection === "ASC" ? "createdAt_old_new" : "createdAt_new_old"
 }
 
 export function SpProductFilter({
@@ -51,8 +51,8 @@ export function SpProductFilter({
 		price_low_high: "Price (Low to High)",
 		sells_high_low: "Sells (High to Low)",
 		sells_low_high: "Sells (Low to High)",
-		created_new_old: "Created (New to Old)",
-		created_old_new: "Created (Old to New)",
+		createdAt_new_old: "Created (New to Old)",
+		createdAt_old_new: "Created (Old to New)",
 	}
 
 	const statusOptions: Record<ProductStatusOption, string> = {

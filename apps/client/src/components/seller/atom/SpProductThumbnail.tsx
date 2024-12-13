@@ -20,6 +20,7 @@ function SpProductThumbnail({
 				src={thumbnailImage}
 				alt={`${productName} thumbnail`}
 				className="rounded-lg object-cover"
+				unoptimized
 			/>
 		</div>
 	)
