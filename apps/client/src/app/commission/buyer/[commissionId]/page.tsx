@@ -1,8 +1,9 @@
 import React from "react"
 import { CommissionDetailTemplate } from "@/components/commission/buyer/detail/template/CommissionDetailTemplate"
+import { getCommissionDetail } from "@/action/commission/commissionAction"
 import type { CommissionDetailType } from "@/types/commission/commissionType"
 
-const dummyCommission: CommissionDetailType = {
+const _dummyCommission: CommissionDetailType = {
 	commissionUuid: "1",
 	commissionTitle: "AI Prompt Engineering for E-commerce Product Descriptions",
 	commissionDescription:
@@ -20,8 +21,13 @@ const dummyCommission: CommissionDetailType = {
 	commissionModifyRequest: "",
 }
 
-function page() {
-	return <CommissionDetailTemplate commission={dummyCommission} />
+interface CommissionDetailPageProps {
+	params: { commissionId: string }
+}
+
+async function page({ params: { commissionId } }: CommissionDetailPageProps) {
+	const { result: commissionData } = await getCommissionDetail(commissionId)
+	return <CommissionDetailTemplate commission={commissionData} />
 }
 
 export default page
