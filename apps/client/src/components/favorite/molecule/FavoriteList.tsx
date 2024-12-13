@@ -9,7 +9,7 @@ export default function FavoriteList({ favoriteList }: FavoriteListProps) {
 	return (
 		<div className="mx-auto w-full">
 			{favoriteList.length > 0 ? (
-				<ul className="grid grid-cols-1 gap-8 xs:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
+				<ul className="grid grid-cols-2 gap-8 md:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5">
 					{favoriteList.map((item) => (
 						<PromptCard productInfo={item} key={item.productUuid} />
 					))}

@@ -6,8 +6,8 @@ interface PromptPriceProps {
 
 export default function PromptPrice({ price }: PromptPriceProps) {
 	return (
-		<p className="font-lato flex items-center gap-1 !text-base text-white">
-			<span className="text-sm">₩</span>
+		<p className="font-lato xxs:!text-base flex items-center gap-1 text-xs text-white">
+			<span className="xxs:!text-sm text-xs">₩</span>
 			<span>{price.toLocaleString()}</span>
 		</p>
 	)

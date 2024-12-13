@@ -1,10 +1,15 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { useRouter, usePathname } from "next/navigation"
 import { ThreeDots } from "react-loader-spinner"
-import { getPromptList } from "@/action/prompts/getPromptsData"
+import { getUpdatePromptList } from "@/action/prompts/getPromptsData"
 import type { CategoryType } from "@/types/prompts/categoryType"
-import type { PromptItemType, PromptsType } from "@/types/prompts/promptsType"
+import type {
+	PromptItemType,
+	PromptsType,
+	PropmtsSearchParamsProps,
+} from "@/types/prompts/promptsType"
 import PromptsFilterSidebar from "../molecule/PromptsFilterSidebar"
 import PromptsItemFilter from "../molecule/PromptsItemFilter"
 import PromptList from "../molecule/PromptList"
@@ -12,12 +17,17 @@ import PromptList from "../molecule/PromptList"
 interface PromptsTemplateProps {
 	promptData: PromptsType
 	categoryList: CategoryType[]
+	searchParams: PropmtsSearchParamsProps
 }
 
 export default function PromptsContainer({
 	promptData,
 	categoryList,
+	searchParams = {},
 }: PromptsTemplateProps) {
+	const router = useRouter()
+	const pathname = usePathname()
+
 	const [list, setList] = useState<PromptItemType[]>(promptData.productList)
 	const [allForm, setAllForm] = useState<FormData>(new FormData())
 	const [loading, setLoading] = useState(false)
@@ -31,7 +41,7 @@ export default function PromptsContainer({
 		if (loading || !promptData.hasNext || !cursorId) return
 
 		setLoading(true)
-		getPromptList(allForm, cursorId)
+		getUpdatePromptList(allForm, cursorId)
 			.then((newProducts) => {
 				setHasNext(newProducts.hasNext)
 				setCursorId(newProducts.nextCursorId)
@@ -52,7 +62,7 @@ export default function PromptsContainer({
 				if (entries[0].isIntersecting && !loading && hasNext && cursorId) {
 					await fetchMoreProducts() // 비동기 작업이 완료될 때까지 기다림
 
-					// 데이터 로드가 성공적으로 완료된 후 스크롤 위치를 중앙으로 설정
+					//데이터 로드가 성공적으로 완료된 후 스크롤 위치를 중앙으로 설정
 					const scrollY = window.scrollY
 					const windowHeight = window.innerHeight
 					const newScrollY = scrollY + windowHeight / 2
@@ -72,17 +82,23 @@ export default function PromptsContainer({
 		}
 	}, [loading, hasNext, cursorId])
 
-	useEffect(() => {
-		window.scrollTo(0, 0)
-	}, [])
+	// useEffect(() => {
+	// 	window.scrollTo(0, 0)
+	// }, [])
 
 	const handleFilter = async (filterFormData: FormData) => {
+		const updateList = await getUpdatePromptList(filterFormData)
 		setAllForm(filterFormData)
-		const updateList = await getPromptList(filterFormData)
-
 		setHasNext(updateList.hasNext)
 		setCursorId(updateList.nextCursorId)
 		setList(updateList.productList)
+
+		const newSearchParams = new URLSearchParams()
+		filterFormData.forEach((value, key) => {
+			newSearchParams.set(key, value as string)
+		})
+		const newPathname = `${pathname}?${newSearchParams.toString()}`
+		router.push(newPathname)
 
 		window.scrollTo(0, 0)
 	}
@@ -90,9 +106,16 @@ export default function PromptsContainer({
 	return (
 		<form action={handleFilter}>
 			<div className="mx-12 mb-12 flex flex-col gap-8 md:!flex-row">
-				<PromptsFilterSidebar categoryList={categoryList} />
+				<PromptsFilterSidebar
+					categoryList={categoryList}
+					searchParams={searchParams}
+				/>
 				<div className="flex w-full flex-col gap-8">
-					<PromptsItemFilter handleFilter={handleFilter} allForm={allForm} />
+					<PromptsItemFilter
+						handleFilter={handleFilter}
+						allForm={allForm}
+						searchParams={searchParams}
+					/>
 					<PromptList promptList={list} />
 				</div>
 			</div>

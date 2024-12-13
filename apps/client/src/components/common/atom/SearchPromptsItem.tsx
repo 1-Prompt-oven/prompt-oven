@@ -16,7 +16,7 @@ function SearchPromptsItem({
 			className="flex w-full cursor-pointer items-start gap-3 rounded-lg p-2 hover:bg-white"
 			onClick={onClick}>
 			<Image
-				src={prompt.thumbnailUrl || "/placeholder.svg"}
+				src={prompt.thumbnailUrl || ""}
 				alt="prompt thumbnail"
 				className="rounded border border-[#424242] object-cover"
 				width={64}

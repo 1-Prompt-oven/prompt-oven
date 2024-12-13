@@ -86,13 +86,13 @@ export default function PromptImageSlide({ images }: PromptImageSlideProps) {
 			className="relative h-full w-full"
 			onMouseEnter={handleMouseEnter}
 			onMouseLeave={handleMouseLeave}>
-			<div className="absolute inset-0 z-[1] flex flex-col gap-2 overflow-hidden rounded-lg bg-[#111111]">
+			<div className="absolute inset-0 z-[1] flex flex-col gap-2 overflow-hidden rounded-lg bg-[#131313]">
 				<AnimatePresence initial={false} custom={direction}>
 					<motion.img
 						key={currentIndex}
 						src={images[currentIndex].contentUrl}
 						alt={images[currentIndex].contentUrl}
-						className="absolute rounded-lg object-fill"
+						className="absolute h-[93%] w-full rounded-lg object-cover"
 						custom={direction}
 						variants={variants}
 						initial="enter"

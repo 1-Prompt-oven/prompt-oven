@@ -1,32 +1,32 @@
 import React, { useState } from "react"
 import { Button } from "@repo/ui/button"
 import { Textarea } from "@repo/ui/textarea"
-import type { RevisionRequest } from "@/types/commission/commissionType"
+import type { RevisionRequestType } from "@/types/commission/commissionType"
 
 interface RevisionFormProps {
-	commissionId: string
-	onSubmit: (revision: RevisionRequest) => void
+	commissionUuid: string
+	onSubmit: (revision: RevisionRequestType) => void
 	onCancel: () => void
 }
 
 function RevisionRequestForm({
-	commissionId,
+	commissionUuid,
 	onSubmit,
 	onCancel,
 }: RevisionFormProps) {
-	const [revisionNote, setRevisionNote] = useState("")
+	const [commissionModifyRequest, setCommissionModifyRequest] = useState("")
 
 	const handleSubmit = (e: React.FormEvent) => {
 		e.preventDefault()
-		onSubmit({ commissionId, revisionNote })
+		onSubmit({ commissionUuid, commissionModifyRequest })
 	}
 	return (
 		<form onSubmit={handleSubmit} className="space-y-4">
 			<div className="space-y-2">
 				<h3 className="text-lg font-semibold text-white">Revision Request</h3>
 				<Textarea
-					value={revisionNote}
-					onChange={(e) => setRevisionNote(e.target.value)}
+					value={commissionModifyRequest}
+					onChange={(e) => setCommissionModifyRequest(e.target.value)}
 					placeholder="Describe what changes you'd like to request..."
 					className="min-h-[100px] border-gray-700 bg-gray-900 text-white"
 					required

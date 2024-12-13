@@ -1,5 +1,4 @@
 import { getServerSession } from "next-auth"
-import React from "react"
 import Favorite from "@/app/favorite/page"
 import PurchaseEd from "@/app/purchase/ed/page"
 import PurchaseIng from "@/app/purchase/ing/page"
@@ -13,7 +12,6 @@ import { authOptions } from "@/app/api/auth/[...nextauth]/authOption"
 import { getUserAuth } from "@/lib/userAuth.ts"
 import SellerProductListPage from "@/components/seller/page/SellerProductListPage.tsx"
 import { getSellerProductSearchParams } from "@/lib/sellerProduct.ts"
-import { getSellerProfile } from "@/action/settlement/settlementAction.ts"
 import Settings from "@/components/settings/templete/Settings.tsx"
 import Cart from "@/app/cart/page"
 import Dashboard from "@/components/dashboard/page/Dashboard"
@@ -28,12 +26,8 @@ export default async function page({ searchParams }: AccountSearchParams) {
 	let _searchParams
 	let sellerUuid = ""
 	if (view === "product-list") {
-		sellerUuid = (
-			await getSellerProfile({
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- memberUUID는 세션에 있습니다.
-				memberUUID: session?.user?.memberUUID as string,
-			})
-		).result[0].settlementProfileID
+		// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- memberUUID는 세션에 있습니다.
+		sellerUuid = session?.user?.memberUUID as string
 		_searchParams = getSellerProductSearchParams(searchParams)
 	}
 

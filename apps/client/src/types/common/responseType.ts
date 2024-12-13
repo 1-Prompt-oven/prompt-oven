@@ -15,6 +15,7 @@ export interface CommonResType2<T> {
 	code?: number
 	result: T
 }
+
 export interface CommonResHttpStatusType {
 	error: boolean
 	is4xxClientError: boolean
@@ -53,17 +54,5 @@ export interface BestCreatorApiResponseType {
 
 export interface CreateCommissionResponseType {
 	commissionId: string
-}
-
-export interface CreateCommissionRequestType {
-	commissionTitle: string
-	clientUuid: string
-	creatorUuid: string
-	commissionDescription: string
-	commissionPrice: number
-	commissionDeadline: string
-	commissionModel: string
-	commissionRequest: string
-	commissionModifyRequest?: string
 }
 

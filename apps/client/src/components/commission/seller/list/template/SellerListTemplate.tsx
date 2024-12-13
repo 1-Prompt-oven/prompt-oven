@@ -1,7 +1,8 @@
 "use client"
 
+/* eslint-disable no-console -- 개발 중 디버깅을 위해 console 사용을 허용 */
+
 import React, { useState } from "react"
-import { Input } from "@repo/ui/input"
 import {
 	Select,
 	SelectContent,
@@ -9,60 +10,57 @@ import {
 	SelectTrigger,
 	SelectValue,
 } from "@repo/ui/select"
-import type { Commission } from "@/types/commission/commissionType"
+import type { CommissionListType } from "@/types/commission/commissionType"
+import { getCommissionsList } from "@/action/commission/commissionAction"
 import CommissionList from "../organism/CommissionList"
 
 interface SellerCommissionListTemplateProps {
-	commissions: Commission[]
+	initialCommissions: CommissionListType[]
 }
 
 function SellerListTemplate({
-	commissions,
+	initialCommissions,
 }: SellerCommissionListTemplateProps) {
-	const [searchTerm, setSearchTerm] = useState("")
-	const [sortBy, setSortBy] = useState("createdAt")
+	const [sortBy, setSortBy] = useState("Latest")
+	const [commissions, setCommissions] =
+		useState<CommissionListType[]>(initialCommissions) // 상태로 관리
 
-	const filteredAndSortedCommissions = commissions
-		.filter((commission) =>
-			commission.title.toLowerCase().includes(searchTerm.toLowerCase()),
-		)
-		.sort((a, b) => {
-			if (sortBy === "createdAt") {
-				return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-			} else if (sortBy === "deadline") {
-				return new Date(a.deadline).getTime() - new Date(b.deadline).getTime()
-			} else if (sortBy === "price") {
-				return b.price - a.price
+	// 정렬 기준 변경 및 API 호출
+	const handleSortChange = async (value: string) => {
+		setSortBy(value) // 정렬 기준 업데이트
+		try {
+			const response = await getCommissionsList(value)
+			if (response.isSuccess) {
+				setCommissions(response.result)
+			} else {
+				console.error("Failed to fetch commissions")
 			}
-			return 0
-		})
+		} catch (error) {
+			console.error("Error fetching commissions:", error)
+		}
+	}
 
 	return (
 		<div className="min-h-screen bg-black p-4 md:p-8">
 			<div className="mx-auto max-w-4xl">
-				<h1 className="mb-8 text-3xl font-bold text-white">
-					Received Commissions
-				</h1>
-				<div className="mb-6 flex items-center justify-between">
-					<Input
-						type="text"
-						placeholder="Search commissions..."
-						value={searchTerm}
-						onChange={(e) => setSearchTerm(e.target.value)}
-						className="w-64 border-gray-700 bg-gray-900 text-white"
-					/>
-					<Select value={sortBy} onValueChange={setSortBy}>
+				<div className="mb-6 mt-10 flex items-center justify-between">
+					<h1 className="text-3xl font-bold text-white">
+						Received Commissions
+					</h1>
+					<Select
+						value={sortBy}
+						onValueChange={(value) => handleSortChange(value)}>
 						<SelectTrigger className="w-48 border-gray-700 bg-gray-900 text-white">
 							<SelectValue placeholder="Sort by" />
 						</SelectTrigger>
 						<SelectContent>
-							<SelectItem value="createdAt">Latest</SelectItem>
-							<SelectItem value="deadline">Deadline</SelectItem>
-							<SelectItem value="price">Price</SelectItem>
+							<SelectItem value="Latest">Latest</SelectItem>
+							<SelectItem value="Deadline">Deadline</SelectItem>
+							<SelectItem value="Price">Price</SelectItem>
 						</SelectContent>
 					</Select>
 				</div>
-				<CommissionList commissions={filteredAndSortedCommissions} />
+				<CommissionList commissions={commissions} />
 			</div>
 		</div>
 	)

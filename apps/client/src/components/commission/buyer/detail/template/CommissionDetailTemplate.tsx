@@ -1,5 +1,5 @@
 "use client"
-
+/* eslint-disable no-console -- 개발 중 디버깅을 위해 console 사용을 허용 */
 import { useState } from "react"
 import { Card, CardContent } from "@repo/ui/card"
 import TitleDisplay from "@/components/commission/common/detail/TitleDisplay"
@@ -10,12 +10,12 @@ import StatusDisplay from "@/components/commission/common/detail/StatusDisplay"
 import ActionButtons from "@/components/commission/common/detail/ActionButtons"
 import RevisionRequestForm from "@/components/commission/buyer/detail/molecule/RevisionRequestForm"
 import type {
-	Commission,
-	RevisionRequest,
+	CommissionDetailType,
+	RevisionRequestType,
 } from "@/types/commission/commissionType"
 
 interface CommissionDetailTemplateProps {
-	commission: Commission
+	commission: CommissionDetailType
 }
 
 export function CommissionDetailTemplate({
@@ -23,11 +23,11 @@ export function CommissionDetailTemplate({
 }: CommissionDetailTemplateProps) {
 	const [showRevisionForm, setShowRevisionForm] = useState(false)
 	const handleAccept = () => {
-		console.log("Commission accepted") // eslint-disable-line no-console -- 필요한 디버깅 로그 출력
+		console.log("Commission accepted")
 	}
 
-	const handleRevisionSubmit = (revision: RevisionRequest) => {
-		console.log("Revision requested:", revision) // eslint-disable-line no-console -- 필요한 디버깅 로그 출력
+	const handleRevisionSubmit = (revision: RevisionRequestType) => {
+		console.log("Revision requested:", revision)
 	}
 
 	return (
@@ -36,27 +36,29 @@ export function CommissionDetailTemplate({
 				<Card className="border-gray-800 bg-gray-950">
 					<CardContent className="space-y-6 p-6">
 						<div className="space-y-6">
-							<TitleDisplay title={commission.title} />
-							<StatusDisplay status={commission.status} />
-							<DescriptionDisplay description={commission.description} />
+							<TitleDisplay title={commission.commissionTitle} />
+							<StatusDisplay status={commission.commissionStatus} />
+							<DescriptionDisplay
+								description={commission.commissionDescription}
+							/>
 							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-								<PriceDisplay price={commission.price} />
-								<DeadlineDisplay deadline={commission.deadline} />
+								<PriceDisplay price={commission.commissionPrice} />
+								<DeadlineDisplay deadline={commission.commissionDeadline} />
 							</div>
 						</div>
 
-						{commission.result ? (
+						{commission.commissionResult ? (
 							<div className="space-y-4 border-t border-gray-800 pt-6">
 								<h2 className="text-lg font-semibold text-white">Result</h2>
 								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
-									{commission.result}
+									{commission.commissionResult}
 								</div>
 							</div>
 						) : null}
 
 						{!showRevisionForm ? (
 							<ActionButtons
-								status={commission.status}
+								status={commission.commissionStatus}
 								onAccept={handleAccept}
 								onRequestRevision={() => setShowRevisionForm(true)}
 							/>
@@ -64,7 +66,7 @@ export function CommissionDetailTemplate({
 
 						{showRevisionForm ? (
 							<RevisionRequestForm
-								commissionId={commission.id}
+								commissionUuid={commission.commissionUuid}
 								onSubmit={handleRevisionSubmit}
 								onCancel={() => setShowRevisionForm(false)}
 							/>

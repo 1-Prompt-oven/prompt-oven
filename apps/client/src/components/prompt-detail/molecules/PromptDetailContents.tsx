@@ -19,7 +19,7 @@ export default function PromptDetailContents({
 	}
 
 	return (
-		<div className="flex flex-col gap-2 xl:mt-8">
+		<div className="flex flex-col gap-2 lg:mt-8">
 			<div className="flex gap-4">
 				{productContents.map((content, index) => (
 					<Button
