@@ -6,6 +6,7 @@ import { ThreeDots } from "react-loader-spinner"
 import { Button } from "@repo/ui/button"
 import Link from "next/link"
 import { DeleteEmail } from "@/action/auth/updateNickname"
+import { resetLocalStorage } from "@/lib/localStorage.ts"
 
 function DeleteAccount() {
 	const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -18,6 +19,7 @@ function DeleteAccount() {
 		try {
 			await DeleteEmail()
 			await signOut({ redirect: true, callbackUrl: "/" })
+			resetLocalStorage()
 		} catch (err) {
 			setError("Delete account fail, Contact us")
 		} finally {

@@ -16,7 +16,7 @@ function SearchCreatorsItem({
 			className="flex w-full cursor-pointer items-center gap-3 rounded-lg p-2 hover:bg-white"
 			onClick={onClick}>
 			<Image
-				src={creator.thumbnail || "/placeholder.svg"}
+				src={creator.thumbnail || ""}
 				alt="creator's thumbnail"
 				className="pointer-events-none rounded border border-[#424242] object-cover"
 				width={64}

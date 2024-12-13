@@ -31,7 +31,6 @@ import type {
 	GetProductDetailResponseType,
 	ModifyProductRequestType,
 } from "@/types/product/productUpsertType.ts"
-import { getSellerProfile } from "@/action/settlement/settlementAction.ts"
 import {
 	createTempProduct,
 	getProductDetail,
@@ -212,14 +211,8 @@ export default function CreateProductFirstPage({
 					await getSubCategories(topCategoryUuid, subCategoryUuid)
 				}
 
-				// user seller uuid 가져오기 api 호출
-				const sellerUuidRes = await getSellerProfile({
-					// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- memberUUID는 세션에 있습니다.
-					memberUUID: session?.user?.memberUUID as string,
-				})
-				// note: 판매자 등록은 한 번 한다는 가정으로 작성한 코드
-
-				const _sellerUuid = sellerUuidRes.result[0].settlementProfileID // session?.user?.memberUUID as string // sellerUuidRes.result[0].settlementProfileID
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access -- memberUUID는 세션에 있습니다.
+				const _sellerUuid = session?.user?.memberUUID as string
 				setSellerUuid(_sellerUuid)
 			} catch (e) {
 				// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
@@ -320,11 +313,7 @@ export default function CreateProductFirstPage({
 			subCategoryUuid: values.subCategoryUuid,
 			discountRate: values.discountRate,
 		}
-		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
-		console.log("onSaveDraft reqbody", reqBody)
 		const res = await createTempProduct(reqBody)
-		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
-		console.log("onSaveDraft", res.result)
 		setProductUuid(res.result.productUuid)
 		return res.result.productUuid
 	}
@@ -342,6 +331,8 @@ export default function CreateProductFirstPage({
 			topCategoryUuid: values.topCategoryUuid,
 			subCategoryUuid: values.subCategoryUuid,
 			discountRate: values.discountRate,
+			enabled: false,
+			temporary: true,
 		}
 		// eslint-disable-next-line no-console -- 에러 로그 출력을 위해 콘솔 출력 필요함.
 		console.log("updateProduct reqbody", reqBody)
