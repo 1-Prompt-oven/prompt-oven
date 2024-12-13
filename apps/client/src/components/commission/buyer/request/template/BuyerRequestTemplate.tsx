@@ -8,7 +8,15 @@ import {
 } from "@repo/ui/card"
 import { CommissionForm } from "../organism/CommissionForm"
 
-function BuyerRequestTemplate() {
+interface BuyerRequestTemplateProps {
+	buyerUuid: string
+	sellerUuid: string
+}
+
+function BuyerRequestTemplate({
+	buyerUuid,
+	sellerUuid,
+}: BuyerRequestTemplateProps) {
 	return (
 		<div className="min-h-screen bg-black p-4 md:p-8">
 			<div className="mx-auto max-w-3xl">
@@ -22,7 +30,7 @@ function BuyerRequestTemplate() {
 						</CardDescription>
 					</CardHeader>
 					<CardContent>
-						<CommissionForm />
+						<CommissionForm buyerUuid={buyerUuid} sellerUuid={sellerUuid} />
 					</CardContent>
 				</Card>
 			</div>
