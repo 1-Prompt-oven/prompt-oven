@@ -11,6 +11,7 @@ import StatusDisplay from "@/components/commission/common/detail/StatusDisplay"
 import ResultUploadField from "@/components/commission/seller/detail/molecule/ResultUploadField"
 import RevisionNoteDisplay from "@/components/commission/seller/detail/molecule/RevisionNoteDisplay"
 import type { CommissionDetailType } from "@/types/commission/commissionType"
+import { statusUpdate } from "@/action/commission/commissionAction"
 
 interface SellerCommissionDetailTemplateProps {
 	commission: CommissionDetailType
@@ -22,14 +23,22 @@ function SellerCommissionDetailTemplate({
 	const [commission, setCommission] =
 		useState<CommissionDetailType>(initialCommission)
 
+	// 요청 들어온 커미션 수락, 거절
+
 	const handleAccept = () => {
 		console.log("Commission accepted")
-		setCommission((prev) => ({ ...prev, status: "in_progress" }))
+		statusUpdate({
+			commissionUuid: commission.commissionUuid,
+			status: "IN_PROGRESS",
+		})
 	}
 
 	const handleReject = () => {
 		console.log("Commission rejected")
-		setCommission((prev) => ({ ...prev, status: "rejected" }))
+		statusUpdate({
+			commissionUuid: commission.commissionUuid,
+			status: "REJECTED",
+		})
 	}
 
 	const handleUploadResult = (result: string) => {

@@ -38,9 +38,9 @@ export interface CommissionDetailType {
 	role: string
 }
 
-export interface RevisionRequest {
-	commissionId: string
-	revisionNote: string
+export interface RevisionRequestType {
+	commissionUuid: string
+	commissionModifyRequest: string
 }
 
 export interface Requester {
@@ -58,4 +58,9 @@ export interface CreateCommissionRequestType {
 	commissionModel: string
 	commissionRequest: string
 	commissionModifyRequest?: string
+}
+
+export interface CommissionStatusUpdateRequestType {
+	commissionUuid: string
+	status: CommissionStatus
 }

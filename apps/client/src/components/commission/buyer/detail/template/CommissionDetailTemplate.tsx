@@ -1,5 +1,5 @@
 "use client"
-
+/* eslint-disable no-console -- 개발 중 디버깅을 위해 console 사용을 허용 */
 import { useState } from "react"
 import { Card, CardContent } from "@repo/ui/card"
 import TitleDisplay from "@/components/commission/common/detail/TitleDisplay"
@@ -11,7 +11,7 @@ import ActionButtons from "@/components/commission/common/detail/ActionButtons"
 import RevisionRequestForm from "@/components/commission/buyer/detail/molecule/RevisionRequestForm"
 import type {
 	CommissionDetailType,
-	RevisionRequest,
+	RevisionRequestType,
 } from "@/types/commission/commissionType"
 
 interface CommissionDetailTemplateProps {
@@ -23,11 +23,11 @@ export function CommissionDetailTemplate({
 }: CommissionDetailTemplateProps) {
 	const [showRevisionForm, setShowRevisionForm] = useState(false)
 	const handleAccept = () => {
-		console.log("Commission accepted") // eslint-disable-line no-console -- 필요한 디버깅 로그 출력
+		console.log("Commission accepted")
 	}
 
-	const handleRevisionSubmit = (revision: RevisionRequest) => {
-		console.log("Revision requested:", revision) // eslint-disable-line no-console -- 필요한 디버깅 로그 출력
+	const handleRevisionSubmit = (revision: RevisionRequestType) => {
+		console.log("Revision requested:", revision)
 	}
 
 	return (
@@ -66,7 +66,7 @@ export function CommissionDetailTemplate({
 
 						{showRevisionForm ? (
 							<RevisionRequestForm
-								commissionId={commission.commissionUuid}
+								commissionUuid={commission.commissionUuid}
 								onSubmit={handleRevisionSubmit}
 								onCancel={() => setShowRevisionForm(false)}
 							/>
