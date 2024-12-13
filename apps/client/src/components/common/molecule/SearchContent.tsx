@@ -40,7 +40,7 @@ function SearchContent({ closeDialog }: { closeDialog: () => void }) {
 
 	return (
 		<section>
-			<div className="flex w-full items-center justify-start gap-4">
+			<div className="mb-4 flex w-full items-center justify-start gap-4">
 				<Button
 					variant="outline"
 					size="sm"

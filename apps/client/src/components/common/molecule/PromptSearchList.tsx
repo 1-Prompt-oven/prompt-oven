@@ -13,7 +13,9 @@ function PromptSearchList({ data }: { data: PromptApiResponseType }) {
 				<Link
 					href={`/prompt-detail/${prompt.productUuid}`}
 					key={prompt.productUuid}>
-					<li key={prompt.productUuid} className="my-4 flex items-center gap-2">
+					<li
+						key={prompt.productUuid}
+						className="flex items-center gap-2 rounded-lg py-2 hover:bg-gray-800">
 						<Image
 							src={prompt.thumbnailUrl}
 							alt={prompt.productName}
@@ -29,3 +31,4 @@ function PromptSearchList({ data }: { data: PromptApiResponseType }) {
 }
 
 export default PromptSearchList
+

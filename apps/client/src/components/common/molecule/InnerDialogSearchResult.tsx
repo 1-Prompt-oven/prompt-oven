@@ -1,6 +1,7 @@
 "use client"
 import React, { useCallback, useEffect, useState } from "react"
 import debounce from "lodash/debounce"
+import { ThreeDots } from "react-loader-spinner"
 import { fetchSearchResults } from "@/action/search/searchAction"
 import type { PromptApiResponseType } from "@/types/common/responseType"
 import type { ProfileForSearchListType } from "@/types/profile/profileTypes"
@@ -18,6 +19,7 @@ function InnerDialogSearchResult({
 	)
 	const [creatorData, setCreatorData] = useState<ProfileForSearchListType[]>([])
 	const [isNodata, setIsNodata] = useState(false)
+	const [loading, setLoading] = useState(false)
 
 	const debounceRes = useCallback(
 		debounce(async (keyword: string, tabName: string) => {
@@ -31,6 +33,7 @@ function InnerDialogSearchResult({
 				setIsNodata(false)
 				return
 			}
+
 			const res = await fetchSearchResults(keyword, tabName)
 			if (tabName === "prompt") {
 				if (
@@ -45,25 +48,46 @@ function InnerDialogSearchResult({
 				}
 				setCreatorData(res as ProfileForSearchListType[])
 			}
+			setLoading(false)
 		}, 1000),
 		[setPromptData, setCreatorData],
 	)
 
 	useEffect(() => {
 		setIsNodata(false)
+		setLoading(true)
 		debounceRes(searchQuery.keyword, searchQuery.tabName)
 		return () => debounceRes.cancel()
 	}, [searchQuery, debounceRes])
 
 	return (
-		<section className="max-h-[30vh] overflow-y-auto">
+		<section className="mt-3 max-h-[30vh] overflow-y-auto">
 			{searchQuery.tabName === "prompt" && promptData ? (
 				<PromptSearchList data={promptData} />
 			) : null}
 			{searchQuery.tabName === "creator" && creatorData.length > 0 && (
 				<CreatorSearchList data={creatorData} />
 			)}
-			{isNodata ? <p className="text-sm text-white">no data</p> : null}
+			{isNodata ? (
+				<p className="mt-4 text-center text-lg text-white">No Data</p>
+			) : null}
+			{searchQuery.keyword !== "" && loading ? (
+				<div className="mb-8 mt-4 flex flex-col items-center justify-center">
+					<ThreeDots
+						visible
+						height="80"
+						width="80"
+						color="#A913F9"
+						radius="9"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+					<span className="text-base font-medium leading-[150%] text-white">
+						Loading...
+					</span>
+				</div>
+			) : null}
 		</section>
 	)
 }
