@@ -10,25 +10,35 @@ import DeadlineDisplay from "@/components/commission/common/detail/DeadlineDispl
 import StatusDisplay from "@/components/commission/common/detail/StatusDisplay"
 import ResultUploadField from "@/components/commission/seller/detail/molecule/ResultUploadField"
 import RevisionNoteDisplay from "@/components/commission/seller/detail/molecule/RevisionNoteDisplay"
-import type { Commission } from "@/types/commission/commissionType"
+import type { CommissionDetailType } from "@/types/commission/commissionType"
+import { statusUpdate } from "@/action/commission/commissionAction"
 
 interface SellerCommissionDetailTemplateProps {
-	commission: Commission
+	commission: CommissionDetailType
 }
 
 function SellerCommissionDetailTemplate({
 	commission: initialCommission,
 }: SellerCommissionDetailTemplateProps) {
-	const [commission, setCommission] = useState<Commission>(initialCommission)
+	const [commission, setCommission] =
+		useState<CommissionDetailType>(initialCommission)
+
+	// 요청 들어온 커미션 수락, 거절
 
 	const handleAccept = () => {
 		console.log("Commission accepted")
-		setCommission((prev) => ({ ...prev, status: "in_progress" }))
+		statusUpdate({
+			commissionUuid: commission.commissionUuid,
+			status: "IN_PROGRESS",
+		})
 	}
 
 	const handleReject = () => {
 		console.log("Commission rejected")
-		setCommission((prev) => ({ ...prev, status: "rejected" }))
+		statusUpdate({
+			commissionUuid: commission.commissionUuid,
+			status: "REJECTED",
+		})
 	}
 
 	const handleUploadResult = (result: string) => {
@@ -41,23 +51,25 @@ function SellerCommissionDetailTemplate({
 				<Card className="border-gray-800 bg-gray-950">
 					<CardContent className="space-y-6 p-6">
 						<div className="space-y-6">
-							<TitleDisplay title={commission.title} />
-							<StatusDisplay status={commission.status} />
-							<DescriptionDisplay description={commission.description} />
+							<TitleDisplay title={commission.commissionTitle} />
+							<StatusDisplay status={commission.commissionStatus} />
+							<DescriptionDisplay
+								description={commission.commissionDescription}
+							/>
 							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-								<PriceDisplay price={commission.price} />
-								<DeadlineDisplay deadline={commission.deadline} />
+								<PriceDisplay price={commission.commissionPrice} />
+								<DeadlineDisplay deadline={commission.commissionDeadline} />
 							</div>
 							<div className="text-gray-300">
-								<p>Requested by: {commission.requester.name}</p>
+								<p>Requested by: {commission.clientUuid}</p>
 								<p>
 									Requested on:{" "}
-									{new Date(commission.createdAt).toLocaleDateString()}
+									{new Date(commission.commissionRequest).toLocaleDateString()}
 								</p>
 							</div>
 						</div>
 
-						{commission.status === "requested" && (
+						{commission.commissionStatus === "REQUESTED" && (
 							<div className="flex space-x-4">
 								<Button
 									onClick={handleAccept}
@@ -73,22 +85,25 @@ function SellerCommissionDetailTemplate({
 							</div>
 						)}
 
-						{commission.status === "in_progress" && (
+						{commission.commissionStatus === "IN_PROGRESS" && (
 							<ResultUploadField onUpload={handleUploadResult} />
 						)}
 
-						{commission.status === "revision_requested" && (
+						{commission.commissionStatus === "REVISION_REQUESTED" && (
 							<>
-								<RevisionNoteDisplay note={commission.revisionNote || ""} />
+								<RevisionNoteDisplay
+									note={commission.commissionModifyRequest || ""}
+								/>
 								<ResultUploadField onUpload={handleUploadResult} />
 							</>
 						)}
 
-						{commission.status === "completed" && commission.result ? (
+						{commission.commissionStatus === "COMPLETED" &&
+						commission.commissionResult ? (
 							<div className="space-y-4 border-t border-gray-800 pt-6">
 								<h2 className="text-lg font-semibold text-white">Result</h2>
 								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
-									{commission.result}
+									{commission.commissionResult}
 								</div>
 							</div>
 						) : null}

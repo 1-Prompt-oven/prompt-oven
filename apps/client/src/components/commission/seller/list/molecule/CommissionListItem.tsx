@@ -4,15 +4,17 @@ import React from "react"
 import Link from "next/link"
 import StatusBadge from "@/components/commission/seller/list/atom/StatusBadge"
 import DateDisplay from "@/components/commission/seller/list/atom/DateDisplay"
-import type { Commission } from "@/types/commission/commissionType"
+import type { CommissionListType } from "@/types/commission/commissionType"
 
 interface CommissionListItemProps {
-	commission: Commission
+	commission: CommissionListType
 }
 
 function CommissionListItem({ commission }: CommissionListItemProps) {
 	return (
-		<Link href={`/commission/seller/${commission.id}`} className="block">
+		<Link
+			href={`/commission/seller/${commission.commissionUuid}`}
+			className="block">
 			<div className="rounded-lg bg-gray-900 p-4 transition-colors hover:bg-gray-800">
 				<div className="mb-2 flex items-start justify-between">
 					<h3 className="truncate text-lg font-semibold text-white">
@@ -25,12 +27,12 @@ function CommissionListItem({ commission }: CommissionListItemProps) {
 						${commission.price.toLocaleString()}
 					</span>
 					<div className="flex space-x-4">
-						<DateDisplay date={commission.createdAt} label="Requested" />
+						<DateDisplay date={commission.requestedDate} label="Requested" />
 						<DateDisplay date={commission.deadline} label="Deadline" />
 					</div>
 				</div>
 				<div className="mt-2 text-sm text-gray-400">
-					Requester: {commission.requester.name}
+					Requester: {commission.clientUuid}
 				</div>
 			</div>
 		</Link>
