@@ -16,6 +16,24 @@ const DEFAULT_IMAGES = [
 	"/img/product/thumbnail/poi-15.webp",
 ]
 
+const DEFAULT_TEXT_PRODUCT_IMAGES = [
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-01.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-02.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-03.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-04.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-05.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-06.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-07.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-08.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-09.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-10.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-11.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-12.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-13.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-14.webp",
+	"https://promptoven.s3.ap-northeast-2.amazonaws.com/product/product-text-default/poi-15.webp",
+]
+
 export const getProductImage = (
 	productName: string,
 	thumbnail?: string,
@@ -24,6 +42,13 @@ export const getProductImage = (
 	const index =
 		Math.abs(getProductThumbnailHash(productName)) % DEFAULT_IMAGES.length
 	return DEFAULT_IMAGES[index]
+}
+
+export const setDefaultTextProductImage = (productName: string) => {
+	const index =
+		Math.abs(getProductThumbnailHash(productName)) %
+		DEFAULT_TEXT_PRODUCT_IMAGES.length
+	return DEFAULT_TEXT_PRODUCT_IMAGES[index]
 }
 
 const getProductThumbnailHash = (str: string): number => {
