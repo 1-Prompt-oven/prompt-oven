@@ -31,7 +31,9 @@ export async function GET(request: NextRequest) {
 			}
 
 			const sendKeepAlive = () => {
-				controller.enqueue(encoder.encode("data: :keep-alive\n\n"))
+				if (controller.desiredSize !== null && controller.desiredSize > 0) {
+					controller.enqueue(encoder.encode("data: :keep-alive\n\n"))
+				}
 			}
 			// 30초마다 keep-alive 메시지 전송
 			const keepAliveInterval = setInterval(sendKeepAlive, 30000)
@@ -58,8 +60,10 @@ export async function GET(request: NextRequest) {
 				)
 			} finally {
 				clearInterval(keepAliveInterval)
-				reader.releaseLock()
-				controller.close()
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ok
+				if (reader) reader.releaseLock()
+				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ok
+				if (controller) controller.close()
 			}
 		},
 	})
