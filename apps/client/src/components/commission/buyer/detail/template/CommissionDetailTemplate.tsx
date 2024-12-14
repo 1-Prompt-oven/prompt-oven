@@ -13,6 +13,10 @@ import type {
 	CommissionDetailType,
 	RevisionRequestType,
 } from "@/types/commission/commissionType"
+import {
+	statusUpdate,
+	requestModification,
+} from "@/action/commission/commissionAction"
 
 interface CommissionDetailTemplateProps {
 	commission: CommissionDetailType
@@ -22,12 +26,23 @@ export function CommissionDetailTemplate({
 	commission,
 }: CommissionDetailTemplateProps) {
 	const [showRevisionForm, setShowRevisionForm] = useState(false)
+
 	const handleAccept = () => {
 		console.log("Commission accepted")
+		statusUpdate({
+			commissionUuid: commission.commissionUuid,
+			status: "COMPLETED",
+		})
 	}
 
 	const handleRevisionSubmit = (revision: RevisionRequestType) => {
 		console.log("Revision requested:", revision)
+		setShowRevisionForm(false)
+		requestModification(revision)
+		statusUpdate({
+			commissionUuid: commission.commissionUuid,
+			status: "REVISION_REQUESTED",
+		})
 	}
 
 	return (

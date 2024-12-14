@@ -1,98 +1,37 @@
-import React from "react"
+import React, { Suspense } from "react"
+import { ThreeDots } from "react-loader-spinner"
 import SellerCommissionDetailTemplate from "@/components/commission/seller/detail/template/SellerCommissionDetailTemplate"
-import type { CommissionDetailType } from "@/types/commission/commissionType"
+import { getCommissionDetail } from "@/action/commission/commissionAction"
 
-const dummyCommissions: CommissionDetailType[] = [
-	{
-		commissionUuid: "1",
-		clientUuid: "user1",
-		creatorUuid: "creator1",
-		commissionTitle:
-			"AI Prompt Engineering for E-commerce Product Descriptions",
-		commissionDescription:
-			"Create a set of prompts that will generate compelling product descriptions for our e-commerce platform. The prompts should be optimized for conversion while maintaining brand voice.",
-		commissionPrice: 299.99,
-		commissionDeadline: "2024-02-15",
-		commissionModel: "GPT-4",
-		commissionRequest: "Initial Request",
-		commissionModifyRequest: "",
-		commissionStatus: "REQUESTED",
-		commissionResult: "",
-		role: "seller",
-	},
-	{
-		commissionUuid: "2",
-		clientUuid: "user2",
-		creatorUuid: "creator2",
-		commissionTitle: "Chatbot Training Data for Customer Support",
-		commissionDescription:
-			"Develop training data for a customer support chatbot. Ensure that the data covers various use cases and customer scenarios, with a focus on natural language responses.",
-		commissionPrice: 499.99,
-		commissionDeadline: "2024-03-01",
-		commissionModel: "GPT-4",
-		commissionRequest: "Initial Request",
-		commissionModifyRequest: "",
-		commissionStatus: "IN_PROGRESS",
-		commissionResult: "",
-		role: "seller",
-	},
-	{
-		commissionUuid: "3",
-		clientUuid: "user3",
-		creatorUuid: "creator3",
-		commissionTitle: "Social Media Ad Copy Generator",
-		commissionDescription:
-			"Create AI prompts that generate engaging ad copy for social media platforms like Instagram and Facebook. Focus on short, catchy phrases and call-to-action strategies.",
-		commissionPrice: 199.99,
-		commissionDeadline: "2024-02-28",
-		commissionModel: "GPT-4",
-		commissionRequest: "Initial Request",
-		commissionModifyRequest: "",
-		commissionStatus: "COMPLETED",
-		commissionResult:
-			"Ad Copy Template:\n1. 'Boost your [target audience]'s day with [unique selling point]!'\n2. 'Discover the magic of [key feature] today!'",
-		role: "seller",
-	},
-	{
-		commissionUuid: "4",
-		clientUuid: "user4",
-		creatorUuid: "creator4",
-		commissionTitle: "SEO Content Strategy Prompt Generator",
-		commissionDescription:
-			"Develop a set of prompts that help in generating SEO-optimized content strategies for blogs and articles. Ensure that the strategies cover keyword analysis and trending topics.",
-		commissionPrice: 399.99,
-		commissionDeadline: "2024-02-20",
-		commissionModel: "GPT-4",
-		commissionRequest: "Initial Request",
-		commissionModifyRequest:
-			"Please include examples for blog headings and meta descriptions.",
-		commissionStatus: "REVISION_REQUESTED",
-		commissionResult: "",
-		role: "seller",
-	},
-	{
-		commissionUuid: "5",
-		clientUuid: "user5",
-		creatorUuid: "creator5",
-		commissionTitle: "Email Campaign Subject Line Generator",
-		commissionDescription:
-			"Create AI prompts to generate compelling subject lines for email marketing campaigns. Focus on improving open rates while maintaining brand tone.",
-		commissionPrice: 149.99,
-		commissionDeadline: "2024-02-12",
-		commissionModel: "GPT-4",
-		commissionRequest: "Initial Request",
-		commissionModifyRequest: "",
-		commissionStatus: "REJECTED",
-		commissionResult: "",
-		role: "seller",
-	},
-]
+interface CommissionDetailPageProps {
+	params: { commissionId: string }
+}
 
-function page({ params }: { params: { commissionId: string } }) {
-	const commission =
-		dummyCommissions.find((c) => c.commissionUuid === params.commissionId) ||
-		dummyCommissions[0]
-	return <SellerCommissionDetailTemplate commission={commission} />
+async function page({ params: { commissionId } }: CommissionDetailPageProps) {
+	const { result: commissionData } = await getCommissionDetail(commissionId)
+
+	return (
+		<Suspense
+			fallback={
+				<div className="mb-8 flex flex-col items-center justify-center">
+					<ThreeDots
+						visible
+						height="80"
+						width="80"
+						color="#A913F9"
+						radius="9"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+					<span className="text-xl font-medium leading-[150%] text-white">
+						Loading...
+					</span>
+				</div>
+			}>
+			<SellerCommissionDetailTemplate commission={commissionData} />
+		</Suspense>
+	)
 }
 
 export default page

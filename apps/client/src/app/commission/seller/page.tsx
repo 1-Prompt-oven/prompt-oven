@@ -1,4 +1,5 @@
-import React from "react"
+import React, { Suspense } from "react"
+import { ThreeDots } from "react-loader-spinner"
 import SellerListTemplate from "@/components/commission/seller/list/template/SellerListTemplate"
 import type { CommissionListType } from "@/types/commission/commissionType"
 import { getCommissionsList } from "@/action/commission/commissionAction"
@@ -53,7 +54,28 @@ const _dummyCommissions: CommissionListType[] = [
 
 async function SellerCommissionListPage() {
 	const { result: commissions } = await getCommissionsList()
-	return <SellerListTemplate initialCommissions={commissions} />
+	return (
+		<Suspense
+			fallback={
+				<div className="mb-8 flex flex-col items-center justify-center">
+					<ThreeDots
+						visible
+						height="80"
+						width="80"
+						color="#A913F9"
+						radius="9"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+					<span className="text-xl font-medium leading-[150%] text-white">
+						Loading...
+					</span>
+				</div>
+			}>
+			<SellerListTemplate initialCommissions={commissions} />
+		</Suspense>
+	)
 }
 
 export default SellerCommissionListPage

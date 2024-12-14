@@ -1,6 +1,6 @@
 "use client"
 /* eslint-disable no-console -- 개발 중 디버깅을 위해 console 사용을 허용 */
-import React, { useState } from "react"
+import React from "react"
 import { Card, CardContent } from "@repo/ui/card"
 import { Button } from "@repo/ui/button"
 import TitleDisplay from "@/components/commission/common/detail/TitleDisplay"
@@ -11,20 +11,18 @@ import StatusDisplay from "@/components/commission/common/detail/StatusDisplay"
 import ResultUploadField from "@/components/commission/seller/detail/molecule/ResultUploadField"
 import RevisionNoteDisplay from "@/components/commission/seller/detail/molecule/RevisionNoteDisplay"
 import type { CommissionDetailType } from "@/types/commission/commissionType"
-import { statusUpdate } from "@/action/commission/commissionAction"
+import {
+	statusUpdate,
+	uploadResult,
+} from "@/action/commission/commissionAction"
 
 interface SellerCommissionDetailTemplateProps {
 	commission: CommissionDetailType
 }
 
 function SellerCommissionDetailTemplate({
-	commission: initialCommission,
+	commission,
 }: SellerCommissionDetailTemplateProps) {
-	const [commission, setCommission] =
-		useState<CommissionDetailType>(initialCommission)
-
-	// 요청 들어온 커미션 수락, 거절
-
 	const handleAccept = () => {
 		console.log("Commission accepted")
 		statusUpdate({
@@ -43,7 +41,10 @@ function SellerCommissionDetailTemplate({
 
 	const handleUploadResult = (result: string) => {
 		console.log("Result uploaded:", result)
-		setCommission((prev) => ({ ...prev, status: "completed", result }))
+		uploadResult({
+			commissionUuid: commission.commissionUuid,
+			result,
+		})
 	}
 	return (
 		<div className="min-h-screen bg-black p-4 md:p-8">
