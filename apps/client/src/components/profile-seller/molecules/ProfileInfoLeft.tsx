@@ -17,15 +17,15 @@ interface MemberLeftProps {
 
 export default async function ProfileInfoLeft({ memberData }: MemberLeftProps) {
 	return (
-		<div className="flex max-w-[160px] flex-grow flex-col justify-between gap-1 xl:gap-3">
+		<div className="flex w-full flex-grow flex-col justify-between gap-1 xs:max-w-[160px]">
 			<ProfileName memberData={memberData} />
 
-			<div className="mt-4 flex items-center gap-2 md:mt-0">
+			<div className="mt-4 flex items-center justify-end gap-2 xs:!mt-0 xs:justify-start">
 				<Button
 					variant="ghost"
 					className="font-mulish bg-white/50 p-1 font-semibold text-white hover:bg-white/60 md:p-4">
 					<Star className="mx-2" />
-					<span className="mr-2 hidden lg:!block">Follow</span>
+					<span className="mr-2 block">Follow</span>
 				</Button>
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
@@ -40,7 +40,8 @@ export default async function ProfileInfoLeft({ memberData }: MemberLeftProps) {
 						className="bg-[#ead4ff] font-semibold text-[#3a3a3a]">
 						{(await matchUser(memberData.memberUUID)) ? (
 							<DropdownMenuItem>
-								<Link href={`/profile/modify/${memberData.nickname}`}>
+								{/* <Link href={`/profile/modify/${memberData.nickname}`}> */}
+								<Link href="/account?view=profile-modify">
 									<p>개인정보 수정</p>
 								</Link>
 							</DropdownMenuItem>

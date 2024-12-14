@@ -4,14 +4,14 @@ import Link from "next/link"
 import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@repo/ui/button"
-import { useModify } from "@/hooks/modify/useModify"
 import { ThreeDots } from "react-loader-spinner"
+import { formatDate } from "@/lib/utils"
+import { modifyProfileData } from "@/action/profile/modifyProfileData"
+import { useModify } from "@/hooks/modify/useModify"
 import type {
 	ProfileModifyType,
 	ProfileMemberInfoType,
 } from "@/types/profile/profileTypes"
-import { modifyProfileData } from "@/action/profile/modifyProfileData"
-import { formatDate } from "@/lib/utils"
 import ProfileModifyAvatar from "../molecules/ProfileModifyAvatar"
 import ProfileModifyBanner from "../molecules/ProfileModifyBanner"
 import ProfileModifyInfoLeft from "../molecules/ProfileModifyInfoLeft"

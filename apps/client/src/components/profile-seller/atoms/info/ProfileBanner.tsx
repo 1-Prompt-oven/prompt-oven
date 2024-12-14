@@ -7,7 +7,7 @@ interface ProfileBannerProps {
 
 export default function ProfileBanner({ memberBanner }: ProfileBannerProps) {
 	return (
-		<div className="relative flex h-[200px] justify-center px-4 md:h-[230px] xl:h-[280px]">
+		<div className="relative flex h-[160px] justify-center px-4 md:h-[230px] xl:h-[280px]">
 			<div
 				className="h-full w-full rounded-lg bg-gradient-to-r from-[#A913F9] to-[#F913C4]"
 				style={{
