@@ -7,7 +7,7 @@ import EmailInput from "@/components/common/atom/EmailInput.tsx"
 
 function MainFooter() {
 	return (
-		<footer className="box-border border-t-[1px] border-[#424242] bg-[#111111] pt-16 text-white">
+		<footer className="box-border w-full border-t-[1px] border-[#424242] bg-[#111111] pt-16 text-white">
 			{/* Footer content */}
 			<div className="container mx-auto px-4">
 				<div className="mb-16">

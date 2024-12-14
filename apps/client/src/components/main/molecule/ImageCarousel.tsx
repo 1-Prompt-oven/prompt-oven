@@ -48,7 +48,7 @@ export default function ImageCarousel({
 	}, [currentIndex, changeCallbackFn])
 
 	useEffect(() => {
-		// eslint-disable-next-line no-undef -- NodeJS.Timeout is a Node.js global
+		// eslint-disable-next-line no-undef -- ok
 		let timer: NodeJS.Timeout | null = null
 		if (!isHovered) {
 			timer = setInterval(() => {
@@ -80,7 +80,7 @@ export default function ImageCarousel({
 	const variants = {
 		enter: (_direction: number) => {
 			return {
-				x: _direction > 0 ? 1000 : -1000,
+				x: _direction > 0 ? "100%" : "-100%",
 				opacity: 0,
 			}
 		},
@@ -92,84 +92,84 @@ export default function ImageCarousel({
 		exit: (_direction: number) => {
 			return {
 				zIndex: 0,
-				x: _direction < 0 ? 1000 : -1000,
+				x: _direction < 0 ? "100%" : "-100%",
 				opacity: 0,
 			}
 		},
 	}
 
 	return (
-		<div
-			className="relative h-[660px] w-[660px]"
-			onMouseEnter={handleMouseEnter}
-			onMouseLeave={handleMouseLeave}>
-			{/* Tilted pink rectangle */}
+		<div className="mx-auto w-full min-w-[400px] max-w-[660px]">
 			<div
-				className="absolute h-full w-full rounded-lg bg-gradient-to-r from-[#A913F9] to-[#F913C4]"
-				style={{
-					transform: "rotate(-3.98deg)",
-					top: "0px",
-					left: "0px",
-					zIndex: 0,
-				}}
-			/>
+				className="relative w-full pb-[100%]"
+				onMouseEnter={handleMouseEnter}
+				onMouseLeave={handleMouseLeave}>
+				{/* Tilted pink rectangle */}
+				<div
+					className="absolute inset-0 rounded-lg bg-gradient-to-r from-[#A913F9] to-[#F913C4]"
+					style={{
+						transform: "rotate(-3.98deg)",
+						zIndex: 0,
+					}}
+				/>
 
-			{/* Main content */}
-			<div className="absolute inset-0 z-[1] overflow-hidden rounded-lg bg-[#161616]">
-				<AnimatePresence initial={false} custom={direction}>
-					<motion.img
-						key={currentIndex}
-						src={images[currentIndex].src}
-						alt={images[currentIndex].alt}
-						className="absolute h-[500px] w-[600px] rounded-lg object-cover"
-						style={{
-							top: "30px",
-							left: "30px",
-						}}
-						custom={direction}
-						variants={variants}
-						initial="enter"
-						animate="center"
-						exit="exit"
-						transition={{
-							x: { type: "spring", stiffness: 300, damping: 30 },
-							opacity: { duration: 0.2 },
-						}}
-						drag="x"
-						dragControls={dragControls}
-						dragConstraints={{ left: 0, right: 0 }}
-						dragElastic={1}
-						onDragEnd={handleDragEnd}
-					/>
-				</AnimatePresence>
-				<div className="absolute bottom-4 left-8 right-8 flex items-center justify-between">
-					<div>
-						<h2 className="font-sora text-2xl font-semibold text-white">
-							{images[currentIndex].title}
-						</h2>
-						<div className="mt-2 flex items-center">
-							<div className="mr-2 h-8 w-8 rounded-full bg-[#C4C4C4]" />
-							<span className="font-roboto text-sm font-medium text-white">
-								{images[currentIndex].creator}
-							</span>
+				{/* Main content */}
+				<div className="absolute inset-0 z-[1] overflow-hidden rounded-lg bg-[#161616]">
+					<AnimatePresence initial={false} custom={direction}>
+						<motion.img
+							key={currentIndex}
+							src={images[currentIndex].src}
+							alt={images[currentIndex].alt}
+							className="absolute h-[calc(100%-130px)] w-[calc(100%-50px)] rounded-lg object-cover"
+							style={{
+								top: "25px",
+								left: "25px",
+							}}
+							custom={direction}
+							variants={variants}
+							initial="enter"
+							animate="center"
+							exit="exit"
+							transition={{
+								x: { type: "spring", stiffness: 300, damping: 30 },
+								opacity: { duration: 0.2 },
+							}}
+							drag="x"
+							dragControls={dragControls}
+							dragConstraints={{ left: 0, right: 0 }}
+							dragElastic={1}
+							onDragEnd={handleDragEnd}
+						/>
+					</AnimatePresence>
+					<div className="absolute bottom-7 left-5 right-5 flex flex-col items-start justify-between sm:flex-row sm:items-center">
+						<div>
+							<h2 className="font-sora text-lg font-semibold text-white sm:text-xl lg:text-2xl">
+								{images[currentIndex].title}
+							</h2>
+							<div className="mt-2 flex items-center sm:mt-3">
+								<div className="mr-3 h-7 w-7 rounded-full bg-[#C4C4C4] sm:h-9 sm:w-9" />
+								<span className="font-roboto text-sm font-medium text-white sm:text-base lg:text-lg">
+									{images[currentIndex].creator}
+								</span>
+							</div>
 						</div>
-					</div>
-					<div className="flex space-x-4">
-						{images.map((button, index) => (
-							<button
-								type="button"
-								key={button.title}
-								className={`h-2.5 w-2.5 rounded-full ${
-									index === currentIndex
-										? "border border-[#FCB808]"
-										: "bg-[#424242]"
-								}`}
-								onClick={() => {
-									setDirection(index > currentIndex ? 1 : -1)
-									setCurrentIndex(index)
-								}}
-							/>
-						))}
+						<div className="mt-2 flex space-x-2 sm:mt-0 sm:space-x-4">
+							{images.map((button, index) => (
+								<button
+									type="button"
+									key={button.title}
+									className={`h-2 w-2 rounded-full sm:h-2.5 sm:w-2.5 ${
+										index === currentIndex
+											? "border border-[#FCB808]"
+											: "bg-[#424242]"
+									}`}
+									onClick={() => {
+										setDirection(index > currentIndex ? 1 : -1)
+										setCurrentIndex(index)
+									}}
+								/>
+							))}
+						</div>
 					</div>
 				</div>
 			</div>
