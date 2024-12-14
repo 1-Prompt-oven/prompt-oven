@@ -124,6 +124,7 @@ function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 								)
 								.map((item, index) => (
 									<NotableDrop
+										// eslint-disable-next-line react/no-array-index-key -- index is unique
 										key={`${currentPage}-${index}`}
 										title={item.title}
 										author={item.author}
@@ -140,6 +141,7 @@ function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 				{Array.from({ length: totalPages }).map((_, index) => (
 					<Button
 						type="button"
+						// eslint-disable-next-line react/no-array-index-key -- index is unique
 						key={index}
 						onClick={() => goToPage(index)}
 						className={`box-border h-2 w-2 rounded-full p-0 sm:h-3 sm:w-3 md:h-[10px] md:w-[10px] ${
