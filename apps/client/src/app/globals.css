@@ -94,11 +94,20 @@
 
 /* Hide scrollbar for IE, Edge and Firefox */
 .hide-scrollbar {
-	-ms-overflow-style: none;  /* IE and Edge */
-	scrollbar-width: none;  /* Firefox */
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
 }
 
+/* 라디오버튼 */
+.custom-radio-default {
+	background-color: #ffffff; /* 기본 배경 흰색 */
+	border-color: #d1d5db; /* 기본 테두리 색상 */
+}
 
+.custom-radio-selected {
+	background-color: #f3e8ff; /* 선택된 배경 보라색 톤 */
+	border-color: #9333ea; /* 선택된 테두리 보라색 */
+}
 
 @layer components {
 	.gradient-button-1 {

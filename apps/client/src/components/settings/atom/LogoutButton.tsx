@@ -33,7 +33,7 @@ function LogoutButton() {
 			<GradientButton
 				onClick={handleLogout}
 				disabled={loading}
-				className="w-[378px]">
+				className="mx-4 w-[304px] sm:w-[340px]">
 				{loading ? (
 					<ThreeDots
 						visible
