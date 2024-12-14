@@ -1,9 +1,11 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@repo/ui/button"
 import { useModify } from "@/hooks/modify/useModify"
+import { ThreeDots } from "react-loader-spinner"
 import type {
 	ProfileModifyType,
 	ProfileMemberInfoType,
@@ -38,7 +40,11 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 		handleImageRemove,
 	} = useModify(memberData)
 
+	const [loading, setLoading] = useState<boolean>(false)
+
 	const handleForm = async (formData: FormData) => {
+		setLoading(true)
+
 		const uploadBanner = formData.get("bannerImageUrl") as string | null
 		const uploadAvatar = formData.get("avatarImageUrl") as string | null
 		let bannerUrl = uploadBanner
@@ -96,6 +102,8 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 			})
 		}
 
+		setLoading(false)
+
 		router.refresh() // Force client-side cache refresh
 		// router.push(`/profile/${payload.nickname}`)
 		router.push(`/account?view=profile`)
@@ -141,6 +149,24 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 						</div>
 					</div>
 				</div>
+
+				{loading ? (
+					<div className="mb-8 flex flex-col items-center justify-center">
+						<ThreeDots
+							visible
+							height="80"
+							width="80"
+							color="#A913F9"
+							radius="9"
+							ariaLabel="three-dots-loading"
+							wrapperStyle={{}}
+							wrapperClass=""
+						/>
+						<span className="text-xl font-medium leading-[150%] text-white">
+							Loading...
+						</span>
+					</div>
+				) : null}
 
 				<div className="mx-auto mb-8 flex w-[90%] flex-col gap-8 sm:flex-row">
 					<div className="flex flex-col justify-between gap-8 sm:w-[50%]">
