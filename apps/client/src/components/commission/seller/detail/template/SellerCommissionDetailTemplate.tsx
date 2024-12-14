@@ -23,25 +23,25 @@ interface SellerCommissionDetailTemplateProps {
 function SellerCommissionDetailTemplate({
 	commission,
 }: SellerCommissionDetailTemplateProps) {
-	const handleAccept = () => {
+	const handleAccept = async () => {
 		console.log("Commission accepted")
-		statusUpdate({
+		await statusUpdate({
 			commissionUuid: commission.commissionUuid,
 			status: "IN_PROGRESS",
 		})
 	}
 
-	const handleReject = () => {
+	const handleReject = async () => {
 		console.log("Commission rejected")
-		statusUpdate({
+		await statusUpdate({
 			commissionUuid: commission.commissionUuid,
 			status: "REJECTED",
 		})
 	}
 
-	const handleUploadResult = (result: string) => {
+	const handleUploadResult = async (result: string) => {
 		console.log("Result uploaded:", result)
-		uploadResult({
+		await uploadResult({
 			commissionUuid: commission.commissionUuid,
 			result,
 		})

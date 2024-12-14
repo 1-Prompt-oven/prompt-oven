@@ -27,19 +27,19 @@ export function CommissionDetailTemplate({
 }: CommissionDetailTemplateProps) {
 	const [showRevisionForm, setShowRevisionForm] = useState(false)
 
-	const handleAccept = () => {
+	const handleAccept = async () => {
 		console.log("Commission accepted")
-		statusUpdate({
+		await statusUpdate({
 			commissionUuid: commission.commissionUuid,
 			status: "COMPLETED",
 		})
 	}
 
-	const handleRevisionSubmit = (revision: RevisionRequestType) => {
+	const handleRevisionSubmit = async (revision: RevisionRequestType) => {
 		console.log("Revision requested:", revision)
 		setShowRevisionForm(false)
-		requestModification(revision)
-		statusUpdate({
+		await requestModification(revision)
+		await statusUpdate({
 			commissionUuid: commission.commissionUuid,
 			status: "REVISION_REQUESTED",
 		})
