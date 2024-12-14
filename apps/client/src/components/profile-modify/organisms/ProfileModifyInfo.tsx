@@ -7,6 +7,7 @@ import { useModify } from "@/hooks/modify/useModify"
 import type { ProfileModifyType, ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import { modifyProfileData } from "@/action/profile/modifyProfileData"
 import { formatDate } from "@/lib/utils"
+import { refreshAccessTokenAfterRoleChange } from "@/action/auth/refreshAfterRoleChangeAction"
 import ProfileModifyAvatar from "../molecules/ProfileModifyAvatar"
 import ProfileModifyBanner from "../molecules/ProfileModifyBanner"
 import ProfileModifyInfoLeft from "../molecules/ProfileModifyInfoLeft"
@@ -91,6 +92,7 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 			await new Promise(resolve => {
 				setTimeout(resolve, 1000)
 			})
+			await refreshAccessTokenAfterRoleChange();
 		}
 
 		router.refresh(); // Force client-side cache refresh
