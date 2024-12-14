@@ -109,6 +109,7 @@ export default function BestTop5Card({
 								className="h-full w-full object-cover transition-all group-hover:scale-105"
 								width={140}
 								height={140}
+								unoptimized
 							/>
 						</div>
 

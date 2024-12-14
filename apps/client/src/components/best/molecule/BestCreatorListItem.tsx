@@ -74,6 +74,7 @@ export function BestCreatorListItem({
 						width={32}
 						height={32}
 						className="rounded-full"
+						unoptimized
 					/>
 					<span className="cursor-pointer text-white hover:text-fuchsia-400">
 						{nickname}
@@ -106,3 +107,4 @@ export function BestCreatorListItem({
 		</Link>
 	)
 }
+
