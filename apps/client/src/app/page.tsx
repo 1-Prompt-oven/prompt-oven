@@ -4,7 +4,6 @@ import AddFolderSvg from "@/components/main/atom/icon/AddFolderSvg.tsx"
 import AddPromptSvg from "@/components/main/atom/icon/AddPromptSvg.tsx"
 import SaleSvg from "@/components/main/atom/icon/SaleSvg.tsx"
 import FeatureDescriptionContainer from "@/components/main/atom/FeatureDescriptionContainer.tsx"
-import CategoryList from "@/components/main/molecule/CategoryList.tsx"
 import NotableDropsCarousel from "@/components/main/organism/NotableDropsCarousel.tsx"
 import MainFooter from "@/components/main/organism/MainFooter.tsx"
 import BestSellerFilter from "@/components/main/organism/BestSellerFilter.tsx"
@@ -37,68 +36,68 @@ const steps = [
 	},
 ]
 
-const promptCategories = [
-	{
-		title: "3D Art",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Digital Painting",
-		images: [
-			"/img/main/collectibles1.png",
-			"/img/main/collectibles2.png",
-			"/img/main/collectibles3.png",
-		],
-	},
-	{
-		title: "Stylized Art",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Realistic Art",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Music",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Photography",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Stylized Art",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Realistic Art",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Music",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Photography",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Stylized Art",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Realistic Art",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Music",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-	{
-		title: "Photography",
-		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-	},
-]
+// const promptCategories = [
+// 	{
+// 		title: "3D Art",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Digital Painting",
+// 		images: [
+// 			"/img/main/collectibles1.png",
+// 			"/img/main/collectibles2.png",
+// 			"/img/main/collectibles3.png",
+// 		],
+// 	},
+// 	{
+// 		title: "Stylized Art",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Realistic Art",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Music",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Photography",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Stylized Art",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Realistic Art",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Music",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Photography",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Stylized Art",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Realistic Art",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Music",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// 	{
+// 		title: "Photography",
+// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
+// 	},
+// ]
 
 const notableDrops = Array.from({ length: 12 }).map(() => ({
 	title: "Colourfull assests",
@@ -182,17 +181,17 @@ export default function Page() {
 				<BestSellerFilter sellers={sellers} />
 			</div>
 
-			<div className="py-32">
-				<CategoryList categories={promptCategories} />
-			</div>
+			{/*<div className="py-32">*/}
+			{/*	<CategoryList categories={promptCategories} />*/}
+			{/*</div>*/}
 
 			<div className="mb-20 flex w-full flex-col items-center justify-center">
-				<div className="relative mb-[60px] flex w-full items-center justify-center overflow-hidden">
+				<div className="relative mb-[100px] mt-[120px] flex w-full items-center justify-center overflow-hidden">
 					<span className="inline-block whitespace-nowrap bg-gradient-to-r from-[#A913F9] to-[#FC466B] bg-clip-text font-sora text-[200px] font-semibold uppercase leading-[90%] tracking-tight text-transparent">
 						CREATE & SELL YOU
 					</span>
 				</div>
-				<div className="max-w-[1420px]">
+				<div className="max-w-[1420px] px-4">
 					<FeatureDescriptionContainer>
 						{steps.map((step, index) => (
 							<FeatureDescription
