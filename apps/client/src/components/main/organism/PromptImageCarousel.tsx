@@ -23,7 +23,7 @@ function PromptImageCarousel({ images }: PromptImageCarouselProps) {
 	}
 
 	return (
-		<div className="flex w-full flex-col items-center justify-center gap-8 px-4 py-10 sm:!px-8 md:!px-12 lg:!flex-row lg:!gap-[100px] lg:!px-16 lg:!py-20 xl:!px-24">
+		<div className="flex w-full flex-col items-center justify-center gap-8 px-4 py-10 sm:!px-10 md:!px-14 lg:!flex-row lg:!gap-[100px] lg:!px-20 lg:!py-20 xl:!px-28">
 			<div className="w-full max-w-[660px]">
 				<ImageCarousel
 					images={images}

@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "@repo/ui/lucide"
 import { Button } from "@repo/ui/button"
@@ -22,7 +22,25 @@ interface NotableDropsCarouselProps {
 function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 	const [currentPage, setCurrentPage] = useState(0)
 	const [direction, setDirection] = useState(0)
-	const totalPages = Math.ceil(items.length / 3)
+	const [itemsPerPage, setItemsPerPage] = useState(3)
+
+	useEffect(() => {
+		const handleResize = () => {
+			if (window.innerWidth < 640) {
+				setItemsPerPage(1)
+			} else if (window.innerWidth < 1024) {
+				setItemsPerPage(2)
+			} else {
+				setItemsPerPage(3)
+			}
+		}
+
+		handleResize()
+		window.addEventListener("resize", handleResize)
+		return () => window.removeEventListener("resize", handleResize)
+	}, [])
+
+	const totalPages = Math.ceil(items.length / itemsPerPage)
 
 	const paginate = (newDirection: number) => {
 		setDirection(newDirection)
@@ -42,7 +60,7 @@ function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 	const variants = {
 		enter: (_direction: number) => {
 			return {
-				x: _direction > 0 ? 1500 : -1500,
+				x: _direction > 0 ? 1000 : -1000,
 				opacity: 0,
 			}
 		},
@@ -54,37 +72,37 @@ function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 		exit: (_direction: number) => {
 			return {
 				zIndex: 0,
-				x: _direction < 0 ? 1500 : -1500,
+				x: _direction < 0 ? 1000 : -1000,
 				opacity: 0,
 			}
 		},
 	}
 
-	// todo -- 추후에 반응형 디자인이 나오면 반응형 작업 진행하기 (현재는 고정값)
 	return (
-		<div className="relative mx-auto w-full max-w-[1420px]">
+		<div className="relative mx-auto w-full max-w-[1420px] px-4 sm:px-6 lg:px-8">
 			{/* upper part */}
-			<div className="mb-[30px] flex items-center justify-between">
-				<h2 className="text-4xl font-bold text-white">Notable drops</h2>
-				<div className="flex gap-x-6">
-					{/* note - 중복되는 코드가 늘어나면 컴포넌트로 뺴거나 variant로 관리하기 */}
+			<div className="mb-4 flex flex-col items-start justify-between space-y-4 sm:mb-6 sm:flex-row sm:items-center sm:space-y-0 md:mb-[30px]">
+				<h2 className="text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+					Notable drops
+				</h2>
+				<div className="flex gap-x-4 sm:gap-x-6">
 					<Button
 						type="button"
 						onClick={() => paginate(-1)}
-						className="group flex h-[50px] w-[50px] items-center justify-center rounded-full border border-[#424242] bg-[#111111] hover:border-[#DDA2FE] hover:bg-[#111111] focus:outline-none">
-						<ChevronLeft className="h-5 w-5 text-[#969696] group-hover:text-[#DDA2FE]" />
+						className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#424242] bg-[#111111] hover:border-[#DDA2FE] hover:bg-[#111111] focus:outline-none sm:h-12 sm:w-12 md:h-[50px] md:w-[50px]">
+						<ChevronLeft className="h-4 w-4 text-[#969696] group-hover:text-[#DDA2FE] sm:h-5 sm:w-5" />
 					</Button>
 					<Button
 						type="button"
 						onClick={() => paginate(1)}
-						className="group flex h-[50px] w-[50px] items-center justify-center rounded-full border border-[#424242] bg-[#111111] hover:border-[#DDA2FE] hover:bg-[#111111] focus:outline-none">
-						<ChevronRight className="h-5 w-5 text-[#969696] group-hover:text-[#DDA2FE]" />
+						className="group flex h-10 w-10 items-center justify-center rounded-full border border-[#424242] bg-[#111111] hover:border-[#DDA2FE] hover:bg-[#111111] focus:outline-none sm:h-12 sm:w-12 md:h-[50px] md:w-[50px]">
+						<ChevronRight className="h-4 w-4 text-[#969696] group-hover:text-[#DDA2FE] sm:h-5 sm:w-5" />
 					</Button>
 				</div>
 			</div>
 
 			{/* lower part */}
-			<div className="relative h-[600px] overflow-hidden">
+			<div className="relative h-[400px] overflow-hidden sm:h-[500px] md:h-[600px]">
 				<AnimatePresence initial={false} custom={direction}>
 					<motion.div
 						key={currentPage}
@@ -98,13 +116,15 @@ function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 							opacity: { duration: 0.2 },
 						}}
 						className="absolute h-full w-full">
-						<div className="flex justify-between space-x-5">
+						<div className="grid h-full w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
 							{items
-								.slice(currentPage * 3, currentPage * 3 + 3)
+								.slice(
+									currentPage * itemsPerPage,
+									currentPage * itemsPerPage + itemsPerPage,
+								)
 								.map((item, index) => (
 									<NotableDrop
-										// eslint-disable-next-line react/no-array-index-key -- index is unique
-										key={index}
+										key={`${currentPage}-${index}`}
 										title={item.title}
 										author={item.author}
 										tag={item.tag}
@@ -116,14 +136,13 @@ function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 					</motion.div>
 				</AnimatePresence>
 			</div>
-			<div className="mt-8 flex justify-center space-x-5">
+			<div className="mt-4 flex justify-center space-x-2 sm:mt-6 sm:space-x-3 md:mt-8 md:space-x-5">
 				{Array.from({ length: totalPages }).map((_, index) => (
 					<Button
 						type="button"
-						// eslint-disable-next-line react/no-array-index-key -- index is unique
 						key={index}
 						onClick={() => goToPage(index)}
-						className={`box-border h-[10px] w-[10px] rounded-full p-0 ${
+						className={`box-border h-2 w-2 rounded-full p-0 sm:h-3 sm:w-3 md:h-[10px] md:w-[10px] ${
 							index === currentPage
 								? "border border-[#DDA2FE] bg-[#111111]"
 								: "bg-[#424242]"
