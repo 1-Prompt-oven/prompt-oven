@@ -1,6 +1,6 @@
 import React from "react"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
-import { formatDate } from "@/lib/utils"
+import { formatDate } from '@/lib/utils'
 
 interface MemberNameProps {
 	memberData: ProfileMemberInfoType
@@ -14,7 +14,7 @@ export default function ProfileName({ memberData }: MemberNameProps) {
 					{memberData.hashTag ? `#${memberData.hashTag}` : "No HashTag"}
 				</span>
 			</p>
-			<p className="mb-2 flex flex-row gap-10 text-[10px] xs:!flex-col xs:gap-1 sm:mb-1">
+			<p className="mb-2 flex flex-col gap-1 text-[10px] sm:mb-1">
 				<span className="line-clamp-1 font-semibold">
 					@{memberData.nickname}
 				</span>
@@ -23,7 +23,9 @@ export default function ProfileName({ memberData }: MemberNameProps) {
 				</span>
 			</p>
 			<p className="h-4 text-[10px]">
-				<span className="line-clamp-1">{memberData.email || "No Email"}</span>
+				<span className="line-clamp-1">
+					{memberData.email || "No Email"}
+				</span>
 			</p>
 		</div>
 	)

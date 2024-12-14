@@ -1,6 +1,3 @@
-import { Button } from "@repo/ui/button"
-import { DropdownMenu, DropdownMenuTrigger } from "@repo/ui/dropdown-menu"
-import { MoreVertical, Star } from "@repo/ui/lucide"
 import ProfileModifyName from "../atoms/ProfileModifyName"
 
 interface MemberLeftProps {
@@ -8,6 +5,11 @@ interface MemberLeftProps {
 	nickname: string | undefined
 	email: string | undefined
 	joined: string
+	bio: string | undefined
+	following: number
+	follower: number
+	viewer: number
+	sales: number
 }
 
 export default function ProfileModifyInfoLeft({
@@ -15,34 +17,25 @@ export default function ProfileModifyInfoLeft({
 	nickname,
 	email,
 	joined,
+	bio,
+	following,
+	follower,
+	viewer,
+	sales,
 }: MemberLeftProps) {
 	return (
-		<div className="flex max-w-[160px] flex-grow flex-col justify-between gap-1 xl:gap-3">
+		<div className="flex w-full flex-grow flex-col justify-between gap-1 xs:max-w-[160px] xl:gap-3">
 			<ProfileModifyName
 				hashTag={hashTag}
 				nickname={nickname}
 				email={email}
 				joined={joined}
+				bio={bio}
+				following={following}
+				follower={follower}
+				viewer={viewer}
+				sales={sales}
 			/>
-
-			<div className="mt-4 flex items-center gap-2 md:mt-0">
-				<Button
-					type="button"
-					variant="ghost"
-					className="font-mulish bg-white/50 p-1 font-semibold text-white hover:bg-white/60 md:p-4">
-					<Star className="mx-2" />
-					<span className="mr-2 hidden lg:block">Follow</span>
-				</Button>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button
-							variant="ghost"
-							className="hover:bDropdownMenug-white/60 w-10 bg-white/50 p-0">
-							<MoreVertical className="h-4 w-4 text-white" />
-						</Button>
-					</DropdownMenuTrigger>
-				</DropdownMenu>
-			</div>
 		</div>
 	)
 }
