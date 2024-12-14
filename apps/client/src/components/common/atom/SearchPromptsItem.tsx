@@ -21,6 +21,7 @@ function SearchPromptsItem({
 				className="rounded border border-[#424242] object-cover"
 				width={64}
 				height={64}
+				unoptimized
 			/>
 			<div className="text-muted-foreground flex min-w-0 flex-col items-start justify-between truncate">
 				<div className="text-muted-foreground truncate font-medium">

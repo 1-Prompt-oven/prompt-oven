@@ -12,6 +12,7 @@ import type {
 	ProfileModifyType,
 	ProfileMemberInfoType,
 } from "@/types/profile/profileTypes"
+import { refreshAccessTokenAfterRoleChange } from "@/action/auth/refreshAfterRoleChangeAction"
 import ProfileModifyAvatar from "../molecules/ProfileModifyAvatar"
 import ProfileModifyBanner from "../molecules/ProfileModifyBanner"
 import ProfileModifyInfoLeft from "../molecules/ProfileModifyInfoLeft"
@@ -100,6 +101,7 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 			await new Promise((resolve) => {
 				setTimeout(resolve, 1000)
 			})
+			await refreshAccessTokenAfterRoleChange()
 		}
 
 		setLoading(false)
