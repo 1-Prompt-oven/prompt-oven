@@ -81,7 +81,7 @@ export default function PromptDetailHoverMouse({
 
 							<div className="flex items-center gap-2">
 								<Link
-									href={`/profile/${sellorInfo.memberNickname}`}
+									href={`/profile/seller/${sellorInfo.memberNickname}`}
 									className="flex items-center gap-2">
 									<Avatar className="h-6 w-6">
 										<AvatarImage

@@ -1,12 +1,17 @@
 "use client"
 
 import Link from "next/link"
+import { useState } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@repo/ui/button"
-import { useModify } from "@/hooks/modify/useModify"
-import type { ProfileModifyType, ProfileMemberInfoType } from "@/types/profile/profileTypes"
-import { modifyProfileData } from "@/action/profile/modifyProfileData"
+import { ThreeDots } from "react-loader-spinner"
 import { formatDate } from "@/lib/utils"
+import { modifyProfileData } from "@/action/profile/modifyProfileData"
+import { useModify } from "@/hooks/modify/useModify"
+import type {
+	ProfileModifyType,
+	ProfileMemberInfoType,
+} from "@/types/profile/profileTypes"
 import { refreshAccessTokenAfterRoleChange } from "@/action/auth/refreshAfterRoleChangeAction"
 import ProfileModifyAvatar from "../molecules/ProfileModifyAvatar"
 import ProfileModifyBanner from "../molecules/ProfileModifyBanner"
@@ -36,11 +41,15 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 		handleImageRemove,
 	} = useModify(memberData)
 
+	const [loading, setLoading] = useState<boolean>(false)
+
 	const handleForm = async (formData: FormData) => {
-		const uploadBanner = formData.get("bannerImageUrl") as string | null;
-		const uploadAvatar = formData.get("avatarImageUrl") as string | null;
-		let bannerUrl = uploadBanner;
-		let avatarUrl = uploadAvatar;
+		setLoading(true)
+
+		const uploadBanner = formData.get("bannerImageUrl") as string | null
+		const uploadAvatar = formData.get("avatarImageUrl") as string | null
+		let bannerUrl = uploadBanner
+		let avatarUrl = uploadAvatar
 
 		// Handle banner image upload
 		if (uploadBanner && uploadBanner !== memberData.bannerImageUrl) {
@@ -52,10 +61,10 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 				"profile",
 			)
 			if (!isBannerUploaded) {
-				return;
+				return
 			}
 			// Get the updated S3 URL from formData after upload
-			bannerUrl = formData.get("bannerImageUrl") as string;
+			bannerUrl = formData.get("bannerImageUrl") as string
 		}
 
 		// Handle avatar image upload
@@ -68,10 +77,10 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 				"profile",
 			)
 			if (!isAvatarUploaded) {
-				return;
+				return
 			}
 			// Get the updated S3 URL from formData after upload
-			avatarUrl = formData.get("avatarImageUrl") as string;
+			avatarUrl = formData.get("avatarImageUrl") as string
 		}
 
 		// Prepare payload with updated URLs
@@ -83,24 +92,27 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 			bio: formData.get("bio") as string,
 			email: formData.get("email") as string,
 			nickname: formData.get("nickname") as string,
-		};
+		}
 
-		await modifyProfileData(payload);
+		await modifyProfileData(payload)
 
 		// If nickname changed, wait briefly for revalidation
 		if (payload.nickname !== memberData.nickname) {
-			await new Promise(resolve => {
+			await new Promise((resolve) => {
 				setTimeout(resolve, 1000)
 			})
-			await refreshAccessTokenAfterRoleChange();
+			await refreshAccessTokenAfterRoleChange()
 		}
 
-		router.refresh(); // Force client-side cache refresh
-		router.push(`/profile/${payload.nickname}`);
-	};
+		setLoading(false)
+
+		router.refresh() // Force client-side cache refresh
+		// router.push(`/profile/${payload.nickname}`)
+		router.push(`/account?view=profile`)
+	}
 
 	return (
-		<div className="mb-20">
+		<div className="mx-6">
 			<form action={handleForm}>
 				<div className="mx-2">
 					<ProfileModifyBanner
@@ -123,6 +135,11 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 								nickname={nickname}
 								email={email}
 								joined={formatDate(memberData.joined)}
+								bio={bio}
+								following={memberData.following}
+								follower={memberData.follower}
+								viewer={memberData.viewer}
+								sales={memberData.sales}
 							/>
 							<ProfileModifyInfoRight
 								bio={bio}
@@ -134,6 +151,24 @@ export default function ProfileModifyInfo({ memberData }: MemberDataProps) {
 						</div>
 					</div>
 				</div>
+
+				{loading ? (
+					<div className="mb-8 flex flex-col items-center justify-center">
+						<ThreeDots
+							visible
+							height="80"
+							width="80"
+							color="#A913F9"
+							radius="9"
+							ariaLabel="three-dots-loading"
+							wrapperStyle={{}}
+							wrapperClass=""
+						/>
+						<span className="text-xl font-medium leading-[150%] text-white">
+							Loading...
+						</span>
+					</div>
+				) : null}
 
 				<div className="mx-auto mb-8 flex w-[90%] flex-col gap-8 sm:flex-row">
 					<div className="flex flex-col justify-between gap-8 sm:w-[50%]">

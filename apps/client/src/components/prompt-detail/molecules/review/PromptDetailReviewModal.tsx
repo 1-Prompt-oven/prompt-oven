@@ -22,7 +22,7 @@ export default function PromptDetailReviewModal({
 			<div className="min-h-[100px]">
 				<div className="flex w-[98%] items-end justify-between">
 					<Link
-						href={`/profile/${review.authorNickname}`}
+						href={`/profile/seller/${review.authorNickname}`}
 						className="ml-3 mt-1 flex items-center gap-4 lg:ml-6 lg:mt-2">
 						<Avatar className="h-4 w-4 lg:h-6 lg:w-6">
 							<AvatarImage src={profileImage} alt={review.authorNickname} />

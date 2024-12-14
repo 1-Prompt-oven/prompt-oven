@@ -11,7 +11,7 @@ export default function PromptDetailLinkSellor({
 	memberProfileImage,
 }: PromptDetailLinkSellorProps) {
 	return (
-		<Link href={`/profile/${memberNickname}`}>
+		<Link href={`/profile/seller/${memberNickname}`}>
 			<div className="flex items-center rounded-full bg-gradient-to-r from-[#ca8feb] to-[#7f24af] p-2 pr-4 hover:opacity-90">
 				<Avatar className="h-8 w-8">
 					<AvatarImage src={memberProfileImage} alt={memberNickname} />
