@@ -53,6 +53,6 @@ export interface BestCreatorApiResponseType {
 }
 
 export interface CreateCommissionResponseType {
-	commissionId: string
+	commissionUuid: string
 }
 

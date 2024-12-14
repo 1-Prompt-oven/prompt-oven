@@ -45,6 +45,7 @@ import type { DropResult } from "@/types/product/componentType.ts"
 import PcLoading from "@/components/product-create/atom/PcLoading.tsx"
 import PcError from "@/components/product-create/atom/PcError.tsx"
 import PcErrorMessage from "@/components/product-create/atom/PcErrorMessage.tsx"
+import { setDefaultTextProductImage } from "@/lib/thumbnail.ts"
 
 type FormData = z.infer<typeof createProductSecondTextSchema>
 
@@ -254,7 +255,7 @@ export default function CreateProductSecondTextPage({
 			contents: contentFields.map((content, index) => ({
 				contentOrder: index + 1,
 				sampleValue: replaceVariables(prompt, content.value),
-				contentUrl: "",
+				contentUrl: setDefaultTextProductImage(content.name),
 			})),
 			enabled: true,
 			temporary: false,

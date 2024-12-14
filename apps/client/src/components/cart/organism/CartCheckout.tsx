@@ -1,13 +1,15 @@
 import Link from "next/link"
 import { Button } from "@repo/ui/button"
 import CartExpected from "../atom/CartExpected"
+import CartCount from "../atom/CartCount"
 
 interface TotalPriceProps {
+	count: number
 	totalPrice: number
 	onCheckout: () => void
 }
 
-function CartCheckout({ totalPrice, onCheckout }: TotalPriceProps) {
+function CartCheckout({ count, totalPrice, onCheckout }: TotalPriceProps) {
 	const discount = 0
 
 	return (
@@ -19,6 +21,7 @@ function CartCheckout({ totalPrice, onCheckout }: TotalPriceProps) {
 
 				{/* 결제 금액 계산 */}
 				<div className="flex flex-col gap-2 border-t border-gray-800 pt-4">
+					<CartCount title="총 개수" count={count} />
 					<CartExpected title="총 상품 가격" price={totalPrice} />
 					<CartExpected title="총 할인" price={discount} />
 				</div>

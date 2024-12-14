@@ -2,12 +2,20 @@
 
 import { revalidateTag } from "next/cache"
 import { getMemberUUID } from "@/lib/api/sessionExtractor"
-import type { PaymentItemType } from "@/types/purchase.ts/purchase-ongoing"
+import { getAuthHeaders } from "@/lib/api/headers"
+import type {
+	PaymentItemType,
+	RequestPaymentType,
+} from "@/types/purchase.ts/purchase-ongoing"
 import {
 	getAllCartNumber,
 	getProductDetail,
 } from "../prompt-detail/getProductDetailData"
 import { deleteCartItemList } from "../cart/cartAction"
+
+// interface PurchaseItem {
+// 	productUUID: string
+// }
 
 export async function getPaymentList(): Promise<PaymentItemType[]> {
 	"use server"
@@ -44,4 +52,42 @@ export async function allDeleteNoCheckCart() {
 	const result = await deleteCartItemList(selectedIds)
 	revalidateTag("updateCarts")
 	return result
+}
+
+export async function appendPurchased(
+	paymentData: RequestPaymentType,
+): Promise<boolean> {
+	"user server"
+
+	const headers = await getAuthHeaders()
+	const memberUUID = await getMemberUUID()
+
+	const productUUIDs: string[] = paymentData.purchaseList.map(
+		(item: PaymentItemType) => item.productUUID,
+	)
+
+	const payload = {
+		memberUuid: memberUUID,
+		purchaseList: productUUIDs,
+		totalAmount: paymentData.totalAmount,
+		message: paymentData.message,
+		orderId: paymentData.orderId,
+		orderName: paymentData.orderName,
+		paymentMethod: paymentData.paymentMethod,
+		paymentWay: paymentData.paymentWay,
+		requestedAt: new Date(paymentData.requestedAt).toISOString(),
+		approvedAt: new Date(paymentData.approvedAt).toISOString(),
+	}
+
+	const res = await fetch(`${process.env.API_BASE_URL}/v1/payment/product`, {
+		method: "POST",
+		headers,
+		body: JSON.stringify(payload),
+	})
+
+	if (!res.ok) {
+		throw new Error("Failed to fetch POST purchase list data")
+	}
+
+	return true
 }

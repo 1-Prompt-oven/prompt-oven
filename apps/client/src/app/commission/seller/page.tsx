@@ -1,8 +1,9 @@
 import React from "react"
 import SellerListTemplate from "@/components/commission/seller/list/template/SellerListTemplate"
 import type { CommissionListType } from "@/types/commission/commissionType"
+import { getCommissionsList } from "@/action/commission/commissionAction"
 
-const dummyCommissions: CommissionListType[] = [
+const _dummyCommissions: CommissionListType[] = [
 	{
 		commissionUuid: "1",
 		title: "AI Writing Assistant Development",
@@ -50,8 +51,9 @@ const dummyCommissions: CommissionListType[] = [
 	},
 ]
 
-function SellerCommisionListPage() {
-	return <SellerListTemplate initialCommissions={dummyCommissions} />
+async function SellerCommissionListPage() {
+	const { result: commissions } = await getCommissionsList()
+	return <SellerListTemplate initialCommissions={commissions} />
 }
 
-export default SellerCommisionListPage
+export default SellerCommissionListPage

@@ -180,7 +180,7 @@ export function ChatMain({
 			/>
 
 			{/*  */}
-			<div className="flex max-h-[calc(100vh-255px)] flex-1 flex-col-reverse space-y-4 !overflow-y-auto p-4 md:!space-y-6 md:!p-8">
+			<div className="flex max-h-[calc(100vh-244px)] flex-1 flex-col-reverse space-y-4 !overflow-y-auto p-4 md:!space-y-6 md:!p-8">
 				<div ref={messagesEndRef} /> {/* 새 메시지 추가 시 스크롤 위치 */}
 				{allMessages.map((message) => (
 					<div

@@ -16,9 +16,16 @@ import { Calendar as CalendarComponent } from "@repo/ui/calendar"
 import { Popover, PopoverTrigger, PopoverContent } from "@repo/ui/popover"
 import { useRouter } from "next/navigation"
 import { commissionSchema } from "@/schema/commissionRequest"
+import type { CreateCommissionRequestType } from "@/types/commission/commissionType"
+import { createCommission } from "@/action/commission/commissionAction"
 import { FormField } from "../molecule/FormField"
 
-export function CommissionForm() {
+interface CommissionFormProps {
+	buyerUuid: string
+	sellerUuid: string
+}
+
+export function CommissionForm({ buyerUuid, sellerUuid }: CommissionFormProps) {
 	const router = useRouter()
 	const [date, setDate] = useState<Date>()
 	const [formValues, setFormValues] = useState({
@@ -82,19 +89,20 @@ export function CommissionForm() {
 			return
 		}
 
-		try {
-			const response = await fetch(
-				`${process.env.API_BASE_URL}/v1/commission`,
-				{
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-					},
-					body: JSON.stringify(formValues),
-				},
-			)
+		const requestBody: CreateCommissionRequestType = {
+			commissionTitle: formValues.title,
+			clientUuid: buyerUuid,
+			creatorUuid: sellerUuid,
+			commissionDescription: formValues.description,
+			commissionPrice: formValues.price,
+			commissionDeadline: date ? date.toISOString() : "",
+			commissionModel: formValues.model,
+			commissionRequest: formValues.additional,
+		}
 
-			if (response.ok) {
+		try {
+			const response = await createCommission(requestBody)
+			if (response.isSuccess && response.result.commissionUuid) {
 				setFormValues({
 					title: "",
 					price: 0,
@@ -104,7 +112,7 @@ export function CommissionForm() {
 					category: "코딩",
 					additional: "",
 				})
-				router.push("/commission/payment")
+				router.push(`/commission/buyer/${response.result.commissionUuid}`)
 			} else {
 				console.error("Failed to create commission")
 			}

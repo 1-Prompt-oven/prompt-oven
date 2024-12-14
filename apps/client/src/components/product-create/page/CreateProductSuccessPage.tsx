@@ -1,5 +1,3 @@
-"use client"
-
 import { Button } from "@repo/ui/button"
 import { Card, CardContent } from "@repo/ui/card"
 import { ArrowLeft, CheckCircle2, ExternalLink } from "@repo/ui/lucide"
@@ -67,7 +65,6 @@ export default function CreateProductSuccessPage({
 						<Button
 							className="flex-1 bg-po-purple-100 text-white hover:bg-po-purple-100/90"
 							asChild>
-							{/* todo: 판매자 상품 상세 페이지로 이동시키기 */}
 							<Link href={`/prompt-detail/${searchParams.productUuid}`}>
 								View Product
 								<ExternalLink className="ml-2 h-4 w-4" />

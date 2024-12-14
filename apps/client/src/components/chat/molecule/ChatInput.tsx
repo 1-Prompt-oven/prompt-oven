@@ -33,7 +33,7 @@ export function ChatInput({
 			{error ? <p className="mb-2 text-sm text-red-500">{error}</p> : null}
 
 			<div
-				className={`flex items-center justify-between rounded-[25px] border border-[#E5EAEF] bg-[#404040] px-6 py-1.5 ${disabled ? "opacity-50" : ""}`}>
+				className={`flex items-center justify-between rounded-[25px] border border-[#E5EAEF] bg-[#404040] px-5 py-1.5 ${disabled ? "opacity-50" : ""}`}>
 				<div className="flex flex-1 items-center gap-3">
 					<button type="button" className="hover:opacity-80">
 						<Mic className="h-6 w-6 text-[#A3A3A3]" />

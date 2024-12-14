@@ -17,7 +17,7 @@ export function ChatHeader({
 	onOpenSidebar,
 }: ChatHeaderProps) {
 	return (
-		<div className="flex items-center justify-between border-b border-[#E3E8E7]/40 bg-[#111111] px-8 py-6">
+		<div className="flex !h-20 items-center justify-between border-b border-[#E3E8E7]/40 bg-[#111111] px-6">
 			<div
 				className="flex cursor-pointer items-center gap-2.5 hover:opacity-90"
 				onClick={onProfileClick}
@@ -43,14 +43,14 @@ export function ChatHeader({
 			<div className="flex items-center gap-3.5">
 				<button
 					type="button"
-					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10 md:!hidden"
+					className="rounded-full border border-[#E2ADFF] p-2 hover:bg-[#404040]/10 md:!hidden"
 					onClick={onOpenSidebar}>
-					<MessageSquare className="h-5 w-5 text-[#E2ADFF]" />
+					<MessageSquare className="h-4 w-4 text-[#E2ADFF]" />
 				</button>
 				<button
 					type="button"
-					className="rounded-full border border-[#E2ADFF] p-2.5 hover:bg-[#404040]/10">
-					<MoreVertical className="h-5 w-5 text-[#E2ADFF]" />
+					className="rounded-full border border-[#E2ADFF] p-2 hover:bg-[#404040]/10">
+					<MoreVertical className="h-4 w-4 text-[#E2ADFF]" />
 				</button>
 			</div>
 		</div>

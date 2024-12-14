@@ -2,11 +2,15 @@
 
 import { X } from "@repo/ui/lucide"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import type { GetReactiveChatRoomListResponseType } from "@/types/chat/chatTypes.ts"
+import type {
+	ChatRoom as ChatRoomType,
+	GetReactiveChatRoomListResponseType,
+} from "@/types/chat/chatTypes.ts"
 import ChSearchBar from "@/components/chat/atom/ChSearchBar.tsx"
 import { ChatRoom } from "@/components/chat/molecule/ChatRoom.tsx"
 
 interface ChatSidebarProps {
+	selectedChatRoom?: ChatRoomType
 	memberUuid: string
 	selectedChatRoomId?: string
 	onSelectChatRoom: (room: GetReactiveChatRoomListResponseType) => void
@@ -14,6 +18,7 @@ interface ChatSidebarProps {
 }
 
 export function ChatSidebar({
+	selectedChatRoom,
 	memberUuid,
 	selectedChatRoomId,
 	onSelectChatRoom,
@@ -23,7 +28,11 @@ export function ChatSidebar({
 	const [isLoading, setIsLoading] = useState(true)
 	const [chatRoomMap, setChatRoomMap] = useState<
 		Map<string, GetReactiveChatRoomListResponseType>
-	>(new Map())
+	>(
+		selectedChatRoom?.chatRoomId
+			? new Map().set(selectedChatRoom.chatRoomId, selectedChatRoom)
+			: new Map(),
+	)
 	const [searchTerm, setSearchTerm] = useState("")
 
 	const filteredChatRooms = useMemo(() => {
@@ -110,7 +119,7 @@ export function ChatSidebar({
 
 	return (
 		<div className="flex h-full w-full flex-col border-r border-r-[#E3E8E7]/50 bg-[#111111] md:!w-[424px]">
-			<div className="flex items-center justify-between border-b border-[#A913F9] p-4 md:!p-6">
+			<div className="flex !h-20 items-center justify-between border-b border-[#A913F9] px-6">
 				<h1 className="text-lg font-semibold text-[#E2ADFF]">Messages</h1>
 				<div className="flex items-center gap-3.5">
 					<button

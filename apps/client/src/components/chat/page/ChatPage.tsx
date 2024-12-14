@@ -1,65 +1,56 @@
 "use client"
 
-import { useEffect, useState } from "react"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { ChatSidebar } from "@/components/chat/organism/ChatSidebar.tsx"
 import { ChatMain } from "@/components/chat/organism/ChatMain.tsx"
-import type { GetReactiveChatRoomListResponseType } from "@/types/chat/chatTypes.ts"
+import type {
+	ChatRoom,
+	GetReactiveChatRoomListResponseType,
+} from "@/types/chat/chatTypes.ts"
 import { ChatPlaceholder } from "@/components/chat/molecule/ChatMainPlaceholder.tsx"
 import { ChatProfileSidebar } from "@/components/chat/organism/ChatProfileSidebar.tsx"
-import { getProfileMemberInfoByUuid } from "@/action/profile/getProfileData.ts"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes.ts"
-// import { UpdateRoomRead } from '@/action/chat/chatAction.ts';
 
 export interface ChatPageProps {
-	roomId: string
+	chatRoom?: ChatRoom
+	partnerProfile?: ProfileMemberInfoType
 	memberUuid: string
 }
 
-export default function ChatPage({ roomId, memberUuid }: ChatPageProps) {
+export default function ChatPage({
+	chatRoom,
+	memberUuid,
+	partnerProfile,
+}: ChatPageProps) {
+	const router = useRouter()
 	const [showProfile, setShowProfile] = useState(false)
 	const [showSidebar, setShowSidebar] = useState(false)
 
 	const [selectedRoom, setSelectedRoom] =
-		useState<GetReactiveChatRoomListResponseType>({
-			chatRoomId: roomId,
-		} as GetReactiveChatRoomListResponseType)
-
-	const [chatUserProfile, setChatUserProfile] =
-		useState<ProfileMemberInfoType | null>(null)
-	useEffect(() => {
-		const getChatUserProfile = async () => {
-			const response = await getProfileMemberInfoByUuid(
-				selectedRoom.partnerUuid,
-			)
-			setChatUserProfile(response)
-		}
-		if (selectedRoom.partnerUuid) {
-			getChatUserProfile().then()
-		}
-	}, [selectedRoom.partnerUuid])
+		useState<GetReactiveChatRoomListResponseType>(chatRoom ?? ({} as ChatRoom))
 
 	return (
 		<div className="flex h-[calc(100vh-80px)] overflow-hidden bg-[#111111]">
 			<div
 				className={`absolute inset-y-0 left-0 z-30 transition-transform duration-300 ease-in-out md:!static md:!w-[424px] ${showSidebar ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
 				<ChatSidebar
+					selectedChatRoom={chatRoom}
 					memberUuid={memberUuid}
 					onSelectChatRoom={(room) => {
-						// UpdateRoomRead({
-						// 	roomId: room.chatRoomId,
-						// 	userUuid: memberUuid,
-						// }).then()
+						// room read update 추가해야함.
 						setSelectedRoom(room)
 						setShowSidebar(false)
+						router.push(`/chat?roomId=${room.chatRoomId}`)
 					}}
 					onClose={() => setShowSidebar(false)}
 				/>
 			</div>
 			<div className="flex flex-1 flex-col overflow-hidden md:!flex-row">
 				<div className="flex flex-1 flex-col">
-					{selectedRoom.chatRoomId && chatUserProfile?.memberUUID ? (
+					{selectedRoom.chatRoomId && partnerProfile?.memberUUID ? (
 						<ChatMain
-							partner={chatUserProfile}
+							partner={partnerProfile}
 							memberUuid={memberUuid}
 							chatRoom={selectedRoom}
 							onProfileClick={() => setShowProfile(!showProfile)}
@@ -69,11 +60,12 @@ export default function ChatPage({ roomId, memberUuid }: ChatPageProps) {
 						<ChatPlaceholder />
 					)}
 				</div>
-				{chatUserProfile?.memberUUID ? (
+				{partnerProfile?.memberUUID ? (
 					<div
 						className={`absolute inset-y-0 right-0 z-30 transition-transform duration-300 ease-in-out md:!static ${showProfile ? "translate-x-0" : "translate-x-full"} md:translate-x-0`}>
 						<ChatProfileSidebar
-							partner={chatUserProfile}
+							memberUuid={memberUuid}
+							partner={partnerProfile}
 							onClose={() => setShowProfile(false)}
 							isOpen={showProfile}
 						/>

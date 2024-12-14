@@ -1,6 +1,6 @@
 import { useState } from "react"
 import { Button } from "@repo/ui/button"
-import FailModal from "@/components/common/atom/FailModal"
+import FailBuy from "@/components/common/atom/FailBuyModal"
 
 export default function PaymentOrderNone({ state }: { state: number }) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
@@ -9,12 +9,10 @@ export default function PaymentOrderNone({ state }: { state: number }) {
 		setIsModalOpen(true)
 	}
 
-	const handleCloseModal = () => {
-		setIsModalOpen(false)
-	}
-
-	const content =
-		state === 1 ? "주문 상품이 없습니다." : "결제 방식을 체크해주세요"
+	let content
+	if (state === 1) content = "주문 상품이 없습니다."
+	else if (state === 2) content = "결제 방식을 체크해주세요"
+	else content = "OVER" //4개 초과 상품일 때 결제 못하도록 함.
 
 	return (
 		<>
@@ -25,11 +23,11 @@ export default function PaymentOrderNone({ state }: { state: number }) {
 				<span>Order Now</span>
 			</Button>
 
-			<FailModal isOpen={isModalOpen} onClose={handleCloseModal}>
-				<div className="rounded-md bg-[#eeeeee]">
-					<p className="p-4 text-lg font-semibold">{content}</p>
-				</div>
-			</FailModal>
+			<FailBuy
+				isOpen={isModalOpen}
+				setIsOpen={setIsModalOpen}
+				content={content}
+			/>
 		</>
 	)
 }
