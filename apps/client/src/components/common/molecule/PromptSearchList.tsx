@@ -21,6 +21,7 @@ function PromptSearchList({ data }: { data: PromptApiResponseType }) {
 							alt={prompt.productName}
 							width={50}
 							height={50}
+							unoptimized
 						/>
 						<span className="text-sm text-white">{prompt.productName}</span>
 					</li>
