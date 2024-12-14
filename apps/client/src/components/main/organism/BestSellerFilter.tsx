@@ -14,7 +14,7 @@ interface BestSellerFilterProps {
 // todo - API 적용 시에 selector의 변경에 따라 다른 데이터를 보여주도록 수정, 현재는 더미 데이터로 구현
 function BestSellerFilter({ sellers }: BestSellerFilterProps) {
 	return (
-		<div className="mx-auto w-full max-w-[1420px]">
+		<div className="mx-auto w-full max-w-[1420px] px-4">
 			<div className="mb-8 flex flex-row items-center justify-between gap-4 sm:!gap-0">
 				<h2 className="flex items-center gap-2 text-[28px] font-semibold text-white sm:text-[32px] lg:text-[38px]">
 					Best sellers

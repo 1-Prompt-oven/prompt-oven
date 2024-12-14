@@ -109,7 +109,7 @@ export default function ProductTable({ products }: ProductTableProps) {
 											</Link>
 										</td>
 										<td className="w-[15%] p-4 text-sm text-white">
-											${product.price.toFixed(2)}
+											₩{product.price.toFixed(2)}
 										</td>
 										<td className="w-[15%] p-4 text-sm text-white">
 											{product.sells}
