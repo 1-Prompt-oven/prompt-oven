@@ -1,3 +1,5 @@
+import React from "react"
+
 interface ProfileFiguresProps {
 	title: string
 	content: number | string

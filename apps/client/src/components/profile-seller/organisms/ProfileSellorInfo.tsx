@@ -15,7 +15,7 @@ interface MemberDataProps {
 
 export default function ProfileMemberInfo({ memberData }: MemberDataProps) {
 	return (
-		<div className="mx-6">
+		<div className="mx-2">
 			<ProfileBanner
 				memberBanner={
 					!memberData.bannerImageUrl || memberData.bannerImageUrl === ""

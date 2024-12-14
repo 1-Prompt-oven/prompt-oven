@@ -15,6 +15,9 @@ import { getSellerProductSearchParams } from "@/lib/sellerProduct.ts"
 import Settings from "@/components/settings/templete/Settings.tsx"
 import Cart from "@/app/cart/page"
 import Dashboard from "@/components/dashboard/page/Dashboard"
+import Profile from "@/app/profile/[id]/page"
+import { getNickname } from "@/lib/api/sessionExtractor"
+import ProfileModify from "@/app/profile/modify/[id]/page"
 import Cookie from "@/components/cookie/page/CookieTemplete"
 import type { CookieListSearchParams } from "@/types/cookie/cookieResponseType"
 
@@ -24,6 +27,7 @@ export default async function page({ searchParams }: AccountSearchParams) {
 
 	const session = await getServerSession(authOptions)
 	const userAuth = await getUserAuth()
+	const userName = await getNickname()
 
 	let _searchParams
 	let sellerUuid = ""
@@ -48,6 +52,12 @@ export default async function page({ searchParams }: AccountSearchParams) {
 			{view === "settings" && <Settings />}
 			{view === "favorites" && <Favorite />}
 			{view === "cart" && <Cart />}
+			{view === "profile" && userName ? (
+				<Profile params={{ id: userName }} />
+			) : null}
+			{view === "profile-modify" && userName ? (
+				<ProfileModify params={{ id: userName }} />
+			) : null}
 			{view === "cookie" && (
 				<Cookie
 					userUuid={sellerUuid}
