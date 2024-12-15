@@ -10,3 +10,4 @@ export default async function Profile({ params }: { params: { id: string } }) {
 		</main>
 	)
 }
+
