@@ -14,6 +14,7 @@ import type { CommissionDetailType } from "@/types/commission/commissionType"
 import {
 	statusUpdate,
 	uploadResult,
+	uploadRevision,
 } from "@/action/commission/commissionAction"
 
 interface SellerCommissionDetailTemplateProps {
@@ -46,6 +47,14 @@ function SellerCommissionDetailTemplate({
 			result,
 		})
 	}
+
+	const handleUploadRevision = async (result: string) => {
+		console.log("Revision uploaded:", result)
+		await uploadRevision({
+			commissionUuid: commission.commissionUuid,
+			result,
+		})
+	}
 	return (
 		<div className="min-h-screen bg-black p-4 md:p-8">
 			<div className="mx-auto max-w-3xl">
@@ -62,7 +71,7 @@ function SellerCommissionDetailTemplate({
 								<DeadlineDisplay deadline={commission.commissionDeadline} />
 							</div>
 							<div className="text-gray-300">
-								<p>Requested by: {commission.clientUuid}</p>
+								<p>Requested by: {commission.clientName}</p>
 								<p>
 									Requested on:{" "}
 									{new Date(commission.commissionRequest).toLocaleDateString()}
@@ -95,7 +104,7 @@ function SellerCommissionDetailTemplate({
 								<RevisionNoteDisplay
 									note={commission.commissionModifyRequest || ""}
 								/>
-								<ResultUploadField onUpload={handleUploadResult} />
+								<ResultUploadField onUpload={handleUploadRevision} />
 							</>
 						)}
 
@@ -103,6 +112,18 @@ function SellerCommissionDetailTemplate({
 						commission.commissionResult ? (
 							<div className="space-y-4 border-t border-gray-800 pt-6">
 								<h2 className="text-lg font-semibold text-white">Result</h2>
+								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
+									{commission.commissionResult}
+								</div>
+							</div>
+						) : null}
+
+						{commission.commissionStatus === "REVISION_COMPLETED" &&
+						commission.commissionResult ? (
+							<div className="space-y-4 border-t border-gray-800 pt-6">
+								<h2 className="text-lg font-semibold text-white">
+									Revision Result
+								</h2>
 								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
 									{commission.commissionResult}
 								</div>

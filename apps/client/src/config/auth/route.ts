@@ -1,6 +1,7 @@
 export const sellerRoutes = {
 	seller: "/seller",
 	sellerRegistration: "/seller/registration",
+	commissionseller: "/commission/seller",
 }
 
 // -- middleware에서 사용될 routes
@@ -26,4 +27,6 @@ export const withAuthRoutes = {
 	dashboard: "/dashboard",
 	purchase: "/purchase",
 	account: "/account",
+	commissionbuyer: "/commission/buyer",
 }
+

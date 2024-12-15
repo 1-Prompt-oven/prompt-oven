@@ -10,9 +10,10 @@ export type CommissionStatus =
 	| "IN_PROGRESS"
 	| "COMPLETED"
 	| "REVISION_REQUESTED"
+	| "REVISION_COMPLETED"
 	| "REJECTED"
 
-export interface CommissionListType {
+export interface CommissionListResponseType {
 	commissionUuid: string
 	title: string
 	clientUuid: string
@@ -22,9 +23,14 @@ export interface CommissionListType {
 	requestedDate: string
 }
 
+export interface CommissionListType extends CommissionListResponseType {
+	clientName: string
+}
+
 export interface CommissionDetailType {
 	commissionUuid: string
 	clientUuid: string
+	clientName: string
 	creatorUuid: string
 	commissionTitle: string
 	commissionDescription: string

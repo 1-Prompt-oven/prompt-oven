@@ -9,7 +9,7 @@ function PriceDisplay({ price }: PriceDisplayProps) {
 		<div className="space-y-1">
 			<h2 className="text-lg font-semibold text-white">Price</h2>
 			<p className="text-2xl font-bold text-purple-400">
-				${price.toLocaleString()}
+				{price.toLocaleString()} 원
 			</p>
 		</div>
 	)

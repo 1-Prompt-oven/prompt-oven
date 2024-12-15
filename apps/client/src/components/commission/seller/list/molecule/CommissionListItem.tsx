@@ -22,17 +22,19 @@ function CommissionListItem({ commission }: CommissionListItemProps) {
 					</h3>
 					<StatusBadge status={commission.status} />
 				</div>
+
+				<span className="text-sm font-medium text-purple-400">
+					{commission.price.toLocaleString()} 원
+				</span>
+
 				<div className="flex items-center justify-between text-sm">
-					<span className="font-medium text-purple-400">
-						${commission.price.toLocaleString()}
-					</span>
+					<div className="mt-3.5 text-sm text-gray-400">
+						Requester: {commission.clientName}
+					</div>
 					<div className="flex space-x-4">
 						<DateDisplay date={commission.requestedDate} label="Requested" />
 						<DateDisplay date={commission.deadline} label="Deadline" />
 					</div>
-				</div>
-				<div className="mt-2 text-sm text-gray-400">
-					Requester: {commission.clientUuid}
 				</div>
 			</div>
 		</Link>

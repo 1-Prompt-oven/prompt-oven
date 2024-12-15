@@ -71,6 +71,17 @@ export function CommissionDetailTemplate({
 							</div>
 						) : null}
 
+						{commission.commissionStatus === "REVISION_REQUESTED" ? (
+							<div className="space-y-4 pt-1">
+								<h2 className="text-lg font-semibold text-white">
+									Modification Request
+								</h2>
+								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
+									{commission.commissionModifyRequest}
+								</div>
+							</div>
+						) : null}
+
 						{!showRevisionForm ? (
 							<ActionButtons
 								status={commission.commissionStatus}
