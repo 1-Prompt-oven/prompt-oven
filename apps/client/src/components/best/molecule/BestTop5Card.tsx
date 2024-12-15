@@ -8,9 +8,9 @@ import {
 	Users,
 	Star,
 	TrendingUp,
-	Calendar,
-	Eye,
-	DollarSign,
+	// Calendar,
+	// Eye,
+	// DollarSign,
 } from "@repo/ui/lucide"
 import { Card } from "@repo/ui/card"
 import { Badge } from "@repo/ui/badge"
@@ -21,13 +21,12 @@ interface BestCardProps {
 	rankingChange: number // 베스트
 	dailySellsCount: number // 베스트
 	reviewAvg: number // 베스트
-	date: string // 베스트
 	avatarImage: string | undefined // 프로필
 	nickname: string // 프로필
 	follower: number // 프로필
 	hashTag: string | undefined // 프로필
-	totalSales: number
 	views: number
+	isTopRanked?: boolean
 }
 
 export default function BestTop5Card({
@@ -35,28 +34,30 @@ export default function BestTop5Card({
 	rankingChange,
 	dailySellsCount,
 	reviewAvg,
-	date,
 	avatarImage = "https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
 	nickname,
 	follower,
 	hashTag,
-	totalSales,
-	views,
+	isTopRanked = false,
+	// views,
 }: BestCardProps) {
-	const calculateDaysSinceJoined = (joinedDate: string) => {
-		const [year, month, day] = joinedDate.split("-").map(Number)
-		const joinDate = new Date(year, month - 1, day) // month is 0-indexed in Date constructor
-		const today = new Date()
-		const diffTime = Math.abs(today.getTime() - joinDate.getTime())
-		const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
-		return diffDays
-	}
+	// const calculateDaysSinceJoined = (joinedDate: string) => {
+	// 	const [year, month, day] = joinedDate.split("-").map(Number)
+	// 	const joinDate = new Date(year, month - 1, day) // month is 0-indexed in Date constructor
+	// 	const today = new Date()
+	// 	const diffTime = Math.abs(today.getTime() - joinDate.getTime())
+	// 	const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+	// 	return diffDays
+	// }
 
-	const daysSinceJoined = calculateDaysSinceJoined(date)
+	// const daysSinceJoined = calculateDaysSinceJoined(date)
 
 	return (
 		<Link href={`/profile/seller/${nickname}`}>
-			<Card className="group relative w-auto overflow-hidden bg-black p-6 text-white transition-all hover:scale-[1.02]">
+			<Card
+				className={`group relative w-auto overflow-hidden bg-black p-6 text-white transition-all hover:scale-[1.02] ${
+					isTopRanked ? "p-6" : "p-4"
+				} `}>
 				{/* Decorative Elements */}
 				<div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent" />
 				<div className="bg-purple-500/10 absolute -left-32 -top-32 h-64 w-64 rounded-full blur-3xl" />
@@ -112,24 +113,22 @@ export default function BestTop5Card({
 						</div>
 
 						{/* Info Section */}
-						<div className="flex flex-col justify-between">
-							<div className="space-y-4">
-								{/* Name and Tag */}
-								<div className="flex items-center justify-between">
-									<h3 className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-2xl font-bold text-transparent">
-										{nickname}
-									</h3>
-									{hashTag ? (
-										<Badge
-											variant="outline"
-											className="border-purple-500/50 text-purple-300">
-											{hashTag}
-										</Badge>
-									) : null}
-								</div>
+						<div className="flex flex-col gap-4">
+							{/* Name and Tag */}
+							<div className="flex flex-col items-start gap-2">
+								<h3 className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-2xl font-bold text-transparent">
+									{nickname}
+								</h3>
+								{hashTag ? (
+									<Badge
+										variant="outline"
+										className="border-purple-500/50 text-purple-300">
+										{hashTag}
+									</Badge>
+								) : null}
 
 								{/* Stats Grid */}
-								<div className="grid grid-cols-2 gap-2">
+								<div className="grid grid-cols-3 gap-2">
 									{[
 										{
 											icon: TrendingUp,
@@ -147,15 +146,15 @@ export default function BestTop5Card({
 											value: reviewAvg.toFixed(1),
 											highlight: true,
 										},
-										{
-											icon: Eye,
-											label: "Views",
-											value: views.toLocaleString(),
-										},
+										// {
+										// 	icon: Eye,
+										// 	label: "Views",
+										// 	value: views.toLocaleString(),
+										// },
 									].map((stat) => (
 										<div
 											key={stat.label}
-											className="flex items-center justify-between rounded-lg border border-white/5 bg-white/5 px-3 py-2 backdrop-blur-sm">
+											className="flex flex-col items-center justify-center rounded-lg border border-white/5 bg-white/5 px-3 py-2 backdrop-blur-sm">
 											<div className="flex items-center gap-2">
 												<stat.icon
 													className={`h-4 w-4 ${stat.highlight ? "text-yellow-400" : "text-purple-300"}`}
@@ -172,12 +171,12 @@ export default function BestTop5Card({
 
 							{/* Footer Stats */}
 							<div className="space-y-3 pt-4">
-								<div className="flex items-center gap-2 text-sm text-zinc-400">
+								{/* <div className="flex items-center gap-2 text-sm text-zinc-400">
 									<Calendar className="h-4 w-4" />
 									<span>Joined {daysSinceJoined} days ago</span>
-								</div>
+								</div> */}
 
-								<div className="bg-purple-500/10 flex items-center justify-between rounded-full border border-purple-500/20 px-4 py-2.5 backdrop-blur-sm">
+								{/* <div className="bg-purple-500/10 flex items-center justify-between rounded-full border border-purple-500/20 px-4 py-2.5 backdrop-blur-sm">
 									<div className="flex items-center gap-2">
 										<DollarSign className="h-5 w-5 text-purple-300" />
 										<span className="font-medium text-purple-100">
@@ -187,7 +186,7 @@ export default function BestTop5Card({
 									<span className="font-bold text-white">
 										{totalSales.toLocaleString()}
 									</span>
-								</div>
+								</div> */}
 							</div>
 						</div>
 					</div>
