@@ -17,7 +17,6 @@ import { Badge } from "@repo/ui/badge"
 import Image from "next/image"
 
 interface BestCardProps {
-	memberUuid: string // 베스트
 	ranking: number // 베스트
 	rankingChange: number // 베스트
 	dailySellsCount: number // 베스트
@@ -32,7 +31,6 @@ interface BestCardProps {
 }
 
 export default function BestTop5Card({
-	memberUuid,
 	ranking,
 	rankingChange,
 	dailySellsCount,
@@ -57,7 +55,7 @@ export default function BestTop5Card({
 	const daysSinceJoined = calculateDaysSinceJoined(date)
 
 	return (
-		<Link href={`/profile/${memberUuid}`}>
+		<Link href={`/profile/seller/${nickname}`}>
 			<Card className="group relative w-auto overflow-hidden bg-black p-6 text-white transition-all hover:scale-[1.02]">
 				{/* Decorative Elements */}
 				<div className="absolute inset-0 bg-gradient-to-br from-purple-600/20 to-transparent" />
