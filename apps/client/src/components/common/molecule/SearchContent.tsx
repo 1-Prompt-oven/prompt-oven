@@ -68,7 +68,10 @@ function SearchContent({ closeDialog }: { closeDialog: () => void }) {
 				className="my-2 border-[1px] border-zinc-500 bg-fuchsia-500 py-[1.25rem] text-lg text-white placeholder:!text-sm placeholder:text-white"
 			/>
 			<Suspense fallback={<div className="text-white">Loading...</div>}>
-				<InnerDialogSearchResult searchQuery={queryParam} />
+				<InnerDialogSearchResult
+					searchQuery={queryParam}
+					closeDialog={closeDialog}
+				/>
 			</Suspense>
 		</section>
 	)

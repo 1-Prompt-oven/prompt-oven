@@ -11,8 +11,10 @@ import CreatorSearchList from "./CreatorSearchList"
 
 function InnerDialogSearchResult({
 	searchQuery,
+	closeDialog,
 }: {
 	searchQuery: SearchQueryType
+	closeDialog: () => void
 }) {
 	const [promptData, setPromptData] = useState<PromptApiResponseType | null>(
 		null as unknown as PromptApiResponseType,
@@ -63,10 +65,10 @@ function InnerDialogSearchResult({
 	return (
 		<section className="mt-3 max-h-[30vh] overflow-y-auto">
 			{searchQuery.tabName === "prompt" && promptData ? (
-				<PromptSearchList data={promptData} />
+				<PromptSearchList data={promptData} closeDialog={closeDialog} />
 			) : null}
 			{searchQuery.tabName === "creator" && creatorData.length > 0 && (
-				<CreatorSearchList data={creatorData} />
+				<CreatorSearchList data={creatorData} closeDialog={closeDialog} />
 			)}
 			{isNodata ? (
 				<p className="mt-4 text-center text-lg text-white">No Data</p>
