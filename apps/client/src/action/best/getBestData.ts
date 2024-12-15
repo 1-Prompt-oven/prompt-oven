@@ -41,7 +41,7 @@ export async function fetchRankingList(
 			const profileResponse = await fetch(
 				`${process.env.API_BASE_URL}/v1/profile/uuid/${bestItem.memberUuid}`,
 				{
-					next: { revalidate: secondsUntilMidnight },
+					cache: "no-cache",
 				},
 			)
 			if (!profileResponse.ok) {
