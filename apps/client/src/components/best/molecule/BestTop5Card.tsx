@@ -9,8 +9,8 @@ import {
 	Star,
 	TrendingUp,
 	// Calendar,
-	Eye,
-	DollarSign,
+	// Eye,
+	// DollarSign,
 } from "@repo/ui/lucide"
 import { Card } from "@repo/ui/card"
 import { Badge } from "@repo/ui/badge"
@@ -25,7 +25,6 @@ interface BestCardProps {
 	nickname: string // 프로필
 	follower: number // 프로필
 	hashTag: string | undefined // 프로필
-	totalSales: number
 	views: number
 	isTopRanked?: boolean
 }
@@ -39,9 +38,8 @@ export default function BestTop5Card({
 	nickname,
 	follower,
 	hashTag,
-	totalSales,
 	isTopRanked = false,
-	views,
+	// views,
 }: BestCardProps) {
 	// const calculateDaysSinceJoined = (joinedDate: string) => {
 	// 	const [year, month, day] = joinedDate.split("-").map(Number)
@@ -115,24 +113,22 @@ export default function BestTop5Card({
 						</div>
 
 						{/* Info Section */}
-						<div className="flex flex-col justify-between">
-							<div className="space-y-4">
-								{/* Name and Tag */}
-								<div className="flex items-center justify-between">
-									<h3 className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-2xl font-bold text-transparent">
-										{nickname}
-									</h3>
-									{hashTag ? (
-										<Badge
-											variant="outline"
-											className="border-purple-500/50 text-purple-300">
-											{hashTag}
-										</Badge>
-									) : null}
-								</div>
+						<div className="flex flex-col gap-4">
+							{/* Name and Tag */}
+							<div className="flex flex-col items-start gap-2">
+								<h3 className="bg-gradient-to-r from-white to-white/70 bg-clip-text text-2xl font-bold text-transparent">
+									{nickname}
+								</h3>
+								{hashTag ? (
+									<Badge
+										variant="outline"
+										className="border-purple-500/50 text-purple-300">
+										{hashTag}
+									</Badge>
+								) : null}
 
 								{/* Stats Grid */}
-								<div className="grid grid-cols-2 gap-2">
+								<div className="grid grid-cols-3 gap-2">
 									{[
 										{
 											icon: TrendingUp,
@@ -150,15 +146,15 @@ export default function BestTop5Card({
 											value: reviewAvg.toFixed(1),
 											highlight: true,
 										},
-										{
-											icon: Eye,
-											label: "Views",
-											value: views.toLocaleString(),
-										},
+										// {
+										// 	icon: Eye,
+										// 	label: "Views",
+										// 	value: views.toLocaleString(),
+										// },
 									].map((stat) => (
 										<div
 											key={stat.label}
-											className="flex items-center justify-between rounded-lg border border-white/5 bg-white/5 px-3 py-2 backdrop-blur-sm">
+											className="flex flex-col items-center justify-center rounded-lg border border-white/5 bg-white/5 px-3 py-2 backdrop-blur-sm">
 											<div className="flex items-center gap-2">
 												<stat.icon
 													className={`h-4 w-4 ${stat.highlight ? "text-yellow-400" : "text-purple-300"}`}
@@ -180,7 +176,7 @@ export default function BestTop5Card({
 									<span>Joined {daysSinceJoined} days ago</span>
 								</div> */}
 
-								<div className="bg-purple-500/10 flex items-center justify-between rounded-full border border-purple-500/20 px-4 py-2.5 backdrop-blur-sm">
+								{/* <div className="bg-purple-500/10 flex items-center justify-between rounded-full border border-purple-500/20 px-4 py-2.5 backdrop-blur-sm">
 									<div className="flex items-center gap-2">
 										<DollarSign className="h-5 w-5 text-purple-300" />
 										<span className="font-medium text-purple-100">
@@ -190,7 +186,7 @@ export default function BestTop5Card({
 									<span className="font-bold text-white">
 										{totalSales.toLocaleString()}
 									</span>
-								</div>
+								</div> */}
 							</div>
 						</div>
 					</div>
