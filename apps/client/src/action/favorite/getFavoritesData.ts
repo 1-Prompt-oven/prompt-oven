@@ -18,15 +18,7 @@ interface RawData {
 export async function getFavoriteList(
 	cursorId?: string | null,
 ): Promise<PromptsType> {
-	// favoriteFormData?: FormData,
 	"use server"
-
-	// if (categoryFormData) {
-	// 	categoryFormData.set("enable", "on")
-	// }
-	// if (cursorId) {
-	// 	categoryFormData?.set("cursorId", cursorId)
-	// }
 
 	const headers = await getAuthHeaders()
 	const memberUUID = await getMemberUUID()

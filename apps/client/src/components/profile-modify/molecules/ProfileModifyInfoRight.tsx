@@ -20,7 +20,7 @@ export default function ProfileModifyInfoRight({
 	const formattedFollower = formatFollowers(follower)
 
 	return (
-		<div className="custom-scrollbar flex h-full max-w-[770px] flex-grow overflow-auto">
+		<div className="custom-scrollbar hidden h-full max-w-[770px] flex-grow overflow-auto xs:!flex">
 			<div className="flex w-full flex-col gap-1">
 				<div className="w-full rounded-lg bg-white/40 text-sm text-white">
 					<p className="mx-2 py-1">

@@ -5,7 +5,7 @@ export default async function PurchaseEd() {
 	const purchaseEdData = await getPurchaseEd()
 
 	return (
-		<section className="container mx-auto bg-[#111111] py-1">
+		<section className="container mx-auto min-h-[650px] bg-[#111111] py-1">
 			<PurchaseEdTemplate purchaseEdData={purchaseEdData} />
 		</section>
 	)
