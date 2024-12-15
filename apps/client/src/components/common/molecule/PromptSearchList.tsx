@@ -4,7 +4,13 @@ import Image from "next/image"
 import Link from "next/link"
 import type { PromptApiResponseType } from "@/types/common/responseType"
 
-function PromptSearchList({ data }: { data: PromptApiResponseType }) {
+function PromptSearchList({
+	data,
+	closeDialog,
+}: {
+	data: PromptApiResponseType
+	closeDialog: () => void
+}) {
 	const promptData = data.productList
 
 	return (
@@ -12,7 +18,8 @@ function PromptSearchList({ data }: { data: PromptApiResponseType }) {
 			{promptData.map((prompt) => (
 				<Link
 					href={`/prompt-detail/${prompt.productUuid}`}
-					key={prompt.productUuid}>
+					key={prompt.productUuid}
+					onClick={closeDialog}>
 					<li
 						key={prompt.productUuid}
 						className="flex items-center gap-2 rounded-lg py-2 hover:bg-gray-800">
