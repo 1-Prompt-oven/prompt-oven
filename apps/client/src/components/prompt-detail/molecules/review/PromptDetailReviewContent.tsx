@@ -22,7 +22,7 @@ export default function PromptDetailReviewContent({
 			<div className="min-h-[150px]">
 				<div className="flex w-[94%] items-end justify-between">
 					<Link
-						href={`/profile/${content.authorNickname}`}
+						href={`/profile/seller/${content.authorNickname}`}
 						className="ml-5 mt-3 flex items-center gap-4 lg:!mt-4 lg:ml-10">
 						<Avatar className="h-6 w-6 lg:h-8 lg:w-8">
 							<AvatarImage src={profileImage} alt={content.authorNickname} />

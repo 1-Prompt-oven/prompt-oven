@@ -1,6 +1,7 @@
 import type { ForwardRefExoticComponent, RefAttributes } from "react"
 import type { LucideProps } from "@repo/ui/lucide"
 import {
+	Cookie,
 	Heart,
 	House,
 	LayoutDashboard,
@@ -134,6 +135,12 @@ export const sellerNavs: MenuNavItemType[] = [
 			},
 		],
 	},
+	{
+		icon: Cookie,
+		label: "Cookie",
+		href: "/account",
+		query: { view: "cookie"}
+	},
 	...commonNavs,
 	{
 		icon: Settings,
@@ -185,6 +192,12 @@ export const userNavs: MenuNavItemType[] = [
 				query: { view: "purchase-completed" },
 			},
 		],
+	},
+	{
+		icon: Cookie,
+		label: "Cookie",
+		href: "/account",
+		query: { view: "cookie"}
 	},
 	...commonNavs,
 	{

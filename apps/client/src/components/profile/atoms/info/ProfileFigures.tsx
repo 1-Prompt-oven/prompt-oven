@@ -1,5 +1,3 @@
-import React from "react"
-
 interface ProfileFiguresProps {
 	title: string
 	content: number | string
@@ -10,7 +8,7 @@ export default function ProfileFigures({
 	content,
 }: ProfileFiguresProps) {
 	return (
-		<div className="flex min-w-0 items-center justify-center gap-1 md:flex-col">
+		<div className="flex min-w-0 items-center justify-between gap-1 md:flex-col">
 			<span className="font-mulish text-gray-200 md:text-sm xl:text-base 2xl:text-xl">
 				{title}
 			</span>

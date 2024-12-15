@@ -9,7 +9,7 @@ export default function PurchaseEdTemplate({
 	purchaseEdData,
 }: PurchaseEdTemplateProps) {
 	return (
-		<div className="mx-auto mt-4 max-w-screen-xl">
+		<div className="mx-auto mt-4 min-h-[650px] max-w-screen-xl">
 			{/* <PurchaseEdTitle /> */}
 			<PurchaseEdContainer purchaseEdData={purchaseEdData} />
 		</div>

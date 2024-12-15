@@ -99,7 +99,7 @@ function CartTemplate({
 	}
 
 	return (
-		<div className="mx-auto mt-4 flex min-h-[600px] max-w-screen-xl flex-col gap-8">
+		<div className="mx-auto mt-4 flex min-h-[650px] max-w-screen-xl flex-col gap-8">
 			<CartTitle />
 
 			<div className="mx-6 flex flex-col justify-between gap-12 lg:!flex-row">

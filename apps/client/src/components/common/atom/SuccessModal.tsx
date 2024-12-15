@@ -11,7 +11,7 @@ function SuccessModal({ isOpen, onClose, children }: SuccessModalProps) {
 	if (!isOpen) return null
 
 	return (
-		<div className="fixed inset-0 flex items-center justify-center bg-slate-300 bg-opacity-40">
+		<div className="fixed inset-0 z-[9999] flex items-center justify-center bg-slate-300 bg-opacity-40">
 			<div className="rounded bg-[#242020] p-4 shadow-lg">
 				<div className="mb-4 text-white">{children}</div>
 				<Button

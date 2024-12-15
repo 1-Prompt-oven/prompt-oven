@@ -5,6 +5,7 @@ import LogoutButton from "../atom/LogoutButton"
 import NicknameModifySection from "../molecule/NicknameModifySection"
 import ShowEmail from "../atom/ShowEmail"
 import DeleteAccount from "../atom/DeleteAccount"
+import SettingsTitle from "../atom/SettingsTitle"
 
 export default async function Settings() {
 	const session = await getServerSession(authOptions)
@@ -12,11 +13,14 @@ export default async function Settings() {
 	const { memberUUID, email } = session!.user
 
 	return (
-		<section className="flex flex-col items-center justify-center py-10">
-			<ShowEmail email={email} />
-			<NicknameModifySection memberUUID={memberUUID} />
-			<LogoutButton />
-			<DeleteAccount />
+		<section className="container mx-auto rounded-md bg-[#111111] py-10">
+			<SettingsTitle />
+			<div className="flex flex-col pl-2">
+				<ShowEmail email={email} />
+				<NicknameModifySection memberUUID={memberUUID} />
+				<LogoutButton />
+				<DeleteAccount />
+			</div>
 		</section>
 	)
 }

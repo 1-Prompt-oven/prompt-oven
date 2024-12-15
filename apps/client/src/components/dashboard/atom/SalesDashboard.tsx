@@ -16,10 +16,9 @@ import PcTitle from "@/components/product-create/atom/PcTitle"
 interface ChartData {
 	name: string
 	dailysold: number
-	dailyearned: number
 }
 
-export function ViewDashboard({
+export function SalesDashboard({
 	selectedPeriod,
 	beginDate,
 	endDate,
@@ -41,7 +40,7 @@ export function ViewDashboard({
 				const dates = []
 				while (start <= end) {
 					const formattedDate = start.toISOString().split("T")[0]
-					dates.push({ name: formattedDate, dailysold: 0, dailyearned: 0 })
+					dates.push({ name: formattedDate, dailysold: 0 })
 					start.setDate(start.getDate() + 1)
 				}
 				return dates
@@ -58,9 +57,6 @@ export function ViewDashboard({
 					dailysold: matchingResult
 						? matchingResult.dailySold
 						: defaultItem.dailysold,
-					dailyearned: matchingResult
-						? matchingResult.dailyEarned
-						: defaultItem.dailyearned,
 				}
 			})
 
@@ -150,13 +146,6 @@ export function ViewDashboard({
 							stroke="#8884d8"
 							fill="rgba(136, 132, 216, 0.6)"
 						/>
-						<Area
-							type="monotone"
-							dataKey="dailyearned"
-							name="Daily Earned"
-							stroke="#ec35f2"
-							fill="rgba(217, 142, 224, 0.92)"
-						/>
 					</AreaChart>
 				</ResponsiveContainer>
 			</div>
@@ -164,4 +153,4 @@ export function ViewDashboard({
 	)
 }
 
-export default ViewDashboard
+export default SalesDashboard

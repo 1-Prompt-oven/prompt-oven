@@ -15,14 +15,7 @@ interface MemberDataProps {
 
 export default function ProfileMemberInfo({ memberData }: MemberDataProps) {
 	return (
-		<div className="mx-2">
-			<ProfileBanner
-				memberBanner={
-					!memberData.bannerImageUrl || memberData.bannerImageUrl === ""
-						? DEFAULT_BANNER
-						: memberData.bannerImageUrl
-				}
-			/>
+		<div className="mx-6">
 			<ProfileBanner
 				memberBanner={
 					!memberData.bannerImageUrl || memberData.bannerImageUrl === ""
@@ -31,13 +24,6 @@ export default function ProfileMemberInfo({ memberData }: MemberDataProps) {
 				}
 			/>
 			<div className="relative -top-[3.5rem] z-[5] mx-10 flex flex-col gap-4 md:-top-[5.5rem] md:h-40 md:!flex-row md:items-center md:justify-between xl:h-44">
-				<ProfileAvatar
-					memberAvatar={
-						!memberData.avatarImageUrl || memberData.avatarImageUrl === ""
-							? DEFAULT_AVATAR
-							: memberData.avatarImageUrl
-					}
-				/>
 				<ProfileAvatar
 					memberAvatar={
 						!memberData.avatarImageUrl || memberData.avatarImageUrl === ""
@@ -54,4 +40,3 @@ export default function ProfileMemberInfo({ memberData }: MemberDataProps) {
 		</div>
 	)
 }
-

@@ -72,5 +72,6 @@ export {
 	SquareTerminal,
 	Sparkles,
 	TrophyIcon,
+	Cookie,
 	type LucideProps,
 } from "lucide-react"
