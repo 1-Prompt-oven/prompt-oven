@@ -130,6 +130,7 @@ export const startTalkWith = async (
 	roomName: string,
 ) => {
 	"use server"
+	
 	const chatRoom = (
 		await createChatRoom({
 			hostUserUuid: host,
