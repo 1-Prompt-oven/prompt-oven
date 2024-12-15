@@ -138,6 +138,5 @@ export const startTalkWith = async (
 			roomName,
 		})
 	).result
-	console.log(chatRoom)
 	return chatRoom
 }
