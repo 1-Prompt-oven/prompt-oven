@@ -102,7 +102,7 @@ export function CommissionForm({ buyerUuid, sellerUuid }: CommissionFormProps) {
 
 		try {
 			const response = await createCommission(requestBody)
-			if (response.isSuccess && response.result.commissionUuid) {
+			if (response !== "") {
 				setFormValues({
 					title: "",
 					price: 0,
@@ -112,7 +112,7 @@ export function CommissionForm({ buyerUuid, sellerUuid }: CommissionFormProps) {
 					category: "코딩",
 					additional: "",
 				})
-				router.push(`/commission/buyer/${response.result.commissionUuid}`)
+				router.push(`/commission/buyer/${response}`)
 			} else {
 				console.error("Failed to create commission")
 			}

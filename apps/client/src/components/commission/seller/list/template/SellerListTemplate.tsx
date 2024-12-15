@@ -19,22 +19,18 @@ interface SellerCommissionListTemplateProps {
 }
 
 function SellerListTemplate({
-	initialCommissions,
+	initialCommissions = [],
 }: SellerCommissionListTemplateProps) {
 	const [sortBy, setSortBy] = useState("Latest")
 	const [commissions, setCommissions] =
-		useState<CommissionListType[]>(initialCommissions) // 상태로 관리
+		useState<CommissionListType[]>(initialCommissions)
 
 	// 정렬 기준 변경 및 API 호출
 	const handleSortChange = async (value: string) => {
-		setSortBy(value) // 정렬 기준 업데이트
+		setSortBy(value)
 		try {
 			const response = await getCommissionsList(value)
-			if (response.isSuccess) {
-				setCommissions(response.result)
-			} else {
-				console.error("Failed to fetch commissions")
-			}
+			setCommissions(response)
 		} catch (error) {
 			console.error("Error fetching commissions:", error)
 		}

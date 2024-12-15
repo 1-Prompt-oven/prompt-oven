@@ -13,6 +13,7 @@ function StatusIndicator({ status }: StatusDisplayProps) {
 			case "IN_PROGRESS":
 				return "bg-blue-500/10 text-blue-500 border-blue-500/20"
 			case "REVISION_REQUESTED":
+			case "REVISION_COMPLETED":
 				return "bg-yellow-500/10 text-yellow-500 border-yellow-500/20"
 			case "REJECTED":
 				return "bg-red-500/10 text-red-500 border-red-500/20"
@@ -22,7 +23,7 @@ function StatusIndicator({ status }: StatusDisplayProps) {
 	}
 	return (
 		<div className="space-y-1">
-			<h2 className="text-lg font-semibold text-white">Status</h2>
+			<h2 className="mb-2 text-lg font-semibold text-white">Status</h2>
 			<span
 				className={`rounded-full border px-3 py-1 ${getStatusColor(status)} capitalize`}>
 				{status.replace("_", " ")}

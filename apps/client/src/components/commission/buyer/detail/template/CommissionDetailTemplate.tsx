@@ -13,6 +13,10 @@ import type {
 	CommissionDetailType,
 	RevisionRequestType,
 } from "@/types/commission/commissionType"
+import {
+	statusUpdate,
+	requestModification,
+} from "@/action/commission/commissionAction"
 
 interface CommissionDetailTemplateProps {
 	commission: CommissionDetailType
@@ -22,12 +26,23 @@ export function CommissionDetailTemplate({
 	commission,
 }: CommissionDetailTemplateProps) {
 	const [showRevisionForm, setShowRevisionForm] = useState(false)
-	const handleAccept = () => {
+
+	const handleAccept = async () => {
 		console.log("Commission accepted")
+		await statusUpdate({
+			commissionUuid: commission.commissionUuid,
+			status: "COMPLETED",
+		})
 	}
 
-	const handleRevisionSubmit = (revision: RevisionRequestType) => {
+	const handleRevisionSubmit = async (revision: RevisionRequestType) => {
 		console.log("Revision requested:", revision)
+		setShowRevisionForm(false)
+		await requestModification(revision)
+		await statusUpdate({
+			commissionUuid: commission.commissionUuid,
+			status: "REVISION_REQUESTED",
+		})
 	}
 
 	return (
@@ -52,6 +67,17 @@ export function CommissionDetailTemplate({
 								<h2 className="text-lg font-semibold text-white">Result</h2>
 								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
 									{commission.commissionResult}
+								</div>
+							</div>
+						) : null}
+
+						{commission.commissionStatus === "REVISION_REQUESTED" ? (
+							<div className="space-y-4 pt-1">
+								<h2 className="text-lg font-semibold text-white">
+									Modification Request
+								</h2>
+								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
+									{commission.commissionModifyRequest}
 								</div>
 							</div>
 						) : null}
