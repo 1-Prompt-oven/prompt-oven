@@ -62,18 +62,19 @@ function NicknameModifySection({ memberUUID }: { memberUUID: string }) {
 
 	return (
 		<div className="flex flex-col gap-4 py-4">
+			<div className="mx-4 text-white">Nickname Change</div>
 			<div className="flex items-center gap-2">
 				<NicknameInput
 					value={nickname}
 					onChange={handleChange}
-					className="w-[270px]"
+					className="ml-4 w-[225px] sm:w-[260px]"
 					placeholder="Enter your new nickname"
 				/>
-				<div>
+				<div className="">
 					<GradientButton
 						onClick={handleSave}
 						disabled={isLoading || Boolean(error)}
-						className="h-[50px] w-[100px] px-[35px] py-[15px]">
+						className="h-[50px] w-[17px] px-[35px] py-[15px]">
 						{isLoading ? (
 							<ThreeDots
 								visible

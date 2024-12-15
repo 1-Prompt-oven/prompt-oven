@@ -18,7 +18,7 @@ interface ChartData {
 	salesAmount: number
 }
 
-export function ViewDashboard({
+export function SalesAmountDashboard({
 	selectedPeriod,
 	beginDate,
 	endDate,
@@ -153,4 +153,4 @@ export function ViewDashboard({
 	)
 }
 
-export default ViewDashboard
+export default SalesAmountDashboard

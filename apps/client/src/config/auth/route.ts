@@ -25,5 +25,6 @@ export const withAuthRoutes = {
 	settings: "/settings",
 	dashboard: "/dashboard",
 	purchase: "/purchase",
+	cookie:"/cookie",
 	account: "/account",
 }

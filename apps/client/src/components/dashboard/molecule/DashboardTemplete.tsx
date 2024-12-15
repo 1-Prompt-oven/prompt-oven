@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from "react"
 import dayjs from "dayjs"
 import DashboardHeader from "../atom/DashboardHeader"
-import SalesDashboard from "../atom/SalesDashboard"
 import { ViewDashboard } from "../atom/ViewDashboard"
 import { FollowDashboard } from "../atom/FollowDashboard"
-import SalesAmountDashboard from "../atom/SalesAmountDashboard"
+import { SalesAmountDashboard } from "../atom/SalesAmountDashboard"
+import { SalesDashboard } from "../atom/SalesDashboard"
 
 function DashboardTemplete() {
 	const [selectedPeriod, setSelectedPeriod] = useState<string>("week") // 기본값 "week"

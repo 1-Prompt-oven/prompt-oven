@@ -18,6 +18,8 @@ import Dashboard from "@/components/dashboard/page/Dashboard"
 import Profile from "@/app/profile/[id]/page"
 import { getNickname } from "@/lib/api/sessionExtractor"
 import ProfileModify from "@/app/profile/modify/[id]/page"
+import Cookie from "@/components/cookie/page/CookieTemplete"
+import type { CookieListSearchParams } from "@/types/cookie/cookieResponseType"
 
 export default async function page({ searchParams }: AccountSearchParams) {
 	// note: queryParam이 없는 경우 overview 사이드바 메뉴가 선택되게 하기 -- 필요에 따라 수정 필요
@@ -56,6 +58,12 @@ export default async function page({ searchParams }: AccountSearchParams) {
 			{view === "profile-modify" && userName ? (
 				<ProfileModify params={{ id: userName }} />
 			) : null}
+			{view === "cookie" && (
+				<Cookie
+					userUuid={sellerUuid}
+					searchParams={_searchParams as CookieListSearchParams}
+				/>
+			)}
 			{view === "purchase-ongoing" && <PurchaseIng />}
 			{view === "purchase-completed" && <PurchaseEd />}
 			{view !== "purchase-ongoing" &&
