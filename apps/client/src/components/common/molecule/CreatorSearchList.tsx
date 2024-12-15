@@ -9,7 +9,7 @@ function CreatorSearchList({ data }: { data: ProfileForSearchListType[] }) {
 	return (
 		<ul>
 			{data.map((creator: ProfileForSearchListType) => (
-				<Link href={`/profile/${creator.id}`} key={creator.id}>
+				<Link href={`/profile/seller/${creator.nickname}`} key={creator.id}>
 					<li className="flex items-center justify-start gap-2 rounded-lg px-2 py-3 hover:bg-gray-800">
 						<Avatar className="mr-[10px] h-[30px] w-[30px]">
 							<AvatarImage src={creator.thumbnail} alt={creator.nickname} />
