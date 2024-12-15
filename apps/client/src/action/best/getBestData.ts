@@ -18,9 +18,18 @@ export async function fetchRankingList(
 ): Promise<BestCreatorCursorListTypes2> {
 	"use server"
 	try {
+		const now = new Date()
+		const midnight = new Date()
+		midnight.setHours(24, 0, 0, 0) // 자정 시간 설정
+		const secondsUntilMidnight = Math.floor(
+			(midnight.getTime() - now.getTime()) / 1000,
+		)
 		// 1. 베스트 API 호출
 		const bestResponse = await fetch(
 			`${process.env.API_BASE_URL}/v1/seller-batch/aggregate/bestSellers?date=${params.date}&pageSize=20&lastRanking=${params.lastRanking}`,
+			{
+				next: { revalidate: secondsUntilMidnight },
+			},
 		)
 		if (!bestResponse.ok) {
 			throw new Error("Failed to fetch best ranking data")
@@ -31,6 +40,9 @@ export async function fetchRankingList(
 		const profilePromises = bestData.result.content.map(async (bestItem) => {
 			const profileResponse = await fetch(
 				`${process.env.API_BASE_URL}/v1/profile/uuid/${bestItem.memberUuid}`,
+				{
+					next: { revalidate: secondsUntilMidnight },
+				},
 			)
 			if (!profileResponse.ok) {
 				throw new Error(
@@ -49,7 +61,7 @@ export async function fetchRankingList(
 				reviewAvg: bestItem.reviewAvg,
 				date: bestItem.date,
 				totalSales: bestItem.sellsCount,
-				avatarImage: profileData.result.avatarImageUrl,
+				avatarImage: profileData.result.avatarImageUrl || "/img/main/art3.png",
 				nickname: profileData.result.nickname,
 				follower: profileData.result.follower,
 				hashTag: profileData.result.hashTag,

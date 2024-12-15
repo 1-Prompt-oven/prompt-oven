@@ -28,22 +28,32 @@ function BestList({
 	)
 	const observerRef = useRef<HTMLDivElement | null>(null)
 
-	const fetchMoreData = () => {
+	const fetchMoreData = async () => {
 		if (loading || !hasNext || !nextCursor) return
 		setLoading(true)
-		fetchRankingList({ lastRanking: nextCursor, date: data[0].date })
-			.then((newCreators) => {
-				setHasNext(newCreators.hasNext)
-				setNextCursor(newCreators.nextCursor)
-				setList((prevList) => [...prevList, ...newCreators.content])
+		try {
+			const newCreators = await fetchRankingList({
+				lastRanking: nextCursor,
+				date: data[0].date,
 			})
-			.catch((error) => {
-				// eslint-disable-next-line no-console -- Error to Fetching
-				console.error("크리에이터를 불러오는 중 오류 발생:", error)
+			const imagePromises = newCreators.content.map((creator) => {
+				return new Promise((resolve) => {
+					const img = new Image()
+					img.src = creator.avatarImage
+					img.onload = resolve
+					img.onerror = resolve
+				})
 			})
-			.finally(() => {
-				setLoading(false)
-			})
+			await Promise.all(imagePromises) // 모든 이미지 로딩 완료 대기
+			setHasNext(newCreators.hasNext)
+			setNextCursor(newCreators.nextCursor)
+			setList((prevList) => [...prevList, ...newCreators.content])
+		} catch (error) {
+			// eslint-disable-next-line no-console -- Error to Fetching
+			console.error("크리에이터를 불러오는 중 오류 발생:", error)
+		} finally {
+			setLoading(false)
+		}
 	}
 
 	useEffect(() => {
