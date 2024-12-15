@@ -64,7 +64,7 @@ export async function fetchRankingList(
 				avatarImage: profileData.result.avatarImageUrl || "/img/main/art3.png",
 				nickname: profileData.result.nickname,
 				follower: profileData.result.follower,
-				hashTag: profileData.result.hashTag,
+				hashTag: profileData.result.hashTag || "크리에이터 태그",
 				views: profileData.result.viewer,
 			}
 		})
