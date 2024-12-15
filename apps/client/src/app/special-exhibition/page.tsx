@@ -4,8 +4,8 @@ import { useRouter } from "next/navigation"
 import { startTalkWith } from "@/action/chat/chatAction.ts"
 import GradientButton from "@/components/common/atom/GradientButton.tsx"
 
-const _host = "e69421fc-b449-4820-a7c2-439ac5cdc69b"
-const _partner = "6c195802-6051-4414-a8a6-5fd33b4bc420"
+const _host = "963fa64e-2dae-42ef-9e47-f1877ac59fb8"
+const _partner = "97c77959-0af8-4a0f-80eb-97d65eab17dd"
 
 export default function Page() {
 	const router = useRouter()
