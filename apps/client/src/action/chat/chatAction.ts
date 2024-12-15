@@ -130,6 +130,7 @@ export const startTalkWith = async (
 	roomName: string,
 ) => {
 	"use server"
+	
 	const chatRoom = (
 		await createChatRoom({
 			hostUserUuid: host,
@@ -137,5 +138,6 @@ export const startTalkWith = async (
 			roomName,
 		})
 	).result
+	console.log(chatRoom)
 	return chatRoom
 }

@@ -46,7 +46,6 @@ export async function getProfileMemberInfoByUuid(
 	id: string,
 ): Promise<ProfileMemberInfoType> {
 	const headers = await getAuthHeaders()
-
 	const res = await fetch(`${process.env.API_BASE_URL}/v1/profile/uuid/${id}`, {
 		method: "GET",
 		headers,
