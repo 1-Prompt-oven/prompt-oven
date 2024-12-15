@@ -77,14 +77,14 @@ export function BestCreatorListItem({
 						{nickname}
 					</span>
 				</div>
-				<div className="col-span-2 ml-5 mr-7 flex items-center justify-start">
+				<div className="col-span-2 ml-4 mr-7 flex items-center justify-start">
 					{hashTag ? (
 						<span className="ml-4 rounded-full bg-purple-600/50 px-3 py-1 text-sm font-medium text-white/80">
 							{hashTag}
 						</span>
 					) : null}
 				</div>
-				<div className="col-span-1 ml-5 flex items-center justify-center gap-1 text-white/80">
+				<div className="col-span-1 ml-4 flex items-center justify-center gap-1 text-white/80">
 					<TrendingUp className="h-4 w-4" />
 					<span>{dailySellsCount}</span>
 				</div>

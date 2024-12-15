@@ -87,7 +87,7 @@ function BestList({
 	return (
 		<div className="mx-auto w-full max-w-[1716px]">
 			<div>
-				<div className="grid grid-cols-12 gap-5 px-6 py-4 text-lg font-semibold text-white">
+				<div className="grid grid-cols-12 gap-5 px-6 py-4 text-base font-semibold text-white">
 					<div className="col-span-2">Rank</div>
 					<div className="col-span-3">Creator&apos;s Name</div>
 					<div className="col-span-2">Creator&apos;s Tag</div>
