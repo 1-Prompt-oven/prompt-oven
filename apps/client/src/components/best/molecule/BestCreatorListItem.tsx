@@ -61,7 +61,7 @@ export function BestCreatorListItem({
 						</div>
 					)}
 				</div>
-				<div className="col-span-3 ml-7 flex items-center gap-2">
+				<div className="col-span-3 ml-7 flex items-center gap-3">
 					<Image
 						src={
 							avatarImage ||
@@ -70,7 +70,7 @@ export function BestCreatorListItem({
 						alt={`${nickname}'s profile`}
 						width={32}
 						height={32}
-						className="rounded-full"
+						className="h-8 w-8 flex-shrink-0 rounded-full object-cover"
 						unoptimized
 					/>
 					<span className="cursor-pointer text-white hover:text-fuchsia-400">
