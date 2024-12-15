@@ -1,15 +1,6 @@
-import Link from "next/link"
-import { Button } from "@repo/ui/button"
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu"
-import { MoreVertical, Star } from "@repo/ui/lucide"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
-import { matchUser } from "@/lib/api/sessionExtractor"
 import ProfileName from "../atoms/info/ProfileName"
+import ProfileFigures from "../atoms/info/ProfileFigures"
 
 interface MemberLeftProps {
 	memberData: ProfileMemberInfoType
@@ -17,41 +8,27 @@ interface MemberLeftProps {
 
 export default async function ProfileInfoLeft({ memberData }: MemberLeftProps) {
 	return (
-		<div className="flex max-w-[160px] flex-grow flex-col justify-between gap-1 xl:gap-3">
+		<div className="flex w-full flex-grow flex-col justify-between gap-1 xs:max-w-[160px] xl:gap-3">
 			<ProfileName memberData={memberData} />
+			<div className="w-full rounded-lg bg-white/40 text-sm text-white xs:!hidden">
+				<p className="mx-2 py-1">
+					<span className="line-clamp-2 text-[12px]">
+						{memberData.bio ? memberData.bio : "자기소개가 없습니다."}
+					</span>
+				</p>
+			</div>
 
-			<div className="mt-4 flex items-center gap-2 md:mt-0">
-				<Button
-					variant="ghost"
-					className="font-mulish bg-white/50 p-1 font-semibold text-white hover:bg-white/60 md:p-4">
-					<Star className="mx-2" />
-					<span className="mr-2 hidden lg:!block">Follow</span>
-				</Button>
-				<DropdownMenu>
-					<DropdownMenuTrigger asChild>
-						<Button
-							variant="ghost"
-							className="hover:white/60 w-10 bg-white/50 p-0">
-							<MoreVertical className="h-4 w-4 text-white" />
-						</Button>
-					</DropdownMenuTrigger>
-					<DropdownMenuContent
-						align="end"
-						className="bg-[#ead4ff] font-semibold text-[#3a3a3a]">
-						{(await matchUser(memberData.memberUUID)) ? (
-							<DropdownMenuItem>
-								<Link href={`/profile/modify/${memberData.nickname}`}>
-									<p>개인정보 수정</p>
-								</Link>
-							</DropdownMenuItem>
-						) : null}
-						<DropdownMenuItem>
-							<Link href="/Report">
-								<p>신고</p>
-							</Link>
-						</DropdownMenuItem>
-					</DropdownMenuContent>
-				</DropdownMenu>
+			<div className="grid h-full w-full grid-cols-1 items-center justify-center gap-4 rounded-lg bg-white/40 p-3 xs:!hidden sm:grid-cols-2 md:grid-cols-4 md:gap-8 md:p-2">
+				<ProfileFigures title="Following" content={memberData.following} />
+				<ProfileFigures title="Follower" content={memberData.follower} />
+				<ProfileFigures
+					title="Viewer"
+					content={memberData.viewer.toLocaleString()}
+				/>
+				<ProfileFigures
+					title="Sales"
+					content={memberData.sales.toLocaleString()}
+				/>
 			</div>
 		</div>
 	)
