@@ -43,7 +43,7 @@ export interface RenderedRankingItemTypes {
 	dailySellsCount: number // 베스트
 	reviewAvg: number // 베스트
 	date: string // 베스트
-	avatarImage: string | undefined // 프로필
+	avatarImage: string // 프로필
 	nickname: string // 프로필
 	follower: number // 프로필
 	hashTag: string | undefined // 프로필

@@ -1,4 +1,7 @@
-import React from "react"
+"use client"
+
+import React, { useState, useEffect } from "react"
+import { ThreeDots } from "react-loader-spinner"
 import type {
 	BestCreatorCursorListTypes2,
 	RenderedRankingItemTypes,
@@ -19,11 +22,53 @@ function BestTemplate({ data }: BestTemplateProps) {
 		pageSize: data.pageSize,
 		page: data.page,
 	}
+
+	const [isLoading, setIsLoading] = useState(true)
+
+	const preloadImages = async (imageData: RenderedRankingItemTypes[]) => {
+		const imagePromises = imageData.map((item) => {
+			return new Promise<void>((resolve) => {
+				const img = new Image()
+				img.src = item.avatarImage
+				img.onload = () => resolve()
+				img.onerror = () => resolve()
+			})
+		})
+		await Promise.all(imagePromises)
+	}
+
+	useEffect(() => {
+		const preloadAllImages = async () => {
+			await preloadImages(data.content)
+			setIsLoading(false)
+		}
+		preloadAllImages()
+	}, [data.content])
+
 	return (
 		<>
-			<BestTop5 data={top5Data} />
-
-			<BestList data={restData} pagingInfo={pagingInfo} />
+			{isLoading ? (
+				<div className="flex min-h-screen flex-col items-center justify-center">
+					<ThreeDots
+						visible
+						height="80"
+						width="80"
+						color="#A913F9"
+						radius="9"
+						ariaLabel="three-dots-loading"
+						wrapperStyle={{}}
+						wrapperClass=""
+					/>
+					<span className="text-xl font-medium leading-[150%] text-white">
+						Loading...
+					</span>
+				</div>
+			) : (
+				<>
+					<BestTop5 data={top5Data} />
+					<BestList data={restData} pagingInfo={pagingInfo} />
+				</>
+			)}
 		</>
 	)
 }

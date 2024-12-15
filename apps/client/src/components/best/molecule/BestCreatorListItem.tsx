@@ -12,7 +12,6 @@ import {
 } from "@repo/ui/lucide"
 
 interface BestCardProps {
-	memberUuid: string // 베스트
 	ranking: number // 베스트
 	rankingChange: number // 베스트
 	dailySellsCount: number // 베스트
@@ -27,7 +26,6 @@ interface BestCardProps {
 }
 
 export function BestCreatorListItem({
-	memberUuid,
 	ranking,
 	rankingChange,
 	dailySellsCount,
@@ -41,7 +39,7 @@ export function BestCreatorListItem({
 	_views,
 }: BestCardProps) {
 	return (
-		<Link href={`/profile/${memberUuid}`}>
+		<Link href={`/profile/seller/${nickname}`}>
 			<div className="ml-5 grid grid-cols-12 items-center border-b border-gray-800 px-4 py-3 transition-colors hover:bg-gray-800/50">
 				<div className="col-span-2 flex items-center gap-2">
 					<Trophy className="h-5 w-5 text-fuchsia-500" />
