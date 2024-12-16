@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { deductCookieAction } from "@/action/cookie/cookieAction"
 import type { CookieLatestType } from "@/types/cookie/cookieResponseType"
 import PromptSampleException from "../../atoms/generate/PromptSampleException"
 import PromptSampleReal from "../../atoms/generate/PromptSampleReal"
@@ -35,6 +36,7 @@ export default function PromptGenerate({
 
 	const handleSubmit = async () => {
 		if (loading) return
+
 		setLoading(true)
 
 		const res = await fetch(`/api/generate/image`, {
@@ -54,6 +56,7 @@ export default function PromptGenerate({
 		if (rawData.data.length > 0) {
 			const imageUrl = rawData.data[0].url
 			setImage(imageUrl)
+			await deductCookieAction()
 		}
 
 		setLoading(false)

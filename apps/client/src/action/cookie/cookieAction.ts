@@ -1,6 +1,8 @@
 "use server"
+import { revalidateTag } from "next/cache"
 import { initializeHeaders } from "@/lib/api/headers"
 import { getAccessToken, getMemberUUID } from "@/lib/api/sessionExtractor"
+import { getKoreanTime } from "@/lib/utils"
 import type { CommonResType } from "@/types/common/responseType"
 import type {
 	CookieLatestType,
@@ -12,6 +14,8 @@ import { actionHandler } from "../actionHandler"
 export const getCookieList = async (
 	req: GetCookieListRequestType,
 ): Promise<CommonResType<GetCookieListResponseType>> => {
+	"use server"
+
 	const userUuid = await getMemberUUID()
 	if (!userUuid) {
 		throw new Error("Unable to fetch user UUID")
@@ -33,12 +37,14 @@ export const getCookieList = async (
 		options: {
 			headers,
 			method: "GET",
-			cache: "no-cache",
+			// cache: "no-cache",
 		},
 	})
 }
 
 export const getCookieLatest = async (): Promise<CookieLatestType> => {
+	"use server"
+
 	const userUuid = await getMemberUUID()
 	const accessToken = await getAccessToken()
 	const headers = initializeHeaders(accessToken ?? undefined)
@@ -58,8 +64,44 @@ export const getCookieLatest = async (): Promise<CookieLatestType> => {
 		options: {
 			headers,
 			method: "GET",
+			next: { tags: ["changeCookie"] },
 		},
 	})
 
 	return { isUser: true, count: cookieLatest.result }
+}
+
+export const deductCookieAction = async (): Promise<boolean> => {
+	"use server"
+
+	const userUuid = await getMemberUUID()
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+
+	if (!userUuid) {
+		//	throw new Error("Unable to fetch user UUID")
+		return false
+	}
+
+	const payload = {
+		memberUuid: userUuid,
+		cookieAmount: 1,
+		approvedAt: getKoreanTime(),
+	}
+
+	const res = await actionHandler<CommonResType<Record<string, never>>>({
+		name: "deductCookie",
+		url: `/v1/member/cookie`,
+		options: {
+			headers,
+			method: "POST",
+			body: JSON.stringify(payload),
+		},
+	})
+
+	if (!res.isSuccess) return false
+	else {
+		revalidateTag("changeCookie")
+		return true
+	}
 }
