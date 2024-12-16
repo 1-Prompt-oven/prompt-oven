@@ -6,27 +6,28 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu"
-import { MoreVertical, Star } from "@repo/ui/lucide"
-import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
+import { MoreVertical } from "@repo/ui/lucide"
 import { matchUser } from "@/lib/api/sessionExtractor"
+import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import ProfileName from "../atoms/info/ProfileName"
+import ProfileFollow from "../atoms/ProfileFollow"
 
 interface MemberLeftProps {
 	memberData: ProfileMemberInfoType
+	followState: boolean
 }
 
-export default async function ProfileInfoLeft({ memberData }: MemberLeftProps) {
+export default async function ProfileInfoLeft({
+	memberData,
+	followState,
+}: MemberLeftProps) {
 	return (
 		<div className="flex w-full flex-grow flex-col justify-between gap-1 xs:max-w-[160px]">
 			<ProfileName memberData={memberData} />
 
 			<div className="mt-4 flex items-center justify-end gap-2 xs:!mt-0 xs:justify-start">
-				<Button
-					variant="ghost"
-					className="font-mulish bg-white/50 p-1 font-semibold text-white hover:bg-white/60 md:p-4">
-					<Star className="mx-2" />
-					<span className="mr-2 block">Follow</span>
-				</Button>
+				<ProfileFollow memberData={memberData} followState={followState} />
+
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button

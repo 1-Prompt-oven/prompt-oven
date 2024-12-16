@@ -8,6 +8,7 @@ interface ProfileDataProps {
 	searchParams: ProductListSearchParams
 	sellerName: string
 	sellerUuid: string
+	followState: boolean
 }
 
 export default async function ProfileSellerTemplate({
@@ -15,10 +16,11 @@ export default async function ProfileSellerTemplate({
 	searchParams,
 	sellerName,
 	sellerUuid,
+	followState,
 }: ProfileDataProps) {
 	return (
 		<section className="mx-auto mt-24 max-w-screen-xl">
-			<ProfileSellorInfo memberData={memberData} />
+			<ProfileSellorInfo memberData={memberData} followState={followState} />
 			<SellerList
 				searchParams={searchParams}
 				sellerName={sellerName}
