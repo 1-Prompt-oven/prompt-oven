@@ -6,16 +6,16 @@ import GradientButton from "@/components/common/atom/GradientButton.tsx"
 
 interface ChattingButtonProps {
 	sellerUuid: string
+	chatRoomName: string
 }
 
-export default function ChattingButtion({ sellerUuid }: ChattingButtonProps) {
+export default function ChattingButton({
+	sellerUuid,
+	chatRoomName,
+}: ChattingButtonProps) {
 	const router = useRouter()
 	const chatWithPeople = async (partner: string) => {
-		// eslint-disable-next-line no-console -- log
-		// console.log(`Chatting with ${partner} as ${host}`)
-		const randomId = Math.random().toString(36)
-		const roomName = `chat-${randomId}` // 테스트용 랜덤 채팅방 이름
-		const chatRoom = await startTalkWith(partner, roomName)
+		const chatRoom = await startTalkWith(partner, chatRoomName)
 		router.push(`/chat?roomId=${chatRoom.roomId}`)
 	}
 
