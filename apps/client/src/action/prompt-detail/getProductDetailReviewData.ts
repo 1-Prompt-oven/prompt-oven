@@ -1,12 +1,19 @@
 "use server"
 
+import { revalidateTag } from "next/cache"
+import { getAuthHeaders } from "@/lib/api/headers"
+import { isValidResponse } from "@/lib/api/validation"
+import { createQueryParamString } from "@/lib/query"
 import type {
 	PromptReviewType,
 	PromptSimpleReviewData,
 } from "@/types/review/reviewType"
-import { getAuthHeaders } from "@/lib/api/headers"
-import { isValidResponse } from "@/lib/api/validation"
-import { createQueryParamString } from "@/lib/query"
+import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
+import {
+	getMemberUUID,
+	getNickname,
+	getProfileImage,
+} from "@/lib/api/sessionExtractor"
 
 export async function getReviewSimpleData(
 	productUUID: string,
@@ -60,6 +67,7 @@ export async function getProductReview(
 		{
 			method: "GET",
 			headers,
+			next: { tags: ["write-review", "delete-review"] },
 		},
 	)
 
@@ -74,4 +82,61 @@ export async function getProductReview(
 	}
 
 	return rawData.result
+}
+
+export async function writeReviewAction(
+	productData: PromptDetailInfoType,
+	contents: string,
+	star: number,
+): Promise<boolean> {
+	"use server"
+	const headers = await getAuthHeaders()
+	const memberUUID = await getMemberUUID()
+	const memberProfile = await getProfileImage()
+	const memberNickname = await getNickname()
+
+	const payload = {
+		productUuid: productData.productUuid,
+		sellerUuid: productData.sellerUuid,
+		authorUuid: memberUUID,
+		authorProfileImage: memberProfile,
+		authorNickname: memberNickname,
+		contents,
+		star,
+	}
+
+	const res = await fetch(`${process.env.API_BASE_URL}/v1/member/review`, {
+		method: "POST",
+		headers,
+		body: JSON.stringify(payload),
+	})
+
+	if (!res.ok) {
+		// throw new Error("Failed to fetch Write Review Data")
+		return false
+	}
+
+	revalidateTag("write-review")
+	return true
+}
+
+export async function deleteReviewAction(reviewId: string): Promise<boolean> {
+	"use server"
+	const headers = await getAuthHeaders()
+
+	const res = await fetch(
+		`${process.env.API_BASE_URL}/v1/member/review/${reviewId}`,
+		{
+			method: "DELETE",
+			headers,
+		},
+	)
+
+	if (!res.ok) {
+		// throw new Error("Failed to fetch Delete Review Data")
+		return false
+	}
+
+	revalidateTag("delete-review")
+	return true
 }

@@ -12,19 +12,24 @@ interface PromptDetailMainProps {
 	contents: PromptDetailContentsType[]
 	productDetail: PromptDetailInfoType
 	userCookie: CookieLatestType
+	purchaseState: boolean
 }
 
 export default async function PromptDetailMain({
 	contents,
 	productDetail,
 	userCookie,
+	purchaseState,
 }: PromptDetailMainProps) {
 	return (
 		<div className="rounded-lg">
 			<div className="flex flex-col gap-12 lg:!flex-row">
 				<div className="flex flex-col gap-6">
 					<PromptDetailThumbnail contents={contents} />
-					<PromptDetailChoice productUuid={productDetail.productUuid} />
+					<PromptDetailChoice
+						productUuid={productDetail.productUuid}
+						purchaseState={purchaseState}
+					/>
 				</div>
 				<div className="flex flex-col gap-6">
 					<PromptDetailInfo productDetail={productDetail} />

@@ -4,6 +4,7 @@ import { revalidateTag } from "next/cache"
 import { getAuthHeaders } from "@/lib/api/headers"
 import { getMemberUUID } from "@/lib/api/sessionExtractor"
 import { isValidResponse } from "@/lib/api/validation"
+import { createQueryParamString } from "@/lib/query"
 import type {
 	ProfileDetailSellorShortType,
 	PromptDetailCartAllNumberType,
@@ -53,7 +54,7 @@ export async function getProductDetail(
 	)
 
 	if (!res.ok) {
-		throw new Error("Failed to fetch product list data")
+		throw new Error("Failed to fetch getProductDetail list data")
 	}
 
 	const rawData: DetailData = await res.json() // RawData 타입으로 지정
@@ -273,4 +274,36 @@ export async function changeCartState(
 
 	//throw new Error("Failed to fetch Update Cart Data")
 	return { result: { res: false, state: "resError", cartId: null } }
+}
+
+export async function getPurchaseState(productId: string): Promise<boolean> {
+	"use server"
+	const headers = await getAuthHeaders()
+	const memberUUID = await getMemberUUID()
+
+	if (!memberUUID) return false
+
+	const payload = {
+		memberUuid: memberUUID,
+		productUuid: productId,
+	}
+
+	const query = createQueryParamString(payload)
+
+	const res = await fetch(
+		`${process.env.API_BASE_URL}/v1/member/purchase/check?${query}`,
+		{
+			method: "GET",
+			headers,
+		},
+	)
+
+	if (!res.ok) {
+		//throw new Error("Failed to fetch purchaseState Data")
+		return false
+	}
+
+	//const rawData: ResponsePurchaseData = await res.json() // RawData 타입으로 지정
+
+	return true
 }

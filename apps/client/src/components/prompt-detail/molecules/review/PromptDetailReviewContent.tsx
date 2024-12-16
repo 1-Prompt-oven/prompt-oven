@@ -52,7 +52,10 @@ export default function PromptDetailReviewContent({
 					/>
 				</div>
 
-				<PromptDetailReviewLine content={content.contents} />
+				<PromptDetailReviewLine
+					reviewId={content.id}
+					content={content.contents}
+				/>
 			</div>
 		</li>
 	)
