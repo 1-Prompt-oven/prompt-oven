@@ -9,7 +9,7 @@ function PageLoader() {
 				width="100"
 				height="80"
 				radius="9"
-				color="#ffffff"
+				color="#A913F9"
 				ariaLabel="three-dots-loading"
 				wrapperStyle={{}}
 				wrapperClass=""
