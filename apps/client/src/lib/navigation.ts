@@ -11,7 +11,6 @@ import {
 	Settings,
 	ShoppingBag,
 	ShoppingCart,
-	Sparkles,
 	SquareTerminal,
 	Store,
 	TrophyIcon,
@@ -59,12 +58,6 @@ export const commonNavs: MenuNavItemType[] = [
 		icon: SquareTerminal,
 		label: "Prompts",
 		href: "/prompts",
-		query: {},
-	},
-	{
-		icon: Sparkles,
-		label: "Special exhibition",
-		href: "/special-exhibition",
 		query: {},
 	},
 	{

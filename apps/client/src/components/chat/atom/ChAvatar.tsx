@@ -24,6 +24,10 @@ export function ChAvatar({ src, alt, size = "md", fallback }: AvatarProps) {
 					src={src}
 					alt={alt ?? "Chat Avatar"}
 					className="h-full w-full rounded-full object-cover"
+					sizes="(max-width: 768px) 100vw, 360px"
+					fill
+					priority
+					unoptimized
 				/>
 			) : (
 				<span className="text-lg text-white">{fallback || alt?.charAt(0)}</span>

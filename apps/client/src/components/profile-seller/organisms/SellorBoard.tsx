@@ -88,7 +88,7 @@ export default function SellorBoard({
 
 	return (
 		<div className="mx-auto flex w-full flex-col items-center justify-center gap-4 px-4 sm:px-6 lg:px-8">
-			<SellorListTitle />
+			<SellorListTitle initialRequest={initialRequest} />
 
 			<SpProductFilter
 				onSearch={handleSearch}
