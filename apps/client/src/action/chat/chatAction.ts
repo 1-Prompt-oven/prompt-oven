@@ -16,7 +16,7 @@ import type {
 import type { CommonResType } from "@/types/common/responseType.ts"
 import { actionHandler } from "@/action/actionHandler.ts"
 import { createQueryParamString } from "@/lib/query.ts"
-import { getAccessToken } from "@/lib/api/sessionExtractor.ts"
+import { getAccessToken, getMemberUUID } from "@/lib/api/sessionExtractor.ts"
 import { initializeHeaders } from "@/lib/api/headers.ts"
 
 // chat-controller
@@ -125,15 +125,14 @@ export const leaveChatRoom = async (req: LeaveRoomRequestType) => {
 
 // custom action
 export const startTalkWith = async (
-	host: string,
 	partner: string,
 	roomName: string,
 ) => {
 	"use server"
-	
+	const hostId = await getMemberUUID()
 	const chatRoom = (
 		await createChatRoom({
-			hostUserUuid: host,
+			hostUserUuid: hostId as string,
 			inviteUserUuid: partner,
 			roomName,
 		})
