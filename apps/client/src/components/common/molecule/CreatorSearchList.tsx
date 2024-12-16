@@ -16,9 +16,13 @@ function CreatorSearchList({
 		<ul>
 			{data.map((creator: ProfileForSearchListType) => (
 				<Link
+					onClick={() => {
+						setTimeout(() => {
+							closeDialog()
+						}, 300)
+					}}
 					href={`/profile/seller/${creator.nickname}`}
-					key={creator.id}
-					onClick={closeDialog}>
+					key={creator.id}>
 					<li className="flex items-center justify-start gap-2 rounded-lg px-2 py-3 hover:bg-gray-800">
 						<Avatar className="mr-[10px] h-[30px] w-[30px]">
 							<AvatarImage src={creator.thumbnail} alt={creator.nickname} />

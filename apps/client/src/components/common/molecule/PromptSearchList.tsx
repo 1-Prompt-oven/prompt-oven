@@ -19,7 +19,11 @@ function PromptSearchList({
 				<Link
 					href={`/prompt-detail/${prompt.productUuid}`}
 					key={prompt.productUuid}
-					onClick={closeDialog}>
+					onClick={() => {
+						setTimeout(() => {
+							closeDialog()
+						}, 400)
+					}}>
 					<li
 						key={prompt.productUuid}
 						className="flex items-center gap-2 rounded-lg py-2 hover:bg-gray-800">
