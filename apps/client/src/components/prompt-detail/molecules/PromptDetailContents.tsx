@@ -3,14 +3,17 @@
 import { useState } from "react"
 import { Button } from "@repo/ui/button"
 import type { PromptDetailContentsType } from "@/types/prompt-detail/promptDetailType"
+import type { CookieLatestType } from "@/types/cookie/cookieResponseType"
 import PromptDetailContent from "../atoms/PromptDetailProductDescription"
 
 interface PromptDetailContentsProps {
 	productContents: PromptDetailContentsType[]
+	userCookie: CookieLatestType
 }
 
 export default function PromptDetailContents({
 	productContents,
+	userCookie,
 }: PromptDetailContentsProps) {
 	const [selectedContent, setSelectedContent] = useState<number>(0)
 
@@ -31,7 +34,10 @@ export default function PromptDetailContents({
 				))}
 			</div>
 
-			<PromptDetailContent productContent={productContents[selectedContent]} />
+			<PromptDetailContent
+				productContent={productContents[selectedContent]}
+				userCookie={userCookie}
+			/>
 		</div>
 	)
 }

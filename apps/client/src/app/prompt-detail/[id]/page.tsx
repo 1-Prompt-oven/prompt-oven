@@ -1,3 +1,4 @@
+import { getCookieLatest } from "@/action/cookie/cookieAction"
 import {
 	getDetailCategory,
 	getDetailDrops,
@@ -17,6 +18,7 @@ export default async function PromptDetail({ params }: PromptIdProps) {
 
 	const productDetail = await getProductDetail(productId)
 	const productReview = await getProductReview(productId)
+	const userCookie = await getCookieLatest()
 	const notableDrops = await getDetailDrops()
 	const categories = await getDetailCategory()
 
@@ -25,10 +27,10 @@ export default async function PromptDetail({ params }: PromptIdProps) {
 			<PromptDetailTemplate
 				productDetail={productDetail}
 				productReview={productReview}
+				userCookie={userCookie}
 				notableDrops={notableDrops}
 				categories={categories}
 			/>
 		</main>
 	)
 }
-

@@ -15,7 +15,6 @@ export default async function PromptDetailStandardInfo({
 	productName,
 }: PromptDetailStandardInfoProps) {
 	const formattedDate = new Date(productRegistDate).toISOString().split("T")[0]
-	const formattedNumber = price.toFixed(2)
 
 	const reviewData = await getReviewSimpleData(productUUID)
 	const avgStar = reviewData.avgStar !== 0 ? reviewData.avgStar : 0
@@ -42,7 +41,7 @@ export default async function PromptDetailStandardInfo({
 			</div>
 			<p className="my-4 flex items-center gap-2 text-4xl font-bold text-white">
 				<span className="text-4xl">₩</span>
-				<span>{formattedNumber}</span>
+				<span>{price}</span>
 			</p>
 		</div>
 	)
