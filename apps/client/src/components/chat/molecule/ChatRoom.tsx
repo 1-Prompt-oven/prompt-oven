@@ -2,6 +2,7 @@ import React from "react"
 import { ChAvatar } from "@/components/chat/atom/ChAvatar"
 import type { GetReactiveChatRoomListResponseType } from "@/types/chat/chatTypes"
 import { getKstTime } from "@/lib/time.ts"
+import { cn } from "@/lib/utils.ts"
 
 interface ChatRoomProps {
 	room: GetReactiveChatRoomListResponseType
@@ -13,10 +14,13 @@ export function ChatRoom({ room, isSelected, onSelect }: ChatRoomProps) {
 	return (
 		<button
 			type="button"
-			onClick={() => onSelect(room)}
-			className={`flex w-full flex-1 items-center gap-2.5 p-6 transition-colors hover:bg-[#404040] ${
-				isSelected ? "bg-[#404040]" : ""
-			}`}>
+			onClick={() => {
+				onSelect(room)
+			}}
+			className={cn(
+				`flex w-full flex-1 cursor-pointer items-center gap-2.5 p-6 transition-colors hover:!bg-[#404040]`,
+			)}
+			style={{ backgroundColor: isSelected ? "#404040 important" : "" }}>
 			<ChAvatar src="" alt={room.chatRoomName} />
 			<div className="flex-1 text-left">
 				<h3 className="text-sm font-semibold text-[#E2ADFF]">

@@ -13,7 +13,6 @@ import { getChatRoomList } from "@/action/chat/chatAction.ts"
 interface ChatSidebarProps {
 	selectedChatRoom?: ChatRoomType
 	memberUuid: string
-	selectedChatRoomId?: string
 	onSelectChatRoom: (room: GetReactiveChatRoomListResponseType) => void
 	onClose: () => void
 }
@@ -21,7 +20,6 @@ interface ChatSidebarProps {
 export function ChatSidebar({
 	selectedChatRoom,
 	memberUuid,
-	selectedChatRoomId,
 	onSelectChatRoom,
 	onClose,
 }: ChatSidebarProps) {
@@ -174,7 +172,7 @@ export function ChatSidebar({
 						<ChatRoom
 							key={room.chatRoomId}
 							room={room}
-							isSelected={selectedChatRoomId === room.chatRoomId}
+							isSelected={selectedChatRoom?.chatRoomId === room.chatRoomId}
 							onSelect={onSelectChatRoom}
 						/>
 					))
