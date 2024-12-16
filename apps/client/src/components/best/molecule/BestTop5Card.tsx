@@ -19,7 +19,6 @@ import Image from "next/image"
 interface BestCardProps {
 	ranking: number // 베스트
 	rankingChange: number // 베스트
-	dailySellsCount: number // 베스트
 	reviewAvg: number // 베스트
 	avatarImage: string | undefined // 프로필
 	nickname: string // 프로필
@@ -27,18 +26,19 @@ interface BestCardProps {
 	hashTag: string | undefined // 프로필
 	views: number
 	isTopRanked?: boolean
+	totalSales: number
 }
 
 export default function BestTop5Card({
 	ranking,
 	rankingChange,
-	dailySellsCount,
 	reviewAvg,
 	avatarImage = "https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
 	nickname,
 	follower,
 	hashTag,
 	isTopRanked = false,
+	totalSales,
 	// views,
 }: BestCardProps) {
 	// const calculateDaysSinceJoined = (joinedDate: string) => {
@@ -132,8 +132,8 @@ export default function BestTop5Card({
 									{[
 										{
 											icon: TrendingUp,
-											label: "Daily Sales",
-											value: dailySellsCount,
+											label: "Total Sales",
+											value: totalSales,
 										},
 										{
 											icon: Users,
