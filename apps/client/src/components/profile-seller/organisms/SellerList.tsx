@@ -2,7 +2,8 @@ import { getSellerProductList } from "@/action/product/productAction.ts"
 import { stringToBoolean } from "@/lib/utils.ts"
 import type { ProductListSearchParams } from "@/types/account/searchParams.ts"
 import type { GetSellerProductListRequestType } from "@/types/product/productUpsertType"
-import SellorBoard from "./SellorBoard"
+import SellerBoard from "@/components/profile-seller/organisms/SellerBoard.tsx"
+import { getNickname } from "@/lib/api/sessionExtractor.ts"
 
 export interface SellerListProps {
 	searchParams: ProductListSearchParams
@@ -27,12 +28,14 @@ export default async function SellerList({
 	}
 
 	const initialData = (await getSellerProductList(request)).result
+	const memberName = (await getNickname()) ?? ""
 
 	return (
-		<SellorBoard
+		<SellerBoard
 			initialData={initialData}
 			initialRequest={request}
 			sellerName={sellerName}
+			userName={memberName}
 		/>
 	)
 }

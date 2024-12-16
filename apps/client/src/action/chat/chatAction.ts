@@ -4,6 +4,8 @@ import _ from "lodash"
 import type {
 	CreateChatRoomRequestType,
 	CreateChatRoomResponseType,
+	GetChatRoomListRequestType,
+	GetChatRoomListResponseType,
 	GetChatRoomRequestType,
 	GetChatRoomResponseType,
 	GetPreviousMessagesRequestType,
@@ -44,6 +46,21 @@ export const getChatRoom = async (erq: GetChatRoomRequestType) => {
 	return actionHandler<CommonResType<GetChatRoomResponseType>>({
 		name: "getChatRoom",
 		url: `/v1/member/chat/${erq.roomId}?${query}`,
+		options: {
+			method: "GET",
+			headers,
+			cache: "no-cache",
+		},
+	})
+}
+
+export const getChatRoomList = async (req: GetChatRoomListRequestType) => {
+	"use server"
+	const accessToken = await getAccessToken()
+	const headers = initializeHeaders(accessToken ?? undefined)
+	return actionHandler<CommonResType<GetChatRoomListResponseType>>({
+		name: "getChatRoomList",
+		url: `/v1/member/chat/rest/chatRoomList/${req.userUuid}`,
 		options: {
 			method: "GET",
 			headers,
@@ -124,18 +141,33 @@ export const leaveChatRoom = async (req: LeaveRoomRequestType) => {
 }
 
 // custom action
-export const startTalkWith = async (
-	partner: string,
-	roomName: string,
-) => {
+export const startTalkWith = async (partnerUuid: string, roomName: string) => {
 	"use server"
 	const hostId = await getMemberUUID()
-	const chatRoom = (
-		await createChatRoom({
-			hostUserUuid: hostId as string,
-			inviteUserUuid: partner,
-			roomName,
-		})
-	).result
+	let chatRoom!: CreateChatRoomResponseType
+	const chatRoomList = (await getChatRoomList({ userUuid: hostId as string }))
+		.result
+
+	const existChatRoomIdx: number = chatRoomList.findIndex(
+		(room) => room.partnerUuid === partnerUuid,
+	)
+	if (existChatRoomIdx !== -1) {
+		const _chatRoom = chatRoomList[existChatRoomIdx]
+		chatRoom = {
+			roomId: _chatRoom.chatRoomId,
+			roomName: _chatRoom.chatRoomName,
+			createdAt: _chatRoom.recentMessageTime,
+			updatedAt: _chatRoom.recentMessageTime,
+		}
+	} else {
+		chatRoom = (
+			await createChatRoom({
+				hostUserUuid: hostId as string,
+				inviteUserUuid: partnerUuid,
+				roomName,
+			})
+		).result
+	}
+
 	return chatRoom
 }

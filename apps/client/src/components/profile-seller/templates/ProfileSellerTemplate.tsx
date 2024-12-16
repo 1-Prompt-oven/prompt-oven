@@ -1,7 +1,7 @@
 import type { ProductListSearchParams } from "@/types/account/searchParams"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import ProfileSellorInfo from "../organisms/ProfileSellorInfo"
-import SellerList from "../organisms/SellorList"
+import SellerList from "../organisms/SellerList.tsx"
 
 interface ProfileDataProps {
 	memberData: ProfileMemberInfoType

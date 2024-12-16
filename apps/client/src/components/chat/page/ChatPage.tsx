@@ -39,8 +39,8 @@ export default function ChatPage({
 					memberUuid={memberUuid}
 					onSelectChatRoom={(room) => {
 						// room read update 추가해야함.
-						setSelectedRoom(room)
 						setShowSidebar(false)
+						setSelectedRoom(room)
 						router.push(`/chat?roomId=${room.chatRoomId}`)
 					}}
 					onClose={() => setShowSidebar(false)}
