@@ -62,6 +62,7 @@ export default function SellerRegistrationPage() {
 	) => {
 		await registerSeller(reqBody)
 		await AuthSession.update()
+		router.push("/")
 		router.refresh()
 	}
 
