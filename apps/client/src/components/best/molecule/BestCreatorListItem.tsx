@@ -13,7 +13,6 @@ import {
 interface BestCardProps {
 	ranking: number // 베스트
 	rankingChange: number // 베스트
-	dailySellsCount: number // 베스트
 	reviewAvg: number // 베스트
 	_date: string // 베스트
 	avatarImage: string | undefined // 프로필
@@ -27,14 +26,13 @@ interface BestCardProps {
 export function BestCreatorListItem({
 	ranking,
 	rankingChange,
-	dailySellsCount,
 	reviewAvg,
 	_date,
 	avatarImage = "https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
 	nickname,
 	follower,
 	hashTag,
-	// totalSales,
+	totalSales,
 	_views,
 }: BestCardProps) {
 	return (
@@ -86,7 +84,7 @@ export function BestCreatorListItem({
 				</div>
 				<div className="col-span-1 ml-4 flex items-center justify-center gap-1 text-white/80">
 					<TrendingUp className="h-4 w-4" />
-					<span>{dailySellsCount}</span>
+					<span>{totalSales}</span>
 				</div>
 				<div className="col-span-2 mr-6 flex items-center justify-end gap-1 text-white/80">
 					<Star className="h-4 w-4 text-yellow-400" />

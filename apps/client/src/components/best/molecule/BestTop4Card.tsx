@@ -16,23 +16,23 @@ import Link from "next/link"
 interface BestTop4CardProps {
 	ranking: number
 	rankingChange: number
-	dailySellsCount: number
 	reviewAvg: number
 	avatarImage?: string
 	nickname: string
 	follower: number
 	hashTag?: string
+	totalSales: number
 }
 
 export default function BestTop4Card({
 	ranking,
 	rankingChange,
-	dailySellsCount,
 	reviewAvg,
 	avatarImage = "https://promptoven.s3.ap-northeast-2.amazonaws.com/dummy/profile/TestAvartar.png",
 	nickname,
 	follower,
 	hashTag,
+	totalSales,
 }: BestTop4CardProps) {
 	return (
 		<Link href={`/profile/seller/${nickname}`}>
@@ -102,7 +102,7 @@ export default function BestTop4Card({
 					<div className="grid grid-cols-3 gap-2">
 						<div className="flex items-center justify-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2 py-1.5">
 							<TrendingUp className="h-3.5 w-3.5 text-purple-300" />
-							<span className="text-sm">{dailySellsCount}</span>
+							<span className="text-sm">{totalSales}</span>
 						</div>
 						<div className="flex items-center justify-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2 py-1.5">
 							<Star className="h-3.5 w-3.5 text-yellow-400" />

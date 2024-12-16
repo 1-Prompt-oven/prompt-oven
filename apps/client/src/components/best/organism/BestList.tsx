@@ -91,7 +91,7 @@ function BestList({
 					<div className="col-span-2">Rank</div>
 					<div className="col-span-3">Creator&apos;s Name</div>
 					<div className="col-span-2">Creator&apos;s Tag</div>
-					<div className="col-span-1 text-right">Daily Sales</div>
+					<div className="col-span-1 text-right">Total Sales</div>
 					<div className="col-span-2 text-right">Avg Star</div>
 					<div className="col-span-2 text-right">Followers</div>
 					{/* <div className="flex items-center">
