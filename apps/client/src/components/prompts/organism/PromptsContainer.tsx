@@ -140,7 +140,7 @@ export default function PromptsContainer({
 			) : null}
 
 			{/* 더 이상 불러올 데이터가 없으면 표시 */}
-			{!hasNext ? (
+			{!hasNext && list.length > 0 ? (
 				<div className="mb-8 p-4 text-center text-white">
 					<span className="font-bold">END</span>
 				</div>
