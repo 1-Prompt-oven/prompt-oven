@@ -160,15 +160,6 @@ export function ChatMain({
 		}
 	}
 
-	// if (status === "loading")
-	// 	return <div className="p-4 text-center">로딩 중...</div>
-	// if (status === "error" || queryError || sseError)
-	// 	return (
-	// 		<div className="p-4 text-center text-red-500">
-	// 			에러: {(queryError as Error).message || sseError || "알 수 없는 오류"}
-	// 		</div>
-	// 	)
-
 	return (
 		<div className="relative flex flex-1 flex-col overflow-hidden bg-[#424242]">
 			<ChatHeader
