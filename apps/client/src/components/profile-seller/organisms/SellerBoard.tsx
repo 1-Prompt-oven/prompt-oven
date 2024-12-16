@@ -14,19 +14,21 @@ import {
 	extractProductStatusOptionReverse,
 } from "@/lib/sellerProduct.ts"
 import type { ProductStatusOption } from "@/types/seller/sellerProduct.ts"
-import SellorListTitle from "../atoms/SellorListTitle"
+import SellerListTitle from "../atoms/SellorListTitle"
 
-interface SellorBoardProps {
+interface SellerBoardProps {
 	initialData: GetSellerProductListResponseType
 	initialRequest: GetSellerProductListRequestType
 	sellerName: string
+	userName: string
 }
 
-export default function SellorBoard({
+export default function SellerBoard({
 	initialData,
 	initialRequest,
 	sellerName,
-}: SellorBoardProps) {
+	userName,
+}: SellerBoardProps) {
 	const router = useRouter()
 	const searchParams = useSearchParams()
 
@@ -40,6 +42,12 @@ export default function SellorBoard({
 		initialRequest.enable ?? true,
 		initialRequest.temporary ?? false,
 	)
+
+	const sellerListTitleProps = {
+		sellerUuid: initialRequest.sellerUuid,
+		sellerName,
+		userName,
+	}
 
 	const updateQueryParams = (
 		params: Partial<GetSellerProductListRequestType>,
@@ -88,7 +96,7 @@ export default function SellorBoard({
 
 	return (
 		<div className="mx-auto flex w-full flex-col items-center justify-center gap-4 px-4 sm:px-6 lg:px-8">
-			<SellorListTitle initialRequest={initialRequest} />
+			<SellerListTitle initialRequest={sellerListTitleProps} />
 
 			<SpProductFilter
 				onSearch={handleSearch}

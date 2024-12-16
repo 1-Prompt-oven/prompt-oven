@@ -81,5 +81,10 @@ export interface GetChatRoomRequestType {
 }
 export type GetChatRoomResponseType = ChatRoom
 
+export interface GetChatRoomListRequestType {
+	userUuid: string // user uuid {path}
+}
+export type GetChatRoomListResponseType = ChatRoom[]
+
 // chat reactive API Types
 export type GetReactiveChatRoomListResponseType = ChatRoom
