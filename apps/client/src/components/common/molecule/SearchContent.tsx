@@ -31,9 +31,13 @@ function SearchContent({ closeDialog }: { closeDialog: () => void }) {
 	}
 
 	const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
-		if (e.key === "Enter" && queryParam.keyword !== "") {
+		if (
+			e.key === "Enter" &&
+			queryParam.keyword !== "" &&
+			selectedTab === "prompt"
+		) {
 			e.preventDefault()
-			router.push(`/${queryParam.tabName}?keyword=${queryParam.keyword}`)
+			router.push(`/${queryParam.tabName}s?keyword=${queryParam.keyword}`)
 			closeDialog()
 		}
 	}
