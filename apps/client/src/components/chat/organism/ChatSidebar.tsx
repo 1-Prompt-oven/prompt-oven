@@ -167,7 +167,7 @@ export function ChatSidebar({
 					</div>
 				) : filteredChatRooms.length === 0 ? (
 					<div className="flex h-full items-center justify-center">
-						<p className="text-[#E2ADFF]">No chat rooms found</p>
+						<p className="text-[#E2ADFF]">채팅방이 없습니다</p>
 					</div>
 				) : (
 					filteredChatRooms.map((room) => (
