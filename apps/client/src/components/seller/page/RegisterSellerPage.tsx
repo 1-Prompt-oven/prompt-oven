@@ -6,6 +6,8 @@ import DaumPostcode from "react-daum-postcode"
 import { Card, CardContent, CardHeader, CardTitle } from "@repo/ui/card"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
+import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { RsProgress } from "@/components/seller/atom/RsProgress"
 import { RsButton } from "@/components/seller/atom/RsButton"
 import { RsSellerInfoForm } from "@/components/seller/organism/RsSellerInfoForm"
@@ -17,7 +19,6 @@ import { RsRegistrationCompleteDialog } from "@/components/seller/molecule/RsReg
 import type { RegisterSellerRequestType } from "@/types/settlement/settlementType.ts"
 import { registerSeller } from "@/action/settlement/settlementAction.ts"
 import { delay } from "@/lib/utils.ts"
-import { refreshAccessTokenAfterRoleChange } from "@/action/auth/refreshAfterRoleChangeAction.ts"
 
 const TOTAL_STEPS = 2
 
@@ -27,6 +28,9 @@ export default function SellerRegistrationPage() {
 	const [isDialogOpen, setIsDialogOpen] = useState(false)
 	const [isSubmitting, setIsSubmitting] = useState(false)
 	const modalRef = useRef<HTMLDivElement>(null)
+
+	const AuthSession = useSession()
+	const router = useRouter()
 
 	const sellerInfoForm = useForm<SellerInfo>({
 		resolver: zodResolver(sellerInfoSchema),
@@ -57,13 +61,8 @@ export default function SellerRegistrationPage() {
 		reqBody: Omit<RegisterSellerRequestType, "memberID">,
 	) => {
 		await registerSeller(reqBody)
-		const result = await refreshAccessTokenAfterRoleChange()
-		if (result.success) {
-			// Update the client-side session
-		} else {
-			// eslint-disable-next-line no-console -- 오류 출력
-			console.error(result.error)
-		}
+		await AuthSession.update()
+		router.refresh()
 	}
 
 	const handleAddressSubmit = async () => {

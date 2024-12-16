@@ -165,45 +165,59 @@ export const authOptions: NextAuthOptions = {
 			return true
 		},
 		async jwt({ token, user, trigger }): Promise<ExtendedToken> {
-			if (user) {
-				token.accesstoken = user.accesstoken
-				token.refreshtoken = user.refreshtoken
-				token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
-			}
-			if (Date.now() >= ((token.tokenExpiration as number) || 0)) {
+			if (trigger === "update") {
 				const refreshedToken = await refreshAccessToken(
 					(token.refreshtoken as string) || "",
 				)
-				if (refreshedToken.result) {
-					const profileImage = await getProfileImage(user.memberUUID)
-					token.profileImage = profileImage.picture || ""
-					user.profileImage = profileImage.picture || ""
+				const profileImage = await getProfileImage(token.memberUUID as string)
+				token.profileImage = profileImage.picture || ""
+				token.accesstoken = refreshedToken.result.accessToken
+				token.role = refreshedToken.result.role
+				token.nickname = refreshedToken.result.nickname
 
-					token.accesstoken = refreshedToken.result.accessToken
-					user.accesstoken = refreshedToken.result.accessToken
+				token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000
+			} else {
+				if (user) {
+					token.accesstoken = user.accesstoken
+					token.refreshtoken = user.refreshtoken
+					token.tokenExpiration = Date.now() + 24 * 60 * 60 * 1000
+				}
+				if (Date.now() >= ((token.tokenExpiration as number) || 0)) {
+					const refreshedToken = await refreshAccessToken(
+						(token.refreshtoken as string) || "",
+					)
+					if (refreshedToken.result) {
+						const profileImage = await getProfileImage(user.memberUUID)
+						token.profileImage = profileImage.picture || ""
+						user.profileImage = profileImage.picture || ""
 
-					token.role = refreshedToken.result.role
-					user.role = refreshedToken.result.role
+						token.accesstoken = refreshedToken.result.accessToken
+						user.accesstoken = refreshedToken.result.accessToken
 
-					token.nickname = refreshedToken.result.nickname
-					user.nickname = refreshedToken.result.nickname
+						token.role = refreshedToken.result.role
+						user.role = refreshedToken.result.role
 
-					token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000
-				} else {
-					await logoutAuthMember({
-						Authorization: `Bearer ${token.accesstoken}`,
-						Refreshtoken: token.refreshtoken as string,
-					})
-					token.accesstoken = null
-					token.refreshtoken = null
-					token.tokenExpiration = null
-					token.error = "LoggedOut"
+						token.nickname = refreshedToken.result.nickname
+						user.nickname = refreshedToken.result.nickname
+
+						token.tokenExpiration = Date.now() + 6 * 24 * 60 * 60 * 1000
+					} else {
+						await logoutAuthMember({
+							Authorization: `Bearer ${token.accesstoken}`,
+							Refreshtoken: token.refreshtoken as string,
+						})
+						token.accesstoken = null
+						token.refreshtoken = null
+						token.tokenExpiration = null
+						token.error = "LoggedOut"
+					}
 				}
 			}
 			return { ...token, ...user }
 		},
 
-		async session({ session, token }) {
+		async session({ session, token, trigger }) {
+			console.log("session callback", session, token, trigger)
 			session.user = token
 			return session
 		},
