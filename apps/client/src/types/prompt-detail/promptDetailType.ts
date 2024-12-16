@@ -50,3 +50,7 @@ export interface PromptDetailCartAllNumberType {
 	createdDate: string
 	lastModifiedDate: string
 }
+
+export interface PromptDetailPurchaseStateType {
+	isPurchase: boolean
+}

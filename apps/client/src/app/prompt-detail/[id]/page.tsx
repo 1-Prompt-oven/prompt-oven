@@ -3,7 +3,10 @@ import {
 	getDetailCategory,
 	getDetailDrops,
 } from "@/action/prompt-detail/getAssociationProduct"
-import { getProductDetail } from "@/action/prompt-detail/getProductDetailData"
+import {
+	getProductDetail,
+	getPurchaseState,
+} from "@/action/prompt-detail/getProductDetailData"
 import { getProductReview } from "@/action/prompt-detail/getProductDetailReviewData"
 import PromptDetailTemplate from "@/components/prompt-detail/templates/PromptDetailTemplate"
 
@@ -19,6 +22,7 @@ export default async function PromptDetail({ params }: PromptIdProps) {
 	const productDetail = await getProductDetail(productId)
 	const productReview = await getProductReview(productId)
 	const userCookie = await getCookieLatest()
+	const purchaseState = await getPurchaseState(productId)
 	const notableDrops = await getDetailDrops()
 	const categories = await getDetailCategory()
 
@@ -28,6 +32,7 @@ export default async function PromptDetail({ params }: PromptIdProps) {
 				productDetail={productDetail}
 				productReview={productReview}
 				userCookie={userCookie}
+				purchaseState={purchaseState}
 				notableDrops={notableDrops}
 				categories={categories}
 			/>
