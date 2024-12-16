@@ -4,14 +4,17 @@ import { useEffect, useState } from "react"
 import { Card, CardContent } from "@repo/ui/card"
 import { ArrowDownCircleIcon, ArrowUpCircleIcon } from "@repo/ui/lucide"
 import type { PromptDetailContentsType } from "@/types/prompt-detail/promptDetailType"
+import type { CookieLatestType } from "@/types/cookie/cookieResponseType"
 import PromptGenerate from "../molecules/generate/PromptGenerate"
 
 interface PromptDetailContentProps {
 	productContent: PromptDetailContentsType
+	userCookie: CookieLatestType
 }
 
 export default function PromptDetailContent({
 	productContent,
+	userCookie,
 }: PromptDetailContentProps) {
 	const [isExpanded, setIsExpanded] = useState(false)
 
@@ -53,6 +56,7 @@ export default function PromptDetailContent({
 										? productContent.sampleValue
 										: productContent.sampleValue.slice(0, sliceLength)
 								}
+								userCookie={userCookie}
 							/>
 						</div>
 

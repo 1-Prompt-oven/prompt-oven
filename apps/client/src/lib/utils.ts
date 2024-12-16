@@ -74,8 +74,16 @@ export function delay(ms: number) {
 }
 
 // change string boolean into boolean type
-
 export function stringToBoolean(str: string) {
 	if (!str) return false
 	return str.toLowerCase() === "true"
+}
+
+// get KR Time
+export function getKoreanTime() {
+	const now = new Date()
+	const kstOffset = 9 * 60 // KST는 UTC+9
+	const kstDate = new Date(now.getTime() + kstOffset * 60 * 1000)
+
+	return kstDate
 }
