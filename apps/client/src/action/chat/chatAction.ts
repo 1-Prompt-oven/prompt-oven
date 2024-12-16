@@ -141,15 +141,33 @@ export const leaveChatRoom = async (req: LeaveRoomRequestType) => {
 }
 
 // custom action
-export const startTalkWith = async (partner: string, roomName: string) => {
+export const startTalkWith = async (partnerUuid: string, roomName: string) => {
 	"use server"
 	const hostId = await getMemberUUID()
-	const chatRoom = (
-		await createChatRoom({
-			hostUserUuid: hostId as string,
-			inviteUserUuid: partner,
-			roomName,
-		})
-	).result
+	let chatRoom!: CreateChatRoomResponseType
+	const chatRoomList = (await getChatRoomList({ userUuid: hostId as string }))
+		.result
+
+	const existChatRoomIdx: number = chatRoomList.findIndex(
+		(room) => room.partnerUuid === partnerUuid,
+	)
+	if (existChatRoomIdx !== -1) {
+		const _chatRoom = chatRoomList[existChatRoomIdx]
+		chatRoom = {
+			roomId: _chatRoom.chatRoomId,
+			roomName: _chatRoom.chatRoomName,
+			createdAt: _chatRoom.recentMessageTime,
+			updatedAt: _chatRoom.recentMessageTime,
+		}
+	} else {
+		chatRoom = (
+			await createChatRoom({
+				hostUserUuid: hostId as string,
+				inviteUserUuid: partnerUuid,
+				roomName,
+			})
+		).result
+	}
+
 	return chatRoom
 }

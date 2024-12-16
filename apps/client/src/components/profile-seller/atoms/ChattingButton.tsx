@@ -14,8 +14,8 @@ export default function ChattingButton({
 	chatRoomName,
 }: ChattingButtonProps) {
 	const router = useRouter()
-	const chatWithPeople = async (partner: string) => {
-		const chatRoom = await startTalkWith(partner, chatRoomName)
+	const chatWithPeople = async (partnerUuid: string) => {
+		const chatRoom = await startTalkWith(partnerUuid, chatRoomName)
 		router.push(`/chat?roomId=${chatRoom.roomId}`)
 	}
 
@@ -23,10 +23,11 @@ export default function ChattingButton({
 		<section>
 			<GradientButton
 				type="button"
+				className="h-[40px] w-[100px] px-[20px] py-[10px]"
 				onClick={() => {
 					chatWithPeople(sellerUuid).then()
 				}}>
-				Commission
+				대화하기
 			</GradientButton>
 		</section>
 	)
