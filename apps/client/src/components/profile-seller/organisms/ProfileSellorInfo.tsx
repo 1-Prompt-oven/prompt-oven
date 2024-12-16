@@ -11,9 +11,13 @@ const DEFAULT_AVATAR = STATIC_DEFAULT_AVATAR
 
 interface MemberDataProps {
 	memberData: ProfileMemberInfoType
+	followState: boolean
 }
 
-export default function ProfileMemberInfo({ memberData }: MemberDataProps) {
+export default function ProfileMemberInfo({
+	memberData,
+	followState,
+}: MemberDataProps) {
 	return (
 		<div className="mx-2">
 			<ProfileBanner
@@ -33,7 +37,7 @@ export default function ProfileMemberInfo({ memberData }: MemberDataProps) {
 				/>
 
 				<div className="flex flex-grow justify-between gap-2 rounded-xl bg-gradient-to-r from-[#B514F1] to-[#0BA9FF] p-4 md:h-[90%] md:items-center">
-					<ProfileInfoLeft memberData={memberData} />
+					<ProfileInfoLeft memberData={memberData} followState={followState} />
 					<ProfileInfoRight memberData={memberData} />
 				</div>
 			</div>
