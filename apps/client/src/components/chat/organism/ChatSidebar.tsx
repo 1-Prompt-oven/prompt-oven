@@ -8,6 +8,7 @@ import type {
 } from "@/types/chat/chatTypes.ts"
 import ChSearchBar from "@/components/chat/atom/ChSearchBar.tsx"
 import { ChatRoom } from "@/components/chat/molecule/ChatRoom.tsx"
+import { getChatRoomList } from "@/action/chat/chatAction.ts"
 
 interface ChatSidebarProps {
 	selectedChatRoom?: ChatRoomType
@@ -49,12 +50,22 @@ export function ChatSidebar({
 	}, [chatRoomMap, searchTerm])
 
 	const updateChatRoomList = useCallback(
-		(newRoom: GetReactiveChatRoomListResponseType) => {
+		(chatRoomList: GetReactiveChatRoomListResponseType[]) => {
+			if (chatRoomList.length === 0) {
+				return
+			}
 			setChatRoomMap((prevMap) => {
 				const newMap = new Map(prevMap)
-				newMap.set(newRoom.chatRoomId, newRoom)
+				chatRoomList.forEach((newRoom) => {
+					newMap.set(newRoom.chatRoomId, newRoom)
+				})
 				return newMap
 			})
+			// setChatRoomMap((prevMap) => {
+			// 	const newMap = new Map(prevMap)
+			// 	newMap.set(newRoom.chatRoomId, newRoom)
+			// 	return newMap
+			// })
 		},
 		[],
 	)
@@ -66,12 +77,16 @@ export function ChatSidebar({
 		const maxRetries = 5
 		const retryDelay = 3000 // 3초
 
-		const connectSSE = () => {
+		const connectSSE = async () => {
 			setIsLoading(true)
+			const chatRoomList = (await getChatRoomList({ userUuid: memberUuid }))
+				.result
+			updateChatRoomList(chatRoomList)
+
 			eventSource = new EventSource(`/api/chat/room?userUuid=${memberUuid}`)
+			setIsLoading(false)
 
 			eventSource.onopen = () => {
-				setIsLoading(false)
 				retryCount = 0 // 연결 성공 시 재시도 횟수 초기화
 			}
 
@@ -110,7 +125,7 @@ export function ChatSidebar({
 			}
 		}
 
-		connectSSE()
+		connectSSE().then()
 
 		return () => {
 			eventSource?.close()

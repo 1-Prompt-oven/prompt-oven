@@ -80,18 +80,6 @@ export const sellerNavs: MenuNavItemType[] = [
 		label: "Product",
 		href: "/account",
 		query: { view: "product-list" },
-		subMenu: [
-			{
-				label: "Product List",
-				href: "/account",
-				query: { view: "product-list" },
-			},
-			{
-				label: "Category",
-				href: "/account",
-				query: { view: "product-category" },
-			},
-		],
 	},
 	{
 		icon: User,
@@ -133,13 +121,13 @@ export const sellerNavs: MenuNavItemType[] = [
 		icon: Hammer,
 		label: "Commission",
 		href: "/account",
-		query: { view: "commission"}
+		query: { view: "commission" },
 	},
 	{
 		icon: Cookie,
 		label: "Cookie",
 		href: "/account",
-		query: { view: "cookie"}
+		query: { view: "cookie" },
 	},
 	...commonNavs,
 	{
@@ -197,7 +185,7 @@ export const userNavs: MenuNavItemType[] = [
 		icon: Cookie,
 		label: "Cookie",
 		href: "/account",
-		query: { view: "cookie"}
+		query: { view: "cookie" },
 	},
 	...commonNavs,
 	{
