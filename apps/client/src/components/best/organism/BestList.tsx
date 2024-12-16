@@ -87,12 +87,13 @@ function BestList({
 	return (
 		<div className="mx-auto w-full max-w-[1716px]">
 			<div>
-				<div className="grid grid-cols-12 gap-5 px-6 py-4 text-base font-semibold text-white">
+				<div className="grid grid-cols-12 px-6 py-4 font-semibold text-white xxs:text-xs sm:text-base">
 					<div className="col-span-2">Rank</div>
-					<div className="col-span-3">Creator&apos;s Name</div>
-					<div className="col-span-2">Creator&apos;s Tag</div>
-					<div className="col-span-1 text-right">Total Sales</div>
-					<div className="col-span-2 text-right">Avg Star</div>
+					<div className="col-span-2 md:col-span-3">Name</div>
+					<div className="col-span-1 text-center">Tag</div>
+					<div className="col-span-1" />
+					<div className="col-span-2 md:col-span-1 md:text-center">Sales</div>
+					<div className="col-span-2 text-left">Star</div>
 					<div className="col-span-2 text-right">Followers</div>
 					{/* <div className="flex items-center">
 						<span>Total Sales</span>

@@ -132,7 +132,7 @@ export default function BestTop5Card({
 									{[
 										{
 											icon: TrendingUp,
-											label: "Total Sales",
+											label: "Sales",
 											value: totalSales,
 										},
 										{
