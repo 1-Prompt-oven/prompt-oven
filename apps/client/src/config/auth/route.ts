@@ -9,7 +9,6 @@ export const sellerRoutes = {
 export const commonAuthRoutes = {
 	promptDetail: "/prompt-detail",
 	prompts: "/prompts",
-	specialExhibition: "/special-exhibition",
 	best: "/best",
 }
 export const withOutAuthRoutes = {

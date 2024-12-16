@@ -7,7 +7,7 @@ interface ProfileAvatarProps {
 
 export default function ProfileAvatar({ memberAvatar }: ProfileAvatarProps) {
 	return (
-		<div className="relative aspect-square h-full w-28 rounded-xl border-[3px] border-white bg-white md:w-auto">
+		<div className="relative aspect-square h-28 w-28 rounded-xl border-[3px] border-white bg-white md:w-auto">
 			{memberAvatar ? (
 				<Image
 					src={decodeURIComponent(memberAvatar)}

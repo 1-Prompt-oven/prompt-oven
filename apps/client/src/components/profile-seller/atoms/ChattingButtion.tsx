@@ -4,17 +4,18 @@ import { useRouter } from "next/navigation"
 import { startTalkWith } from "@/action/chat/chatAction.ts"
 import GradientButton from "@/components/common/atom/GradientButton.tsx"
 
-const _host = "963fa64e-2dae-42ef-9e47-f1877ac59fb8"
-const _partner = "97c77959-0af8-4a0f-80eb-97d65eab17dd"
+interface ChattingButtonProps {
+	sellerUuid: string
+}
 
-export default function Page() {
+export default function ChattingButtion({ sellerUuid }: ChattingButtonProps) {
 	const router = useRouter()
-	const chatWithPeople = async (host: string, partner: string) => {
+	const chatWithPeople = async (partner: string) => {
 		// eslint-disable-next-line no-console -- log
-		console.log(`Chatting with ${partner} as ${host}`)
+		// console.log(`Chatting with ${partner} as ${host}`)
 		const randomId = Math.random().toString(36)
 		const roomName = `chat-${randomId}` // 테스트용 랜덤 채팅방 이름
-		const chatRoom = await startTalkWith(host, partner, roomName)
+		const chatRoom = await startTalkWith(partner, roomName)
 		router.push(`/chat?roomId=${chatRoom.roomId}`)
 	}
 
@@ -23,9 +24,9 @@ export default function Page() {
 			<GradientButton
 				type="button"
 				onClick={() => {
-					chatWithPeople(_host, _partner).then()
+					chatWithPeople(sellerUuid).then()
 				}}>
-				채팅 테스트다 이자식아
+				Commission
 			</GradientButton>
 		</section>
 	)
