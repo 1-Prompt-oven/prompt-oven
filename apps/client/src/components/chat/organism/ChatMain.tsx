@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { EventSource } from "event-source-polyfill"
+import { EventSourcePolyfill } from "event-source-polyfill"
 import { ThreeDots } from "react-loader-spinner"
 import { ChatHeader } from "@/components/chat/molecule/ChatHeader"
 import { ChatInput } from "@/components/chat/molecule/ChatInput.tsx"
@@ -47,8 +47,12 @@ export function ChatMain({
 		const retryDelay = 3000 // 3초
 
 		const connectSSE = () => {
-			eventSource = new EventSource(
+			eventSource = new EventSourcePolyfill(
 				`/api/chat/message?roomId=${chatRoom.chatRoomId}`,
+				{
+					// withCredentials: true,
+					heartbeatTimeout: 600000, // 10분
+				},
 			)
 
 			eventSource.onopen = () => {

@@ -2,6 +2,7 @@
 
 import { X } from "@repo/ui/lucide"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { EventSourcePolyfill } from "event-source-polyfill"
 import type {
 	ChatRoom as ChatRoomType,
 	GetReactiveChatRoomListResponseType,
@@ -34,6 +35,15 @@ export function ChatSidebar({
 	)
 	const [searchTerm, setSearchTerm] = useState("")
 
+	const handleOnSelectChatRoom = (
+		room: GetReactiveChatRoomListResponseType,
+	) => {
+		onSelectChatRoom(room)
+	}
+	const handlerOnClose = () => {
+		onClose()
+	}
+
 	const filteredChatRooms = useMemo(() => {
 		const rooms = Array.from(chatRoomMap.values())
 		return rooms
@@ -59,11 +69,6 @@ export function ChatSidebar({
 				})
 				return newMap
 			})
-			// setChatRoomMap((prevMap) => {
-			// 	const newMap = new Map(prevMap)
-			// 	newMap.set(newRoom.chatRoomId, newRoom)
-			// 	return newMap
-			// })
 		},
 		[],
 	)
@@ -81,7 +86,13 @@ export function ChatSidebar({
 				.result
 			updateChatRoomList(chatRoomList)
 
-			eventSource = new EventSource(`/api/chat/room?userUuid=${memberUuid}`)
+			eventSource = new EventSourcePolyfill(
+				`/api/chat/room?userUuid=${memberUuid}`,
+				{
+					// withCredentials: true,
+					heartbeatTimeout: 600000, // 10분
+				},
+			)
 			setIsLoading(false)
 
 			eventSource.onopen = () => {
@@ -138,7 +149,7 @@ export function ChatSidebar({
 					<button
 						type="button"
 						className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10 md:!hidden"
-						onClick={onClose}>
+						onClick={handlerOnClose}>
 						<X className="h-5 w-5 text-[#E2ADFF]" />
 					</button>
 				</div>
@@ -173,7 +184,7 @@ export function ChatSidebar({
 							key={room.chatRoomId}
 							room={room}
 							isSelected={selectedChatRoom?.chatRoomId === room.chatRoomId}
-							onSelect={onSelectChatRoom}
+							onSelect={handleOnSelectChatRoom}
 						/>
 					))
 				)}
@@ -181,62 +192,3 @@ export function ChatSidebar({
 		</div>
 	)
 }
-
-/*
-
-	<button
-						type="button"
-						className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
-						<MessageSquarePlus className="h-5 w-5 text-[#E2ADFF]" />
-					</button>
-
-<button
-						type="button"
-						className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
-						<MoreVertical className="h-5 w-5 text-[#E2ADFF]" />
-					</button>
-
-<button
-						type="button"
-						className="rounded-full border border-[#9F9F9F] p-2.5 hover:bg-[#404040]/10">
-						<Search className="h-5 w-5 text-[#E2ADFF]" />
-					</button>
-
- */
-
-/*
-
-
-// SSE event source
-	useEffect(() => {
-		setIsLoading(true)
-		const eventSource = new EventSource(`/api/chat/room?userUuid=${memberUuid}`)
-
-		eventSource.onopen = () => {
-			setIsLoading(false)
-		}
-
-		eventSource.onmessage = (event: MessageEvent<string>) => {
-			// console.log("event.data: ", event.data)
-			// string으로 인코딩된 데이터를 GetReactiveChatMessageResponseType 타입으로 파싱
-			const newRooms = JSON.parse(
-				event.data,
-			) as GetReactiveChatRoomListResponseType
-
-			updateChatRoomList(newRooms)
-		}
-
-		eventSource.onerror = (err) => {
-			// eslint-disable-next-line no-console -- error log
-			console.error("EventSource failed:", err)
-			setError("채팅방 목록을 불러오는데 실패했습니다.")
-			eventSource.close()
-		}
-
-		return () => {
-			eventSource.close()
-		}
-	}, [memberUuid])
-
-
- */
