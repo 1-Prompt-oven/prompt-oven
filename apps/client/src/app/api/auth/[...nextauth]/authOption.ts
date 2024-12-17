@@ -58,8 +58,6 @@ export const authOptions: NextAuthOptions = {
 							usedDH = true
 						}
 					} catch (dhError) {
-						// eslint-disable-next-line no-console -- 오류 출력
-						console.warn("DH key exchange failed, falling back to v1:", dhError)
 					}
 
 					// If DH failed, fall back to v1 login
@@ -73,8 +71,6 @@ export const authOptions: NextAuthOptions = {
 
 					// Check if response is valid
 					if (!response) {
-						// eslint-disable-next-line no-console -- 오류 출력
-						console.error("Invalid response from sign-in API:", response)
 						return null
 					}
 
@@ -91,8 +87,6 @@ export const authOptions: NextAuthOptions = {
 						failed: false,
 					}
 				} catch (error) {
-					// eslint-disable-next-line no-console -- 오류 출력
-					console.error("Authentication error:", error)
 					return null
 				}
 			},
@@ -118,7 +112,6 @@ export const authOptions: NextAuthOptions = {
 			}
 			//소셜 로그인 공통 처리
 			if (account?.provider) {
-				console.log(`${account.provider} Sign-In detected:`, account, profile)
 
 				let providerID: string
 				let email: string | undefined
@@ -140,8 +133,6 @@ export const authOptions: NextAuthOptions = {
 						break
 
 					default:
-						// eslint-disable-next-line no-console -- 오류 출력
-						console.error("Unsupported provider:", account.provider)
 						return false
 				}
 
@@ -153,12 +144,8 @@ export const authOptions: NextAuthOptions = {
 				})
 
 				if (response) {
-					// eslint-disable-next-line no-console -- This is a client-side only log
-					console.log(`${account.provider} OAuth API response:`, response)
 					return true
 				} else {
-					// eslint-disable-next-line no-console -- This is a client-side only log
-					console.error(`${account.provider} OAuth API failed:`, response)
 					return "/sign-up"
 				}
 			}
@@ -222,8 +209,12 @@ export const authOptions: NextAuthOptions = {
 			return session
 		},
 		async redirect({ url, baseUrl }) {
-			return url.startsWith(baseUrl) ? url : baseUrl
-		},
+			// Allows relative callback URLs
+			if (url.startsWith("/")) return `${baseUrl}${url}`
+			// Allows callback URLs on the same origin
+			else if (new URL(url).origin === baseUrl) return url
+			return baseUrl
+		}
 	},
 	pages: {
 		signIn: "/sign-in",

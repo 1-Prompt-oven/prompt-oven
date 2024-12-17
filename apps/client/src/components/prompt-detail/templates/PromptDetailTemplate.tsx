@@ -14,6 +14,7 @@ interface PromptDetailProps {
 	notableDrops: DetailDropsCarouselType[]
 	categories: DetailCategoryListType[]
 	userCookie: CookieLatestType
+	purchaseState: boolean
 	productDetail: PromptDetailInfoType
 	productReview: PromptReviewType
 }
@@ -22,6 +23,7 @@ export default function PromptDetailTemplate({
 	notableDrops,
 	categories,
 	userCookie,
+	purchaseState,
 	productDetail,
 	productReview,
 }: PromptDetailProps) {
@@ -31,11 +33,13 @@ export default function PromptDetailTemplate({
 				contents={productDetail.contents}
 				productDetail={productDetail}
 				userCookie={userCookie}
+				purchaseState={purchaseState}
 			/>
 
 			<PromptDetailReview
 				productDetail={productDetail}
 				productReview={productReview}
+				purchaseState={purchaseState}
 			/>
 
 			<PromptDetailDropsCarousel items={notableDrops} />

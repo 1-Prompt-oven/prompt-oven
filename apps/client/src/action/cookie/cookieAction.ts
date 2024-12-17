@@ -100,8 +100,7 @@ export const deductCookieAction = async (): Promise<boolean> => {
 	})
 
 	if (!res.isSuccess) return false
-	else {
-		revalidateTag("changeCookie")
-		return true
-	}
+
+	revalidateTag("changeCookie")
+	return true
 }
