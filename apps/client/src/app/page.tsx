@@ -8,6 +8,8 @@ import NotableDropsCarousel from "@/components/main/organism/NotableDropsCarouse
 import MainFooter from "@/components/main/organism/MainFooter.tsx"
 import BestSellerFilter from "@/components/main/organism/BestSellerFilter.tsx"
 import PromptImageCarousel from "@/components/main/organism/PromptImageCarousel.tsx"
+import type { BestCreatorCursorListTypes2 } from "@/types/best/bestTypes.ts"
+import { fetchRankingList } from "@/action/best/getBestData.ts"
 
 const steps = [
 	{
@@ -48,24 +50,6 @@ const notableDrops = Array.from({ length: 12 }).map(() => ({
 	},
 }))
 
-const sellers = [
-	{ number: 1, nickname: "Creator 1", earnings: 6486658, isVerified: true },
-	{ number: 2, nickname: "Creator 2", earnings: 10140240, isVerified: true },
-	{ number: 3, nickname: "Creator 3", earnings: 2156628, isVerified: true },
-	{ number: 4, nickname: "Creator 4", earnings: 1168853, isVerified: false },
-	{ number: 5, nickname: "Creator 5", earnings: 839349, isVerified: true },
-	{ number: 6, nickname: "Creator 6", earnings: 3986580, isVerified: false },
-	{ number: 7, nickname: "Creator 7", earnings: 2170691, isVerified: false },
-	{ number: 8, nickname: "Creator 8", earnings: 1643063, isVerified: true },
-	{ number: 9, nickname: "Creator 9", earnings: 14685149, isVerified: true },
-	{ number: 10, nickname: "Creator 10", earnings: 10510827, isVerified: true },
-	{ number: 11, nickname: "Creator 11", earnings: 6561810, isVerified: true },
-	{ number: 12, nickname: "Creator 12", earnings: 6486658, isVerified: true },
-	{ number: 13, nickname: "Creator 13", earnings: 15432752, isVerified: false },
-	{ number: 14, nickname: "Creator 14", earnings: 8443547, isVerified: true },
-	{ number: 15, nickname: "Creator 15", earnings: 16143658, isVerified: true },
-]
-
 const images = [
 	{
 		src: "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/14d64d25a42a191fc83ed8fe0131d55e-elpi9POXTCICMSLKPSWwoBsGyvbQOw.png",
@@ -105,7 +89,23 @@ const images = [
 	},
 ]
 
-export default function Page() {
+interface FetchBestCreatorsParams {
+	lastRanking?: number
+	pageSize?: number
+	date: string
+}
+
+export default async function Page() {
+	// bestSeller vars and functions
+	const now = new Date()
+	const todayDate = now.toISOString().split("T")[0]
+	const params: FetchBestCreatorsParams = {
+		date: todayDate,
+		pageSize: 15,
+		lastRanking: 0,
+	}
+	const bestData: BestCreatorCursorListTypes2 = await fetchRankingList(params)
+
 	return (
 		<main className="flex min-h-screen flex-col items-center justify-between bg-[#111111]">
 			<PromptImageCarousel images={images} />
@@ -115,7 +115,7 @@ export default function Page() {
 			</div>
 
 			<div className="w-full">
-				<BestSellerFilter sellers={sellers} />
+				<BestSellerFilter sellers={bestData.content} />
 			</div>
 
 			<div className="mb-20 flex w-full flex-col items-center justify-center">
