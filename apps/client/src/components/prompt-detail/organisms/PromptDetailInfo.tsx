@@ -1,4 +1,4 @@
-import { getSellorShort } from "@/action/prompt-detail/getProductDetailData"
+import { getSellerShort } from "@/action/prompt-detail/getProductDetailData"
 import { getFollowingState } from "@/action/prompt-detail/getProductDetailFollowData"
 import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
 import PromptDetailDescription from "../atoms/PromptDetailHash"
@@ -12,7 +12,7 @@ interface PromptDetailInfoProps {
 export default async function PromptDetailInfo({
 	productDetail,
 }: PromptDetailInfoProps) {
-	const sellerData = await getSellorShort(productDetail.sellerUuid)
+	const sellerData = await getSellerShort(productDetail.sellerUuid)
 	const followState = await getFollowingState(sellerData.memberNickname)
 
 	return (
