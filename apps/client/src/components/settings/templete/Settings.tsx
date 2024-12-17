@@ -25,7 +25,7 @@ export default async function Settings() {
 					<DeleteAccount />
 				</div>
 				{/* 오른쪽 이미지 */}
-				<div className="mt-10">
+				<div className="mt-10 hidden md:!block">
 					<Image
 						src="/img/settings/settings.png"
 						alt="Settings Illustration"

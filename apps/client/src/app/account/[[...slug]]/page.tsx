@@ -19,7 +19,7 @@ import Profile from "@/app/profile/[id]/page"
 import { getNickname } from "@/lib/api/sessionExtractor"
 import ProfileModify from "@/app/profile/modify/[id]/page"
 import Cookie from "@/components/cookie/page/CookieTemplete"
-import type { CookieListSearchParams } from "@/types/cookie/cookieResponseType"
+import type { GetCookieListRequestType } from "@/types/cookie/cookieResponseType"
 import SellerCommissionListPage from "@/app/commission/seller/page"
 
 export default async function page({ searchParams }: AccountSearchParams) {
@@ -62,7 +62,7 @@ export default async function page({ searchParams }: AccountSearchParams) {
 			{view === "cookie" && (
 				<Cookie
 					userUuid={sellerUuid}
-					searchParams={_searchParams as CookieListSearchParams}
+					searchParams={_searchParams as GetCookieListRequestType}
 				/>
 			)}
 			{view === "commission" && <SellerCommissionListPage />}

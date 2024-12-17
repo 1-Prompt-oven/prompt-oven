@@ -8,48 +8,27 @@ import {
 	DropdownMenuRadioItem,
 	DropdownMenuTrigger,
 } from "@repo/ui/dropdown-menu"
-import type {
-	CookieStatusOption,
-	Sort,
-	SortDirection,
-	CookieSortOption,
-} from "@/types/cookie/cookieType"
+import type { CookieSortOption, Sort } from "@/types/cookie/cookieType"
 
 interface CookieFilterProps {
-	onSort: (
-		sortOption: undefined | "USE" | "CHARGE",
-		sortBy: "ASC" | "DESC",
-	) => void
-	initSort?: Sort
-	initSortDirection?: SortDirection
-	initStatus?: CookieStatusOption
+	onSort: (sortOption: CookieSortOption) => void // 정렬 핸들러
+	initSort?: Sort // 초기 정렬 값
 }
 
-function setSort(sort: Sort, sortDirection: SortDirection) {
-	if (sort === "USE")
-		return sortDirection === "ASC" ? "price_low_high" : "price_high_low"
-	if (sort === "CHARGE")
-		return sortDirection === "ASC" ? "sells_low_high" : "sells_high_low"
-	return sortDirection === "ASC" ? "created_old_new" : "created_new_old"
-}
+export function CookieFilter({ onSort, initSort = "All" }: CookieFilterProps) {
+	const [selectedSort, setSelectedSort] = useState<Sort>(initSort) // 정렬 상태
 
-export function CookieFilter({
-	onSort,
-	initSort = "USE",
-	initSortDirection = "DESC",
-}: CookieFilterProps) {
-	const [selectedSort, setSelectedSort] = useState<CookieSortOption>("All") // 현재 선택된 정렬 상태를 저장
-	const sort = setSort(initSort, initSortDirection)
-
-	const sortOptions: Record<CookieSortOption, string> = {
-		All: "All",
-		Use: "Use",
-		Charge: "Charge",
+	// 정렬 옵션 목록
+	const sortOptions: Record<Sort, string> = {
+		All: "All", // null에 해당하는 옵션
+		USE: "Use",
+		CHARGE: "Charge",
 	}
 
-	const handleSortChange = (value: CookieSortOption) => {
-		setSelectedSort(value) // 선택한 값을 상태로 저장
-		onSort(value as Sort, initSortDirection) // 선택 이벤트를 상위 컴포넌트에 전달
+	// 정렬 변경 핸들러
+	const handleSortChange = (value: Sort) => {
+		setSelectedSort(value) // 상태 업데이트
+		onSort(value === "All" ? undefined : value) // 부모 컴포넌트에 null 또는 "USE" / "CHARGE" 전달
 	}
 
 	return (
@@ -60,7 +39,7 @@ export function CookieFilter({
 						<Button
 							variant="ghost"
 							className="flex h-11 items-center px-4 capitalize text-po-purple-50">
-							{selectedSort}
+							{sortOptions[selectedSort]}
 							<ChevronDown className="ml-2 h-4 w-4" />
 						</Button>
 					</DropdownMenuTrigger>
@@ -68,10 +47,8 @@ export function CookieFilter({
 						className="w-56 border-po-purple-50/25 bg-[#120F1E]"
 						align="end">
 						<DropdownMenuRadioGroup
-							value={sort}
-							onValueChange={(value) =>
-								handleSortChange(value as CookieSortOption)
-							}>
+							value={selectedSort}
+							onValueChange={(value) => handleSortChange(value as Sort)}>
 							{Object.entries(sortOptions).map(([value, label]) => (
 								<DropdownMenuRadioItem
 									key={value}
