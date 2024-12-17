@@ -64,6 +64,11 @@ function CartTemplate({
 
 	const handleDeleteItems = async (itemIds: number[]) => {
 		if (!itemIds.length) return
+		if (itemIds.length === 1) {
+			const itemToRemove = itemIds[0]
+			const updatedItemIds = selectedItemIds.filter((id) => id !== itemToRemove)
+			setSelectedItemIds(updatedItemIds)
+		}
 		await deleteCartItemList(itemIds)
 	}
 
@@ -75,7 +80,7 @@ function CartTemplate({
 	const handleCheckout = async () => {
 		if (!selectedItemIds.length) {
 			return
-		} else if (selectedItemIds.length > 4) {
+		} else if (selectedItemIds.length > 3) {
 			setIsOpen(!isOpen)
 			return
 		}
@@ -103,13 +108,20 @@ function CartTemplate({
 			<CartTitle />
 
 			<div className="mx-6 flex flex-col justify-between gap-12 lg:!flex-row">
-				<CartItemContainer
-					cartItems={initialItems}
-					handleSelectAll={handleSelectAll}
-					handleSelectItem={handleSelectItem}
-					handleDeleteItems={handleDeleteItems}
-					handleDeleteSelectedItems={handleDeleteSelectedItems}
-				/>
+				{initialItems.length > 0 ? (
+					<CartItemContainer
+						cartItems={initialItems}
+						handleSelectAll={handleSelectAll}
+						handleSelectItem={handleSelectItem}
+						handleDeleteItems={handleDeleteItems}
+						handleDeleteSelectedItems={handleDeleteSelectedItems}
+					/>
+				) : (
+					<div className="flex w-full items-center justify-center text-xs font-semibold text-[#C1C1C1]">
+						<p>상품이 없습니다.</p>
+					</div>
+				)}
+
 				<CartCheckout
 					count={selectedItemIds.length}
 					totalPrice={initialTotalPrice}

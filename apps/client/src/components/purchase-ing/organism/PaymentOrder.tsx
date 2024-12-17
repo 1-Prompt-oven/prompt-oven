@@ -33,7 +33,7 @@ export default function PaymentOrder({
 
 	let content
 	if (method.payment) {
-		if (paymentList.length > 4) {
+		if (paymentList.length > 3) {
 			content = <PaymentOrderNone state={3} />
 		} else if (paymentList.length > 0) {
 			content = (
@@ -53,7 +53,7 @@ export default function PaymentOrder({
 	}
 
 	return (
-		<div className="flex h-full w-[350px] flex-col gap-4 rounded-md bg-white p-4 text-sm">
+		<div className="flex h-full w-full flex-grow flex-col gap-4 rounded-md bg-white p-4 text-sm md:w-[350px]">
 			<PaymentTitle title="Message" />
 			<PaymentMessageArea
 				comment="Leave a message"
