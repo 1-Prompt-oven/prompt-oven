@@ -1,6 +1,6 @@
 import React, { Suspense } from "react"
 import Link from "next/link"
-import { Bell, MessageSquareText } from "@repo/ui/lucide"
+import { MessageSquareText } from "@repo/ui/lucide"
 import CommonHeader from "@/components/common/atom/Header"
 import MainLogo from "@/components/common/atom/icon/MainLogo.tsx"
 import { AvatarMenu } from "@/components/common/molecule/AvatarMenu.tsx"
@@ -38,9 +38,6 @@ export default async function MainHeader() {
 				{userAuth !== "guest" ? (
 					<>
 						<div className="hidden gap-5 sm:!flex">
-							<BadgeContainer count={2}>
-								<Bell className="!h-7 !w-7 text-po-gray-150" strokeWidth={2} />
-							</BadgeContainer>
 							<Link href="/chat">
 								<BadgeContainer count={0}>
 									<MessageSquareText

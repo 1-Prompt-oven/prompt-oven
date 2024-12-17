@@ -38,6 +38,47 @@ export interface GetProductSellerResponseType {
 	sellerUuid: string
 }
 
+export interface GetNotableProductListRequestType {
+	searchBar?: string // 검색어
+	topCategoryUuid?: string // 상위 카테고리 UUID
+	subCategoryUuid?: string // 하위 카테고리 UUID
+	minPrice?: string // 최소 가격
+	maxPrice?: string // 최대 가격
+	sortBy?: string // 정렬 기준
+	sortOption?: string // 정렬 옵션 (예: ASC, DESC)
+	pageSize?: number // 페이지 사이즈
+}
+
+export interface NotableProduct {
+	productUuid: string
+	productName: string
+	price: number
+	topCategoryUuid: string
+	subCategoryUuid: string
+	enabled: boolean
+	avgStar: number
+	sells: number
+	likeCount: number
+	llmId: number
+	description: string
+	discountRate: number
+	reviewCount: number
+	createdAt: string // ISO date string
+	thumbnailUrl: string
+}
+export interface NotableProductWithAuthor extends NotableProduct {
+	author: {
+		memberUuid: string
+		memberProfileImage: string
+		memberNickname: string
+	}
+}
+export interface GetNotableProductListResponseType {
+	nextCursorId: string
+	hasNext: boolean
+	productList: NotableProduct[]
+}
+
 export interface PromptContentType {
 	contentUrl: string
 	contentOrder: number

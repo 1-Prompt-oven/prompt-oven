@@ -3,25 +3,19 @@
 import React, { useCallback, useEffect, useState } from "react"
 import type { PanInfo } from "framer-motion"
 import { AnimatePresence, motion, useDragControls } from "framer-motion"
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/avatar"
+import type { NotableProductWithAuthor } from "@/types/product/productUpsertType.ts"
 
 const SLIDE_DURATION = 5000 // 5 seconds
 const DRAG_THRESHOLD = 50 // Minimum drag distance to trigger slide change
 
 interface ImageCarouselProps {
-	images: {
-		id?: string
-		src: string
-		alt: string
-		title: string
-		creator: string
-		mainDesc?: string
-		subDesc?: string
-	}[]
+	items: NotableProductWithAuthor[]
 	changeCallbackFn?: (index: number) => void
 }
 
 export default function ImageCarousel({
-	images,
+	items,
 	changeCallbackFn,
 }: ImageCarouselProps) {
 	const [currentIndex, setCurrentIndex] = useState(0)
@@ -31,15 +25,15 @@ export default function ImageCarousel({
 
 	const nextSlide = useCallback(() => {
 		setDirection(1)
-		setCurrentIndex((prevIndex) => (prevIndex + 1) % images.length)
-	}, [images.length])
+		setCurrentIndex((prevIndex) => (prevIndex + 1) % items.length)
+	}, [items.length])
 
 	const prevSlide = useCallback(() => {
 		setDirection(-1)
 		setCurrentIndex(
-			(prevIndex) => (prevIndex - 1 + images.length) % images.length,
+			(prevIndex) => (prevIndex - 1 + items.length) % items.length,
 		)
-	}, [images.length])
+	}, [items.length])
 
 	useEffect(() => {
 		if (changeCallbackFn) {
@@ -118,9 +112,9 @@ export default function ImageCarousel({
 					<AnimatePresence initial={false} custom={direction}>
 						<motion.img
 							key={currentIndex}
-							src={images[currentIndex].src}
-							alt={images[currentIndex].alt}
-							className="absolute h-[calc(100%-130px)] w-[calc(100%-50px)] rounded-lg object-cover"
+							src={items[currentIndex].thumbnailUrl}
+							alt={items[currentIndex].productName}
+							className="absolute h-[calc(100%-100px)] w-[calc(100%-50px)] rounded-lg object-cover"
 							style={{
 								top: "25px",
 								left: "25px",
@@ -143,21 +137,27 @@ export default function ImageCarousel({
 					</AnimatePresence>
 					<div className="absolute bottom-7 left-5 right-5 flex flex-col items-start justify-between sm:flex-row sm:items-center">
 						<div>
-							<h2 className="font-sora text-lg font-semibold text-white sm:text-xl lg:text-2xl">
-								{images[currentIndex].title}
-							</h2>
 							<div className="mt-2 flex items-center sm:mt-3">
-								<div className="mr-3 h-7 w-7 rounded-full bg-[#C4C4C4] sm:h-9 sm:w-9" />
+								<Avatar className="mr-2 h-6 w-6 sm:!mr-[10px] sm:!h-[30px] sm:!w-[30px]">
+									<AvatarImage
+										src={items[currentIndex].author.memberProfileImage}
+										alt={items[currentIndex].author.memberNickname}
+									/>
+									<AvatarFallback>
+										{items[currentIndex].author.memberNickname[0]}
+									</AvatarFallback>
+								</Avatar>
 								<span className="font-roboto text-sm font-medium text-white sm:text-base lg:text-lg">
-									{images[currentIndex].creator}
+									{items[currentIndex].author.memberNickname}
 								</span>
 							</div>
 						</div>
-						<div className="mt-2 flex space-x-2 sm:mt-0 sm:space-x-4">
-							{images.map((button, index) => (
+
+						<div className="mt-2 flex min-w-20 space-x-2 sm:mt-0 sm:space-x-4">
+							{items.map((button, index) => (
 								<button
 									type="button"
-									key={button.title}
+									key={button.productUuid}
 									className={`h-2 w-2 rounded-full sm:h-2.5 sm:w-2.5 ${
 										index === currentIndex
 											? "border border-[#FCB808]"
