@@ -104,33 +104,3 @@ export const deductCookieAction = async (): Promise<boolean> => {
 	revalidateTag("changeCookie")
 	return true
 }
-
-// export const cookieRecentAction = async (): Promise<number | null> => {
-
-// 	const userUuid = await getMemberUUID()
-// 	const accessToken = await getAccessToken()
-// 	const headers = initializeHeaders(accessToken ?? undefined)
-
-// 	if (!userUuid) {
-// 		//	throw new Error("Unable to fetch user UUID")
-// 		return false
-// 	}
-
-// 	const queryParams = new URLSearchParams({ memberUuid: userUuid }).toString();
-
-// 	const res = await actionHandler<CommonResType<CommonResType<number>>>({
-// 		name: "deductCookie",
-// 		url: `/v1/member/cookie/latest?${queryParams}`,
-// 		options: {
-// 			headers,
-// 			method: "GET",
-// 		},
-// 	})
-// console.log("cookieRemain", res)
-// if (!res.isSuccess || res.data?.data == null) return null;
-
-// return res.data.data;
-
-// 	revalidateTag("changeCookie")
-// 	return true
-// }
