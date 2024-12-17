@@ -10,8 +10,10 @@ import ResultModal from "@/components/common/atom/ResultModal"
 
 export default function PromptDetailGet({
 	productUuid,
+	purchaseState,
 }: {
 	productUuid: string
+	purchaseState: boolean
 }) {
 	const router = useRouter()
 
@@ -26,6 +28,9 @@ export default function PromptDetailGet({
 		const getResponse = await checkIsMember()
 		if (!getResponse) {
 			setModalContent({ res: true, state: "NoUser" })
+			return
+		} else if (purchaseState) {
+			setModalContent({ res: true, state: "already-Purchase" })
 			return
 		}
 

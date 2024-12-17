@@ -23,6 +23,7 @@
 		"./select": "./src/Select.tsx",
 		"./dropdown-menu": "./src/DropdownMenu.tsx",
 		"./radio-group": "./src/RadioGroup.tsx",
+		"./review-star": "./src/ReviewStar.tsx",
 		"./star-animation": "./src/StarAnimation.tsx",
 		"./dialog": "./src/Dialog.tsx",
 		"./skeleton": "./src/Skeleton.tsx",

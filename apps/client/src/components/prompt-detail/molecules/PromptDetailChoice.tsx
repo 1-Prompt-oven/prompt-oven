@@ -15,10 +15,12 @@ import PromptDetailGet from "../atoms/PromptDetailGet"
 
 interface PromptDetailChoiceProps {
 	productUuid: string
+	purchaseState: boolean
 }
 
 export default function PromptDetailChoice({
 	productUuid,
+	purchaseState,
 }: PromptDetailChoiceProps) {
 	const [isFavorite, setIsFavorite] = useState<{ liked: boolean }>({
 		liked: false,
@@ -102,7 +104,10 @@ export default function PromptDetailChoice({
 					</Button>
 				</div>
 
-				<PromptDetailGet productUuid={productUuid} />
+				<PromptDetailGet
+					productUuid={productUuid}
+					purchaseState={purchaseState}
+				/>
 			</div>
 
 			<ResultModal content={modalContent} setContent={setModalContent} />

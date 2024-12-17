@@ -36,69 +36,6 @@ const steps = [
 	},
 ]
 
-// const promptCategories = [
-// 	{
-// 		title: "3D Art",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Digital Painting",
-// 		images: [
-// 			"/img/main/collectibles1.png",
-// 			"/img/main/collectibles2.png",
-// 			"/img/main/collectibles3.png",
-// 		],
-// 	},
-// 	{
-// 		title: "Stylized Art",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Realistic Art",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Music",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Photography",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Stylized Art",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Realistic Art",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Music",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Photography",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Stylized Art",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Realistic Art",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Music",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// 	{
-// 		title: "Photography",
-// 		images: ["/img/main/art1.png", "/img/main/art2.png", "/img/main/art3.png"],
-// 	},
-// ]
-
 const notableDrops = Array.from({ length: 12 }).map(() => ({
 	title: "Colourfull assests",
 	description:
@@ -180,10 +117,6 @@ export default function Page() {
 			<div className="w-full">
 				<BestSellerFilter sellers={sellers} />
 			</div>
-
-			{/*<div className="py-32">*/}
-			{/*	<CategoryList categories={promptCategories} />*/}
-			{/*</div>*/}
 
 			<div className="mb-20 flex w-full flex-col items-center justify-center">
 				<div className="relative mb-[100px] mt-[120px] flex w-full items-center justify-center overflow-hidden">

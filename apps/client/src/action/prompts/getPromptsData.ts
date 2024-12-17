@@ -61,7 +61,7 @@ export async function getPromptList(
 	)
 
 	if (!res.ok) {
-		throw new Error("Failed to fetch product list data")
+		throw new Error("Failed to fetch getPromptList list data")
 	}
 
 	const rawData: RawData = await res.json() // RawData 타입으로 지정
@@ -128,7 +128,7 @@ export async function getUpdatePromptList(
 	)
 
 	if (!res.ok) {
-		throw new Error("Failed to fetch product list data")
+		throw new Error("Failed to fetch getUpdatePromptList list data")
 	}
 
 	const rawData: RawData = await res.json() // RawData 타입으로 지정
