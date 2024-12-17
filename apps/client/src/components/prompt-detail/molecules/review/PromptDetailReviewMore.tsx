@@ -19,8 +19,8 @@ import type {
 	PromptReviewType,
 	PromptSimpleReviewData,
 } from "@/types/review/reviewType"
-import PromptDetailReviewContentModal from "./PromptDetailReviewContentModal"
 import PromptDetailHoverMouse from "../../atoms/PromptDetailHoverMouse"
+import PromptDetailReviewContentModal from "./PromptDetailReviewContentModal"
 
 interface PromptDetailReviewMoreProps {
 	reviewSimpleData: PromptSimpleReviewData
