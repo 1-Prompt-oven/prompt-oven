@@ -36,7 +36,7 @@ function DeleteAccount() {
 	}
 
 	const handleConfirmDelete = () => {
-		setModalMessage("Are you sure you want to delete your account?")
+		setModalMessage("Are you sure delete your account")
 		setIsModalOpen(true)
 	}
 
@@ -74,17 +74,19 @@ function DeleteAccount() {
 			<DeleteComfirmModal
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}>
-				<div>
-					<p>{modalMessage}</p>
-					<div className="mt-4 flex justify-center gap-2">
+				<div className="gap-2">
+					<p className="flex items-center justify-center py-2 align-middle">
+						{modalMessage}
+					</p>
+					<div className="mt-6 flex justify-center gap-2">
 						<Button
 							onClick={handleDelete}
-							className="rounded bg-red-600 px-4 py-2 text-white hover:bg-red-500">
+							className="flex w-[35%] items-center justify-center rounded-md bg-gradient-to-b from-orange-300 via-orange-500 to-orange-600 p-2 transition-transform duration-200 hover:scale-105 hover:bg-gradient-to-b hover:from-orange-400 hover:via-orange-500 hover:to-orange-600">
 							Confirm
 						</Button>
 						<Button
 							onClick={() => setIsModalOpen(false)}
-							className="rounded bg-gray-600 px-4 py-2 text-white hover:bg-gray-500">
+							className="flex w-[35%] items-center justify-center rounded-md bg-gradient-to-b from-transparent via-black/5 to-black p-2 transition-transform duration-200 hover:scale-105 hover:bg-gradient-to-b hover:from-black/10 hover:via-black/20 hover:to-black">
 							Cancel
 						</Button>
 					</div>

@@ -53,8 +53,7 @@ export function CookieFilter({
 	}
 
 	return (
-		<div className="flex w-full max-w-[1070px] flex-col items-start justify-between gap-4 bg-[#1B1818] sm:flex-row sm:items-center">
-			<span className="ml-4 text-white">Cookie record</span>
+		<div className="flex w-full max-w-[1070px] justify-end gap-4 bg-[#1B1818] sm:flex-row sm:items-center">
 			<div className="flex gap-2 sm:gap-4">
 				<DropdownMenu>
 					<DropdownMenuTrigger asChild>
