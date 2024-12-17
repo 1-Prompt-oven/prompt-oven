@@ -105,12 +105,12 @@ export default function BestTop4Card({
 							<span className="text-sm">{totalSales}</span>
 						</div>
 						<div className="flex items-center justify-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2 py-1.5">
-							<Star className="h-3.5 w-3.5 text-yellow-400" />
-							<span className="text-sm">{reviewAvg.toFixed(1)}</span>
-						</div>
-						<div className="flex items-center justify-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2 py-1.5">
 							<Users className="h-3.5 w-3.5 text-purple-300" />
 							<span className="text-sm">{(follower / 1000).toFixed(1)}k</span>
+						</div>
+						<div className="flex items-center justify-center gap-2 rounded-lg border border-white/5 bg-white/5 px-2 py-1.5">
+							<Star className="h-3.5 w-3.5 text-yellow-400" />
+							<span className="text-sm">{reviewAvg.toFixed(1)}</span>
 						</div>
 					</div>
 				</div>
