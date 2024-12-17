@@ -83,7 +83,7 @@ function BestTemplate({ data }: BestTemplateProps) {
 								</h1>
 							</div>
 							<BestTop5 data={top5Data} />
-							<BestList data={data.content} pagingInfo={pagingInfo} />
+							<BestList data={restData} pagingInfo={pagingInfo} />
 						</div>
 					) : (
 						<>

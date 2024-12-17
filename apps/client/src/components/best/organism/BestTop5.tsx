@@ -1,6 +1,6 @@
 import React from "react"
 import type { RenderedRankingItemTypes } from "@/types/best/bestTypes"
-import BestTop5Card from "@/components/best/molecule/BestTop5Card"
+import BestTop1Card from "@/components/best/molecule/BestTop1Card"
 import BestTop4Card from "@/components/best/molecule/BestTop4Card"
 
 interface BestListProps<T> {
@@ -13,7 +13,7 @@ function BestTop5({ data }: BestListProps<RenderedRankingItemTypes[]>) {
 		<div className="container mx-auto p-8">
 			<div className="grid grid-cols-1 gap-8">
 				<div className="flex justify-center">
-					<BestTop5Card
+					<BestTop1Card
 						key={top1Data.memberUuid}
 						{...top1Data}
 						isTopRanked={true}
