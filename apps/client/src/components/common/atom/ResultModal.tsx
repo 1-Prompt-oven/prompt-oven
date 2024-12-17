@@ -25,7 +25,7 @@ function ResultModal({ content, setContent }: ResultModalProps) {
 	} else contentKR = [""]
 
 	return (
-		<div className="mx-auto my-5 flex justify-center">
+		<div className="mx-auto flex justify-center">
 			<Dialog
 				open={content.res}
 				onOpenChange={() => setContent({ res: !content.res, state: "" })}>

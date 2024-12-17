@@ -1,8 +1,8 @@
 import { getCookieLatest } from "@/action/cookie/cookieAction"
-import {
-	getDetailCategory,
-	getDetailDrops,
-} from "@/action/prompt-detail/getAssociationProduct"
+// import {
+// 	getDetailCategory,
+// 	getDetailDrops,
+// } from "@/action/prompt-detail/getAssociationProduct"
 import {
 	getProductDetail,
 	getPurchaseState,
@@ -23,8 +23,8 @@ export default async function PromptDetail({ params }: PromptIdProps) {
 	const productReview = await getProductReview(productId)
 	const userCookie = await getCookieLatest()
 	const purchaseState = await getPurchaseState(productId)
-	const notableDrops = await getDetailDrops()
-	const categories = await getDetailCategory()
+	// const notableDrops = await getDetailDrops()
+	// const categories = await getDetailCategory()
 
 	return (
 		<main className="container mx-auto bg-[#111111] py-1">
@@ -33,8 +33,8 @@ export default async function PromptDetail({ params }: PromptIdProps) {
 				productReview={productReview}
 				userCookie={userCookie}
 				purchaseState={purchaseState}
-				notableDrops={notableDrops}
-				categories={categories}
+				// notableDrops={notableDrops}
+				// categories={categories}
 			/>
 		</main>
 	)
