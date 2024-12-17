@@ -88,7 +88,7 @@ function BestTemplate({ data }: BestTemplateProps) {
 					) : (
 						<>
 							<div className="mb-3 mt-10">
-								<h1 className="ml-[100px] text-left text-5xl font-bold text-white">
+								<h1 className="text-left text-center text-5xl font-bold text-white">
 									Best Creators
 								</h1>
 							</div>
