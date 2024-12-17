@@ -4,7 +4,7 @@ export interface GetCookieResultType {
     memberUuid: string; // UUID of the member
     cookieAmount: number; // Amount of cookies
     approvedAt: string; // Approval timestamp (ISO 8601 format)
-    paymentType: "CHARGE" | "USE"; // Type of payment (e.g., CHARGE, REFUND)
+    paymentType: "CHARGE" | "USE" | undefined; // Type of payment (e.g., CHARGE, REFUND)
     quantity: number; // Quantity associated with the cookie result
   }
 

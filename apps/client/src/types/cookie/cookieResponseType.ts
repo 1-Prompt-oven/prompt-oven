@@ -5,15 +5,6 @@ export interface GetCookieListRequestType {
 	startDate?: string
 	endDate?: string
 	paymentType?: "USE" | "CHARGE" // 정렬 기준
-	lastId?: string | null
-	pageSize?: number
-}
-
-export interface CookieListSearchParams {
-	userUuid: string
-	startDate?: string
-	endDate?: string
-	paymentType?: "USE" | "CHARGE" // 정렬 기준
 	lastId?: string
 	pageSize?: number
 }
@@ -25,6 +16,17 @@ export interface GetCookieListResponseType {
 	pageSize: number
 	page: number
 }
+
+// export interface GetCookieResultType {
+// 	id: string; // Unique identifier for the cookie result
+// 	paymentId: number; // Payment ID
+// 	memberUuid: string; // UUID of the member
+// 	cookieAmount: number; // Amount of cookies
+// 	approvedAt: string; // Approval timestamp (ISO 8601 format)
+// 	paymentType: "CHARGE" | "USE"; // Type of payment (e.g., CHARGE, REFUND)
+// 	quantity: number; // Quantity associated with the cookie result
+// }
+
 
 export interface CookieLatestType {
 	isUser: boolean
