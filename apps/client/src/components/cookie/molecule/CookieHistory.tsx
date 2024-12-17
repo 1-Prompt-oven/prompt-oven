@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect } from "react"
 import type {
 	GetCookieListRequestType,
@@ -19,81 +20,89 @@ export default function CookieHistory({
 	initData,
 	initRequest,
 }: CookieHistoryProps) {
-	// 상태 관리
-	const [request, setRequest] = useState<GetCookieListRequestType>(initRequest) // 요청 상태
-	const [data, setData] = useState<GetCookieListResponseType>(initData) // 데이터 상태
-	const [cursorHistory, setCursorHistory] = useState<string[]>([])
+	const router = useRouter()
+	const searchParams = useSearchParams()
+
+	const [data, setData] = useState<GetCookieListResponseType>(initData)
 	const [loading, setLoading] = useState(false)
-	// 데이터 요청
-	const fetchData = async () => {
-		setLoading(true)
-		try {
-			const response = await getCookieList(request)
-			if (response.isSuccess) {
-				setData(response.result)
+
+	// 쿼리 파라미터 업데이트 함수
+	const updateQueryParams = (params: Partial<GetCookieListRequestType>) => {
+		const newParams = new URLSearchParams(searchParams.toString())
+		Object.entries(params).forEach(([key, value]) => {
+			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- no problem
+			if (value === undefined) {
+				newParams.delete(key)
+			} else {
+				newParams.set(key, value.toString())
 			}
-		} catch (error) {
-			// eslint-disable-next-line no-console -- This is a error
-			console.error("Try again")
-		} finally {
-			setLoading(false)
-		}
+		})
+
+		router.push(`/account?${newParams.toString()}`)
 	}
 
-	const handlePrevPage = () => {
-		if (cursorHistory.length > 0) {
-			const prevCursor = cursorHistory[cursorHistory.length - 1] // 마지막 기록 커서 가져오기
-			setCursorHistory((prev) => prev.slice(0, -1)) // 기록에서 마지막 커서 제거
-			setRequest((prev) => ({
-				...prev,
-				lastId: prevCursor || undefined, // 이전 커서 설정
-			}))
-		}
+	// 정렬 변경 핸들러
+	const handleSortChange = (paymentType: "USE" | "CHARGE" | undefined) => {
+		updateQueryParams({ paymentType, lastId: undefined }) // 정렬 시 첫 페이지로 이동
 	}
 
 	// 다음 페이지 핸들러
 	const handleNextPage = () => {
-		if (data.hasNext && data.nextCursor) {
-			setCursorHistory((prev) => [...prev, request.lastId || ""]) // 현재 커서를 기록
-			setRequest((prev) => ({
-				...prev,
-				lastId: data.nextCursor, // 다음 커서 설정
-			}))
-		}
-	}
-	// 정렬 변경 핸들러
-	const handleSortChange = (paymentType: "USE" | "CHARGE" | undefined) => {
-		setRequest({
-			...initRequest,
-			paymentType,
-			lastId: undefined, // 첫 페이지로 초기화
-		})
+		updateQueryParams({ lastId: data.nextCursor || undefined }) // nextCursor를 사용해 다음 페이지 요청
 	}
 
-	// 요청 상태가 변경되면 데이터 요청
+	// 이전 페이지 핸들러
+	const handlePrevPage = () => {
+		updateQueryParams({ lastId: undefined }) // 이전 페이지로 돌아감 (기본값)
+	}
+
+	// 페이지 변경 시 데이터 요청
 	useEffect(() => {
+		const fetchData = async () => {
+			setLoading(true)
+			try {
+				const request: GetCookieListRequestType = {
+					...initRequest,
+					paymentType:
+						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- no problem
+						(searchParams.get("paymentType") as "USE" | "CHARGE") || undefined,
+					lastId: searchParams.get("lastId") || undefined,
+				}
+
+				const response = await getCookieList(request)
+				if (response.isSuccess) {
+					setData(response.result)
+				}
+			} catch (error) {
+				// eslint-disable-next-line no-console -- This is a server-side only log
+				console.error("Failed to fetch data")
+			} finally {
+				setLoading(false)
+			}
+		}
+
 		fetchData()
-	}, [request])
+	}, [searchParams]) // URL 파라미터 변경 시 데이터 요청
 
 	return (
 		<div className="mx-auto w-full max-w-[1070px] px-4 sm:px-6 lg:px-8">
 			<CookieFilter
 				onSort={handleSortChange}
-				initSort={initRequest.paymentType || "USE"}
-				initSortDirection="DESC"
+				initSort={initRequest.paymentType || "All"}
 			/>
+
 			{loading ? <p>Loading...</p> : <CookieTable cookies={data.content} />}
 
 			<CookiePaginationControl
 				className="mt-4"
-				total={data.pageSize * (data.page + 1)} // 전체 데이터 수 가정
+				total={data.pageSize * (data.page + 1)} // 전체 데이터 수
 				currentPage={data.page}
 				pageSize={data.pageSize}
 				hasNext={data.hasNext}
-				hasPrev={cursorHistory.length > 0} // 이전 페이지 여부
-				onPrevPage={handlePrevPage} // 이전 페이지 요청
-				onNextPage={handleNextPage} // 다음 페이지 요청
-				isFirstPage={data.page === 0}
+				hasPrev={Boolean(searchParams.get("lastId"))} // 이전 페이지 여부
+				onPrevPage={handlePrevPage}
+				onNextPage={handleNextPage}
+				isFirstPage={!searchParams.get("lastId")}
 			/>
 		</div>
 	)

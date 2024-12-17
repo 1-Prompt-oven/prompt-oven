@@ -1,10 +1,9 @@
 export type CookieSortOption =
-	| "Use"
-	| "Charge"
-  | "All"
+	| "USE"
+	| "CHARGE"
+	| undefined
 
-export type CookieStatusOption = "USE" | "CHARGE"
+export type CookieStatusOption = "USE" | "CHARGE" | undefined
 
-export type Sort = undefined | "USE" | "CHARGE"
-export type SortDirection = "ASC" | "DESC"
+export type Sort = "USE" | "CHARGE" | "All"
 

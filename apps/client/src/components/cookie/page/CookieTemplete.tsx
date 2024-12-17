@@ -1,7 +1,4 @@
-import type {
-	CookieListSearchParams,
-	GetCookieListRequestType,
-} from "@/types/cookie/cookieResponseType"
+import type { GetCookieListRequestType } from "@/types/cookie/cookieResponseType"
 import { getCookieList } from "@/action/cookie/cookieAction"
 import CookieHistory from "../molecule/CookieHistory"
 import CookieCharge from "../molecule/CookieCharge"
@@ -10,7 +7,7 @@ import CookieRemain from "../molecule/CookieRemain"
 
 export interface CookieTempleteProps {
 	userUuid: string // 필수
-	searchParams: CookieListSearchParams
+	searchParams: GetCookieListRequestType
 }
 
 export default async function Cookie({
