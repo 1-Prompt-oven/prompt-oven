@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Textarea } from "@repo/ui/textarea"
 import {
 	Dialog,
@@ -22,9 +22,12 @@ export default function PromptWriteModal({
 	productDetail,
 }: PromptWriteModalProps) {
 	const [isOpen, setIsOpen] = useState<boolean>(false)
-
 	const [contents, setContents] = useState<string>("")
 	const [star, setStar] = useState<number>(0)
+	const [checkMessage, setCheckMessage] = useState<string>("")
+
+	const textareaRef = useRef<HTMLTextAreaElement>(null)
+	const reviewStarRef = useRef<HTMLDivElement>(null)
 
 	const handleTextChange = (value: string) => {
 		setContents(value)
@@ -33,13 +36,33 @@ export default function PromptWriteModal({
 	const resetHandler = () => {
 		setContents("")
 		setStar(0)
+		setCheckMessage("")
 	}
 
 	const reviewHandler = async () => {
+		if (contents === "") {
+			setCheckMessage("리뷰를 작성해주세요.")
+			textareaRef.current?.focus()
+			return
+		} else if (star === 0) {
+			setCheckMessage("평점을 매겨주세요.")
+			reviewStarRef.current?.focus()
+			return
+		}
+
 		const res = await writeReviewAction(productDetail, contents, Number(star))
 
 		if (res) setIsOpen(!isOpen)
 	}
+
+	useEffect(() => {
+		if (checkMessage) {
+			const timer = setTimeout(() => {
+				setCheckMessage("")
+			}, 3000)
+			return () => clearTimeout(timer)
+		}
+	}, [checkMessage])
 
 	return (
 		<div className="my-5">
@@ -64,22 +87,24 @@ export default function PromptWriteModal({
 						</div>
 					</DialogHeader>
 					<Textarea
+						ref={textareaRef}
 						value={contents}
 						placeholder="리뷰를 작성해주세요"
-						className="h-[200px] bg-gradient-filter p-2 text-left leading-tight text-white"
+						className={`h-[200px] bg-gradient-filter p-2 text-left leading-tight text-white ${checkMessage ? "border-red-500" : ""}`}
 						onChange={(e) => handleTextChange(e.target.value)}
 					/>
+					{checkMessage ? (
+						<div className="text-xs text-red-500">{checkMessage}</div>
+					) : null}
 
 					<div className="flex justify-between">
-						<div className="flex items-center gap-1 text-[9px]">
+						<div
+							className="flex items-center gap-1 text-[9px]"
+							ref={reviewStarRef}>
 							<div className="text-xs font-semibold text-white">평점 : </div>
-							<ReviewStar
-								star={star}
-								setStar={setStar}
-								noAnimation={false}
-								className="hidden xs:!inline-block"
-							/>
+							<ReviewStar star={star} setStar={setStar} noAnimation={false} />
 						</div>
+
 						<button type="button" onClick={resetHandler}>
 							<span className="text-xs text-[#a8a8a8]">초기화</span>
 						</button>

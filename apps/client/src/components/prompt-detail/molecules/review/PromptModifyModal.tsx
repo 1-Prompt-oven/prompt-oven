@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { Textarea } from "@repo/ui/textarea"
 import {
 	Dialog,
@@ -27,6 +27,10 @@ export default function PromptModifyModal({
 
 	const [contents, setContents] = useState<string>(content.contents)
 	const [star, setStar] = useState<number>(content.star)
+	const [checkMessage, setCheckMessage] = useState<string>("")
+
+	const textareaRef = useRef<HTMLTextAreaElement>(null)
+	const reviewStarRef = useRef<HTMLDivElement>(null)
 
 	const handleTextChange = (value: string) => {
 		setContents(value)
@@ -35,13 +39,33 @@ export default function PromptModifyModal({
 	const resetHandler = () => {
 		setContents(content.contents)
 		setStar(content.star)
+		setCheckMessage("")
 	}
 
 	const reviewHandler = async () => {
+		if (contents === "") {
+			setCheckMessage("리뷰를 작성해주세요.")
+			textareaRef.current?.focus()
+			return
+		} else if (star === 0) {
+			setCheckMessage("평점을 매겨주세요.")
+			reviewStarRef.current?.focus()
+			return
+		}
+
 		const res = await modifyReviewAction(reviewId, contents, star)
 
 		if (res) setIsOpen(!isOpen)
 	}
+
+	useEffect(() => {
+		if (checkMessage) {
+			const timer = setTimeout(() => {
+				setCheckMessage("")
+			}, 3000)
+			return () => clearTimeout(timer)
+		}
+	}, [checkMessage])
 
 	return (
 		<Dialog
@@ -68,12 +92,17 @@ export default function PromptModifyModal({
 				<Textarea
 					value={contents}
 					placeholder="리뷰를 작성해주세요"
-					className="h-[200px] bg-gradient-filter p-2 text-left leading-tight text-white"
+					className={`h-[200px] bg-gradient-filter p-2 text-left leading-tight text-white ${checkMessage ? "border-red-500" : ""}`}
 					onChange={(e) => handleTextChange(e.target.value)}
 				/>
+				{checkMessage ? (
+					<div className="text-xs text-red-500">{checkMessage}</div>
+				) : null}
 
 				<div className="flex justify-between">
-					<div className="flex items-center gap-1 text-[9px]">
+					<div
+						className="flex items-center gap-1 text-[9px]"
+						ref={reviewStarRef}>
 						<div className="text-xs font-semibold text-white">평점 : </div>
 						<ReviewStar
 							star={star}
@@ -82,6 +111,7 @@ export default function PromptModifyModal({
 							className="hidden xs:!inline-block"
 						/>
 					</div>
+
 					<button type="button" onClick={resetHandler}>
 						<span className="text-xs text-[#a8a8a8]">초기화</span>
 					</button>
