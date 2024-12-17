@@ -33,7 +33,9 @@ export default function PromptModifyModal({
 	const reviewStarRef = useRef<HTMLDivElement>(null)
 
 	const handleTextChange = (value: string) => {
-		setContents(value)
+		if (value.length <= 100) {
+			setContents(value)
+		}
 	}
 
 	const resetHandler = () => {
@@ -89,6 +91,11 @@ export default function PromptModifyModal({
 						리뷰 수정
 					</div>
 				</DialogHeader>
+				<div className="flex justify-end">
+					<button type="button" onClick={resetHandler}>
+						<span className="text-xs text-[#a8a8a8]">초기화</span>
+					</button>
+				</div>
 				<Textarea
 					value={contents}
 					placeholder="리뷰를 작성해주세요"
@@ -99,7 +106,7 @@ export default function PromptModifyModal({
 					<div className="text-xs text-red-500">{checkMessage}</div>
 				) : null}
 
-				<div className="flex justify-between">
+				<div className="flex items-center justify-between">
 					<div
 						className="flex items-center gap-1 text-[9px]"
 						ref={reviewStarRef}>
@@ -111,10 +118,9 @@ export default function PromptModifyModal({
 							className="hidden xs:!inline-block"
 						/>
 					</div>
-
-					<button type="button" onClick={resetHandler}>
-						<span className="text-xs text-[#a8a8a8]">초기화</span>
-					</button>
+					<div className="text-right text-xs text-white">
+						{contents.length} / 100
+					</div>
 				</div>
 
 				<div className="flex justify-between">

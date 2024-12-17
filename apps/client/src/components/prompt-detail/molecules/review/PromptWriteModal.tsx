@@ -30,7 +30,9 @@ export default function PromptWriteModal({
 	const reviewStarRef = useRef<HTMLDivElement>(null)
 
 	const handleTextChange = (value: string) => {
-		setContents(value)
+		if (value.length <= 100) {
+			setContents(value)
+		}
 	}
 
 	const resetHandler = () => {
@@ -75,7 +77,7 @@ export default function PromptWriteModal({
 					<button
 						type="button"
 						className="rounded-md bg-none px-4 text-xs font-semibold text-[#a8a8a8]">
-						<span>리뷰 작성</span>
+						<p>리뷰 작성</p>
 					</button>
 				</DialogTrigger>
 				<DialogContent className="gradient-filter flex h-[350px] w-[300px] flex-col gap-2 rounded border-none xs:w-[600px]">
@@ -86,6 +88,12 @@ export default function PromptWriteModal({
 							리뷰 작성
 						</div>
 					</DialogHeader>
+					<div className="flex justify-end">
+						<button type="button" onClick={resetHandler}>
+							<span className="text-xs text-[#a8a8a8]">초기화</span>
+						</button>
+					</div>
+
 					<Textarea
 						ref={textareaRef}
 						value={contents}
@@ -97,17 +105,16 @@ export default function PromptWriteModal({
 						<div className="text-xs text-red-500">{checkMessage}</div>
 					) : null}
 
-					<div className="flex justify-between">
+					<div className="flex items-center justify-between">
 						<div
 							className="flex items-center gap-1 text-[9px]"
 							ref={reviewStarRef}>
 							<div className="text-xs font-semibold text-white">평점 : </div>
 							<ReviewStar star={star} setStar={setStar} noAnimation={false} />
 						</div>
-
-						<button type="button" onClick={resetHandler}>
-							<span className="text-xs text-[#a8a8a8]">초기화</span>
-						</button>
+						<div className="text-right text-xs text-white">
+							{contents.length} / 100
+						</div>
 					</div>
 
 					<div className="flex justify-between">

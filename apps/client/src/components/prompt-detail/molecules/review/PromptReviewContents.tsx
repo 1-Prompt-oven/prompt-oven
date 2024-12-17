@@ -36,6 +36,7 @@ export default async function PromptReviewContents({
 					<PromptDetailReviewMore
 						reviewSimpleData={reviewSimpleData}
 						sellorInfo={sellorInfo}
+						memberUuid={memberUuid}
 						productDetail={productDetail}
 						productReview={productReview}
 					/>
