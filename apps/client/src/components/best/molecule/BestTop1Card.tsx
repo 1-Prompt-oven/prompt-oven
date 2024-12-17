@@ -29,7 +29,7 @@ interface BestCardProps {
 	totalSales: number
 }
 
-export default function BestTop5Card({
+export default function BestTop1Card({
 	ranking,
 	rankingChange,
 	reviewAvg,

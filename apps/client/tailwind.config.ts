@@ -14,6 +14,7 @@ const config: Config = {
 			screens: {
 				xxs: "400px", //xxs 브레이크포인트 추가
 				xs: "480px", // xs 브레이크포인트 추가
+				"max-xxs": { max: "639px" }, // max-xxs 브레이크포인트 추가
 			},
 			animation: {
 				"gradient-border": "gradientBorder 4s linear infinite",
@@ -30,3 +31,4 @@ const config: Config = {
 }
 
 export default config
+
