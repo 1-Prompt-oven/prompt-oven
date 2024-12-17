@@ -154,18 +154,19 @@ function SignUpForm() {
 		setModalCallback(null) // 콜백 초기화
 	}
 	return (
-		<div className="min-w-[500px] select-none gap-0 rounded border-none bg-[#252525] px-6 pb-12 pt-16 md:min-h-[780px] md:max-w-[650px] md:px-10 md:pb-16 md:pt-24">
-			<div className="mb-5 flex h-fit flex-col justify-center gap-[5px] md:mb-14">
-				<h1 className="text-center text-4xl font-bold text-white">
-					Create Your Account
-				</h1>
-				<p className="text-center text-[16px] font-normal leading-[26px] text-[#C1C1C1]">
-					Enter your details to create your account
-				</p>
-			</div>
-			<form
-				onSubmit={handleSubmit(handleOnSubmitSuccess, handleOnSubmitFailure)}>
-				<div className="mb-11 flex h-fit w-full flex-col gap-5">
+		<div className="flex justify-center px-4 pb-16 pt-12 sm:pt-16 md:pt-20 lg:pt-24">
+			<div className="w-full max-w-[400px] rounded-lg border-none bg-[#252525] px-6 py-8 sm:max-w-[500px] sm:px-8 sm:py-12 md:max-w-[650px] md:px-10 md:py-16">
+				<div className="mb-5 flex flex-col justify-center gap-2 md:mb-10">
+					<h1 className="text-center text-2xl font-bold text-white sm:text-3xl md:text-4xl">
+						Create Your Account
+					</h1>
+					<p className="text-center text-sm font-normal text-[#C1C1C1] sm:text-base md:text-lg">
+						Enter your details to create your account
+					</p>
+				</div>
+				<form
+					onSubmit={handleSubmit(handleOnSubmitSuccess, handleOnSubmitFailure)}
+					className="flex flex-col gap-6">
 					{/* Email */}
 					<SignUpField
 						showButton
@@ -233,16 +234,16 @@ function SignUpForm() {
 						}}
 					/>
 
-					{/* password confirm */}
+					{/* Password Confirm */}
 					<SignUpField
-						labelText="Password connfirm"
+						labelText="Password Confirm"
 						labelProps={{
 							htmlFor: signUpSchemaKeys.passwordValidate,
 						}}
 						inputProps={{
 							type: "password",
 							id: signUpSchemaKeys.passwordValidate,
-							placeholder: "Password Confirm",
+							placeholder: "Confirm Password",
 							...register(signUpSchemaKeys.passwordValidate),
 						}}
 						errorProps={{
@@ -276,7 +277,8 @@ function SignUpForm() {
 						}}
 					/>
 
-					<div className="flex items-center space-x-2">
+					{/* Terms and Conditions */}
+					<div className="flex items-start space-x-2 sm:space-x-3">
 						<ValidTermsCheckBox
 							id="terms"
 							name="terms"
@@ -291,18 +293,22 @@ function SignUpForm() {
 							setValue={setValue}
 						/>
 					</div>
-				</div>
-				<SuccessModal isOpen={successModalOpen} onClose={closeSuccessModal}>
-					<div>{modalMessage}</div>
-				</SuccessModal>
-				<div className="mb-8 flex h-fit w-full flex-col items-center gap-4">
-					<Button
-						type="submit"
-						className="h-[50px] w-full rounded-[25px] !bg-[#A913F9] text-white hover:!bg-[#A913F9]/90">
-						Sign Up
-					</Button>
-				</div>
-			</form>
+
+					{/* Success Modal */}
+					<SuccessModal isOpen={successModalOpen} onClose={closeSuccessModal}>
+						<div>{modalMessage}</div>
+					</SuccessModal>
+
+					{/* Submit Button */}
+					<div className="flex items-center justify-center">
+						<Button
+							type="submit"
+							className="w-full rounded-full bg-[#A913F9] py-3 text-white hover:bg-[#A913F9]/90 sm:py-4 sm:text-lg">
+							Sign Up
+						</Button>
+					</div>
+				</form>
+			</div>
 		</div>
 	)
 }
