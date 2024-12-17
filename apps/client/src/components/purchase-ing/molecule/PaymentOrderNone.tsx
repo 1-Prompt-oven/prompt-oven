@@ -12,7 +12,7 @@ export default function PaymentOrderNone({ state }: { state: number }) {
 	let content
 	if (state === 1) content = "주문 상품이 없습니다."
 	else if (state === 2) content = "결제 방식을 체크해주세요"
-	else content = "OVER" //4개 초과 상품일 때 결제 못하도록 함.
+	else content = "OVER" //3개 초과 상품일 때 결제 못하도록 함.
 
 	return (
 		<>

@@ -78,7 +78,7 @@ export default function PaymentProceed({
 					orderId: generateRandomString(), // 고유 주문번호
 					orderName,
 					successUrl: `${window.location.origin}/payment/success`, // 결제 요청이 성공하면 리다이렉트되는 URL
-					failUrl: `${window.location.origin}/fail`, // 결제 요청이 실패하면 리다이렉트되는 URL
+					failUrl: `${window.location.origin}/payment/fail`, // 결제 요청이 실패하면 리다이렉트되는 URL
 					customerEmail: paymentMail,
 					customerName: payer,
 					card: {
@@ -97,7 +97,7 @@ export default function PaymentProceed({
 					orderId: generateRandomString(),
 					orderName,
 					successUrl: `${window.location.origin}/payment/success`,
-					failUrl: `${window.location.origin}/fail`,
+					failUrl: `${window.location.origin}/payment/fail`,
 					customerEmail: paymentMail,
 					customerName: payer,
 					transfer: {
@@ -115,7 +115,7 @@ export default function PaymentProceed({
 					orderId: generateRandomString(),
 					orderName,
 					successUrl: `${window.location.origin}/payment/success`,
-					failUrl: `${window.location.origin}/fail`,
+					failUrl: `${window.location.origin}/payment/fail`,
 					customerEmail: paymentMail,
 					customerName: payer,
 					virtualAccount: {
@@ -134,7 +134,7 @@ export default function PaymentProceed({
 					orderId: generateRandomString(),
 					orderName,
 					successUrl: `${window.location.origin}/payment/success`,
-					failUrl: `${window.location.origin}/fail`,
+					failUrl: `${window.location.origin}/payment/fail`,
 					customerEmail: paymentMail,
 					customerName: payer,
 				})
@@ -146,7 +146,7 @@ export default function PaymentProceed({
 					orderId: generateRandomString(),
 					orderName,
 					successUrl: `${window.location.origin}/payment/success`,
-					failUrl: `${window.location.origin}/fail`,
+					failUrl: `${window.location.origin}/payment/fail`,
 					customerEmail: paymentMail,
 					customerName: payer,
 				})
@@ -161,7 +161,7 @@ export default function PaymentProceed({
 					orderId: generateRandomString(),
 					orderName: "토스 티셔츠 외 2건",
 					successUrl: `${window.location.origin}/payment/success`,
-					failUrl: `${window.location.origin}/fail`,
+					failUrl: `${window.location.origin}/payment/fail`,
 					customerEmail: paymentMail,
 					customerName: payer,
 					foreignEasyPay: {

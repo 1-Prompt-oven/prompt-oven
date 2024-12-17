@@ -67,7 +67,7 @@ export async function getProductReview(
 		{
 			method: "GET",
 			headers,
-			next: { tags: ["write-review", "delete-review"] },
+			next: { tags: ["write-review", "modify-review", "delete-review"] },
 		},
 	)
 
@@ -117,6 +117,35 @@ export async function writeReviewAction(
 	}
 
 	revalidateTag("write-review")
+	return true
+}
+
+export async function modifyReviewAction(
+	reviewId: string,
+	contents: string,
+	star: number,
+): Promise<boolean> {
+	"use server"
+	const headers = await getAuthHeaders()
+
+	const payload = {
+		id: reviewId,
+		contents,
+		star,
+	}
+
+	const res = await fetch(`${process.env.API_BASE_URL}/v1/member/review`, {
+		method: "PUT",
+		headers,
+		body: JSON.stringify(payload),
+	})
+
+	if (!res.ok) {
+		// throw new Error("Failed to fetch Modify Review Data")
+		return false
+	}
+
+	revalidateTag("modify-review")
 	return true
 }
 

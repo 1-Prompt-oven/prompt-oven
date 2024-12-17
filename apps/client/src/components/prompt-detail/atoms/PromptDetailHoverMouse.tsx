@@ -13,21 +13,21 @@ import type { PromptSimpleReviewData } from "@/types/review/reviewType"
 import { STATIC_DEFAULT_AVATAR } from "@/app/static/data"
 
 interface PromptDetailHoverMouseProps {
-	sellorInfo: ProfileDetailSellorShortType
+	sellerInfo: ProfileDetailSellorShortType
 	productDetail: PromptDetailInfoType
 	reviewSimpleData: PromptSimpleReviewData
 }
 
 export default function PromptDetailHoverMouse({
-	sellorInfo,
+	sellerInfo,
 	productDetail,
 	reviewSimpleData,
 }: PromptDetailHoverMouseProps) {
 	const [isHovered, setIsHovered] = useState(false)
 
 	const profileImage =
-		sellorInfo.memberProfileImage !== ""
-			? sellorInfo.memberProfileImage
+		sellerInfo.memberProfileImage !== ""
+			? sellerInfo.memberProfileImage
 			: STATIC_DEFAULT_AVATAR
 
 	return (
@@ -36,7 +36,7 @@ export default function PromptDetailHoverMouse({
 			onMouseEnter={() => setIsHovered(true)}
 			onMouseLeave={() => setIsHovered(false)}>
 			<Avatar className="h-5 w-5">
-				<AvatarImage src={profileImage} alt={sellorInfo.memberNickname} />
+				<AvatarImage src={profileImage} alt={sellerInfo.memberNickname} />
 				<AvatarFallback>AU</AvatarFallback>
 			</Avatar>
 
@@ -81,17 +81,17 @@ export default function PromptDetailHoverMouse({
 
 							<div className="flex items-center gap-2">
 								<Link
-									href={`/profile/seller/${sellorInfo.memberNickname}`}
+									href={`/profile/seller/${sellerInfo.memberNickname}`}
 									className="flex items-center gap-2">
 									<Avatar className="h-6 w-6">
 										<AvatarImage
 											src={profileImage}
-											alt={sellorInfo.memberNickname}
+											alt={sellerInfo.memberNickname}
 										/>
 										<AvatarFallback>AU</AvatarFallback>
 									</Avatar>
 									<p className="mt-1 text-base font-bold">
-										{sellorInfo.memberNickname}
+										{sellerInfo.memberNickname}
 									</p>
 								</Link>
 							</div>

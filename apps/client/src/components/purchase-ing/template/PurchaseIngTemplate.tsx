@@ -30,11 +30,11 @@ export default function PurchaseIngTemplate({
 	}, 0)
 
 	return (
-		<div className="mx-6 mb-12 mt-4 max-w-screen-xl">
+		<div className="mb-12 mt-4 flex flex-col gap-6">
 			<PurchaseIngTitle />
 
-			<div className="flex gap-8">
-				<div className="flex w-[700px] flex-col gap-8">
+			<div className="mx-6 flex flex-col justify-between gap-8 md:!flex-row">
+				<div className="flex w-full flex-col gap-8 md:w-[700px]">
 					<PaymentMethod
 						method={selectedMethod}
 						setMethod={setSelectedMethod}

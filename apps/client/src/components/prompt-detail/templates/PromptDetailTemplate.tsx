@@ -1,18 +1,16 @@
-import type {
-	DetailCategoryListType,
-	DetailDropsCarouselType,
-} from "@/types/prompt-detail/associationPromptType"
+// import type {
+// 	DetailCategoryListType,
+// 	DetailDropsCarouselType,
+// } from "@/types/prompt-detail/associationPromptType"
 import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
 import type { PromptReviewType } from "@/types/review/reviewType"
 import type { CookieLatestType } from "@/types/cookie/cookieResponseType"
 import PromptDetailMain from "../organisms/PromptDetailMain"
-import PromptDetailDropsCarousel from "../organisms/PromptDetailDropsCarousel"
 import PromptDetailReview from "../organisms/PromptDetailReview"
-import PropmtDetailCategoryList from "../molecules/PropmtDetailCategoryList"
 
 interface PromptDetailProps {
-	notableDrops: DetailDropsCarouselType[]
-	categories: DetailCategoryListType[]
+	// notableDrops: DetailDropsCarouselType[]
+	// categories: DetailCategoryListType[]
 	userCookie: CookieLatestType
 	purchaseState: boolean
 	productDetail: PromptDetailInfoType
@@ -20,8 +18,6 @@ interface PromptDetailProps {
 }
 
 export default function PromptDetailTemplate({
-	notableDrops,
-	categories,
 	userCookie,
 	purchaseState,
 	productDetail,
@@ -41,9 +37,6 @@ export default function PromptDetailTemplate({
 				productReview={productReview}
 				purchaseState={purchaseState}
 			/>
-
-			<PromptDetailDropsCarousel items={notableDrops} />
-			<PropmtDetailCategoryList categories={categories} />
 		</section>
 	)
 }

@@ -6,15 +6,15 @@ import { STATIC_DEFAULT_AVATAR } from "@/app/static/data"
 import type { ReviewContentType } from "@/types/review/reviewType"
 import PromptDetailReviewLine from "../../atoms/review/PromptDetailReviewLine"
 
-interface PromptDetailReviewContentProps {
+interface PromptDetailReviewContentModalProps {
 	content: ReviewContentType
 	memberUuid: string | null
 }
 
-export default function PromptDetailReviewContent({
+export default function PromptDetailReviewContentModal({
 	content,
 	memberUuid,
-}: PromptDetailReviewContentProps) {
+}: PromptDetailReviewContentModalProps) {
 	const isNotToday = getCheckToday(content.updatedAt)
 	const formDate = ReviewDateFormatted(content.updatedAt)
 	const profileImage = content.authorProfileImage || STATIC_DEFAULT_AVATAR
@@ -23,16 +23,16 @@ export default function PromptDetailReviewContent({
 		<li className="rounded-md bg-[#1b1b1b]">
 			<div className="min-h-[150px]">
 				<div
-					className={`${memberUuid === content.authorUuid ? "w-[82%] xs:w-[85%] lg:w-[92%]" : "w-[94%]"} flex items-end justify-between`}>
+					className={`${memberUuid === content.authorUuid ? "w-[80%] xs:w-[85%] lg:w-[92%]" : "w-[94%]"} flex items-end justify-between`}>
 					<Link
 						href={`/profile/seller/${content.authorNickname}`}
 						className="ml-5 mt-3 flex w-full items-center justify-between gap-4 lg:!mt-4 lg:ml-10">
-						<div className="flex gap-2">
+						<div className="flex items-center gap-2">
 							<Avatar className="h-6 w-6 lg:h-8 lg:w-8">
 								<AvatarImage src={profileImage} alt={content.authorNickname} />
 								<AvatarFallback>AU</AvatarFallback>
 							</Avatar>
-							<p className="mt-1 text-base font-bold text-white lg:text-xl">
+							<p className="mt-1 text-xs font-bold text-white xs:!text-lg">
 								{content.authorNickname}
 							</p>
 						</div>

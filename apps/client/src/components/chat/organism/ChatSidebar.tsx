@@ -2,6 +2,7 @@
 
 import { X } from "@repo/ui/lucide"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
+import { EventSource } from "event-source-polyfill"
 import type {
 	ChatRoom as ChatRoomType,
 	GetReactiveChatRoomListResponseType,
