@@ -171,3 +171,16 @@ export const startTalkWith = async (partnerUuid: string, roomName: string) => {
 
 	return chatRoom
 }
+
+// reactive action
+export const getReactiveChatMessages = async (roomId: string) => {
+	const accessToken = await getAccessToken()
+	return fetch(`${process.env.API_BASE_URL}/v1/member/chat/new/${roomId}`, {
+		method: "GET",
+		headers: {
+			Authorization: accessToken || "",
+			Accept: "text/event-stream",
+		},
+		cache: "no-cache",
+	})
+}
