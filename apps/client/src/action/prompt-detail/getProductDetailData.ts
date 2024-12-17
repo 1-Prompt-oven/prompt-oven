@@ -303,7 +303,7 @@ export async function getPurchaseState(productId: string): Promise<boolean> {
 		return false
 	}
 
-	//const rawData: ResponsePurchaseData = await res.json() // RawData 타입으로 지정
+	const rawData: { result: boolean } = await res.json() // RawData 타입으로 지정
 
-	return true
+	return rawData.result
 }

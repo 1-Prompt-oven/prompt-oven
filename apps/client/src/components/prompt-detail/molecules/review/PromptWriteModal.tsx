@@ -30,6 +30,11 @@ export default function PromptWriteModal({
 		setContents(value)
 	}
 
+	const resetHandler = () => {
+		setContents("")
+		setStar(0)
+	}
+
 	const reviewHandler = async () => {
 		const res = await writeReviewAction(productDetail, contents, Number(star))
 
@@ -75,7 +80,7 @@ export default function PromptWriteModal({
 								className="hidden xs:!inline-block"
 							/>
 						</div>
-						<button type="button" onClick={() => setContents("")}>
+						<button type="button" onClick={resetHandler}>
 							<span className="text-xs text-[#a8a8a8]">초기화</span>
 						</button>
 					</div>

@@ -8,10 +8,12 @@ import PromptDetailReviewLine from "../../atoms/review/PromptDetailReviewLine"
 
 interface PromptDetailReviewContentProps {
 	content: ReviewContentType
+	memberUuid: string | null
 }
 
 export default function PromptDetailReviewContent({
 	content,
+	memberUuid,
 }: PromptDetailReviewContentProps) {
 	const isNotToday = getCheckToday(content.updatedAt)
 	const formDate = ReviewDateFormatted(content.updatedAt)
@@ -54,7 +56,8 @@ export default function PromptDetailReviewContent({
 
 				<PromptDetailReviewLine
 					reviewId={content.id}
-					content={content.contents}
+					content={content}
+					memberUuid={memberUuid}
 				/>
 			</div>
 		</li>
