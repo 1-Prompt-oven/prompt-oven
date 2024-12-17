@@ -19,12 +19,12 @@ import type {
 	PromptReviewType,
 	PromptSimpleReviewData,
 } from "@/types/review/reviewType"
-import PromptDetailHoverMouse from "../../atoms/PromptDetailHoverMouse"
 import PromptDetailReviewContentModal from "./PromptDetailReviewContentModal"
+import PromptDetailHoverMouse from "../../atoms/PromptDetailHoverMouse"
 
 interface PromptDetailReviewMoreProps {
 	reviewSimpleData: PromptSimpleReviewData
-	sellorInfo: ProfileDetailSellorShortType
+	sellerInfo: ProfileDetailSellorShortType
 	memberUuid: string | null
 	productDetail: PromptDetailInfoType
 	productReview: PromptReviewType
@@ -32,7 +32,7 @@ interface PromptDetailReviewMoreProps {
 
 export default function PromptDetailReviewMore({
 	reviewSimpleData,
-	sellorInfo,
+	sellerInfo,
 	memberUuid,
 	productDetail,
 	productReview,
@@ -82,7 +82,7 @@ export default function PromptDetailReviewMore({
 						<div className="flex items-center gap-4">
 							<DialogTitle className="font-bold text-white">
 								<PromptDetailHoverMouse
-									sellorInfo={sellorInfo}
+									sellerInfo={sellerInfo}
 									productDetail={productDetail}
 									reviewSimpleData={reviewSimpleData}
 								/>
