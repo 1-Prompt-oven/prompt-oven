@@ -1,5 +1,5 @@
 import { getReviewSimpleData } from "@/action/prompt-detail/getProductDetailReviewData"
-import { getSellorShort } from "@/action/prompt-detail/getProductDetailData"
+import { getSellerShort } from "@/action/prompt-detail/getProductDetailData"
 import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
 import type { PromptReviewType } from "@/types/review/reviewType"
 import PromptDetailNoReview from "../../atoms/review/PromptDetailNoReview"
@@ -16,7 +16,7 @@ export default async function PromptReviewContents({
 	productReview,
 }: PromptReviewContentsProps) {
 	const reviewSimpleData = await getReviewSimpleData(productDetail.productUuid)
-	const sellorInfo = await getSellorShort(productDetail.sellerUuid)
+	const sellorInfo = await getSellerShort(productDetail.sellerUuid)
 
 	return (
 		<div>

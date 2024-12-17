@@ -5,6 +5,8 @@ import type {
 	CreateProductRequestType,
 	CreateProductTempRequestType,
 	CreateProductTempResponseType,
+	GetNotableProductListRequestType,
+	GetNotableProductListResponseType,
 	GetProductDetailRequestType,
 	GetProductDetailResponseType,
 	GetProductSellerRequestType,
@@ -19,6 +21,7 @@ import { actionHandler } from "@/action/actionHandler.ts"
 import { getAccessToken } from "@/lib/api/sessionExtractor.ts"
 import { initializeHeaders } from "@/lib/api/headers.ts"
 import { createQueryParamString } from "@/lib/query.ts"
+import { getSellerShort } from "@/action/prompt-detail/getProductDetailData.ts"
 
 export const getProductSeller = async (
 	req: GetProductSellerRequestType,
@@ -32,9 +35,68 @@ export const getProductSeller = async (
 		options: {
 			headers,
 			method: "GET",
-			cache: "no-cache",
+			cache: "default",
 		},
 	})
+}
+
+export const getNotableProductList = async () => {
+	"use server"
+	const req: GetNotableProductListRequestType = {
+		searchBar: "",
+		topCategoryUuid: "",
+		subCategoryUuid: "",
+		minPrice: "",
+		maxPrice: "",
+		sortBy: "avgStar",
+		sortOption: "DESC",
+		pageSize: 12,
+	}
+	return getMainCarouselProductList(req)
+}
+
+export const getMainProductList = async () => {
+	"use server"
+	const req: GetNotableProductListRequestType = {
+		searchBar: "",
+		topCategoryUuid: "",
+		subCategoryUuid: "",
+		minPrice: "",
+		maxPrice: "",
+		sortBy: "sells",
+		sortOption: "DESC",
+		pageSize: 4,
+	}
+	return getMainCarouselProductList(req)
+}
+export const getMainCarouselProductList = async (
+	req: GetNotableProductListRequestType,
+) => {
+	const headers = initializeHeaders()
+	const productList = (
+		await actionHandler<CommonResType<GetNotableProductListResponseType>>({
+			name: "getMainCarouselProductList",
+			url: `/v1/product/list?${createQueryParamString(req)}`,
+			options: {
+				headers,
+				method: "GET",
+				cache: "default",
+			},
+		})
+	).result
+	return Promise.all(
+		productList.productList.map(async (product) => {
+			const sellerUuid = await getProductSeller({
+				productUuid: product.productUuid,
+			})
+			const seller = await getSellerShort(sellerUuid.result.sellerUuid)
+
+			return {
+				...product,
+				author: seller,
+			}
+		}),
+	)
 }
 
 export const getSellerProductList = async (
