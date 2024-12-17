@@ -66,7 +66,7 @@ export async function getProductDetail(
 	return rawData.result
 }
 
-export async function getSellorShort(
+export async function getSellerShort(
 	memberId: string,
 ): Promise<ProfileDetailSellorShortType> {
 	"use server"

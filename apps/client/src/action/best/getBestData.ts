@@ -19,7 +19,8 @@ export async function fetchRankingList(
 	"use server"
 	try {
 		const now = new Date()
-		const midnight = new Date()
+		now.setHours(now.getHours() + 9)
+		const midnight = new Date(now)
 		midnight.setHours(24, 0, 0, 0) // 자정 시간 설정
 		const secondsUntilMidnight = Math.floor(
 			(midnight.getTime() - now.getTime()) / 1000,
@@ -41,7 +42,7 @@ export async function fetchRankingList(
 			const profileResponse = await fetch(
 				`${process.env.API_BASE_URL}/v1/profile/uuid/${bestItem.memberUuid}`,
 				{
-					cache: "no-cache",
+					next: { revalidate: secondsUntilMidnight },
 				},
 			)
 			if (!profileResponse.ok) {
@@ -64,7 +65,7 @@ export async function fetchRankingList(
 				avatarImage: profileData.result.avatarImageUrl || "/img/main/art3.png",
 				nickname: profileData.result.nickname,
 				follower: profileData.result.follower,
-				hashTag: profileData.result.hashTag || "크리에이터 태그",
+				hashTag: profileData.result.hashTag || "",
 				views: profileData.result.viewer,
 			}
 		})

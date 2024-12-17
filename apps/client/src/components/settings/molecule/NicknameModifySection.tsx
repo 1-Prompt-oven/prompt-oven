@@ -4,6 +4,7 @@ import React, { useState } from "react"
 import { ThreeDots } from "react-loader-spinner"
 import { z } from "zod"
 import { updateNickname } from "@/action/auth/updateNickname"
+import { verifyNickname } from "@/action/auth/memberManageAction"
 import { nicknameSchemaObject } from "@/schema/auth"
 import GradientButton from "@/components/common/atom/GradientButton"
 import SuccessModal from "@/components/common/atom/SuccessModal"
@@ -16,12 +17,14 @@ function NicknameModifySection({ memberUUID }: { memberUUID: string }) {
 	const [isModalOpen, setIsModalOpen] = useState<boolean>(false)
 	const [modalMessage, setModalMessage] = useState<string>("")
 
+	// 닉네임 저장 핸들러
 	const handleSave = async () => {
 		if (!nickname) {
-			setError("Enter your new nincname")
+			setError("Enter your new nickname")
 			return
 		}
 
+		// Zod 스키마 유효성 검사
 		try {
 			nicknameSchemaObject.parse({ nickname })
 		} catch (zodError) {
@@ -35,17 +38,27 @@ function NicknameModifySection({ memberUUID }: { memberUUID: string }) {
 		setError(null)
 
 		try {
+			// 닉네임 중복 확인
+			const verifyResponse = await verifyNickname({ nickname })
+			if (!verifyResponse.result) {
+				setModalMessage("This nickname already exist.")
+				setIsModalOpen(true)
+				return
+			}
+
+			// 닉네임 업데이트
 			await updateNickname({ memberUUID, nickname })
-			setModalMessage("Nickname is changed")
+			setModalMessage("Nickname updated.")
 			setIsModalOpen(true)
 		} catch (err) {
-			setModalMessage("Fail nickname change")
+			setModalMessage("Failed to update nickname.")
 			setIsModalOpen(true)
 		} finally {
 			setIsLoading(false)
 		}
 	}
 
+	// 닉네임 입력값 변경 핸들러
 	const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
 		const value = event.target.value
 		setNickname(value)
@@ -62,7 +75,7 @@ function NicknameModifySection({ memberUUID }: { memberUUID: string }) {
 
 	return (
 		<div className="flex flex-col gap-4 py-4">
-			<div className="mx-4 text-white">Nickname Change</div>
+			<div className="mx-4 text-xl text-white">Nickname Change</div>
 			<div className="flex items-center gap-2">
 				<NicknameInput
 					value={nickname}

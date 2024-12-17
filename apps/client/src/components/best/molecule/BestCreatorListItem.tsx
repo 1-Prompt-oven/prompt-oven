@@ -37,29 +37,29 @@ export function BestCreatorListItem({
 }: BestCardProps) {
 	return (
 		<Link href={`/profile/seller/${nickname}`}>
-			<div className="grid grid-cols-12 items-center border-b border-gray-800 px-4 py-3 pl-3 transition-colors hover:bg-gray-800/50">
-				<div className="col-span-2 ml-2 flex items-center gap-2">
-					<Trophy className="h-5 w-5 text-fuchsia-500" />
+			<div className="grid items-center border-b border-gray-800 py-3 transition-colors hover:bg-gray-800/50 xxs:grid-cols-10 xxs:px-5 xxs:text-xs sm:grid-cols-12 sm:px-6 sm:text-base">
+				<div className="col-span-2 flex items-center gap-2 sm:col-span-1">
+					<Trophy className="text-fuchsia-500 xxs:h-4 xxs:w-4 sm:h-5 sm:w-5" />
 					<span className="font-bold text-white">{ranking}</span>
 					{rankingChange === 0 ? (
 						<Minus color="#8c8c8c" strokeWidth={2.5} size={20} />
 					) : (
 						<div className="flex items-center text-xs">
 							{rankingChange > 0 ? (
-								<div className="font-xs flex items-center text-green-600">
-									<ArrowUp className="h-4 w-4" />
+								<div className="flex items-center text-green-600">
+									<ArrowUp className="xxs:h-3 xxs:w-3 sm:h-4 sm:w-4" />
 									<span>{Math.abs(rankingChange)}</span>
 								</div>
 							) : (
-								<div className="font-xs flex items-center text-red-600">
-									<ArrowDown className="h-4 w-4" />
+								<div className="flex items-center text-red-600">
+									<ArrowDown className="xxs:h-3 xxs:w-3 sm:h-4 sm:w-4" />
 									<span>{Math.abs(rankingChange)}</span>
 								</div>
 							)}
 						</div>
 					)}
 				</div>
-				<div className="col-span-3 ml-7 flex items-center gap-3">
+				<div className="flex items-center xxs:col-span-1 xxs:flex-col xxs:gap-2 sm:col-span-3 sm:flex-row sm:justify-center sm:gap-3">
 					<Image
 						src={
 							avatarImage ||
@@ -71,33 +71,33 @@ export function BestCreatorListItem({
 						className="h-8 w-8 flex-shrink-0 rounded-full object-cover"
 						unoptimized
 					/>
-					<span className="cursor-pointer text-white hover:text-fuchsia-400">
+					<span className="inline-block cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-white hover:text-fuchsia-400 xxs:text-[11px] sm:text-base">
 						{nickname}
 					</span>
 				</div>
-				<div className="col-span-2 ml-4 mr-7 flex items-center justify-start">
+				<div className="col-span-1 xxs:block sm:hidden" />
+				<div className="inline-block overflow-hidden text-ellipsis whitespace-nowrap text-center xxs:col-span-2 sm:col-span-3">
 					{hashTag ? (
-						<span className="ml-4 rounded-full bg-purple-600/50 px-3 py-1 text-sm font-medium text-white/80">
+						<span className="rounded-full bg-purple-600/50 px-3 py-1 text-center font-medium text-white/80 xxs:w-[80px] xxs:text-[10px] sm:w-[100px] sm:text-sm md:w-[120px] md:text-sm lg:w-[150px] lg:text-base">
 							{hashTag}
 						</span>
 					) : null}
 				</div>
-				<div className="col-span-1 ml-4 flex items-center justify-center gap-1 text-white/80">
+				<div className="col-span-1 hidden sm:block" />
+				<div className="flex items-center justify-center gap-1 text-white/80 xxs:col-span-3 sm:col-span-2 sm:block">
 					<TrendingUp className="h-4 w-4" />
 					<span>{totalSales}</span>
 				</div>
-				<div className="col-span-2 mr-6 flex items-center justify-end gap-1 text-white/80">
+				<div className="flex items-center gap-1 text-white/80 xxs:col-span-1 xxs:justify-end sm:col-span-1 sm:justify-center">
 					<Star className="h-4 w-4 text-yellow-400" />
 					<span>{reviewAvg.toFixed(1)}</span>
 				</div>
-				<div className="col-span-2 mr-6 flex items-center justify-end gap-1 text-white/80">
-					<Users className="h-4 w-4" />
-					<span>{(follower / 1000).toFixed(1)}k</span>
+				<div className="col-span-2 flex items-center justify-start gap-1 text-white/80 xxs:hidden sm:mr-4 sm:block sm:justify-end">
+					<Users className="h-4 w-4 xxs:hidden sm:block" />
+					<span className="xxs:hidden sm:block">
+						{(follower / 1000).toFixed(1)}k
+					</span>
 				</div>
-				{/* <div className="col-span-1 flex items-center gap-1 text-right text-white/80">
-					<DollarSign className="h-4 w-4 text-yellow-400" />
-					{totalSales.toLocaleString()}
-				</div> */}
 			</div>
 		</Link>
 	)

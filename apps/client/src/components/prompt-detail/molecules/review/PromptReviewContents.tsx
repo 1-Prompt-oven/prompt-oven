@@ -1,5 +1,5 @@
 import { getReviewSimpleData } from "@/action/prompt-detail/getProductDetailReviewData"
-import { getSellorShort } from "@/action/prompt-detail/getProductDetailData"
+import { getSellerShort } from "@/action/prompt-detail/getProductDetailData"
 import { getMemberUUID } from "@/lib/api/sessionExtractor"
 import type { PromptDetailInfoType } from "@/types/prompt-detail/promptDetailType"
 import type { PromptReviewType } from "@/types/review/reviewType"
@@ -17,7 +17,7 @@ export default async function PromptReviewContents({
 	productReview,
 }: PromptReviewContentsProps) {
 	const reviewSimpleData = await getReviewSimpleData(productDetail.productUuid)
-	const sellorInfo = await getSellorShort(productDetail.sellerUuid)
+	const sellerInfo = await getSellerShort(productDetail.sellerUuid)
 	const memberUuid = await getMemberUUID()
 
 	return (
@@ -35,7 +35,7 @@ export default async function PromptReviewContents({
 					</ul>
 					<PromptDetailReviewMore
 						reviewSimpleData={reviewSimpleData}
-						sellorInfo={sellorInfo}
+						sellerInfo={sellerInfo}
 						memberUuid={memberUuid}
 						productDetail={productDetail}
 						productReview={productReview}
