@@ -24,6 +24,16 @@ function BestTemplate({ data }: BestTemplateProps) {
 	}
 
 	const [isLoading, setIsLoading] = useState(true)
+	const [isMobile, setIsMobile] = useState(false)
+
+	useEffect(() => {
+		const handleResize = () => {
+			setIsMobile(window.innerWidth < 768)
+		}
+		handleResize()
+		window.addEventListener("resize", handleResize)
+		return () => window.removeEventListener("resize", handleResize)
+	}, [])
 
 	const preloadImages = async (imageData: RenderedRankingItemTypes[]) => {
 		const imagePromises = imageData.map((item) => {
@@ -65,8 +75,27 @@ function BestTemplate({ data }: BestTemplateProps) {
 				</div>
 			) : (
 				<>
-					<BestTop5 data={top5Data} />
-					<BestList data={restData} pagingInfo={pagingInfo} />
+					{isMobile ? (
+						<div>
+							<div className="mb-3 mt-10">
+								<h1 className="text-center text-3xl font-bold text-white">
+									Best Creators
+								</h1>
+							</div>
+							<BestTop5 data={top5Data} />
+							<BestList data={data.content} pagingInfo={pagingInfo} />
+						</div>
+					) : (
+						<>
+							<div className="mb-3 mt-10">
+								<h1 className="ml-[100px] text-left text-5xl font-bold text-white">
+									Best Creators
+								</h1>
+							</div>
+							<BestTop5 data={top5Data} />
+							<BestList data={restData} pagingInfo={pagingInfo} />
+						</>
+					)}
 				</>
 			)}
 		</>
