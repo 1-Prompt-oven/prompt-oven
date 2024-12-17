@@ -86,8 +86,11 @@ export async function appendPurchased(
 	})
 
 	if (!res.ok) {
-		throw new Error("Failed to fetch POST purchase list data")
+		return false
+		//throw new Error("Failed to fetch POST purchase list data")
 	}
+
+	revalidateTag("purchase-ing")
 
 	return true
 }

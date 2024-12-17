@@ -53,6 +53,7 @@ export async function getPurchaseEd(
 		{
 			method: "GET",
 			headers,
+			next: { tags: ["purchase-ing"] },
 		},
 	)
 
