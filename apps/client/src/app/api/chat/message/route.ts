@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
 					method: "GET",
 					headers: {
 						Authorization: accessToken || "",
-						Accept: "text/event-stream",
+						Accept: "*/*",
 						"Cache-Control": "no-cache",
 						Connection: "keep-alive",
 						"Accept-Encoding": "gzip, deflate, br",
@@ -76,6 +76,7 @@ export async function GET(request: NextRequest) {
 			"Content-Type": "text/event-stream",
 			"Cache-Control": "no-cache",
 			Connection: "keep-alive",
+			Accept: "*/*",
 		},
 	})
 }
