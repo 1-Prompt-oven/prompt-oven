@@ -20,7 +20,11 @@ export async function GET(request: NextRequest) {
 					headers: {
 						Authorization: accessToken || "",
 						Accept: "text/event-stream",
+						"Cache-Control": "no-cache",
+						Connection: "keep-alive",
+						"Accept-Encoding": "gzip, deflate, br",
 					},
+					cache: "no-cache",
 				},
 			)
 

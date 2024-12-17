@@ -20,18 +20,20 @@ import type {
 	PromptSimpleReviewData,
 } from "@/types/review/reviewType"
 import PromptDetailHoverMouse from "../../atoms/PromptDetailHoverMouse"
-import PromptDetailReviewModal from "./PromptDetailReviewModal"
+import PromptDetailReviewContentModal from "./PromptDetailReviewContentModal"
 
 interface PromptDetailReviewMoreProps {
 	reviewSimpleData: PromptSimpleReviewData
-	sellorInfo: ProfileDetailSellorShortType
+	sellerInfo: ProfileDetailSellorShortType
+	memberUuid: string | null
 	productDetail: PromptDetailInfoType
 	productReview: PromptReviewType
 }
 
 export default function PromptDetailReviewMore({
 	reviewSimpleData,
-	sellorInfo,
+	sellerInfo,
+	memberUuid,
 	productDetail,
 	productReview,
 }: PromptDetailReviewMoreProps) {
@@ -75,12 +77,12 @@ export default function PromptDetailReviewMore({
 						View Modal
 					</div>
 				</DialogTrigger>
-				<DialogContent className="h-[600px] min-w-[400px] max-w-[500px] rounded border-none bg-[#252525] lg:h-[700px] lg:min-w-[600px] lg:max-w-[900px]">
+				<DialogContent className="h-[600px] min-w-[350px] max-w-[370px] rounded border-none bg-[#252525] xs:min-w-[500px] lg:h-[700px] lg:min-w-[600px] lg:max-w-[900px]">
 					<DialogHeader className="mb-4 ml-4 flex flex-row justify-between lg:mb-0">
 						<div className="flex items-center gap-4">
 							<DialogTitle className="font-bold text-white">
 								<PromptDetailHoverMouse
-									sellorInfo={sellorInfo}
+									sellerInfo={sellerInfo}
 									productDetail={productDetail}
 									reviewSimpleData={reviewSimpleData}
 								/>
@@ -98,12 +100,12 @@ export default function PromptDetailReviewMore({
 							x
 						</Button>
 					</DialogHeader>
-					<ul className="grid max-h-[550px] grid-cols-1 gap-2 overflow-auto">
-						{reviewList.content.map((review, index) => (
-							<PromptDetailReviewModal
-								// eslint-disable-next-line react/no-array-index-key -- Test Data has Duplicate id
-								key={review.id + index}
-								review={review}
+					<ul className="grid h-[400px] grid-cols-1 gap-2 overflow-auto">
+						{reviewList.content.map((review) => (
+							<PromptDetailReviewContentModal
+								key={review.id}
+								content={review}
+								memberUuid={memberUuid}
 							/>
 						))}
 					</ul>

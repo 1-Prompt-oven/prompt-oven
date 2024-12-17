@@ -11,8 +11,10 @@ function SuccessModal({ isOpen, children }: SuccessModalProps) {
 
 	return (
 		<div className="fixed inset-0 flex items-center justify-center bg-slate-300 bg-opacity-40">
-			<div className="rounded bg-[#242020] p-4 shadow-lg">
-				<div className="mb-4 text-white">{children}</div>
+			<div className="gradient-filter h-[150px] w-[300px] rounded border-none">
+				<div className="rounded p-4 shadow-lg">
+					<div className="mb-4 text-white">{children}</div>
+				</div>
 			</div>
 		</div>
 	)
