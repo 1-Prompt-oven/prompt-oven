@@ -71,14 +71,14 @@ export function BestCreatorListItem({
 						className="h-8 w-8 flex-shrink-0 rounded-full object-cover"
 						unoptimized
 					/>
-					<span className="inline-block cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-[11px] text-white hover:text-fuchsia-400 sm:text-base">
+					<span className="inline-block cursor-pointer overflow-hidden text-ellipsis whitespace-nowrap text-white hover:text-fuchsia-400 max-xxs:text-[10px] sm:text-base">
 						{nickname}
 					</span>
 				</div>
 				<div className="col-span-1 max-xxs:block sm:hidden" />
-				<div className="col-span-2 inline-block overflow-hidden text-ellipsis whitespace-nowrap text-center sm:col-span-3">
+				<div className="col-span-2 inline-block whitespace-nowrap py-1 text-center sm:col-span-3">
 					{hashTag ? (
-						<span className="w-[80px] rounded-full bg-purple-600/50 px-3 py-1 text-center text-[10px] font-medium text-white/80 sm:w-[100px] sm:text-sm md:w-[120px] md:text-sm lg:w-[150px] lg:text-base">
+						<span className="w-[80px] max-w-[150px] rounded-full bg-purple-600/50 px-3 py-1 text-center text-[11px] font-medium text-white/80 sm:w-[100px] sm:text-sm md:w-[120px] md:text-sm lg:w-[150px] lg:text-base">
 							{hashTag}
 						</span>
 					) : null}
