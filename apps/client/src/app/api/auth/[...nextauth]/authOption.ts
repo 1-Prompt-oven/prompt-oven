@@ -57,8 +57,7 @@ export const authOptions: NextAuthOptions = {
 						if (response) {
 							usedDH = true
 						}
-					} catch (dhError) {
-					}
+					} catch (dhError) {}
 
 					// If DH failed, fall back to v1 login
 					if (!usedDH) {
@@ -112,7 +111,6 @@ export const authOptions: NextAuthOptions = {
 			}
 			//소셜 로그인 공통 처리
 			if (account?.provider) {
-
 				let providerID: string
 				let email: string | undefined
 
@@ -204,6 +202,7 @@ export const authOptions: NextAuthOptions = {
 		},
 
 		async session({ session, token, trigger }) {
+			
 			session.user = token
 			return session
 		},
@@ -213,7 +212,7 @@ export const authOptions: NextAuthOptions = {
 			// Allows callback URLs on the same origin
 			else if (new URL(url).origin === baseUrl) return url
 			return baseUrl
-		}
+		},
 	},
 	pages: {
 		signIn: "/sign-in",
