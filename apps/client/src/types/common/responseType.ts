@@ -56,3 +56,34 @@ export interface CreateCommissionResponseType {
 	commissionUuid: string
 }
 
+// pageable type
+export interface PaginationResult<T> {
+	totalElements: number
+	totalPages: number
+	first: boolean
+	last: boolean
+	size: number
+	content: T
+	number: number
+	sort: Sort[]
+	numberOfElements: number
+	pageable: Pageable
+	empty: boolean
+}
+
+interface Sort {
+	direction: string
+	nullHandling: string
+	ascending: boolean
+	property: string
+	ignoreCase: boolean
+}
+
+interface Pageable {
+	offset: number
+	sort: Sort[]
+	paged: boolean
+	pageNumber: number
+	pageSize: number
+	unpaged: boolean
+}

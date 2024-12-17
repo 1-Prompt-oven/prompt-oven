@@ -5,18 +5,10 @@ import { AnimatePresence, motion } from "framer-motion"
 import { ChevronLeft, ChevronRight } from "@repo/ui/lucide"
 import { Button } from "@repo/ui/button"
 import NotableDrop from "@/components/main/molecule/NotableDrop.tsx"
+import type { NotableProductWithAuthor } from "@/types/product/productUpsertType.ts"
 
 interface NotableDropsCarouselProps {
-	items: {
-		title: string
-		description: string
-		tag: string
-		bgImage: string
-		author: {
-			name: string
-			profile: string
-		}
-	}[]
+	items: NotableProductWithAuthor[]
 }
 
 function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
@@ -126,11 +118,7 @@ function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 									<NotableDrop
 										// eslint-disable-next-line react/no-array-index-key -- index is unique
 										key={`${currentPage}-${index}`}
-										title={item.title}
-										author={item.author}
-										tag={item.tag}
-										description={item.description}
-										bgImage={item.bgImage}
+										item={item}
 									/>
 								))}
 						</div>
