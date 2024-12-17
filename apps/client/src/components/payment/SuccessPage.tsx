@@ -103,9 +103,6 @@ export function SuccessPage() {
 				const appendLegerRes = await appendLedger(purchaseList, json.orderId)
 				if (appendLegerRes) await appendPurchased(payload)
 
-				// eslint-disable-next-line no-console -- This is a  payload
-				console.log("payload --> ", payload)
-
 				await allDeleteNoCheckCart()
 			}
 		}
