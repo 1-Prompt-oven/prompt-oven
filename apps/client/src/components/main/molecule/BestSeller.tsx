@@ -20,23 +20,21 @@ export default function Seller({
 	isVerified = true,
 	sellerImage = "/img/main/notableDropAvatar1.png",
 }: SellerProps) {
-	// Ensure number is a valid number before converting to string
 	const displayNumber =
 		typeof number === "number" ? number.toString().padStart(2, "0") : "00"
 
-	// Ensure earnings is a valid number before formatting
 	const displayEarnings =
 		typeof earnings === "number" ? earnings.toLocaleString() : "0"
 
 	return (
 		<Link href={`/profile/seller/${nickname}`}>
-			<Card className="relative box-border flex h-[90px] min-w-[220px] max-w-[345px] items-center rounded-[10px] border-[#424242] bg-[#111111] py-5 pl-[15px] pr-5 hover:border-[#FCB808]">
-				<span className="font-roboto text-[15px] font-normal leading-[20px] text-[#969696]">
+			<Card className="relative box-border flex h-auto min-h-[70px] w-full items-center rounded-[10px] border-[#424242] bg-[#111111] px-3 py-3 hover:border-[#FCB808] sm:h-[90px] sm:min-w-[220px] sm:max-w-[345px] sm:py-5 sm:pl-[15px] sm:pr-5">
+				<span className="font-roboto text-[13px] font-normal leading-[20px] text-[#969696] sm:text-[15px]">
 					{displayNumber}
 				</span>
 
-				<div className="relative mx-[15px]">
-					<Avatar className="h-[50px] w-[50px] bg-gray-600">
+				<div className="relative mx-2 sm:mx-[15px]">
+					<Avatar className="h-[40px] w-[40px] bg-gray-600 sm:h-[50px] sm:w-[50px]">
 						{sellerImage ? (
 							<AvatarImage
 								src={sellerImage}
@@ -47,17 +45,16 @@ export default function Seller({
 						<AvatarFallback>{nickname[0] || "CN"}</AvatarFallback>
 					</Avatar>
 					{isVerified ? (
-						<TickMarkSvg className="!absolute -bottom-1 -right-1" />
+						<TickMarkSvg className="!absolute -bottom-1 -right-1 h-4 w-4 sm:h-5 sm:w-5" />
 					) : null}
-					<TickMarkSvg className="!absolute -bottom-1 -right-1" />
 				</div>
 
 				<div className="flex flex-col justify-center">
-					<span className="mb-[3px] font-roboto text-[15px] font-medium text-white">
+					<span className="mb-[2px] font-roboto text-[13px] font-medium text-white sm:mb-[3px] sm:text-[15px]">
 						{nickname || "Seller Name"}
 					</span>
-					<span className="flex items-center font-roboto text-[13px] font-normal leading-[19px] text-[#BBBBBB]">
-						<TrendingUp className="mr-2 h-4 w-4" />
+					<span className="flex items-center font-roboto text-[11px] font-normal leading-[15px] text-[#BBBBBB] sm:text-[13px] sm:leading-[19px]">
+						<TrendingUp className="mr-1 h-3 w-3 sm:mr-2 sm:h-4 sm:w-4" />
 						{displayEarnings}
 					</span>
 				</div>
