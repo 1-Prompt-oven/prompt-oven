@@ -16,6 +16,7 @@ import {
 	uploadResult,
 	uploadRevision,
 } from "@/action/commission/commissionAction"
+import RequesterDisplay from "../../list/atom/RequesterDisplay"
 
 interface SellerCommissionDetailTemplateProps {
 	commission: CommissionDetailType
@@ -66,69 +67,66 @@ function SellerCommissionDetailTemplate({
 							<DescriptionDisplay
 								description={commission.commissionDescription}
 							/>
-							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 								<PriceDisplay price={commission.commissionPrice} />
-								<DeadlineDisplay deadline={commission.commissionDeadline} />
-							</div>
-							<div className="text-gray-300">
-								<p>Requested by: {commission.clientName}</p>
-								<p>
-									Requested on:{" "}
-									{new Date(commission.commissionRequest).toLocaleDateString()}
-								</p>
+								<div className="xxxs:justify-between flex sm:justify-end sm:gap-8">
+									<DeadlineDisplay deadline={commission.commissionDeadline} />
+									<RequesterDisplay requesterName={commission.clientName} />
+								</div>
 							</div>
 						</div>
-
-						{commission.commissionStatus === "REQUESTED" && (
-							<div className="flex space-x-4">
-								<Button
-									onClick={handleAccept}
-									className="bg-purple-600 hover:bg-purple-700">
-									Accept Commission
-								</Button>
-								<Button
-									onClick={handleReject}
-									variant="outline"
-									className="border-red-500 text-red-500 hover:bg-red-500/10">
-									Reject Commission
-								</Button>
-							</div>
-						)}
-
-						{commission.commissionStatus === "IN_PROGRESS" && (
-							<ResultUploadField onUpload={handleUploadResult} />
-						)}
-
-						{commission.commissionStatus === "REVISION_REQUESTED" && (
-							<>
-								<RevisionNoteDisplay
-									note={commission.commissionModifyRequest || ""}
-								/>
-								<ResultUploadField onUpload={handleUploadRevision} />
-							</>
-						)}
-
-						{commission.commissionStatus === "COMPLETED" &&
-						commission.commissionResult ? (
-							<div className="space-y-4 border-t border-gray-800 pt-6">
-								<h2 className="text-lg font-semibold text-white">Result</h2>
-								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
-									{commission.commissionResult}
+						<div className="w-auto">
+							{commission.commissionStatus === "REQUESTED" && (
+								<div className="flex space-x-4">
+									<Button
+										onClick={handleAccept}
+										className="bg-purple-600 hover:bg-purple-700">
+										<span className="!xxxs:text-xs !sm:text-sm">Accept</span>
+									</Button>
+									<Button
+										onClick={handleReject}
+										variant="outline"
+										className="!xxxs:text-xs border-red-500 text-red-500 hover:bg-red-500/10 sm:!text-sm">
+										<span className="!xxxs:text-xs sm:!text-sm">Reject</span>
+									</Button>
 								</div>
-							</div>
-						) : null}
+							)}
 
-						{commission.commissionStatus === "REVISION_COMPLETED" &&
-						commission.commissionResult ? (
-							<div className="space-y-4 border-t border-gray-800 pt-6">
-								<h2 className="text-lg font-semibold text-white">
-									Revision Result
-								</h2>
-								<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
-									{commission.commissionResult}
+							{commission.commissionStatus === "IN_PROGRESS" && (
+								<ResultUploadField onUpload={handleUploadResult} />
+							)}
+
+							{commission.commissionStatus === "REVISION_REQUESTED" && (
+								<div className="flex flex-col gap-4">
+									<RevisionNoteDisplay
+										note={commission.commissionModifyRequest || ""}
+									/>
+									<ResultUploadField onUpload={handleUploadRevision} />
 								</div>
-							</div>
-						) : null}
+							)}
+
+							{commission.commissionStatus === "COMPLETED" &&
+							commission.commissionResult ? (
+								<div className="space-y-4 border-t border-gray-800 pt-6">
+									<h2 className="text-lg font-semibold text-white">Result</h2>
+									<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
+										{commission.commissionResult}
+									</div>
+								</div>
+							) : null}
+
+							{commission.commissionStatus === "REVISION_COMPLETED" &&
+							commission.commissionResult ? (
+								<div className="space-y-4 border-t border-gray-800 pt-6">
+									<h2 className="text-lg font-semibold text-white">
+										Revision Result
+									</h2>
+									<div className="rounded-lg bg-gray-900 p-4 text-gray-300">
+										{commission.commissionResult}
+									</div>
+								</div>
+							) : null}
+						</div>
 					</CardContent>
 				</Card>
 			</div>

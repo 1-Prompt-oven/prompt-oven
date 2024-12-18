@@ -13,7 +13,7 @@ interface CommissionListItemProps {
 function CommissionListItem({ commission }: CommissionListItemProps) {
 	return (
 		<Link
-			href={`/commission/seller/${commission.commissionUuid}`}
+			href={`/commission/buyer/${commission.commissionUuid}`}
 			className="block">
 			<div className="rounded-lg bg-gray-900 p-4 transition-colors hover:bg-gray-800">
 				<div className="mb-2 flex hidden items-start justify-between sm:block">
@@ -34,9 +34,9 @@ function CommissionListItem({ commission }: CommissionListItemProps) {
 
 				<div className="flex justify-between text-sm sm:flex-row sm:items-center">
 					<div className="xxxs:text-xs xxxs:flex-col xxxs:items-start mt-3.5 flex gap-1 text-gray-400 sm:text-sm">
-						Requester{" "}
+						Creator{" "}
 						<span className="text-sm text-gray-300">
-							{commission.clientName}
+							{commission.creatorName}
 						</span>
 					</div>
 					<div className="xxxs:mt-3.5 flex space-x-4">
