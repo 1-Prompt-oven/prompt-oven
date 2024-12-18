@@ -12,6 +12,7 @@ export async function getFollowingList(id: string): Promise<Follower[]> {
 		{
 			method: "GET",
 			headers,
+			next: { tags: ["change-FollowList"] },
 		},
 	)
 
@@ -25,11 +26,11 @@ export async function getFollowingList(id: string): Promise<Follower[]> {
 		throw new Error("Invalid response format")
 	}
 
-	const data = (rawData.result as Follower[]).map(item => ({
+	const data = (rawData.result as Follower[]).map((item) => ({
 		...item,
-		isFollowing: true
+		isFollowing: true,
 	}))
-	
+
 	return data
 }
 
@@ -54,7 +55,7 @@ export async function getFollowerList(id: string): Promise<Follower[]> {
 		throw new Error("Invalid response format")
 	}
 
-	const data = (rawData.result as Follower[]).map(async item => {
+	const data = (rawData.result as Follower[]).map(async (item) => {
 		const followingRes = await fetch(
 			`${process.env.API_BASE_URL}/v1/profile/relation/${id}/${item.memberNickname}`,
 			{
@@ -62,25 +63,28 @@ export async function getFollowerList(id: string): Promise<Follower[]> {
 				headers,
 			},
 		)
-		
+
 		if (!followingRes.ok) {
 			return {
 				...item,
-				isFollowing: false
+				isFollowing: false,
 			}
 		}
 
 		const followingData: { result: boolean } = await followingRes.json()
 		return {
 			...item,
-			isFollowing: followingData.result
+			isFollowing: followingData.result,
 		}
 	})
 
 	return Promise.all(data)
 }
 
-export async function toggleFollow(id: string, isFollowing: boolean): Promise<void> {
+export async function toggleFollow(
+	id: string,
+	isFollowing: boolean,
+): Promise<void> {
 	if (isFollowing) {
 		await unfollowMember(id)
 	} else {
@@ -95,7 +99,7 @@ export async function followMember(id: string): Promise<void> {
 		`${process.env.API_BASE_URL}/v1/profile/nickname/${id}/follow`,
 		{
 			method: "POST",
-			headers, 
+			headers,
 		},
 	)
 
@@ -111,7 +115,7 @@ export async function unfollowMember(id: string): Promise<void> {
 		`${process.env.API_BASE_URL}/v1/profile/nickname/${id}/unfollow`,
 		{
 			method: "POST",
-			headers, 
+			headers,
 		},
 	)
 
