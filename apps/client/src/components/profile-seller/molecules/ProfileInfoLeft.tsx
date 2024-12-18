@@ -1,13 +1,3 @@
-import Link from "next/link"
-import { Button } from "@repo/ui/button"
-import {
-	DropdownMenu,
-	DropdownMenuContent,
-	DropdownMenuItem,
-	DropdownMenuTrigger,
-} from "@repo/ui/dropdown-menu"
-import { MoreVertical } from "@repo/ui/lucide"
-import { matchUser } from "@/lib/api/sessionExtractor"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
 import ProfileName from "../atoms/info/ProfileName"
 import ProfileFollow from "../atoms/ProfileFollow"
@@ -28,7 +18,7 @@ export default async function ProfileInfoLeft({
 			<div className="mt-4 flex items-center justify-end gap-2 xs:!mt-0 xs:justify-start">
 				<ProfileFollow memberData={memberData} followState={followState} />
 
-				<DropdownMenu>
+				{/* <DropdownMenu>
 					<DropdownMenuTrigger asChild>
 						<Button
 							variant="ghost"
@@ -42,7 +32,7 @@ export default async function ProfileInfoLeft({
 						{(await matchUser(memberData.memberUUID)) ? (
 							<DropdownMenuItem>
 								{/* <Link href={`/profile/modify/${memberData.nickname}`}> */}
-								<Link href="/account?view=profile-modify">
+				{/* <Link href="/account?view=profile-modify">
 									<p>개인정보 수정</p>
 								</Link>
 							</DropdownMenuItem>
@@ -53,7 +43,7 @@ export default async function ProfileInfoLeft({
 							</Link>
 						</DropdownMenuItem>
 					</DropdownMenuContent>
-				</DropdownMenu>
+				</DropdownMenu>  */}
 			</div>
 		</div>
 	)

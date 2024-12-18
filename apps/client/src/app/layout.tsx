@@ -1,7 +1,6 @@
 import React from "react"
 import { getServerSession } from "next-auth"
 import "./globals.css"
-// eslint-disable-next-line import/no-unresolved -- eslint 에러 잡기
 import "@repo/ui/styles.css"
 import type { Metadata } from "next"
 import { roboto, sora } from "@/app/fonts.ts"
@@ -48,11 +47,10 @@ export default async function RootLayout({
 				<AuthContextProvider isAuth={isAuth}>
 					<SideMenuToggleStoreProvider>
 						<MainHeader />
-						<div className="relative pt-20">{children}</div>
+						<div className="relative overflow-x-hidden pt-20">{children}</div>
 					</SideMenuToggleStoreProvider>
 				</AuthContextProvider>
 			</body>
 		</html>
 	)
 }
-

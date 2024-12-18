@@ -175,12 +175,17 @@ export const startTalkWith = async (partnerUuid: string, roomName: string) => {
 // reactive action
 export const getReactiveChatMessages = async (roomId: string) => {
 	const accessToken = await getAccessToken()
+	const headers: HeadersInit = {
+		Accept: "text/event-stream",
+		Authorization: `Bearer ${accessToken}`,
+		"Cache-Control": "no-cache",
+		Connection: "keep-alive",
+		"Accept-Encoding": "gzip, deflate, br",
+	}
+
 	return fetch(`${process.env.API_BASE_URL}/v1/member/chat/new/${roomId}`, {
 		method: "GET",
-		headers: {
-			Authorization: accessToken || "",
-			Accept: "text/event-stream",
-		},
+		headers,
 		cache: "no-cache",
 	})
 }

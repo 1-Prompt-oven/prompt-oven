@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
 	// query parameter로부터 userUuid을 추출합니다
 	const userUuid = request.nextUrl.searchParams.get("userUuid")
 	// accessToken을 가져옵니다
-	const accessToken = await getAccessToken()
+	const accessToken = (await getAccessToken()) ?? ""
 
 	// encoder를 생성합니다
 	const encoder = new TextEncoder()
@@ -18,7 +18,8 @@ export async function GET(request: NextRequest) {
 				{
 					method: "GET",
 					headers: {
-						Authorization: accessToken || "",
+						"Content-Type": "text/event-stream",
+						Authorization: `Bearer ${accessToken}`,
 						Accept: "*/*",
 						"Cache-Control": "no-cache",
 						Connection: "keep-alive",

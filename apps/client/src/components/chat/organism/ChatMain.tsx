@@ -3,7 +3,8 @@
 import { useEffect, useRef, useState } from "react"
 import { useInView } from "react-intersection-observer"
 import { useInfiniteQuery } from "@tanstack/react-query"
-import { EventSource } from "event-source-polyfill"
+import type { EventSource } from "event-source-polyfill"
+import { EventSourcePolyfill } from "event-source-polyfill"
 import { ThreeDots } from "react-loader-spinner"
 import { ChatHeader } from "@/components/chat/molecule/ChatHeader"
 import { ChatInput } from "@/components/chat/molecule/ChatInput.tsx"
@@ -21,6 +22,8 @@ import { getKstTime } from "@/lib/time.ts"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes.ts"
 
 interface ChatMainProps {
+	env: string
+	accessToken: string
 	memberUuid: string
 	partner: ProfileMemberInfoType
 	chatRoom: GetReactiveChatRoomListResponseType
@@ -29,6 +32,8 @@ interface ChatMainProps {
 }
 
 export function ChatMain({
+	env,
+	accessToken,
 	memberUuid,
 	partner,
 	chatRoom,
@@ -47,8 +52,17 @@ export function ChatMain({
 		const retryDelay = 3000 // 3초
 
 		const connectSSE = () => {
-			eventSource = new EventSource(
-				`/api/chat/message?roomId=${chatRoom.chatRoomId}`,
+			eventSource = new EventSourcePolyfill(
+				`${env}/v1/member/chat/new/${chatRoom.chatRoomId}`,
+				{
+					heartbeatTimeout: 600000, // 10분
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+						"Content-Type": "text/event-stream",
+						Connection: "keep-alive",
+						"Accept-Encoding": "gzip, deflate, br",
+					},
+				},
 			)
 
 			eventSource.onopen = () => {
@@ -56,6 +70,8 @@ export function ChatMain({
 			}
 
 			eventSource.onmessage = (event: MessageEvent<string>) => {
+				// eslint-disable-next-line no-console -- ok
+				console.log("event.data -- onmessage: ", event.data)
 				if (event.data === ":keep-alive") {
 					// keep-alive 메시지 처리
 					// eslint-disable-next-line no-console -- log
