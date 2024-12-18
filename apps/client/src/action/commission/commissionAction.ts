@@ -121,7 +121,11 @@ export const getCommissionDetail = async (
 	const clientName = await getProfileMemberInfoByUuid(
 		commissionDetail.clientUuid,
 	)
+	const creatorName = await getProfileMemberInfoByUuid(
+		commissionDetail.creatorUuid,
+	)
 	commissionDetail.clientName = clientName.nickname
+	commissionDetail.creatorName = creatorName.nickname
 	return commissionDetail
 }
 

@@ -59,9 +59,9 @@ export function CommissionDetailTemplate({
 							/>
 							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 								<PriceDisplay price={commission.commissionPrice} />
-								<div className="xxxs:justify-between flex sm:justify-end sm:gap-8">
+								<div className="flex xxxs:justify-between sm:justify-end sm:gap-8">
 									<DeadlineDisplay deadline={commission.commissionDeadline} />
-									<CreatorDisplay creatorName={commission.clientName} />
+									<CreatorDisplay creatorName={commission.creatorName} />
 								</div>
 							</div>
 						</div>
