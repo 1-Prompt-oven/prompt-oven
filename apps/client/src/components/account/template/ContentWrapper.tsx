@@ -19,7 +19,7 @@ export default function ContentWrapper({
 		<section className="relative flex h-[calc(100vh-80px)]">
 			<SideMenu menuItems={menuItems} />
 			{/* Main content */}
-			<div className="relative flex-1 overflow-y-scroll bg-[#1B1818] p-6 lg:mt-0 lg:p-10">
+			<div className="relative flex-1 overflow-x-hidden overflow-y-scroll bg-[#1B1818] p-6 lg:mt-0 lg:p-10">
 				{children}
 			</div>
 		</section>
