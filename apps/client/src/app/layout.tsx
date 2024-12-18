@@ -1,7 +1,6 @@
 import React from "react"
 import { getServerSession } from "next-auth"
 import "./globals.css"
-// eslint-disable-next-line import/no-unresolved -- eslint 에러 잡기
 import "@repo/ui/styles.css"
 import type { Metadata } from "next"
 import { roboto, sora } from "@/app/fonts.ts"
