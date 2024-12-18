@@ -17,6 +17,7 @@ export interface CommissionListResponseType {
 	commissionUuid: string
 	title: string
 	clientUuid: string
+	creatorUuid: string
 	price: number
 	deadline: string
 	status: CommissionStatus
@@ -25,6 +26,7 @@ export interface CommissionListResponseType {
 
 export interface CommissionListType extends CommissionListResponseType {
 	clientName: string
+	creatorName: string
 }
 
 export interface CommissionDetailType {

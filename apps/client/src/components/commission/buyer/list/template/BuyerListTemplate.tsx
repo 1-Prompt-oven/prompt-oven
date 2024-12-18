@@ -14,13 +14,13 @@ import type { CommissionListType } from "@/types/commission/commissionType"
 import { getCommissionsList } from "@/action/commission/commissionAction"
 import CommissionList from "../organism/CommissionList"
 
-interface SellerCommissionListTemplateProps {
+interface BuyerCommissionListTemplateProps {
 	initialCommissions: CommissionListType[]
 }
 
-function SellerListTemplate({
+function BuyerListTemplate({
 	initialCommissions = [],
-}: SellerCommissionListTemplateProps) {
+}: BuyerCommissionListTemplateProps) {
 	const [sortBy, setSortBy] = useState("Latest")
 	const [commissions, setCommissions] =
 		useState<CommissionListType[]>(initialCommissions)
@@ -41,7 +41,7 @@ function SellerListTemplate({
 			<div className="mx-auto max-w-4xl">
 				<div className="xxxs:flex-col xxxs:gap-5 mb-6 mt-10 flex items-center justify-between sm:flex-row sm:gap-0">
 					<h1 className="xxxs:text-2xl font-bold text-white sm:text-3xl">
-						Received Commissions
+						My Commissions
 					</h1>
 					<Select
 						value={sortBy}
@@ -62,4 +62,4 @@ function SellerListTemplate({
 	)
 }
 
-export default SellerListTemplate
+export default BuyerListTemplate
