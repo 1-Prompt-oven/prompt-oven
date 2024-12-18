@@ -87,22 +87,16 @@ function BestList({
 	return (
 		<div className="mx-auto w-full max-w-[1716px]">
 			<div>
-				<div className="grid px-6 py-4 text-xs font-semibold text-white max-xxs:grid-cols-10 sm:grid-cols-12 sm:text-base">
-					<div className="max-xxs:col-span-2 sm:col-span-1">Rank</div>
-					<div className="text-center max-xxs:col-span-1 sm:col-span-3">
-						Name
-					</div>
-					<div className="max-xxs:col-span-1 max-xxs:block sm:hidden" />
-					<div className="text-center max-xxs:col-span-2 sm:col-span-3">
-						Tag
-					</div>
-					<div className="text-center max-xxs:col-span-3 sm:col-span-2">
-						Sales
-					</div>
-					<div className="text-right max-xxs:col-span-1 sm:col-span-1 sm:mr-0 sm:text-center">
+				<div className="xxxs:grid-cols-10 grid px-6 py-4 text-xs font-semibold text-white sm:grid-cols-12 sm:text-base">
+					<div className="xxxs:col-span-2 sm:col-span-1">Rank</div>
+					<div className="xxxs:col-span-1 text-center sm:col-span-3">Name</div>
+					<div className="xxxs:col-span-1 xxxs:block sm:hidden" />
+					<div className="xxxs:col-span-2 text-center sm:col-span-3">Tag</div>
+					<div className="xxxs:col-span-3 text-center sm:col-span-2">Sales</div>
+					<div className="xxxs:col-span-1 text-right sm:col-span-1 sm:mr-0 sm:text-center">
 						Star
 					</div>
-					<div className="col-span-2 text-right max-xxs:hidden sm:block">
+					<div className="xxxs:hidden col-span-2 text-right sm:block">
 						Followers
 					</div>
 				</div>

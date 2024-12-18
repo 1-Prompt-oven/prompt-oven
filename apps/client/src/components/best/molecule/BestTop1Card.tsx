@@ -154,12 +154,12 @@ export default function BestTop1Card({
 									].map((stat) => (
 										<div
 											key={stat.label}
-											className="flex flex-col items-center justify-center rounded-lg border border-white/5 bg-white/5 px-3 py-2 backdrop-blur-sm max-xxs:gap-[0.08rem] max-xxs:pt-1 sm:gap-0 sm:pt-0">
-											<div className="flex items-center max-xxs:mt-1 max-xxs:gap-1 sm:mt-0 sm:gap-2">
+											className="xxxs:gap-[0.08rem] xxxs:pt-1 flex flex-col items-center justify-center rounded-lg border border-white/5 bg-white/5 px-3 py-2 backdrop-blur-sm sm:gap-0 sm:pt-0">
+											<div className="xxxs:mt-1 xxxs:gap-1 flex items-center sm:mt-0 sm:gap-2">
 												<stat.icon
 													className={`h-4 w-4 ${stat.highlight ? "text-yellow-400" : "text-purple-300"}`}
 												/>
-												<span className="text-zinc-400 max-xxs:text-[11px] sm:text-sm">
+												<span className="xxxs:text-[11px] text-zinc-400 sm:text-sm">
 													{stat.label}
 												</span>
 											</div>

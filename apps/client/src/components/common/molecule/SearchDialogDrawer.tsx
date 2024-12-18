@@ -54,7 +54,7 @@ export function SearchDialogDrawer({
 		<>
 			{isMobile ? (
 				<Drawer open={isOpen} onOpenChange={closeDialog}>
-					<DrawerContent className="border-zinc-80 bg-zinc-900/95 p-5">
+					<DrawerContent className="border-zinc-80 mb-3 min-h-[60%] w-[100vw] bg-zinc-900/95 p-5">
 						<DialogHeader>
 							<DrawerTitle className="hidden">Search</DrawerTitle>
 							<DrawerDescription className="hidden">
