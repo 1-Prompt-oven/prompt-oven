@@ -73,10 +73,20 @@ export const getCommissionsList = async (
 				return clientInfo.nickname
 			}),
 		)
+		const creatorName = await Promise.all(
+			commissionList.map(async (commission) => {
+				const { creatorUuid } = await getCommissionDetail(
+					commission.commissionUuid,
+				)
+				const creatorInfo = await getProfileMemberInfoByUuid(creatorUuid)
+				return creatorInfo.nickname
+			}),
+		)
 		const commissions = commissionList.map((commission, index) => {
 			return {
 				...commission,
 				clientName: clientName[index],
+				creatorName: creatorName[index],
 			}
 		})
 		return commissions

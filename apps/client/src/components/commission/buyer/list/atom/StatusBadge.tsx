@@ -1,11 +1,11 @@
 import React from "react"
 import type { CommissionStatus } from "@/types/commission/commissionType"
 
-interface StatusDisplayProps {
+interface StatusBadgeProps {
 	status: CommissionStatus
 }
 
-function StatusIndicator({ status }: StatusDisplayProps) {
+function StatusBadge({ status }: StatusBadgeProps) {
 	const getStatusColor = (commissionStatus: CommissionStatus) => {
 		switch (commissionStatus) {
 			case "COMPLETED":
@@ -21,15 +21,13 @@ function StatusIndicator({ status }: StatusDisplayProps) {
 				return "bg-purple-500/10 text-purple-500 border-purple-500/20"
 		}
 	}
+
 	return (
-		<div className="flex items-center gap-7 space-y-1">
-			<h2 className="text-lg font-semibold text-white">Status</h2>
-			<span
-				className={`xxxs:text-xs !mt-0 flex items-center rounded-full border px-3 py-1 sm:text-sm ${getStatusColor(status)} capitalize`}>
-				{status.replace("_", " ")}
-			</span>
-		</div>
+		<span
+			className={`rounded-full border px-2 py-1 text-xs font-medium ${getStatusColor(status)} capitalize`}>
+			{status.replace("_", " ")}
+		</span>
 	)
 }
 
-export default StatusIndicator
+export default StatusBadge

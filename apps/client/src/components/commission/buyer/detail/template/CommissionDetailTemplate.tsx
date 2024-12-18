@@ -17,6 +17,7 @@ import {
 	statusUpdate,
 	requestModification,
 } from "@/action/commission/commissionAction"
+import CreatorDisplay from "../atom/CreatorDisplay"
 
 interface CommissionDetailTemplateProps {
 	commission: CommissionDetailType
@@ -56,9 +57,12 @@ export function CommissionDetailTemplate({
 							<DescriptionDisplay
 								description={commission.commissionDescription}
 							/>
-							<div className="grid grid-cols-1 gap-6 md:grid-cols-2">
+							<div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
 								<PriceDisplay price={commission.commissionPrice} />
-								<DeadlineDisplay deadline={commission.commissionDeadline} />
+								<div className="xxxs:justify-between flex sm:justify-end sm:gap-8">
+									<DeadlineDisplay deadline={commission.commissionDeadline} />
+									<CreatorDisplay creatorName={commission.clientName} />
+								</div>
 							</div>
 						</div>
 

@@ -182,6 +182,12 @@ export const userNavs: MenuNavItemType[] = [
 		],
 	},
 	{
+		icon: Hammer,
+		label: "Commission",
+		href: "/account",
+		query: { view: "buyer-commission" },
+	},
+	{
 		icon: Cookie,
 		label: "Cookie",
 		href: "/account",
@@ -225,3 +231,4 @@ export const getUserAuthNavitems = (userAuth: UserAuthType) => {
 	}
 	return menuItems
 }
+

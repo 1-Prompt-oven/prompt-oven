@@ -21,6 +21,7 @@ import ProfileModify from "@/app/profile/modify/[id]/page"
 import Cookie from "@/components/cookie/page/CookieTemplete"
 import type { GetCookieListRequestType } from "@/types/cookie/cookieResponseType"
 import SellerCommissionListPage from "@/app/commission/seller/page"
+import BuyerCommissionListPage from "@/app/commission/buyer/page"
 
 export default async function page({ searchParams }: AccountSearchParams) {
 	// note: queryParam이 없는 경우 overview 사이드바 메뉴가 선택되게 하기 -- 필요에 따라 수정 필요
@@ -66,6 +67,7 @@ export default async function page({ searchParams }: AccountSearchParams) {
 				/>
 			)}
 			{view === "commission" && <SellerCommissionListPage />}
+			{view === "buyer-commission" && <BuyerCommissionListPage />}
 			{view === "purchase-ongoing" && <PurchaseIng />}
 			{view === "purchase-completed" && <PurchaseEd />}
 			{view !== "purchase-ongoing" &&
@@ -75,3 +77,4 @@ export default async function page({ searchParams }: AccountSearchParams) {
 		</ContentWrapper>
 	)
 }
+
