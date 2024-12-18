@@ -34,6 +34,7 @@ export interface CommissionDetailType {
 	clientUuid: string
 	clientName: string
 	creatorUuid: string
+	creatorName: string
 	commissionTitle: string
 	commissionDescription: string
 	commissionPrice: number
