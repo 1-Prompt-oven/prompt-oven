@@ -80,7 +80,6 @@ export const getMainCarouselProductList = async (
 			options: {
 				headers,
 				method: "GET",
-				cache: "default",
 			},
 		})
 	).result
