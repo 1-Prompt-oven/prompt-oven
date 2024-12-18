@@ -3,7 +3,7 @@
 import React, { useEffect } from "react"
 import { useRouter } from "next/navigation"
 
-export default function FailPage() {
+export default function CookieFailPage() {
 	const router = useRouter()
 
 	useEffect(() => {

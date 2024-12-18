@@ -4,7 +4,11 @@ import { useState } from "react"
 import { Button } from "@repo/ui/button"
 import CookiePurchaseModal from "../atom/CookieChargeModal"
 
-function CookieCharge() {
+interface CookieChargeProps {
+  userUuid: string; // userUuid 추가
+}
+
+function CookieCharge({ userUuid }: CookieChargeProps) {
 	const [isModalOpen, setIsModalOpen] = useState(false)
 	const handleConfirm = () => {
 		setIsModalOpen(false)
@@ -20,6 +24,7 @@ function CookieCharge() {
 				isOpen={isModalOpen}
 				onClose={() => setIsModalOpen(false)}
 				onConfirm={handleConfirm}
+				userUuid={userUuid}
 			/>
 		</div>
 	)
