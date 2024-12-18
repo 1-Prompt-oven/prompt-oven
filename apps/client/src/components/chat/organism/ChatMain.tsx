@@ -70,8 +70,6 @@ export function ChatMain({
 			}
 
 			eventSource.onmessage = (event: MessageEvent<string>) => {
-				// eslint-disable-next-line no-console -- ok
-				console.log("event.data -- onmessage: ", event.data)
 				if (event.data === ":keep-alive") {
 					// keep-alive 메시지 처리
 					// eslint-disable-next-line no-console -- log
