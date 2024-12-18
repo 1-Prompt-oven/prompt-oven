@@ -13,12 +13,16 @@ import { ChatProfileSidebar } from "@/components/chat/organism/ChatProfileSideba
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes.ts"
 
 export interface ChatPageProps {
+	env: string
+	accessToken: string
 	chatRoom?: ChatRoom
 	partnerProfile?: ProfileMemberInfoType
 	memberUuid: string
 }
 
 export default function ChatPage({
+	env,
+	accessToken,
 	chatRoom,
 	memberUuid,
 	partnerProfile,
@@ -35,6 +39,8 @@ export default function ChatPage({
 			<div
 				className={`absolute inset-y-0 left-0 z-30 transition-transform duration-300 ease-in-out md:!static md:!w-[424px] ${showSidebar ? "translate-x-0" : "-translate-x-full"} md:translate-x-0`}>
 				<ChatSidebar
+					env={env}
+					accessToken={accessToken}
 					selectedChatRoom={chatRoom}
 					memberUuid={memberUuid}
 					onSelectChatRoom={(room) => {
@@ -50,6 +56,8 @@ export default function ChatPage({
 				<div className="flex flex-1 flex-col">
 					{selectedRoom.chatRoomId && partnerProfile?.memberUUID ? (
 						<ChatMain
+							env={env}
+							accessToken={accessToken}
 							partner={partnerProfile}
 							memberUuid={memberUuid}
 							chatRoom={selectedRoom}

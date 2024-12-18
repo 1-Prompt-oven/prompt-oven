@@ -2,7 +2,8 @@
 
 import { X } from "@repo/ui/lucide"
 import React, { useCallback, useEffect, useMemo, useState } from "react"
-import { EventSource } from "event-source-polyfill"
+import type { EventSource } from "event-source-polyfill"
+import { EventSourcePolyfill } from "event-source-polyfill"
 import type {
 	ChatRoom as ChatRoomType,
 	GetReactiveChatRoomListResponseType,
@@ -12,6 +13,8 @@ import { ChatRoom } from "@/components/chat/molecule/ChatRoom.tsx"
 import { getChatRoomList } from "@/action/chat/chatAction.ts"
 
 interface ChatSidebarProps {
+	env: string
+	accessToken: string
 	selectedChatRoom?: ChatRoomType
 	memberUuid: string
 	onSelectChatRoom: (room: GetReactiveChatRoomListResponseType) => void
@@ -19,6 +22,8 @@ interface ChatSidebarProps {
 }
 
 export function ChatSidebar({
+	env,
+	accessToken,
 	selectedChatRoom,
 	memberUuid,
 	onSelectChatRoom,
@@ -82,7 +87,18 @@ export function ChatSidebar({
 				.result
 			updateChatRoomList(chatRoomList)
 
-			eventSource = new EventSource(`/api/chat/room?userUuid=${memberUuid}`)
+			eventSource = new EventSourcePolyfill(
+				`${env}/v1/member/chat/chatRoomList/${memberUuid}`,
+				{
+					heartbeatTimeout: 600000, // 10분
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+						"Content-Type": "text/event-stream",
+						Connection: "keep-alive",
+						"Accept-Encoding": "gzip, deflate, br",
+					},
+				},
+			)
 			setIsLoading(false)
 
 			eventSource.onopen = () => {
