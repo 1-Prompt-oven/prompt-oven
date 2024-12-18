@@ -73,7 +73,7 @@ function NotableDropsCarousel({ items }: NotableDropsCarouselProps) {
 	return (
 		<div className="relative mx-auto w-full max-w-[1420px] px-4 sm:px-6 lg:px-8">
 			{/* upper part */}
-			<div className="mb-4 flex flex-col items-start justify-between space-y-4 sm:mb-6 sm:flex-row sm:items-center sm:space-y-0 md:mb-[30px]">
+			<div className="mb-4 flex items-center justify-between space-y-4 sm:mb-6 sm:flex-row sm:items-center sm:space-y-0 md:mb-[30px]">
 				<h2 className="text-2xl font-bold text-white sm:text-3xl md:text-4xl">
 					Notable drops
 				</h2>
