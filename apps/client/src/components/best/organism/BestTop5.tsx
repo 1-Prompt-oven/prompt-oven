@@ -13,11 +13,7 @@ function BestTop5({ data }: BestListProps<RenderedRankingItemTypes[]>) {
 		<div className="container mx-auto p-8">
 			<div className="grid grid-cols-1 gap-8">
 				<div className="flex justify-center">
-					<BestTop1Card
-						key={top1Data.memberUuid}
-						{...top1Data}
-						isTopRanked={true}
-					/>
+					<BestTop1Card key={top1Data.memberUuid} {...top1Data} isTopRanked />
 				</div>
 				<div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 lg:grid-cols-4 lg:gap-8">
 					{restData.map((creator) => (
@@ -30,4 +26,3 @@ function BestTop5({ data }: BestListProps<RenderedRankingItemTypes[]>) {
 }
 
 export default BestTop5
-
