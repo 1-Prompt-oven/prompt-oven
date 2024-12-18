@@ -93,7 +93,7 @@ export default function ImageCarousel({
 	}
 
 	return (
-		<div className="mx-auto w-full min-w-[400px] max-w-[660px]">
+		<div className="mx-auto w-full min-w-[300px] max-w-[660px]">
 			<div
 				className="relative w-full pb-[100%]"
 				onMouseEnter={handleMouseEnter}
