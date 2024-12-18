@@ -79,7 +79,7 @@ export const deductCookieAction = async (): Promise<boolean> => {
 	const headers = initializeHeaders(accessToken ?? undefined)
 
 	if (!userUuid) {
-		//	throw new Error("Unable to fetch user UUID")
+		//	throw new Error("Unable to fetch user UUID")CookieChargeModal
 		return false
 	}
 
