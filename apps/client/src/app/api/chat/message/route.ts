@@ -20,8 +20,6 @@ export async function GET(request: NextRequest) {
 					headers: {
 						"Content-Type": "text/event-stream",
 						Authorization: `Bearer ${accessToken}`,
-						Accept: "*/*",
-						"Cache-Control": "no-cache",
 						Connection: "keep-alive",
 						"Accept-Encoding": "gzip, deflate, br",
 					},

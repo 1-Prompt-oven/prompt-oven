@@ -65,7 +65,9 @@ export default function ChatPage({
 							onOpenSidebar={() => setShowSidebar(!showSidebar)}
 						/>
 					) : (
-						<ChatPlaceholder />
+						<ChatPlaceholder
+							onOpenSidebar={() => setShowSidebar(!showSidebar)}
+						/>
 					)}
 				</div>
 				{partnerProfile?.memberUUID ? (

@@ -1,13 +1,26 @@
 "use client"
 
 import { MessageSquare } from "@repo/ui/lucide"
-import { ChatHeaderPlaceholder } from "@/components/chat/molecule/ChatHeaderPlaceholder.tsx"
 import { ChatInput } from "@/components/chat/molecule/ChatInput.tsx"
 
-export function ChatPlaceholder() {
+export interface ChatPlaceholderProps {
+	onOpenSidebar?: () => void
+}
+export function ChatPlaceholder({ onOpenSidebar }: ChatPlaceholderProps) {
 	return (
 		<div className="flex h-full flex-col bg-[#424242]">
-			<ChatHeaderPlaceholder />
+			<div className="flex items-center justify-between border-b border-[#E3E8E7]/20 bg-[#111111] px-6 py-4">
+				<div className="flex items-center">
+					<h2 className="text-lg font-semibold text-[#E2ADFF]">채팅</h2>
+				</div>
+				<button
+					type="button"
+					className="rounded-full border border-[#E2ADFF] p-2 hover:bg-[#404040]/10 md:!hidden"
+					onClick={onOpenSidebar}>
+					<MessageSquare className="h-4 w-4 text-[#E2ADFF]" />
+				</button>
+				{/* Placeholder for avatar */}
+			</div>
 
 			<div className="flex flex-1 flex-col items-center justify-center p-4 md:p-8">
 				<MessageSquare className="mb-4 h-16 w-16 text-[#E2ADFF]" />
