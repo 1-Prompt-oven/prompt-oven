@@ -36,23 +36,20 @@ export default async function MainHeader() {
 				{/* todo: 현재는 BadgeContainer로만 표현했지만 알림은 알림과 관련된 모달을 띄우고 메시지와 카트는 해당 페이지로 이동해야한다. 그 이후에 컴포넌트로 정의하기*/}
 
 				{userAuth !== "guest" ? (
-					<>
-						<div className="hidden gap-5 sm:!flex">
-							<Link href="/chat">
-								<BadgeContainer count={0}>
-									<MessageSquareText
-										className="!h-7 !w-7 text-po-gray-150"
-										strokeWidth={2}
-									/>
-								</BadgeContainer>
-							</Link>
-							{/* <Link href="/cart"> */}
-							<Link href="/account?view=cart">
-								<CartCountBadge userAuth={userAuth} />
-							</Link>
-						</div>
+					<div className="flex gap-4">
+						<Link href="/chat">
+							<BadgeContainer count={0}>
+								<MessageSquareText
+									className="!h-7 !w-7 text-po-gray-150"
+									strokeWidth={2}
+								/>
+							</BadgeContainer>
+						</Link>
+						<Link className="hidden sm:!flex" href="/account?view=cart">
+							<CartCountBadge userAuth={userAuth} />
+						</Link>
 						<AvatarMenu userAuth={userAuth} />
-					</>
+					</div>
 				) : (
 					<GradientLink href="/sign-in" className="hidden lg:!flex">
 						Sign In
