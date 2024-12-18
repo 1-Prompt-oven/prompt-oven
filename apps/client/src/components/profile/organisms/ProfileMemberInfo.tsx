@@ -1,5 +1,6 @@
 import { STATIC_DEFAULT_AVATAR, STATIC_DEFAULT_BANNER } from "@/app/static/data"
 import type { ProfileMemberInfoType } from "@/types/profile/profileTypes"
+import type { Follower } from "@/types/profile/followingType"
 import ProfileAvatar from "../atoms/info/ProfileAvatar"
 import ProfileBanner from "../atoms/info/ProfileBanner"
 import ProfileInfoLeft from "../molecules/ProfileInfoLeft"
@@ -11,9 +12,13 @@ const DEFAULT_AVATAR = STATIC_DEFAULT_AVATAR
 
 interface MemberDataProps {
 	memberData: ProfileMemberInfoType
+	followingList: Follower[]
 }
 
-export default function ProfileMemberInfo({ memberData }: MemberDataProps) {
+export default function ProfileMemberInfo({
+	memberData,
+	followingList,
+}: MemberDataProps) {
 	return (
 		<div className="mx-6">
 			<ProfileBanner
@@ -33,8 +38,14 @@ export default function ProfileMemberInfo({ memberData }: MemberDataProps) {
 				/>
 
 				<div className="flex flex-grow justify-between gap-2 rounded-xl bg-gradient-to-r from-[#B514F1] to-[#0BA9FF] p-4 md:h-[90%] md:items-center">
-					<ProfileInfoLeft memberData={memberData} />
-					<ProfileInfoRight memberData={memberData} />
+					<ProfileInfoLeft
+						memberData={memberData}
+						followingList={followingList}
+					/>
+					<ProfileInfoRight
+						memberData={memberData}
+						followingList={followingList}
+					/>
 				</div>
 			</div>
 		</div>
