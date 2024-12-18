@@ -35,7 +35,7 @@ export default async function Cookie({
 			<CookieTitle />
 			<div className="flex justify-between px-8">
 				<CookieRemain />
-				<CookieCharge />
+				<CookieCharge userUuid={userUuid} />
 			</div>
 			<CookieHistory initData={initData} initRequest={request} />
 			{/* <CookieGuidance /> */}

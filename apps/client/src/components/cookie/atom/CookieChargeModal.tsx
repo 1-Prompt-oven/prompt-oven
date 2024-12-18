@@ -3,20 +3,31 @@
 import { useState } from "react"
 import { Button } from "@repo/ui/button"
 import { RadioGroup, RadioGroupItem } from "@repo/ui/radio-group"
-import { createCookiePayment } from "@/action/cookie/cookiePaymentAction"
-import { getDummyCookiePaymentData } from "@/types/cookie/cookiePayment"
-import SuccessModal from "@/components/common/atom/SuccessModal"
+import { loadTossPayments } from "@tosspayments/tosspayments-sdk"
 
 interface CookiePurchaseModalProps {
 	isOpen: boolean // 모달 열림 여부
 	onClose: () => void // 모달 닫기 함수
 	onConfirm: (cookieAmount: number) => void // 구매 확인 함수
+	userUuid: string
+}
+
+function generateCustomerKey(userUuid: string): string {
+	const randomString = Math.random().toString(36).slice(2, 6) // 4자리 랜덤 문자열
+	const specialChars = "-_=.@"
+	const specialChar = specialChars.charAt(
+		Math.floor(Math.random() * specialChars.length),
+	) // 특수문자 하나 선택
+
+	// userUuid와 랜덤 문자열, 특수문자 결합
+	return `${userUuid}${specialChar}${randomString}`
 }
 
 function CookiePurchaseRadio({
 	isOpen,
 	onClose,
 	onConfirm,
+	userUuid,
 }: CookiePurchaseModalProps) {
 	const options = [
 		{ value: 50, label: "50개" },
@@ -29,7 +40,6 @@ function CookiePurchaseRadio({
 	const unitPrice = 100 // 쿠키 1개당 가격
 	const [selectedOption, setSelectedOption] = useState<number | null>(null)
 	const [isLoading, setIsLoading] = useState(false)
-	const [isSuccessModalOpen, setIsSuccessModalOpen] = useState(false) // 성공 모달 상태 추가
 
 	const handleSelection = (value: number) => {
 		setSelectedOption(value)
@@ -40,25 +50,35 @@ function CookiePurchaseRadio({
 
 		setIsLoading(true) // 로딩 상태 시작
 		try {
-			const dummyData = getDummyCookiePaymentData(selectedOption)
+			const totalAmount = selectedOption * unitPrice
+			const orderId = `order-${Date.now()}`
 
-			// API 호출
-			await createCookiePayment({
-				cookieAmount: dummyData.cookieAmount,
-				totalAmount: dummyData.totalAmount,
-				message: dummyData.message,
-				orderId: dummyData.orderId,
-				orderName: dummyData.orderName,
-				paymentMethod: dummyData.paymentMethod,
-				paymentWay: dummyData.paymentWay,
+			// TossPayments SDK 로드
+			const clientKey = process.env.NEXT_PUBLIC_TOSS_CLIENT_KEY
+			if (!clientKey) {
+				throw new Error(
+					"Toss client key is not defined in environment variables.",
+				)
+			}
+			const tossPayments = await loadTossPayments(clientKey)
+
+			const customerKey = generateCustomerKey(userUuid)
+
+			const payment = tossPayments.payment({ customerKey })
+
+			// 결제 요청
+			payment.requestPayment({
+				//eslint-disable-next-line object-shorthand -- no problem
+				orderId: orderId,
+				orderName: `쿠키 ${selectedOption}개`,
+				successUrl: `${window.location.origin}/cookiepayment/success`,
+				failUrl: `${window.location.origin}/cookiepayment/fail`,
+				method: "CARD",
+				amount: { currency: "KRW", value: totalAmount },
 			})
 
 			// 구매 확인 콜백 호출
 			onConfirm(selectedOption)
-
-			// 성공 모달 열기
-			setIsSuccessModalOpen(true)
-			onClose() // 구매 모달 닫기
 		} catch (error) {
 			// eslint-disable-next-line no-console -- This is a server-side only log
 			console.error("결제 실패:", error)
@@ -131,14 +151,6 @@ function CookiePurchaseRadio({
 					</div>
 				</div>
 			)}
-			<SuccessModal
-				/* eslint-disable-next-line react/jsx-no-leaked-render -- no problem */
-				isOpen={isSuccessModalOpen && !isOpen} // 구매 모달이 닫혀 있을 때만 성공 모달 표시
-				onClose={() => setIsSuccessModalOpen(false)}>
-				<p className="text-center text-white">
-					쿠키 구매가 성공적으로 완료되었습니다!
-				</p>
-			</SuccessModal>
 		</>
 	)
 }

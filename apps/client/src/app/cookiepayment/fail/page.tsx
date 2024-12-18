@@ -1,7 +1,7 @@
 import { Suspense } from "react"
 import ContentWrapper from "@/components/account/template/ContentWrapper"
-import FailPage from "@/components/payment/FailPage"
 import { getUserAuth } from "@/lib/userAuth.ts"
+import CookieFailPage from "@/components/cookiepayment/CookieFailPage"
 
 export default async function WidgetFail() {
 	// note: 컴포넌트를 수정하면서 queryParams={{ view: "TossPaySuccess" }} 부분이 필요없어짐
@@ -10,7 +10,7 @@ export default async function WidgetFail() {
 	return (
 		<ContentWrapper userAuth={userAuth}>
 			<Suspense fallback={<div>Loading...</div>}>
-				<FailPage />
+				<CookieFailPage />
 			</Suspense>
 		</ContentWrapper>
 	)
