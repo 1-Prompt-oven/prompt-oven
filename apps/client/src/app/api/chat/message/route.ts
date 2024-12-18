@@ -6,7 +6,7 @@ export async function GET(request: NextRequest) {
 	// query parameter로부터 roomId을 추출합니다
 	const roomId = request.nextUrl.searchParams.get("roomId")
 	// accessToken을 가져옵니다
-	const accessToken = await getAccessToken()
+	const accessToken = (await getAccessToken()) ?? ""
 
 	// encoder를 생성합니다
 	const encoder = new TextEncoder()
@@ -18,7 +18,8 @@ export async function GET(request: NextRequest) {
 				{
 					method: "GET",
 					headers: {
-						Authorization: accessToken || "",
+						"Content-Type": "text/event-stream",
+						Authorization: `Bearer ${accessToken}`,
 						Accept: "*/*",
 						"Cache-Control": "no-cache",
 						Connection: "keep-alive",
@@ -58,9 +59,9 @@ export async function GET(request: NextRequest) {
 				// eslint-disable-next-line no-console -- This is a server-side only log
 				console.error("Stream reading error in chat message:", error)
 				// 에러 메시지를 클라이언트에 전송
-				controller.enqueue(
-					encoder.encode(`event: error\ndata: ${JSON.stringify(error)}\n\n`),
-				)
+				// controller.enqueue(
+				// 	encoder.encode(`event: error\ndata: ${JSON.stringify(error)}\n\n`),
+				// )
 			} finally {
 				clearInterval(keepAliveInterval)
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition -- ok
