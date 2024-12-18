@@ -78,6 +78,7 @@ export async function sellorFollowAction(
 		return { result: { res: false, state: "resError" } }
 	}
 	revalidateTag("chageFollowing")
+	revalidateTag("change-FollowList")
 	return { result: { res: true, state: "success" } }
 }
 
@@ -109,5 +110,6 @@ export async function sellorUnFollowAction(
 		return { result: { res: false, state: "resError" } }
 	}
 	revalidateTag("chageFollowing")
+	revalidateTag("change-FollowList")
 	return { result: { res: true, state: "success" } }
 }
