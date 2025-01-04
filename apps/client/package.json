@@ -30,7 +30,7 @@
 		"event-source-polyfill": "^1.0.31",
 		"framer-motion": "^11.11.9",
 		"lodash": "^4.17.21",
-		"next": "14.2.18",
+		"next": "14.2.21",
 		"next-auth": "^4.24.8",
 		"openai": "^4.76.0",
 		"react": "^18",
